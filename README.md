@@ -1,18 +1,12 @@
 # High Park Livery Website
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+A Black car service Web App, that uses Nuxt 3, Pinia, Prisma, Connected to a Planet Scale DB Tailwind Css, Hosted on Vercel 
 
 ## Setup
 
 Make sure to install the dependencies:
 
 ```bash
-# yarn
-yarn install
-
-# npm
-npm install
-
 # pnpm
 pnpm install --shamefully-hoist
 ```
@@ -38,5 +32,3 @@ Locally preview production build:
 ```bash
 npm run preview
 ```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
