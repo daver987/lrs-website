@@ -114,9 +114,11 @@ model Trip {
   distance                      Float
   flight_information            Json?
   line_items_list               Json?
-  line_items_tax                Float?
   line_items_subtotal           Float?
+  line_items_tax                Float?
   line_items_total              Float?
+  affiliate_payout              Float?
+  is_farmed_out                 Boolean? @default(false)
   is_return                     Boolean  @default(false)
   notes                         String?
   quote_number                  Int
