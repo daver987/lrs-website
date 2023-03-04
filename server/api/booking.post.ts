@@ -38,7 +38,6 @@ export default defineEventHandler(async (event) => {
       data: {
         stripe_customer_id: stripeId,
         quotes: {
-          //@ts-ignore
           update: {
             where: {
               quote_number: quote.quote_number,

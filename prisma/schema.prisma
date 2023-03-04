@@ -91,10 +91,10 @@ model Quote {
 }
 
 model Trip {
-  id                            String   @id @unique @default(uuid())
-  created_at                    DateTime @default(now())
-  updated_at                    DateTime @updatedAt
-  quote                         Quote    @relation(fields: [quote_number], references: [quote_number])
+  id                            String     @id @unique @default(uuid())
+  created_at                    DateTime   @default(now())
+  updated_at                    DateTime   @updatedAt
+  quote                         Quote      @relation(fields: [quote_number], references: [quote_number])
   quote_number                  Int
   origin_lat                    Float
   origin_lng                    Float
@@ -117,12 +117,52 @@ model Trip {
   line_items_tax                Float?
   line_items_total              Float?
   affiliate_payout              Float?
-  is_farmed_out                 Boolean? @default(false)
-  is_return                     Boolean  @default(false)
+  is_farmed_out                 Boolean?   @default(false)
+  is_return                     Boolean    @default(false)
   notes                         String?
   Payment                       Payment?
+  locations                     Location[]
+  flight                        Flight?
 
   @@index([quote_number])
+}
+
+model Flight {
+  id                    String    @id @default(uuid())
+  created_at            DateTime  @default(now())
+  updated_at            DateTime  @updatedAt
+  airline_code          String
+  airline_name          String?
+  flight_number         String
+  is_active             Boolean   @default(false)
+  is_landed             Boolean   @default(false)
+  is_arrived            Boolean   @default(false)
+  departure_time        DateTime?
+  arrival_time          DateTime?
+  departure_time_actual DateTime?
+  arrival_time_actual   DateTime?
+  trip                  Trip?     @relation(fields: [trip_id], references: [id])
+  trip_id               String?   @unique
+}
+
+model Location {
+  id                String   @id @default(uuid())
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+  lat               Float
+  lng               Float
+  name              String
+  formatted_address String
+  full_name         String?
+  types             Json
+  place_id          String
+  is_origin         Boolean  @default(false)
+  is_destination    Boolean  @default(false)
+  is_waypoint       Boolean  @default(false)
+  trip              Trip?    @relation(fields: [trip_id], references: [id])
+  trip_id           String?
+
+  @@index([trip_id])
 }
 
 model Payment {

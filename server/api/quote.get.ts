@@ -65,7 +65,6 @@ export default defineEventHandler(async (event) => {
   try {
     const query = getQuery(event)
     const quote_number = useToNumber(query.quote_number as string)
-    console.log('Server Quote Number:', quote_number.value)
     const data = await prisma.quote.findUnique({
       where: { quote_number: quote_number.value },
       select: {
@@ -114,7 +113,6 @@ export default defineEventHandler(async (event) => {
         },
       },
     })
-    console.log('Quote Data SS:', data)
     if (data) {
       const quote = data
       console.log('Returned Quote:', quote)
