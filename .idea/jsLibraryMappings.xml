@@ -2,5 +2,6 @@
 <project version="4">
   <component name="JavaScriptLibraryMappings">
     <includedPredefinedLibrary name="Node.js Core" />
+    <excludedPredefinedLibrary name="hpl-website-nuxt/.output/server/functions/node_modules" />
   </component>
 </project>

@@ -2,6 +2,8 @@
 import { stripeInit } from '~/services/stripeClientInit'
 import { useStripeStore } from '~/stores/useStripeStore'
 import { storeToRefs } from 'pinia'
+import { buildURL } from '~/utils/buildUrl'
+import { useQuoteStore } from '~/stores/useQuoteStore'
 definePageMeta({
   name: 'cart',
   layout: 'auth',
@@ -10,6 +12,10 @@ definePageMeta({
 const stripeStore = useStripeStore()
 const { client_secret } = storeToRefs(stripeStore)
 const stripe = await stripeInit()
+
+const quoteStore = useQuoteStore()
+const { quote } = storeToRefs(quoteStore)
+const { quote_number } = quote.value
 
 const appearance = {
   theme: 'stripe',
@@ -38,14 +44,15 @@ onMounted(() => {
   })
 })
 
-const websiteUrl = useRuntimeConfig().public.WEBSITE_URL
+const websiteUrl = buildURL('/success', `quote_number=${quote_number}`)
+console.log('Website Redirect Url:', websiteUrl.value)
 async function submitHandler() {
   console.log('clientSecret:', client_secret.value)
   console.log('Stripe Elements:', stripeElements.elements)
   const { error } = await stripe!.confirmSetup({
     elements: stripeElements.elements,
     confirmParams: {
-      return_url: websiteUrl,
+      return_url: websiteUrl.value,
     },
   })
   if (error) {
@@ -181,50 +188,6 @@ const products = [
         </h2>
 
         <div class="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0">
-          <!--            <div>-->
-          <!--              <h3-->
-          <!--                id="contact-info-heading"-->
-          <!--                class="text-lg font-medium text-gray-900"-->
-          <!--              >-->
-          <!--                Payment Information-->
-          <!--              </h3>-->
-
-          <!--              &lt;!&ndash;              <div class="mt-6">&ndash;&gt;-->
-          <!--              &lt;!&ndash;                <label&ndash;&gt;-->
-          <!--              &lt;!&ndash;                  for="full-name"&ndash;&gt;-->
-          <!--              &lt;!&ndash;                  class="block text-sm font-medium text-gray-700"&ndash;&gt;-->
-          <!--              &lt;!&ndash;                  >Full Name</label&ndash;&gt;-->
-          <!--              &lt;!&ndash;                >&ndash;&gt;-->
-          <!--              &lt;!&ndash;                <div class="mt-1">&ndash;&gt;-->
-          <!--              &lt;!&ndash;                  <input&ndash;&gt;-->
-          <!--              &lt;!&ndash;                    v-model="fullName"&ndash;&gt;-->
-          <!--              &lt;!&ndash;                    type="text"&ndash;&gt;-->
-          <!--              &lt;!&ndash;                    id="full-name"&ndash;&gt;-->
-          <!--              &lt;!&ndash;                    name="full-name"&ndash;&gt;-->
-          <!--              &lt;!&ndash;                    autocomplete="full-name"&ndash;&gt;-->
-          <!--              &lt;!&ndash;                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-brand focus:ring-brand sm:text-sm"&ndash;&gt;-->
-          <!--              &lt;!&ndash;                  />&ndash;&gt;-->
-          <!--              &lt;!&ndash;                </div>&ndash;&gt;-->
-          <!--              &lt;!&ndash;              </div>&ndash;&gt;-->
-          <!--              &lt;!&ndash;              <div class="mt-1">&ndash;&gt;-->
-          <!--              &lt;!&ndash;                <label&ndash;&gt;-->
-          <!--              &lt;!&ndash;                  for="email-address"&ndash;&gt;-->
-          <!--              &lt;!&ndash;                  class="block text-sm font-medium text-gray-700"&ndash;&gt;-->
-          <!--              &lt;!&ndash;                  >Email address</label&ndash;&gt;-->
-          <!--              &lt;!&ndash;                >&ndash;&gt;-->
-          <!--              &lt;!&ndash;                <div class="mt-1">&ndash;&gt;-->
-          <!--              &lt;!&ndash;                  <input&ndash;&gt;-->
-          <!--              &lt;!&ndash;                    v-model="email"&ndash;&gt;-->
-          <!--              &lt;!&ndash;                    type="email"&ndash;&gt;-->
-          <!--              &lt;!&ndash;                    id="email-address"&ndash;&gt;-->
-          <!--              &lt;!&ndash;                    name="email-address"&ndash;&gt;-->
-          <!--              &lt;!&ndash;                    autocomplete="email"&ndash;&gt;-->
-          <!--              &lt;!&ndash;                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-brand focus:ring-brand sm:text-sm"&ndash;&gt;-->
-          <!--              &lt;!&ndash;                  />&ndash;&gt;-->
-          <!--              &lt;!&ndash;                </div>&ndash;&gt;-->
-          <!--              &lt;!&ndash;              </div>&ndash;&gt;-->
-          <!--            </div>-->
-
           <div class="mt-4">
             <h3
               id="payment-heading"

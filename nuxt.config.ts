@@ -27,7 +27,7 @@ export default defineNuxtConfig({
     ],
   ],
   nitro: {
-    preset: 'azure',
+    preset: 'vercel',
   },
   runtimeConfig: {
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,

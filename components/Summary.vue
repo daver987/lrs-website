@@ -1,6 +1,17 @@
 <script setup lang="ts">
 import { Quote } from '~/server/api/quote.get'
+import { useQuoteStore } from '~/stores/useQuoteStore'
+import { useCartStore } from '~/stores/useCartStore'
+import { storeToRefs } from 'pinia'
 import { combineTotals, combineLineItems } from '~/utils/lineItemUtils'
+import { useStripeStore } from '~/stores/useStripeStore'
+
+const quoteStore = useQuoteStore()
+const cartStore = useCartStore()
+const stripeStore = useStripeStore()
+
+const { addedToCart, loading } = storeToRefs(cartStore)
+const currentDate = useFormattedDate(new Date())
 
 let quote = reactive<Quote>({
   is_round_trip: false,
@@ -40,12 +51,18 @@ let quote = reactive<Quote>({
     last_name: '',
     phone_number: '',
     email_address: '',
+    id: '',
   },
 })
 
+if (quoteStore.quote) {
+  Object.assign(quote, quoteStore.quote)
+  console.log('Store assigned to quote')
+}
+
 const route = useRoute()
-if (route.query) {
-  const { quote_number } = route.query
+const { quote_number } = route.query
+if (quote_number) {
   console.log('Quote Number in route:', quote_number)
   const { data } = await useFetch('/api/quote', {
     method: 'GET',
@@ -53,6 +70,7 @@ if (route.query) {
   })
   console.log('Fetched Data from route:', data.value)
   Object.assign(quote, data.value)
+  Object.assign(quoteStore.quote, data.value)
   console.log('Fetched data assigned to quote')
 }
 

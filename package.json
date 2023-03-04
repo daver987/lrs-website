@@ -9,13 +9,7 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "webstorm-integration": "vitest --watch --reporter=dot --reporter=json --outputFile=.vitest-result.json",
-    "ci": "start-server-and-test story:preview http://localhost:4567/ test",
-    "test": "cypress run",
-    "test:dev": "cypress open --config baseUrl=http://localhost:6006",
-    "test:examples": "pnpm run story:build && pnpm run ci",
-    "supabasezod": "supabase-to-zod --input types.ts --output schema/supabase.ts"
+    "preview": "nuxt preview"
   },
   "devDependencies": {
     "@googlemaps/js-api-loader": "^1.15.1",
