@@ -24,7 +24,7 @@ model Account {
 model User {
   id                 String      @id @default(uuid())
   created_at         DateTime    @default(now())
-  updated_at         DateTime    @default(now())
+  updated_at         DateTime    @updatedAt
   first_name         String
   last_name          String
   email_address      String      @unique
@@ -66,21 +66,19 @@ model Quote {
   sales_tax             SalesTax?  @relation(fields: [sales_tax_id], references: [id])
   line_items            LineItem[]
   trips                 Trip[]
-  selected_hours        Int?
-  selected_passengers   Int        @default(value: 1)
   pickup_date           Float
-  formatted_pickup_date String?
   pickup_time           Float
-  formatted_pickup_time String?
   return_date           Float?
-  formatted_return_date String?
   return_time           Float?
+  formatted_pickup_date String?
+  formatted_pickup_time String?
+  formatted_return_date String?
   formatted_return_time String?
   return_service_type   String?
+  selected_hours        Int?       @default(value: 2)
+  selected_passengers   Int        @default(value: 1)
   is_round_trip         Boolean    @default(false)
   is_booked             Boolean    @default(false)
-  session_id            String?
-  setup_intent          Json?
   user_id               String
   service_id            Int
   vehicle_id            Int
@@ -93,10 +91,11 @@ model Quote {
 }
 
 model Trip {
-  id                            String   @id @default(uuid())
+  id                            String   @id @unique @default(uuid())
   created_at                    DateTime @default(now())
   updated_at                    DateTime @updatedAt
   quote                         Quote    @relation(fields: [quote_number], references: [quote_number])
+  quote_number                  Int
   origin_lat                    Float
   origin_lng                    Float
   origin_name                   String
@@ -121,15 +120,29 @@ model Trip {
   is_farmed_out                 Boolean? @default(false)
   is_return                     Boolean  @default(false)
   notes                         String?
-  quote_number                  Int
+  Payment                       Payment?
 
   @@index([quote_number])
+}
+
+model Payment {
+  id               String   @id @default(uuid())
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+  is_preauthorized Boolean  @default(false)
+  is_paid          Boolean  @default(false)
+  setup_intent     Json?
+  payment_intent   Json?
+  payment_type     String?
+  notes            String?
+  trip_id          String?  @unique
+  trip             Trip?    @relation(fields: [trip_id], references: [id])
 }
 
 model Service {
   value            Int      @id @unique @default(autoincrement())
   created_at       DateTime @default(now())
-  updated_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
   label            String
   is_active        Boolean  @default(false)
   is_hourly        Boolean  @default(false)
@@ -140,7 +153,7 @@ model Service {
 model LineItem {
   id            String   @id @unique @default(uuid())
   created_at    DateTime @default(now())
-  updated_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
   label         String
   description   String?
   is_percentage Boolean  @default(true)
@@ -154,7 +167,7 @@ model LineItem {
 model SalesTax {
   id         Int      @id @unique @default(autoincrement())
   created_at DateTime @default(now())
-  updated_at DateTime @default(now())
+  updated_at DateTime @updatedAt
   tax_name   String
   amount     Float
   region     String
@@ -165,7 +178,7 @@ model SalesTax {
 model Vehicle {
   value            Int      @id @unique @default(autoincrement())
   created_at       DateTime @default(now())
-  updated_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
   max_passengers   Int      @default(value: 0)
   max_luggage      Int      @default(value: 0)
   per_km           Float    @default(value: 0)
