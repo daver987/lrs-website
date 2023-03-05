@@ -79,6 +79,7 @@ model Quote {
   selected_passengers   Int        @default(value: 1)
   is_round_trip         Boolean    @default(false)
   is_booked             Boolean    @default(false)
+  payment               Payment?
   user_id               String
   service_id            Int
   vehicle_id            Int
@@ -177,6 +178,8 @@ model Payment {
   notes            String?
   trip_id          String?  @unique
   trip             Trip?    @relation(fields: [trip_id], references: [id])
+  quote            Quote    @relation(fields: [quote_number], references: [quote_number])
+  quote_number     Int      @unique
 }
 
 model Service {

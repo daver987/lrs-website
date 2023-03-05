@@ -312,7 +312,7 @@ const printSummary = () => {
                   <p class="max-w-[65ch] font-sans text-sm text-red-700">
                     **Please note, due to scheduling you may not receive a
                     confirmation right away. If your trip is not confirmed
-                    within 2 hours, please contact us at 1-800-668-8687.
+                    within 2 hours, please contact us at 647-360-9631
                   </p>
                 </div>
                 <div class="flex flex-col">

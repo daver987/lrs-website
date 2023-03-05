@@ -281,7 +281,7 @@ export default defineEventHandler(async (event) => {
         //@ts-ignore
         to: quote.user.phone_number,
       })
-    }, 20000)
+    }, 60000)
 
     return {
       quote,

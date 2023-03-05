@@ -233,7 +233,6 @@ body {
   --n-bezier: cubic-bezier(0.4, 0, 0.2, 1);
   --n-count-text-color: rgba(255, 255, 255, 0.52);
   --n-count-text-color-disabled: rgba(255, 255, 255, 0.38);
-  --n-color: rgba(255, 255, 255, 0.1);
   --n-font-size: 14px;
   --n-border-radius: 3px;
   --n-height: 34px;
@@ -280,7 +279,6 @@ body {
   --n-suffix-text-color: rgba(255, 255, 255, 0.82);
 }
 
-input:focus,
 textarea:focus {
   outline: none;
 }
@@ -343,189 +341,32 @@ textarea:focus {
 
   .vue-tel-input {
     border-radius: var(--n-border-radius) !important;
-    display: flex !important;
-    border: solid 1px !important;
-    border-color: transparent !important;
-    text-align: left !important;
-    background-color: var(--n-color) !important;
+    border: 1px solid transparent !important;
     height: var(--n-height) !important;
-    font-size: var(--n-font-size) !important;
-    outline: none !important;
+    width: 100%;
+  }
+
+  .vti__input {
+    border-radius: 0 3px 3px 0;
+    padding-left: 7px;
+    background-color: var(--n-color);
+    caret-color: var(--n-caret-color);
+    font-size: var(--n-font-size);
+    color: var(--n-text-color);
   }
 
   .vue-tel-input:hover {
     border: var(--n-border-hover) !important;
   }
 
-  .vue-tel-input:focus {
-    border: var(--n-border-focus) !important;
-    outline: var(--n-border-focus) !important;
-    background-color: #000000;
-  }
-
   .vti__dropdown {
-    display: flex;
-    flex-direction: column;
-    align-content: center;
-    justify-content: center;
-    position: relative;
-    padding: 7px;
-    cursor: pointer;
+    z-index: 1000 !important;
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
-    background-color: var(--n-color) !important;
+    background-color: var(--n-count-text-color);
   }
 
-  .vti__dropdown:hover {
-    background-color: var(--n-color) !important;
-  }
 
-  .vti__dropdown.show {
-    max-height: 300px;
-    overflow: scroll;
-  }
 
-  .vti__dropdown.open {
-    background-color: var(--n-color);
-  }
-
-  .vti__dropdown.disabled {
-    cursor: no-drop;
-    outline: none;
-    background-color: #f3f3f3;
-  }
-
-  .vti__dropdown:hover {
-    background-color: #f3f3f3;
-  }
-
-  .vti__selection {
-    font-size: 0.8em;
-    display: flex;
-    align-items: center;
-  }
-
-  .vti__selection .vti__country-code {
-    color: #666;
-  }
-
-  .vti__flag-wrapper {
-    display: inline-block;
-    width: 30px;
-    text-align: center;
-  }
-
-  .vti__flag {
-    margin-right: 5px;
-    margin-left: 5px;
-  }
-
-  .vti__dropdown-list {
-    z-index: 1;
-    padding: 0;
-    margin: 0;
-    text-align: left;
-    list-style: none;
-    max-height: 200px;
-    overflow-y: scroll;
-    position: absolute;
-    left: -1px;
-    background-color: var(--n-color);
-    border: 1px solid var(--n-color);
-  }
-
-  .vti__dropdown-list.below {
-    top: 33px;
-  }
-
-  .vti__dropdown-list.above {
-    top: auto;
-    bottom: 100%;
-  }
-
-  .vti__dropdown-arrow {
-    transform: scaleY(0.5);
-    display: inline-block;
-    color: #666;
-  }
-
-  .vti__dropdown-item {
-    cursor: pointer;
-    padding: 4px 15px;
-  }
-
-  .vti__dropdown-item.highlighted {
-    background-color: #f3f3f3;
-  }
-
-  .vti__dropdown-item.last-preferred {
-    border-bottom: 1px solid #cacaca;
-  }
-
-  .vti__dropdown-item .vti__flag {
-    display: inline-block;
-    margin-right: 5px;
-  }
-
-  .vti__input {
-    border: none;
-    border-radius: 0 3px 3px 0;
-    width: 100%;
-    outline: none;
-    padding-left: 7px;
-    background-color: transparent;
-    caret-color: var(--n-caret-color);
-    font-size: var(--n-font-size);
-  }
-
-  .vti__input:focus {
-    border: none !important;
-    outline: none !important;
-  }
-
-  .vti__input:focus-within {
-    border: none !important;
-    outline: none !important;
-  }
-
-  .vti__search_box {
-    border: 1px solid var(--n-color);
-    width: 100%;
-    padding: 7px;
-    margin: 2px 2px;
-  }
 }
 
-/*.vue-tel-input {
-  max-width: 100% !important;
-  cursor: text !important;
-  line-height: 1.5 !important;
-  z-index: auto !important;
-  outline: none !important;
-  box-sizing: border-box !important;
-  position: relative !important;
-  display: inline-flex !important;
-  border-radius: var(--n-border-radius) !important;
-  background-color: var(--n-color) !important;
-  transition: background-color 0.3s var(--n-bezier) !important;
-  font-size: var(--n-font-size) !important;
-  --n-padding-vertical: calc(
-    (var(--n-height) - 1.5 * var(--n-font-size)) / 2
-  ) !important;
-}
-
-.vti__dropdown {
-  display: flex;
-  flex-direction: column;
-  align-content: center;
-  justify-content: center;
-  position: relative;
-  padding: 7px;
-  cursor: pointer;
-  background: rgba(0, 0, 0, 0.25);
-}
-
-.vti__dropdown.show {
-  max-height: 300px;
-  overflow: scroll;
-}*/

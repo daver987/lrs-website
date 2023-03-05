@@ -5,8 +5,7 @@ import {
   getCustomerByEmail,
 } from './services/stripe'
 import { Quote } from './quote.get'
-
-// const WEBSITE_URL = useRuntimeConfig().public.WEBSITE_URL
+import { Prisma } from '@prisma/client'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -37,23 +36,20 @@ export default defineEventHandler(async (event) => {
       },
       data: {
         stripe_customer_id: stripeId,
-        quotes: {
-          update: {
-            where: {
-              quote_number: quote.quote_number,
-            },
-            data: {
-              setup_intent: setupIntent,
-            },
+      },
+    })
+    const createSetup = await prisma.payment.create({
+      data: {
+        setup_intent: setupIntent as unknown as Prisma.InputJsonValue,
+        quote: {
+          connect: {
+            quote_number: quote.quote_number,
           },
         },
       },
-      include: {
-        quotes: true,
-      },
     })
     // Return the session ID to the client
-    return { update, setupIntent, customer, statusCode: 200 }
+    return { createSetup, update, setupIntent, customer, statusCode: 200 }
   } catch (err) {
     // Handle any errors that occur
     throw err

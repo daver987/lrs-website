@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useOsTheme, darkTheme } from 'naive-ui'
 import { useUserStore } from './stores/useUserStore'
 import { useStorage } from '@vueuse/core'
 
@@ -15,23 +14,17 @@ const userStore = useUserStore()
 const user_id = useStorage('hpl_user_id', userStore.getUserId())
 
 userStore.setUserId(user_id.value)
-
-const osTheme = useOsTheme()
-const theme = computed(() => (osTheme.value === 'dark' ? darkTheme : null))
 </script>
 
 <template>
-  <NConfigProvider :theme="theme">
-    <NGlobalStyle />
-    <NLoadingBarProvider>
-      <NMessageProvider>
-        <NuxtLayout>
-          <SeoKit />
-          <NuxtPage />
-        </NuxtLayout>
-      </NMessageProvider>
-    </NLoadingBarProvider>
-  </NConfigProvider>
+  <NLoadingBarProvider>
+    <NMessageProvider>
+      <NuxtLayout>
+        <SeoKit />
+        <NuxtPage />
+      </NuxtLayout>
+    </NMessageProvider>
+  </NLoadingBarProvider>
 </template>
 
 <style>
