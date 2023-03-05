@@ -215,7 +215,7 @@ const createBooking = async () => {
                       >{{ quote.selected_passengers }}
                     </p>
                   </div>
-                  <p class="mt-3 text-sm font-medium">
+                  <p class="text-gray-500 dark:text-gray-100">
                     <span class="text-brand-400">Base Rate: </span>$
                     {{ quote.trips[0].line_items_list[0].total }}
                   </p>
@@ -311,7 +311,7 @@ const createBooking = async () => {
                       >{{ quote.selected_passengers }}
                     </p>
                   </div>
-                  <p class="mt-3 text-sm font-medium">
+                  <p class="text-gray-500 dark:text-gray-100">
                     <span class="text-brand-400">Base Rate: </span>$
                     {{ quote.trips[1].line_items_list[0].total }}
                   </p>

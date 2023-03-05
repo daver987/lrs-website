@@ -1,5 +1,4 @@
 import {
-  // createCheckoutSession,
   createCustomer,
   createSetupIntent,
   getCustomerByEmail,
@@ -25,11 +24,8 @@ export default defineEventHandler(async (event) => {
 
     const stripeId = customer.id
 
-    // Create a checkout session
-    // const session = await createCheckoutSession(quote, stripeId, WEBSITE_URL)
     const setupIntent = await createSetupIntent(quote, stripeId)
 
-    // Add the session ID and stripe ID to the user and quotes table
     const update = await prisma.user.update({
       where: {
         email_address: quote.user.email_address,
@@ -48,7 +44,6 @@ export default defineEventHandler(async (event) => {
         },
       },
     })
-    // Return the session ID to the client
     return { createSetup, update, setupIntent, customer, statusCode: 200 }
   } catch (err) {
     // Handle any errors that occur

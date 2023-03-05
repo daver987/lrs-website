@@ -224,9 +224,7 @@ const products = [
               </div>
             </form>
             <div class="mb-2 flex flex-col">
-              <p
-                class="font-sans text-sm font-bold text-gray-900 dark:text-gray-100"
-              >
+              <p class="font-sans text-sm font-bold text-gray-900">
                 We require a credit card to hold your reservation
               </p>
               <p class="max-w-[65ch] font-sans text-xs text-red-700">
@@ -235,9 +233,7 @@ const products = [
                 full amount of your reservation.
               </p>
               <div class="mt-2 flex flex-col">
-                <p
-                  class="font-sans text-sm font-bold text-gray-900 dark:text-gray-100"
-                >
+                <p class="font-sans text-sm font-bold text-gray-900">
                   Card is not charged until the completion of your trip
                 </p>
                 <p class="font-sans text-xs text-red-700">
