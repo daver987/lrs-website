@@ -3,6 +3,12 @@ generator client {
   previewFeatures = ["clientExtensions"]
 }
 
+generator zod {
+  provider                  = "zod-prisma-types"
+  createRelationValuesTypes = true
+  createPartialTypes        = true
+}
+
 datasource db {
   provider     = "mysql"
   url          = env("DATABASE_URL")
@@ -25,10 +31,10 @@ model User {
   id                 String      @id @default(uuid())
   created_at         DateTime    @default(now())
   updated_at         DateTime    @updatedAt
-  first_name         String
-  last_name          String
-  email_address      String      @unique
-  phone_number       String
+  first_name         String?
+  last_name          String?
+  email_address      String?     @unique
+  phone_number       String?
   stripe_customer_id String?
   is_customer        Boolean     @default(false)
   quotes             Quote[]
@@ -66,8 +72,8 @@ model Quote {
   sales_tax             SalesTax?  @relation(fields: [sales_tax_id], references: [id])
   line_items            LineItem[]
   trips                 Trip[]
-  pickup_date           Float
-  pickup_time           Float
+  pickup_date           Float?
+  pickup_time           Float?
   return_date           Float?
   return_time           Float?
   formatted_pickup_date String?

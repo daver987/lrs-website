@@ -2,6 +2,29 @@
 definePageMeta({
   layout: 'auth',
 })
+
+const emailData = {
+  first_name: 'David',
+  last_name: 'Robertson',
+  email_address: 'oplholds@hotmail.com',
+  phone_number: '289-400-9408',
+  round_trip_total: '139.99',
+  total_fare: '139.99',
+  vehicle_label: 'Standard Sedan',
+  service_label: 'Point To Point',
+  is_round_trip: false,
+  pickup_date: 'March 10, 2023',
+  pickup_time: '10:00pm',
+  return_date: 'January 10, 1969',
+  return_time: '12:00AM',
+  quote_number: '2500',
+  origin_full_name: '1265 Sixth Line, Oakville, Ontario, L6H1X2',
+  destination_full_name:
+    'Toronto Pearson International Airport, 6900 Silverdart Drive',
+  vehicle_image:
+    'https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/d519ec92-d745-4c9b-6521-1466a8d28300/1024',
+  visibility: false,
+}
 </script>
 <template>
   <div style="max-width: 650px; margin: auto">

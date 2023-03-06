@@ -1,11 +1,19 @@
 import { usePricingEngine } from '~/composables/usePricingEngine'
 import { Quote } from '~/schema/quoteSchema'
-import { Conversion } from '~/schema/conversionSchema'
 import { createAircallContact } from './services/createAircallContact'
-import { twilioClient } from '~/server/api/services/twilioInit'
 import { sendEmail } from './services/sendEmail'
+import { sendBookingConfirmationEmail } from './services/sendGridEmail'
 import { formatAddress } from '~/utils/formatAddress'
 import { computed } from 'vue'
+import {
+  VehicleSchema,
+  LineItemSchema,
+  SalesTaxSchema,
+  ConversionPartialSchema,
+  ServiceSchema,
+  QuotePartialSchema,
+  UserPartialSchema,
+} from '~/prisma/generated/zod'
 import {
   useFormattedDate,
   useFormattedTime,
@@ -13,18 +21,25 @@ import {
 
 const zapierEmail = useRuntimeConfig().ZAPIER_WEBHOOK_EMAIL
 const aircallSecret = useRuntimeConfig().AIRCALL_API_TOKEN
+const sendGridKey = useRuntimeConfig().SENDGRID_API_KEY
+
 export default defineEventHandler(async (event) => {
   try {
     const prisma = event.context.prisma
-    const quoteData = await readBody<Quote>(event)
+    const twilioClient = event.context.twilioClient
+    const data = await readBody<Quote>(event)
+    const { origin, destination } = data
+    const vehicle = VehicleSchema.array().parse(data.vehicle)
+    const line_items = LineItemSchema.array().parse(data.line_items)
+    const sales_tax = SalesTaxSchema.array().parse(data.sales_tax)
+    const service = ServiceSchema.array().parse(data.service)
+    const conversionData = ConversionPartialSchema.strip().parse(
+      data.conversion
+    )
+    const quoteData = QuotePartialSchema.strip().parse(data)
+    const user = UserPartialSchema.strip().parse(data)
     const {
       user_id,
-      first_name,
-      last_name,
-      email_address,
-      phone_number,
-      origin,
-      destination,
       service_id,
       vehicle_id,
       selected_hours,
@@ -33,16 +48,11 @@ export default defineEventHandler(async (event) => {
       is_round_trip,
       return_date,
       return_time,
-      conversion,
-      vehicle,
-      service,
-      line_items,
-      sales_tax,
       selected_passengers,
     } = quoteData
 
-    const conversionData = conversion as Conversion
-    console.log('SS Quote Data:', quoteData)
+    const { first_name, last_name, email_address, phone_number } = user
+
     const returnServiceTypeLabel = computed(() =>
       is_round_trip && service_id === 2
         ? 'From Airport'
@@ -61,8 +71,12 @@ export default defineEventHandler(async (event) => {
     // Set pricing engine state
     pricingEngine.origin.value = origin.place_id
     pricingEngine.destination.value = destination.place_id
-    pricingEngine.vehicleTypeId.value = vehicle_id
-    pricingEngine.serviceTypeId.value = service_id
+    if (typeof vehicle_id === 'number') {
+      pricingEngine.vehicleTypeId.value = vehicle_id
+    }
+    if (service_id != null) {
+      pricingEngine.serviceTypeId.value = service_id
+    }
     pricingEngine.selectedHours.value = selected_hours!
 
     // Wait for the distance to be set before updating other values
@@ -222,7 +236,7 @@ export default defineEventHandler(async (event) => {
         },
         user: {
           connectOrCreate: {
-            where: { email_address: email_address },
+            where: { email_address: email_address as string },
             create: {
               id: user_id,
               first_name: first_name,
@@ -269,17 +283,21 @@ export default defineEventHandler(async (event) => {
     const quote = newQuote
 
     await sendEmail(zapierEmail, newQuote)
+    try {
+      await sendBookingConfirmationEmail(newQuote, sendGridKey)
+      console.log('Email sent successfully')
+    } catch (error) {
+      console.error('Error sending email:', error?.message as string)
+    }
     await createAircallContact(aircallSecret, newQuote)
     const checkoutLink = `https://highparklivery.com/checkout?quote_number=${quote.quote_number}`
-    //@ts-ignore
-    const message = `Hi ${quote.user.first_name} This is High Park Livery. Thank you for requesting a quote. Please use this link to book: ${checkoutLink}.`
+    const message = `Hi ${first_name} This is High Park Livery. Thank you for requesting a quote. Please use this link to book: ${checkoutLink}.`
 
     setTimeout(async () => {
       await twilioClient.messages.create({
         body: message,
-        messagingServiceSid: 'MG9b5c0af877bac1ebc7504e98a8022456',
-        //@ts-ignore
-        to: quote.user.phone_number,
+        messagingServiceSid: 'MG211e359fc267bbde46acacf4a428a03f',
+        to: phone_number as string,
       })
     }, 10000)
 

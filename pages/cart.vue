@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { stripeInit } from '~/services/stripeClientInit'
+// import { stripeInit } from '~/services/stripeClientInit'
 import { useStripeStore } from '~/stores/useStripeStore'
 import { storeToRefs } from 'pinia'
 import { buildURL } from '~/utils/buildUrl'
@@ -11,7 +11,7 @@ definePageMeta({
 
 const stripeStore = useStripeStore()
 const { client_secret } = storeToRefs(stripeStore)
-const stripe = await stripeInit()
+const { $stripe } = useNuxtApp()
 
 const quoteStore = useQuoteStore()
 const { quote } = storeToRefs(quoteStore)
@@ -35,7 +35,7 @@ const stripeElements = reactive<any>({})
 onMounted(() => {
   nextTick(() => {
     console.log('clientSecret:', client_secret.value)
-    stripeElements.elements = stripe?.elements({
+    stripeElements.elements = $stripe?.elements({
       clientSecret: client_secret.value,
       appearance,
     })
@@ -49,7 +49,7 @@ console.log('Website Redirect Url:', websiteUrl.value)
 async function submitHandler() {
   console.log('clientSecret:', client_secret.value)
   console.log('Stripe Elements:', stripeElements.elements)
-  const { error } = await stripe!.confirmSetup({
+  const { error } = await $stripe!.confirmSetup({
     elements: stripeElements.elements,
     confirmParams: {
       return_url: websiteUrl.value,

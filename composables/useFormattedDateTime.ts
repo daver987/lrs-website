@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 
-export function useFormattedDate(timestamp: number | Date | null): string {
+export function useFormattedDate(timestamp: number | null | undefined): string {
   if (!timestamp) {
     return ''
   }
@@ -8,7 +8,7 @@ export function useFormattedDate(timestamp: number | Date | null): string {
   return format(date, 'MMMM dd, yyyy')
 }
 
-export function useFormattedTime(timestamp: number | null): string {
+export function useFormattedTime(timestamp: number | null | undefined): string {
   if (!timestamp) {
     return ''
   }

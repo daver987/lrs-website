@@ -1,4 +1,4 @@
-import { format } from 'date-fns'
+import sgMail from '@sendgrid/mail'
 
 interface EmailData {
   first_name: string
@@ -62,5 +62,73 @@ export const sendEmail = async (
     console.log('This is the returned email data', data)
   } else {
     console.error(`Error sending email: ${response.statusText}`)
+  }
+}
+
+export async function sendQuoteEmail(body: any, apiKey: string) {
+  sgMail.setApiKey(apiKey)
+  const msg = {
+    from: {
+      email: 'info@highparklivery.com',
+    },
+    subject: 'High Park Livery Invites you to Complete Your Booking',
+    personalizations: [
+      {
+        to: [
+          {
+            email: body.email_address,
+          },
+        ],
+        dynamicTemplateData: {
+          first_name: body.first_name,
+          last_name: body.last_name,
+          email_address: body.email_address,
+          phone_number: body.phone_number,
+          total: body.total_fare,
+          is_round_trip: body.is_round_trip,
+          round_trip_total: body.round_trip_total,
+          vehicle_label: body.vehicle_label,
+          service_label: body.service_label,
+          pickup_date: body.pickup_date,
+          pickup_time: body.pickup_time,
+          return_date: body.return_date,
+          return_time: body.return_time,
+          quote_number: body.quote_number,
+          origin_formatted_address: body.origin_formatted_address,
+          destination_formatted_address: body.destination_formatted_address,
+          vehicle_image: body.vehicle_image,
+          visibility: body.visibility,
+        },
+      },
+    ],
+    template_id: 'd-a84d49d56c0c4666b6442473fcccf297',
+    mailSettings: {
+      bypassListManagement: {
+        enable: false,
+      },
+      footer: {
+        enable: false,
+      },
+      sandboxMode: {
+        enable: false,
+      },
+    },
+    trackingSettings: {
+      clickTracking: {
+        enable: true,
+        enableText: false,
+      },
+      openTracking: {
+        enable: true,
+        substitutionTag: '%open-track%',
+      },
+    },
+  }
+
+  try {
+    await sgMail.send(msg)
+    console.log('Quote email sent successfully.')
+  } catch (error) {
+    console.error('Error sending quote email:', error)
   }
 }

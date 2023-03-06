@@ -1,14 +1,12 @@
-import { vehicleSchema } from '~/schema/vehicleSchema'
-import { z } from 'zod'
-const vehicle = z.array(vehicleSchema)
+import { VehicleSchema } from '~/prisma/generated/zod'
 
 export default defineEventHandler(async (event) => {
   const prisma = event.context.prisma
   try {
     const data = await prisma.vehicle.findMany()
+
     if (data) {
-      const vehicleTypes = vehicle.parse(data)
-      return vehicleTypes
+      return VehicleSchema.array().parse(data)
     } else {
       console.log('No data found')
       return 'No data found'

@@ -3,7 +3,7 @@ export default defineEventHandler(async (event) => {
   const query = getQuery(event)
   try {
     const user = await prisma.user.findUnique({
-      where: { id: query.id },
+      where: { id: query.id as string },
       select: {
         stripe_customer_id: true,
       },

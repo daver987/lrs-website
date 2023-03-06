@@ -1,5 +1,4 @@
 import { Stripe } from 'stripe'
-import { stripe } from './stripeInit'
 
 export interface CreateCustomerParams {
   first_name: string
@@ -14,7 +13,7 @@ export async function createCustomer(quote: {
 }): Promise<Stripe.Customer> {
   const { first_name, last_name, email_address, phone_number, id } = quote.user
 
-  return await stripe.customers.create({
+  return await $stripe.customers.create({
     email: email_address,
     name: `${first_name} ${last_name}`,
     phone: phone_number,
@@ -30,7 +29,7 @@ export async function createCheckoutSession(
   WEBSITE_URL: string
 ): Promise<Stripe.Checkout.Session> {
   const { quote_number } = quote
-  return await stripe.checkout.sessions.create({
+  return await $stripe.checkout.sessions.create({
     customer: stripeCustomerId,
     payment_method_types: ['card'],
     mode: 'setup',
@@ -49,7 +48,7 @@ export async function createSetupIntent(
   stripeCustomerId: string
 ): Promise<Stripe.SetupIntent> {
   const { quote_number } = quote
-  return await stripe.setupIntents.create({
+  return await $stripe.setupIntents.create({
     customer: stripeCustomerId,
     payment_method_types: ['card'],
     metadata: {
@@ -65,7 +64,7 @@ interface GetCustomerByEmailParams {
 export async function getCustomerByEmail({
   email,
 }: GetCustomerByEmailParams): Promise<Stripe.Customer | null> {
-  const customers = await stripe.customers.list({ email: email })
+  const customers = await $stripe.customers.list({ email: email })
 
   if (customers.data.length > 0) {
     return customers.data[0]

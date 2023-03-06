@@ -1,5 +1,6 @@
-import { computed, ref, reactive } from 'vue'
+import { computed, ref } from 'vue'
 import { z } from 'zod'
+import { Service, LineItem, Vehicle, SalesTax } from '~/prisma/generated/zod'
 
 const directionsSchema = z.object({
   routes: z.array(
@@ -21,54 +22,6 @@ const directionsSchema = z.object({
 })
 
 type DirectionsApiResponse = z.infer<typeof directionsSchema>
-
-// Vehicle Type interface
-export const vehicleSchema = z
-  .object({
-    value: z.number(),
-    label: z.string(),
-    per_km: z.number(),
-    per_hour: z.number(),
-    min_rate: z.number(),
-    min_hours: z.number(),
-    min_distance: z.number(),
-    is_active: z.boolean(),
-    vehicle_image: z.string(),
-  })
-  .strip()
-
-export type Vehicle = z.infer<typeof vehicleSchema>
-
-// Service Type interface
-export interface Service {
-  is_active: boolean
-  is_hourly: boolean
-  label: string
-  value: number
-}
-
-// Line Item interface
-export interface LineItem {
-  amount: number
-  id?: string
-  region?: string
-  is_active?: boolean
-  is_percentage?: boolean
-  is_taxable?: boolean
-  label: string
-  total?: number
-  tax?: number
-  applies_to?: string | null
-}
-
-// Tax interface
-export interface SalesTax {
-  amount: number
-  id: number
-  is_active: boolean
-  region: string
-  tax_name: string
-}
 
 const config = useRuntimeConfig().public.GOOGLE_MAPS_API_KEY
 
@@ -192,8 +145,10 @@ export function usePricingEngine(
 
         const tax = item.is_taxable ? +((amount * taxRate) / 100).toFixed(2) : 0
 
+        // @ts-ignore
         item.total = amount
         item.label = item.label || ''
+        // @ts-ignore
         item.tax = tax
 
         return { label: item.label, total: amount, tax: tax }
