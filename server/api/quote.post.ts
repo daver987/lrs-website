@@ -1,7 +1,6 @@
 import { usePricingEngine } from '~/composables/usePricingEngine'
 import { Quote } from '~/schema/quoteSchema'
 import { createAircallContact } from './services/createAircallContact'
-import { sendEmail } from './services/sendEmail'
 import { sendBookingConfirmationEmail } from './services/sendGridEmail'
 import { formatAddress } from '~/utils/formatAddress'
 import { computed } from 'vue'
@@ -19,9 +18,7 @@ import {
   useFormattedTime,
 } from '~/composables/useFormattedDateTime'
 
-const zapierEmail = useRuntimeConfig().ZAPIER_WEBHOOK_EMAIL
 const aircallSecret = useRuntimeConfig().AIRCALL_API_TOKEN
-const sendGridKey = useRuntimeConfig().SENDGRID_API_KEY
 
 export default defineEventHandler(async (event) => {
   try {
@@ -99,7 +96,6 @@ export default defineEventHandler(async (event) => {
     const formattedReturnDate = useFormattedDate(return_date)
     const formattedReturnTime = useFormattedTime(return_time)
     const returnServiceType = returnServiceTypeLabel.value
-    console.log('Detailed Line Items:', lineItemsList)
 
     const newQuote = await prisma.quote.create({
       data: {
@@ -282,14 +278,9 @@ export default defineEventHandler(async (event) => {
     })
     const quote = newQuote
 
-    await sendEmail(zapierEmail, newQuote)
-    try {
-      await sendBookingConfirmationEmail(newQuote, sendGridKey)
-      console.log('Email sent successfully')
-    } catch (error) {
-      console.error('Error sending email:', error?.message as string)
-    }
-    await createAircallContact(aircallSecret, newQuote)
+    const sendGridKey = useRuntimeConfig().SENDGRID_API_KEY
+    await sendBookingConfirmationEmail(newQuote, sendGridKey)
+    await createAircallContact(aircallSecret, quote)
     const checkoutLink = `https://highparklivery.com/checkout?quote_number=${quote.quote_number}`
     const message = `Hi ${first_name} This is High Park Livery. Thank you for requesting a quote. Please use this link to book: ${checkoutLink}.`
 
