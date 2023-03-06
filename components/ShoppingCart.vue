@@ -107,7 +107,7 @@ const createBooking = async () => {
 
     checkoutLoading.value = false
 
-    await navigateTo('/cart', {
+    await navigateTo('/checkout', {
       redirectCode: 303,
       external: false,
     })
