@@ -296,7 +296,7 @@ async function onSubmit() {
       console.log('Routed quote Data', quoteStore.quote)
       loadingBar.finish()
       // Navigate to checkout page
-      await navigateTo(`/checkout`)
+      await navigateTo(`/cart`)
       loading.value = false
     }, 500)
   } catch (e) {
