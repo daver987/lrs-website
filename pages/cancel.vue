@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 // import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue'
 
-useHead({
+definePageMeta({
+  layout: 'default',
   title: 'Cancel',
   meta: [
     {
@@ -9,13 +10,6 @@ useHead({
       content: 'Cancel page',
     },
   ],
-})
-definePageMeta({
-  layout: 'default',
-})
-
-const dropdownOptions = ref({
-  showFlags: true,
 })
 </script>
 

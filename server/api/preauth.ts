@@ -7,7 +7,6 @@ export default defineEventHandler(async (event) => {
   const prisma = event.context.prisma
   const now = format(new Date(), 'T')
   const tomorrow = format(add(new Date(), { days: 1 }), 'T')
-  // cron.schedule('0 * * * *', async () => {
   const quotes = await prisma.quote.findMany({
     where: {
       pickup_date: {
@@ -15,7 +14,9 @@ export default defineEventHandler(async (event) => {
         lte: useToNumber(tomorrow).value,
       },
       is_booked: true,
+      payment: {
+        is_preauthorized: false,
+      },
     },
   })
-  // })
 })

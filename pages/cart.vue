@@ -6,7 +6,7 @@ definePageMeta({
 </script>
 
 <template>
-  <div class="min-h-screen dark:bg-grey-900">
+  <div style="min-height: 100dvh" class="flex flex-col justify-between">
     <AppNavigation />
     <ShoppingCart />
     <SubFooter />

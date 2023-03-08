@@ -8,7 +8,7 @@ definePageMeta({
 
 <!--success page  -->
 <template>
-  <div class="h-full">
+  <div style="min-height: 100dvh" class="flex flex-col justify-between">
     <AppNavigation />
     <Summary />
     <SubFooter />
