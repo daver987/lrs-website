@@ -6,7 +6,6 @@ definePageMeta({
 })
 </script>
 
-<!--success page  -->
 <template>
   <div style="min-height: 100dvh" class="flex flex-col justify-between">
     <AppNavigation />

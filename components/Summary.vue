@@ -5,6 +5,7 @@ import { useCartStore } from '~/stores/useCartStore'
 import { storeToRefs } from 'pinia'
 import { combineTotals, combineLineItems } from '~/utils/lineItemUtils'
 import { useStripeStore } from '~/stores/useStripeStore'
+import { exportToPDF } from '#imports'
 
 const quoteStore = useQuoteStore()
 const cartStore = useCartStore()
@@ -81,6 +82,7 @@ const totals = combineTotals(quote.trips)
 const printSummary = () => {
   window.print()
 }
+const summary = ref<HTMLElement | null>(null)
 </script>
 
 <template>
@@ -151,7 +153,7 @@ const printSummary = () => {
       </div>
       <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
         <button
-          @click="printSummary"
+          @click="exportToPDF('my-pdf-file.pdf', summary)"
           type="button"
           class="inline-flex items-center justify-center rounded-md border border-transparent bg-primary px-4 py-2 font-sans text-sm font-medium uppercase tracking-wider text-white shadow-sm hover:bg-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 sm:w-auto"
         >
@@ -159,7 +161,7 @@ const printSummary = () => {
         </button>
       </div>
     </div>
-    <div class="-mx-4 mt-8 flex flex-col sm:-mx-6 md:mx-0">
+    <div class="-mx-4 mt-8 flex flex-col sm:-mx-6 md:mx-0" ref="summary">
       <table class="min-w-full divide-y divide-gray-300">
         <thead>
           <tr>

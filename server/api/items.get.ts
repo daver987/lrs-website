@@ -7,11 +7,11 @@ export default defineEventHandler(async (event) => {
     if (data) {
       return LineItemSchema.array().parse(data)
     } else {
-      console.log('No data found')
-      return 'No data found'
+      console.log('No Line Items found')
+      return 'No Line Items found'
     }
   } catch (error) {
-    console.log('Get User Error:', error)
+    console.log('Get Line Items Error:', error)
     return error
   }
 })

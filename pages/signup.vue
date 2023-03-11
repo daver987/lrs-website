@@ -8,11 +8,13 @@ import {
   TransitionRoot,
 } from '@headlessui/vue'
 import { navigation } from '~/data/navigation'
+
 definePageMeta({
   title: 'Sign Up',
   layout: 'auth',
   name: 'signup',
 })
+
 const quoteStore = useQuoteStore()
 const { quote } = storeToRefs(quoteStore)
 

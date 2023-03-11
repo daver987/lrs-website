@@ -1,7 +1,6 @@
-import '@total-typescript/ts-reset'
+// import '@total-typescript/ts-reset'
 
 export default defineNuxtConfig({
-  //@ts-ignore
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },
     layoutTransition: { name: 'layout', mode: 'out-in' },
@@ -9,7 +8,7 @@ export default defineNuxtConfig({
   build: {
     transpile: ['@headlessui/vue', '@googlemaps/js-api-loader'],
   },
-  // extends: ['nuxt-seo-kit'],
+  css: ['vue-tel-input/dist/vue-tel-input.css'],
   modules: [
     '@vueuse/nuxt',
     '@nuxtjs/fontaine',
@@ -19,17 +18,25 @@ export default defineNuxtConfig({
     'nuxt-icon',
     'nuxt-vitest',
     '@huntersofbook/naive-ui-nuxt',
+    '@sidebase/nuxt-pdf',
     [
       '@pinia/nuxt',
       {
-        autoImports: ['defineStore', ['defineStore', 'definePiniaStore']],
+        autoImports: ['defineStore', 'definePiniaStore'],
       },
     ],
   ],
+  naiveUI: {
+    themeOverrides: {
+      common: {
+        primaryColor: '#9f6c27',
+        primaryColorHover: '#674D32',
+      },
+    },
+  },
   nitro: {
     preset: 'vercel',
   },
-  css: ['vue-tel-input/dist/vue-tel-input.css'],
   runtimeConfig: {
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
@@ -54,13 +61,5 @@ export default defineNuxtConfig({
   },
   typescript: {
     shim: false,
-  },
-  naiveUI: {
-    themeOverrides: {
-      common: {
-        primaryColor: '#9f6c27',
-        primaryColorHover: '#674D32',
-      },
-    },
   },
 })

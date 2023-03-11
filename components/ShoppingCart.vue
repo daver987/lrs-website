@@ -5,13 +5,14 @@ import { useCartStore } from '~/stores/useCartStore'
 import { storeToRefs } from 'pinia'
 import { combineTotals, combineLineItems } from '~/utils/lineItemUtils'
 import { useStripeStore } from '~/stores/useStripeStore'
+import { format } from 'date-fns'
 
 const quoteStore = useQuoteStore()
 const cartStore = useCartStore()
 const stripeStore = useStripeStore()
 
 const { addedToCart, loading } = storeToRefs(cartStore)
-const currentDate = useFormattedDate(new Date())
+const currentDate = format(new Date(), 'PPPP')
 
 let quote = reactive<Quote>({
   is_round_trip: false,

@@ -80,6 +80,8 @@ export function usePricingEngine(
   const lineItemsList = ref(lineItems)
   const detailedLineItems = ref()
   const selectedServiceLabel = ref<string | undefined>('')
+  const selectedService = ref<Service>()
+  const selectedVehicle = ref<Vehicle>()
 
   // methods
   async function updateDistance() {
@@ -98,9 +100,11 @@ export function usePricingEngine(
     const selectedServiceType = services.find(
       (s) => s.value === serviceTypeId.value
     )
-
+    selectedVehicle.value = selectedVehicleType as any
     console.log('Selected vehicle type:', selectedVehicleType)
+    selectedService.value = selectedServiceType as any
     console.log('Selected service type:', selectedServiceType)
+
     selectedServiceLabel.value = selectedServiceType?.label
 
     if (!selectedVehicleType || !selectedServiceType) {
@@ -191,6 +195,8 @@ export function usePricingEngine(
     serviceTypeId,
     selectedServiceLabel,
     selectedHours,
+    selectedVehicle,
+    selectedService,
     distance,
     baseRate,
     detailedLineItems,

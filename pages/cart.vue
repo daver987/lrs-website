@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 definePageMeta({
   title: 'Cart',
-  layout: 'store',
+  layout: 'default',
 })
 </script>
 

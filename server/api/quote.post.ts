@@ -1,9 +1,9 @@
 import { usePricingEngine } from '~/composables/usePricingEngine'
-import { Quote } from '~/schema/quoteSchema'
 import { createAircallContact } from './services/createAircallContact'
 import { sendBookingConfirmationEmail } from './services/sendGridEmail'
 import { formatAddress } from '~/utils/formatAddress'
 import { computed } from 'vue'
+import _ from 'lodash'
 import {
   VehicleSchema,
   LineItemSchema,
@@ -24,8 +24,15 @@ export default defineEventHandler(async (event) => {
   try {
     const prisma = event.context.prisma
     const twilioClient = event.context.twilioClient
-    const data = await readBody<Quote>(event)
-    const { origin, destination } = data
+    const data = await readBody(event)
+    const {
+      origin,
+      destination,
+      return_date,
+      return_time,
+      pickup_date,
+      pickup_time,
+    } = data
     const vehicle = VehicleSchema.array().parse(data.vehicle)
     const line_items = LineItemSchema.array().parse(data.line_items)
     const sales_tax = SalesTaxSchema.array().parse(data.sales_tax)
@@ -35,17 +42,14 @@ export default defineEventHandler(async (event) => {
     )
     const quoteData = QuotePartialSchema.strip().parse(data)
     const user = UserPartialSchema.strip().parse(data)
+
     const {
       user_id,
+      selected_hours,
+      is_round_trip,
+      selected_passengers,
       service_id,
       vehicle_id,
-      selected_hours,
-      pickup_date,
-      pickup_time,
-      is_round_trip,
-      return_date,
-      return_time,
-      selected_passengers,
     } = quoteData
 
     const { first_name, last_name, email_address, phone_number } = user
@@ -96,140 +100,169 @@ export default defineEventHandler(async (event) => {
     const formattedReturnDate = useFormattedDate(return_date)
     const formattedReturnTime = useFormattedTime(return_time)
     const returnServiceType = returnServiceTypeLabel.value
+    const routeData = pricingEngine.routeData.value
 
-    const newQuote = await prisma.quote.create({
+    const quotes = {
       data: {
-        selected_hours: pricingEngine.selectedHours.value,
+        selected_hours: _.toNumber(selected_hours),
         selected_passengers: selected_passengers,
-        pickup_date: pickup_date,
-        formatted_pickup_date: formattedPickupDate,
-        pickup_time: pickup_time,
-        formatted_pickup_time: formattedPickupTime,
-        return_date: return_date,
-        formatted_return_date: formattedReturnDate,
-        return_time: return_time,
-        formatted_return_time: formattedReturnTime,
         is_round_trip: is_round_trip,
-        return_service_type: returnServiceType,
-        trips: {
-          //@ts-ignore
-          create: is_round_trip
-            ? [
+        quote_total: is_round_trip
+          ? totalAmount.value + returnTotalAmount.value
+          : totalAmount.value,
+        trips: is_round_trip
+          ? {
+              create: [
                 {
                   // First trip
-                  origin_lat:
-                    pricingEngine.routeData.value?.routes[0].legs[0]
-                      .start_location.lat,
-                  origin_lng:
-                    pricingEngine.routeData.value?.routes[0].legs[0]
-                      .start_location.lng,
-                  origin_name: origin.name,
-                  origin_formatted_address: origin.formatted_address,
-                  origin_full_name: formatAddress(
-                    origin.name,
-                    origin.formatted_address
-                  ),
-                  origin_place_id: origin.place_id,
-                  origin_types: origin.types,
-                  destination_lat:
-                    pricingEngine.routeData.value?.routes[0].legs[0]
-                      .end_location.lat,
-                  destination_lng:
-                    pricingEngine.routeData.value?.routes[0].legs[0]
-                      .end_location.lng,
-                  destination_name: origin.name,
-                  destination_formatted_address: origin.formatted_address,
-                  destination_full_name: formatAddress(
-                    destination.name,
-                    destination.formatted_address
-                  ),
-                  destination_place_id: origin.place_id,
-                  destination_types: origin.types,
-                  distance: pricingEngine.distance.value,
-                  is_return: false,
+                  pickup_date: _.toNumber(data.pickup_date),
+                  pickup_time: _.toNumber(data.pickup_time),
+                  formatted_pickup_date: formattedPickupDate,
+                  formatted_pickup_time: formattedPickupTime,
+                  distance_text: routeData?.routes[0].legs[0].distance.text,
+                  duration_text: routeData?.routes[0].legs[0].duration.text,
+                  duration_value: routeData?.routes[0].legs[0].distance.value,
+                  distance_value: routeData?.routes[0].legs[0].duration.value,
+                  service_label: pricingEngine.selectedService.value?.label,
+                  vehicle_label: pricingEngine.selectedVehicle.value?.label,
                   line_items_list: lineItemDetails,
                   line_items_subtotal: subTotal.value,
                   line_items_tax: taxTotal.value,
                   line_items_total: totalAmount.value,
+                  is_return: false,
+                  locations: {
+                    create: [
+                      {
+                        lat: routeData?.routes[0].legs[0].start_location.lat,
+                        lng: routeData?.routes[0].legs[0].start_location.lng,
+                        name: origin.name,
+                        formatted_address: origin.formatted_address,
+                        full_name: formatAddress(
+                          origin.name,
+                          origin.formatted_address
+                        ),
+                        place_id: origin.place_id,
+                        types: origin.types,
+                        is_origin: true,
+                      },
+                      {
+                        lat: routeData?.routes[0].legs[0].end_location.lat,
+                        lng: routeData?.routes[0].legs[0].end_location.lng,
+                        name: destination.name,
+                        formatted_address: destination.formatted_address,
+                        full_name: formatAddress(
+                          destination.name,
+                          destination.formatted_address
+                        ),
+                        place_id: destination.place_id,
+                        types: destination.types,
+                        is_destination: true,
+                      },
+                    ],
+                  },
                 },
                 {
                   // Second trip
-                  origin_lat:
-                    pricingEngine.routeData.value?.routes[0].legs[0]
-                      .end_location.lat,
-                  origin_lng:
-                    pricingEngine.routeData.value?.routes[0].legs[0]
-                      .end_location.lng,
-                  origin_name: origin.name,
-                  origin_formatted_address: origin.formatted_address,
-                  origin_full_name: formatAddress(
-                    origin.name,
-                    origin.formatted_address
-                  ),
-                  origin_place_id: origin.place_id,
-                  origin_types: origin.types,
-                  destination_lat:
-                    pricingEngine.routeData.value?.routes[0].legs[0]
-                      .start_location.lat,
-                  destination_lng:
-                    pricingEngine.routeData.value?.routes[0].legs[0]
-                      .start_location.lng,
-                  destination_name: destination.name,
-                  destination_formatted_address: destination.formatted_address,
-                  destination_full_name: formatAddress(
-                    destination.name,
-                    destination.formatted_address
-                  ),
-                  destination_place_id: destination.place_id,
-                  destination_types: destination.types,
-                  distance: pricingEngine.distance.value,
-                  is_return: true,
+                  pickup_date: _.toNumber(data.return_date),
+                  pickup_time: _.toNumber(data.return_time),
+                  formatted_pickup_date: formattedReturnDate,
+                  formatted_pickup_time: formattedReturnTime,
+                  distance_text: routeData?.routes[0].legs[0].distance.text,
+                  duration_text: routeData?.routes[0].legs[0].duration.text,
+                  duration_value: routeData?.routes[0].legs[0].distance.value,
+                  distance_value: routeData?.routes[0].legs[0].duration.value,
+                  service_label: returnServiceType,
+                  vehicle_label: pricingEngine.selectedVehicle.value?.label,
                   line_items_list: returnLineItemsDetails,
                   line_items_subtotal: returnSubTotal.value,
                   line_items_tax: returnTaxTotal.value,
                   line_items_total: returnTotalAmount.value,
-                },
-              ]
-            : [
-                {
-                  // First (and only) trip
-                  origin_lat:
-                    pricingEngine.routeData.value?.routes[0].legs[0]
-                      .start_location.lat,
-                  origin_lng:
-                    pricingEngine.routeData.value?.routes[0].legs[0]
-                      .start_location.lng,
-                  origin_name: origin.name,
-                  origin_formatted_address: origin.formatted_address,
-                  origin_full_name: formatAddress(
-                    origin.name,
-                    origin.formatted_address
-                  ),
-                  origin_place_id: origin.place_id,
-                  origin_types: origin.types,
-                  destination_lat:
-                    pricingEngine.routeData.value?.routes[0].legs[0]
-                      .end_location.lat,
-                  destination_lng:
-                    pricingEngine.routeData.value?.routes[0].legs[0]
-                      .end_location.lng,
-                  destination_name: destination.name,
-                  destination_formatted_address: destination.formatted_address,
-                  destination_full_name: formatAddress(
-                    destination.name,
-                    destination.formatted_address
-                  ),
-                  destination_place_id: destination.place_id,
-                  destination_types: destination.types,
-                  distance: pricingEngine.distance.value,
                   is_return: false,
+                  locations: {
+                    create: [
+                      {
+                        lat: routeData?.routes[0].legs[0].end_location.lat,
+                        lng: routeData?.routes[0].legs[0].end_location.lng,
+                        name: destination.name,
+                        formatted_address: destination.formatted_address,
+                        full_name: formatAddress(
+                          destination.name,
+                          destination.formatted_address
+                        ),
+                        place_id: destination.place_id,
+                        types: destination.types,
+                        is_origin: true,
+                      },
+                      {
+                        lat: routeData?.routes[0].legs[0].start_location.lat,
+                        lng: routeData?.routes[0].legs[0].start_location.lng,
+                        name: origin.name,
+                        formatted_address: origin.formatted_address,
+                        full_name: formatAddress(
+                          origin.name,
+                          origin.formatted_address
+                        ),
+                        place_id: origin.place_id,
+                        types: origin.types,
+                        is_destination: true,
+                      },
+                    ],
+                  },
+                },
+              ],
+            }
+          : {
+              create: [
+                {
+                  // First trip
+                  pickup_date: _.toNumber(data.pickup_date),
+                  pickup_time: _.toNumber(data.pickup_time),
+                  formatted_pickup_date: formattedPickupDate,
+                  formatted_pickup_time: formattedPickupTime,
+                  distance_text: routeData?.routes[0].legs[0].distance.text,
+                  duration_text: routeData?.routes[0].legs[0].duration.text,
+                  duration_value: routeData?.routes[0].legs[0].distance.value,
+                  distance_value: routeData?.routes[0].legs[0].duration.value,
+                  service_label: pricingEngine.selectedService.value?.label,
+                  vehicle_label: pricingEngine.selectedVehicle.value?.label,
                   line_items_list: lineItemDetails,
                   line_items_subtotal: subTotal.value,
                   line_items_tax: taxTotal.value,
                   line_items_total: totalAmount.value,
+                  is_return: false,
+                  locations: {
+                    create: [
+                      {
+                        lat: routeData?.routes[0].legs[0].start_location.lat,
+                        lng: routeData?.routes[0].legs[0].start_location.lng,
+                        name: origin.name,
+                        formatted_address: origin.formatted_address,
+                        full_name: formatAddress(
+                          origin.name,
+                          origin.formatted_address
+                        ),
+                        place_id: origin.place_id,
+                        types: origin.types,
+                        is_origin: true,
+                      },
+                      {
+                        lat: routeData?.routes[0].legs[0].end_location.lat,
+                        lng: routeData?.routes[0].legs[0].end_location.lng,
+                        name: destination.name,
+                        formatted_address: destination.formatted_address,
+                        full_name: formatAddress(
+                          destination.name,
+                          destination.formatted_address
+                        ),
+                        place_id: destination.place_id,
+                        types: destination.types,
+                        is_destination: true,
+                      },
+                    ],
+                  },
                 },
               ],
-        },
+            },
         user: {
           connectOrCreate: {
             where: { email_address: email_address as string },
@@ -252,13 +285,13 @@ export default defineEventHandler(async (event) => {
           },
         },
         sales_tax: {
-          connect: { id: pricingEngine.salesTaxes[0].id },
+          connect: { id: 1 },
         },
         vehicle: {
-          connect: { value: pricingEngine.vehicleTypeId.value },
+          connect: { value: pricingEngine.selectedVehicle.value?.value },
         },
         service: {
-          connect: { value: pricingEngine.serviceTypeId.value },
+          connect: { value: pricingEngine.selectedService.value?.value },
         },
         line_items: {
           connect: [
@@ -272,10 +305,16 @@ export default defineEventHandler(async (event) => {
         sales_tax: true,
         vehicle: true,
         service: true,
-        trips: true,
+        trips: {
+          include: {
+            locations: true,
+          },
+        },
         user: true,
       },
-    })
+    }
+    //@ts-ignore
+    const newQuote = await prisma.quote.create(quotes)
     const quote = newQuote
 
     const sendGridKey = useRuntimeConfig().SENDGRID_API_KEY

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
+    <file url="PROJECT" libraries="{@googlemaps/js-api-loader, vue-tel-input}" />
     <includedPredefinedLibrary name="Node.js Core" />
-    <excludedPredefinedLibrary name="hpl-website-nuxt/.output/server/functions/node_modules" />
   </component>
 </project>
