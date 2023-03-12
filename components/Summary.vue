@@ -5,16 +5,21 @@ import { useCartStore } from '~/stores/useCartStore'
 import { storeToRefs } from 'pinia'
 import { combineTotals, combineLineItems } from '~/utils/lineItemUtils'
 import { useStripeStore } from '~/stores/useStripeStore'
-import { exportToPDF } from '#imports'
+// import { exportToPDF } from '#imports'
+import { format } from 'date-fns'
+import {
+  QuoteWithRelationsSchema,
+  QuoteWithRelations,
+} from '~/prisma/generated/zod'
 
 const quoteStore = useQuoteStore()
 const cartStore = useCartStore()
 const stripeStore = useStripeStore()
 
 const { addedToCart, loading } = storeToRefs(cartStore)
-const currentDate = useFormattedDate(new Date())
+const currentDate = format(new Date(), 'PPP')
 
-let quote = reactive<Quote>({
+let quote = reactive<QuoteWithRelations>({
   is_round_trip: false,
   vehicle: {
     label: '',
@@ -63,17 +68,16 @@ if (quoteStore.quote) {
 
 const route = useRoute()
 const { quote_number } = route.query
-if (quote_number) {
-  console.log('Quote Number in route:', quote_number)
-  const { data } = await useFetch('/api/quote', {
-    method: 'GET',
-    query: { quote_number: quote_number },
-  })
-  console.log('Fetched Data from route:', data.value)
-  Object.assign(quote, data.value)
-  Object.assign(quoteStore.quote, data.value)
-  console.log('Fetched data assigned to quote')
-}
+// if (quote_number) {
+console.log('Quote Number in route:', quote_number)
+const { data, pending } = await useFetch('/api/quote', {
+  method: 'GET',
+  query: { quote_number: quote_number },
+})
+console.log('Fetched Data from route:', data.value)
+Object.assign(quote, data.value)
+Object.assign(quoteStore.quote, data.value)
+console.log('Fetched data assigned to quote')
 
 const itemsArray = combineLineItems(quote.trips)
 
@@ -82,11 +86,11 @@ const totals = combineTotals(quote.trips)
 const printSummary = () => {
   window.print()
 }
-const summary = ref<HTMLElement | null>(null)
+// const summary = ref<HTMLElement | null>(null)
 </script>
 
 <template>
-  <BaseContainer class="rounded bg-gray-100 p-6">
+  <BaseContainer v-if="pending" class="rounded bg-gray-100 p-6">
     <div class="sm:flex sm:items-center">
       <div class="sm:flex-auto">
         <h1 class="font-sans text-xl font-semibold text-gray-900">
@@ -119,8 +123,8 @@ const summary = ref<HTMLElement | null>(null)
           </span>
           <time
             class="font-sans font-normal"
-            :datetime="quote.formatted_pickup_date"
-            >{{ quote.formatted_pickup_date }}
+            :datetime="quote.trips[0].formatted_pickup_date"
+            >{{ quote.trips[0].formatted_pickup_date }}
           </time>
           <br />
           <span class="font-sans font-medium text-black"> Pick up Time: </span>
@@ -153,7 +157,7 @@ const summary = ref<HTMLElement | null>(null)
       </div>
       <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
         <button
-          @click="exportToPDF('my-pdf-file.pdf', summary)"
+          @click="printSummary"
           type="button"
           class="inline-flex items-center justify-center rounded-md border border-transparent bg-primary px-4 py-2 font-sans text-sm font-medium uppercase tracking-wider text-white shadow-sm hover:bg-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 sm:w-auto"
         >
@@ -334,4 +338,5 @@ const summary = ref<HTMLElement | null>(null)
       </table>
     </div>
   </BaseContainer>
+  <div v-else>Loading....</div>
 </template>

@@ -1,5 +1,9 @@
 import { useToNumber } from '@vueuse/core'
 import { z } from 'zod'
+import {
+  QuoteWithRelationsSchema,
+  QuoteWithRelations,
+} from '~/prisma/generated/zod'
 
 export const quoteSchema = z
   .object({
@@ -67,54 +71,19 @@ export default defineEventHandler(async (event) => {
     const quote_number = useToNumber(query.quote_number as string)
     const data = await prisma.quote.findUnique({
       where: { quote_number: quote_number.value },
-      select: {
-        quote_number: true,
-        return_service_type: true,
-        formatted_pickup_date: true,
-        formatted_pickup_time: true,
-        formatted_return_date: true,
-        formatted_return_time: true,
-        is_round_trip: true,
-        selected_passengers: true,
-        service: {
-          select: {
-            label: true,
-          },
-        },
-        vehicle: {
-          select: {
-            label: true,
-            vehicle_image: true,
-          },
-        },
-        user: {
-          select: {
-            first_name: true,
-            last_name: true,
-            phone_number: true,
-            email_address: true,
-            id: true,
-          },
-        },
+      include: {
+        service: true,
+        vehicle: true,
+        user: true,
         trips: {
-          select: {
-            destination_full_name: true,
-            line_items_list: true,
-            line_items_subtotal: true,
-            line_items_tax: true,
-            line_items_total: true,
-            origin_full_name: true,
-          },
-        },
-        sales_tax: {
-          select: {
-            tax_name: true,
+          include: {
+            locations: true,
           },
         },
       },
     })
     if (data) {
-      const quote = data
+      const quote = QuoteWithRelationsSchema.parse(data)
       console.log('Returned Quote:', quote)
       return quote
     } else {
