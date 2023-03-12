@@ -1,16 +1,52 @@
 <script setup lang="ts">
-import { Quote } from '~/server/api/quote.get'
 import { useQuoteStore } from '~/stores/useQuoteStore'
 import { useCartStore } from '~/stores/useCartStore'
 import { storeToRefs } from 'pinia'
 import { combineTotals, combineLineItems } from '~/utils/lineItemUtils'
 import { useStripeStore } from '~/stores/useStripeStore'
 // import { exportToPDF } from '#imports'
+import { z } from 'zod'
 import { format } from 'date-fns'
 import {
-  QuoteWithRelationsSchema,
-  QuoteWithRelations,
+  QuoteSchema,
+  VehicleSchema,
+  ServiceSchema,
+  TripSchema,
+  UserSchema,
+  SalesTaxSchema,
+  LocationSchema,
 } from '~/prisma/generated/zod'
+
+const summaryVehicle = VehicleSchema.pick({ label: true, vehicle_image: true })
+const summaryService = ServiceSchema.pick({ label: true })
+const summaryUser = UserSchema.pick({
+  email_address: true,
+  first_name: true,
+  last_name: true,
+  phone_number: true,
+  id: true,
+})
+
+const summaryTrips = TripSchema.pick({
+  formatted_pickup_date: true,
+  formatted_pickup_time: true,
+})
+const summarySalesTax = SalesTaxSchema.pick({ tax_name: true })
+const summaryLocations = LocationSchema.pick({ full_name: true })
+
+const SummarySchema = QuoteSchema.pick({
+  is_round_trip: true,
+  quote_number: true,
+  selected_hours: true,
+  selected_passengers: true,
+})
+  .merge(summaryTrips.merge(summaryLocations))
+  .merge(summaryVehicle)
+  .merge(summaryService)
+  .merge(summarySalesTax)
+  .merge(summaryUser)
+
+type Summary = z.infer<typeof SummarySchema>
 
 const quoteStore = useQuoteStore()
 const cartStore = useCartStore()
@@ -19,7 +55,7 @@ const stripeStore = useStripeStore()
 const { addedToCart, loading } = storeToRefs(cartStore)
 const currentDate = format(new Date(), 'PPP')
 
-let quote = reactive<QuoteWithRelations>({
+let quote = reactive<Summary>({
   is_round_trip: false,
   vehicle: {
     label: '',
