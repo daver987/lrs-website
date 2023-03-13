@@ -10,7 +10,7 @@ specifiers:
   '@nuxt/test-utils': ^3.2.3
   '@nuxtjs/fontaine': ^0.2.4
   '@nuxtjs/robots': ^3.0.0
-  '@nuxtjs/tailwindcss': ^6.4.1
+  '@nuxtjs/tailwindcss': ^6.5.0
   '@pinia/nuxt': ^0.4.7
   '@prisma/client': 4.11.0
   '@sendgrid/mail': ^7.7.0
@@ -43,11 +43,10 @@ specifiers:
   typescript: ^4.9.5
   uuid: ^9.0.0
   vee-validate: ^4.8.1
-  vite-node: ^0.29.2
   vitest: ^0.29.2
   vue-tel-input: ^6.0.5
   zod: ^3.21.4
-  zod-prisma-types: ^2.5.0
+  zod-prisma-types: ^2.5.1
 
 dependencies:
   '@prisma/client': 4.11.0_prisma@4.11.0
@@ -94,11 +93,10 @@ devDependencies:
   typescript: 4.9.5
   uuid: 9.0.0
   vee-validate: 4.8.1_vue@3.2.47
-  vite-node: 0.29.2
   vitest: 0.29.2
   vue-tel-input: 6.0.5_vue@3.2.47
   zod: 3.21.4
-  zod-prisma-types: 2.5.0
+  zod-prisma-types: 2.5.1
 
 packages:
 
@@ -2101,13 +2099,13 @@ packages:
     resolution: {integrity: sha512-9K4zoImiZc3HlIp6AVUDE4CWYx22a+lhSZMYNpbjW04+YF0KWj4pJXnEMjdnFTiQibFFmElcsasJXDbdI/EPhA==}
     dependencies:
       '@types/eslint': 8.21.1
-      '@types/estree': 0.0.51
+      '@types/estree': 1.0.0
     dev: true
 
   /@types/eslint/8.21.1:
     resolution: {integrity: sha512-rc9K8ZpVjNcLs8Fp0dkozd5Pt2Apk1glO4Vgz8ix1u6yFByxfqo5Yavpy65o+93TAe24jr7v+eSBtFLvOQtCRQ==}
     dependencies:
-      '@types/estree': 0.0.51
+      '@types/estree': 1.0.0
       '@types/json-schema': 7.0.11
     dev: true
 
@@ -8959,8 +8957,8 @@ packages:
       readable-stream: 3.6.2
     dev: true
 
-  /zod-prisma-types/2.5.0:
-    resolution: {integrity: sha512-DXu0bNm9LsRb0He9pZywXIaUQXUNpgmadoVBwIuXJyF0DMamvN5WyScevL7thgUAfzojzanBGM0M5lHYHXUJSw==}
+  /zod-prisma-types/2.5.1:
+    resolution: {integrity: sha512-dstZvDkCVjnRJzaulS3A0qk0TXcBufsJ0AqoLfrkXqWwyM4hbkNXOyPmf0fECGGe8WcUFKtCBnc1RGAGLNfSeQ==}
     hasBin: true
     dependencies:
       '@prisma/generator-helper': 4.11.0
