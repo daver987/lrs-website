@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { Quote } from '~/server/api/quote.get'
 import { useQuoteStore } from '~/stores/useQuoteStore'
 import { useCartStore } from '~/stores/useCartStore'
 import { storeToRefs } from 'pinia'
-import { combineTotals, combineLineItems } from '~/utils/lineItemUtils'
 import { useStripeStore } from '~/stores/useStripeStore'
 import { format } from 'date-fns'
+import { SummarySchema } from '~/schema/summarySchema'
+import type { Summary } from '~/schema/summarySchema'
+import { ref } from '#imports'
 
 const quoteStore = useQuoteStore()
 const cartStore = useCartStore()
@@ -14,29 +15,40 @@ const stripeStore = useStripeStore()
 const { addedToCart, loading } = storeToRefs(cartStore)
 const currentDate = format(new Date(), 'PPPP')
 
-let quote = reactive<Quote>({
+const quote = ref<Summary>({
   is_round_trip: false,
+  quote_number: 0,
+  selected_hours: 0,
+  selected_passengers: 1,
+  quote_tax_total: 0,
+  quote_subtotal: 0,
+  quote_total: 0,
+  user: {
+    first_name: '',
+    last_name: '',
+    phone_number: '',
+    email_address: '',
+    id: '',
+  },
   vehicle: {
     label: '',
     vehicle_image:
       'https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/b4bf6461-ba55-48bd-e0ba-d613ae383000/1024',
   },
-  service: { label: '' },
-  quote_number: 0,
-  selected_hours: 0,
-  selected_passengers: 1,
-  formatted_pickup_date: '',
-  formatted_pickup_time: '',
-  formatted_return_date: null,
-  formatted_return_time: null,
-  return_service_type: '',
+  sales_tax: { tax_name: '' },
   trips: [
     {
+      locations: [
+        {
+          full_name: '',
+        },
+      ],
+      formatted_pickup_date: '',
+      formatted_pickup_time: '',
+      service_label: '',
       line_items_tax: 0,
       line_items_subtotal: 0,
       line_items_total: 0,
-      origin_full_name: '',
-      destination_full_name: '',
       line_items_list: [
         {
           label: '',
@@ -46,14 +58,6 @@ let quote = reactive<Quote>({
       ],
     },
   ],
-  sales_tax: { tax_name: '' },
-  user: {
-    first_name: '',
-    last_name: '',
-    phone_number: '',
-    email_address: '',
-    id: '',
-  },
 })
 
 if (quoteStore.quote) {
@@ -69,15 +73,12 @@ if (quote_number) {
     method: 'GET',
     query: { quote_number: quote_number },
   })
-  console.log('Fetched Data from route:', data.value)
-  Object.assign(quote, data.value)
-  Object.assign(quoteStore.quote, data.value)
+  const parsedQuote = SummarySchema.strip().parse(data.value)
+  console.log('Fetched Data from route:', parsedQuote)
+  Object.assign(quote, parsedQuote)
+  Object.assign(quoteStore.quote, parsedQuote)
   console.log('Fetched data assigned to quote')
 }
-
-const itemsArray = combineLineItems(quote.trips)
-
-const totals = combineTotals(quote.trips)
 
 const checkoutLoading = ref(false)
 
@@ -169,7 +170,7 @@ const createBooking = async () => {
           <li class="flex py-6 sm:py-8">
             <div class="flex-shrink-0">
               <NuxtPicture
-                :src="quote.vehicle.vehicle_image"
+                :src="quote.vehicle.vehicle_image!"
                 :alt="quote.vehicle.label"
                 :img-attrs="{
                   class:
@@ -188,24 +189,24 @@ const createBooking = async () => {
                       <NuxtLink
                         to="#"
                         class="font-medium text-gray-700 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-200"
-                        >{{ quote.service.label }}
+                        >{{ quote.trips[0].service_label }}
                       </NuxtLink>
                     </h3>
                   </div>
                   <div class="mt-2 flex flex-col space-y-1 text-sm">
                     <p class="text-gray-500 dark:text-gray-100">
                       <span class="text-brand-400">Date: </span
-                      >{{ quote.formatted_pickup_date }}
+                      >{{ quote.trips[0].formatted_pickup_date }}
                       <span class="text-brand-400">Time: </span>
-                      {{ quote.formatted_pickup_time }}
+                      {{ quote.trips[0].formatted_pickup_time }}
                     </p>
                     <p class="text-gray-500 dark:text-gray-100">
                       <span class="text-brand-400">PU: </span
-                      >{{ quote.trips[0].origin_full_name }}
+                      >{{ quote.trips[0].locations[0].full_name }}
                     </p>
                     <p class="text-gray-500 dark:text-gray-100">
                       <span class="text-brand-400">DO: </span>
-                      {{ quote.trips[0].destination_full_name }}
+                      {{ quote.trips[0].locations[1].full_name }}
                     </p>
                     <p class="text-gray-500 dark:text-gray-100">
                       <span class="text-brand-400">Vehicle Type: </span
@@ -218,7 +219,7 @@ const createBooking = async () => {
                   </div>
                   <p class="text-gray-500 dark:text-gray-100">
                     <span class="text-brand-400">Base Rate: </span>$
-                    {{ quote.trips[0].line_items_list[0].total }}
+                    {{ quote.quote_subtotal }}
                   </p>
                 </div>
 
@@ -264,7 +265,7 @@ const createBooking = async () => {
           <li v-if="quote.is_round_trip" class="flex py-6 sm:py-10">
             <div class="flex-shrink-0">
               <NuxtPicture
-                :src="quote.vehicle.vehicle_image"
+                :src="quote.vehicle.vehicle_image!"
                 :alt="quote.vehicle.label"
                 :img-attrs="{
                   class:
@@ -284,24 +285,24 @@ const createBooking = async () => {
                       <NuxtLink
                         to="#"
                         class="font-medium text-gray-700 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-200"
-                        >{{ quote.return_service_type }}
+                        >{{ quote.trips[1].service_label }}
                       </NuxtLink>
                     </h3>
                   </div>
                   <div class="mt-2 flex flex-col space-y-1 text-sm">
                     <p class="text-gray-500 dark:text-gray-100">
                       <span class="text-brand-400">Date: </span
-                      >{{ quote.formatted_return_date }}
+                      >{{ quote.trips[1].formatted_pickup_date }}
                       <span class="text-brand-400">Time: </span>
-                      {{ quote.formatted_return_time }}
+                      {{ quote.trips[1].formatted_pickup_time }}
                     </p>
                     <p class="text-gray-500 dark:text-gray-100">
                       <span class="text-brand-400">PU: </span
-                      >{{ quote.trips[0].destination_full_name }}
+                      >{{ quote.trips[0].locations[0].full_name }}
                     </p>
                     <p class="text-gray-500 dark:text-gray-100">
                       <span class="text-brand-400">DO: </span>
-                      {{ quote.trips[0].origin_full_name }}
+                      {{ quote.trips[0].locations[1].full_name }}
                     </p>
                     <p class="text-gray-500 dark:text-gray-100">
                       <span class="text-brand-400">Vehicle Type: </span
@@ -314,7 +315,7 @@ const createBooking = async () => {
                   </div>
                   <p class="text-gray-500 dark:text-gray-100">
                     <span class="text-brand-400">Base Rate: </span>$
-                    {{ quote.trips[1].line_items_list[0].total }}
+                    {{ quote.quote_subtotal }}
                   </p>
                 </div>
 
@@ -374,7 +375,7 @@ const createBooking = async () => {
         <dl class="mt-6 space-y-4">
           <div
             class="flex items-center justify-between border-t border-gray-200 pt-4"
-            v-for="item in itemsArray"
+            v-for="item in quote.trips[0].line_items_list"
             :key="item.label"
           >
             <dt
@@ -421,7 +422,7 @@ const createBooking = async () => {
             </dt>
             <dd class="text-sm font-medium text-gray-900 dark:text-gray-100">
               $
-              {{ totals.line_items_tax }}
+              {{ quote.sales_tax }}
             </dd>
           </div>
           <div
@@ -432,7 +433,7 @@ const createBooking = async () => {
             </dt>
             <dd class="text-base font-medium text-gray-900 dark:text-gray-100">
               $
-              {{ totals.line_items_total }}
+              {{ quote.quote_total }}
             </dd>
           </div>
         </dl>

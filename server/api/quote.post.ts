@@ -83,8 +83,12 @@ export default defineEventHandler(async (event) => {
     // Wait for the distance to be set before updating other values
     await pricingEngine.updateDistance()
     pricingEngine.updateBaseRate()
+
+    //Calculate line items
     const lineItemsList = pricingEngine.updateLineItemsTotal(origin.place_id)
     const { lineItemDetails, taxTotal, subTotal, totalAmount } = lineItemsList
+
+    //Calculate return pricing
     const returnLineItemsList = pricingEngine.updateLineItemsTotal(
       destination.place_id
     )
@@ -95,6 +99,7 @@ export default defineEventHandler(async (event) => {
       totalAmount: returnTotalAmount,
     } = returnLineItemsList
 
+    //format date times
     const formattedPickupDate = useFormattedDate(pickup_date)
     const formattedPickupTime = useFormattedTime(pickup_time)
     const formattedReturnDate = useFormattedDate(return_date)
@@ -110,6 +115,12 @@ export default defineEventHandler(async (event) => {
         quote_total: is_round_trip
           ? totalAmount.value + returnTotalAmount.value
           : totalAmount.value,
+        quote_subtotal: is_round_trip
+          ? totalAmount.value + returnSubTotal.value
+          : subTotal.value,
+        quote_taxtotal: is_round_trip
+          ? totalAmount.value + returnTaxTotal.value
+          : taxTotal.value,
         trips: is_round_trip
           ? {
               create: [
@@ -313,7 +324,7 @@ export default defineEventHandler(async (event) => {
         user: true,
       },
     }
-    //@ts-ignore
+
     const newQuote = await prisma.quote.create(quotes)
     const quote = newQuote
 

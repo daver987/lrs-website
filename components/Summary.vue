@@ -1,83 +1,46 @@
 <script setup lang="ts">
-import { useQuoteStore } from '~/stores/useQuoteStore'
-import { useCartStore } from '~/stores/useCartStore'
-import { storeToRefs } from 'pinia'
-import { combineTotals, combineLineItems } from '~/utils/lineItemUtils'
-import { useStripeStore } from '~/stores/useStripeStore'
 // import { exportToPDF } from '#imports'
-import { z } from 'zod'
 import { format } from 'date-fns'
-import {
-  QuoteSchema,
-  VehicleSchema,
-  ServiceSchema,
-  TripSchema,
-  UserSchema,
-  SalesTaxSchema,
-  LocationSchema,
-} from '~/prisma/generated/zod'
+import { SummarySchema } from '~/schema/summarySchema'
+import type { Summary } from '~/schema/summarySchema'
+import { ref } from '#imports'
 
-const summaryVehicle = VehicleSchema.pick({ label: true, vehicle_image: true })
-const summaryService = ServiceSchema.pick({ label: true })
-const summaryUser = UserSchema.pick({
-  email_address: true,
-  first_name: true,
-  last_name: true,
-  phone_number: true,
-  id: true,
-})
-
-const summaryTrips = TripSchema.pick({
-  formatted_pickup_date: true,
-  formatted_pickup_time: true,
-})
-const summarySalesTax = SalesTaxSchema.pick({ tax_name: true })
-const summaryLocations = LocationSchema.pick({ full_name: true })
-
-const SummarySchema = QuoteSchema.pick({
-  is_round_trip: true,
-  quote_number: true,
-  selected_hours: true,
-  selected_passengers: true,
-})
-  .merge(summaryTrips.merge(summaryLocations))
-  .merge(summaryVehicle)
-  .merge(summaryService)
-  .merge(summarySalesTax)
-  .merge(summaryUser)
-
-type Summary = z.infer<typeof SummarySchema>
-
-const quoteStore = useQuoteStore()
-const cartStore = useCartStore()
-const stripeStore = useStripeStore()
-
-const { addedToCart, loading } = storeToRefs(cartStore)
 const currentDate = format(new Date(), 'PPP')
 
-let quote = reactive<Summary>({
+const quote = ref<Summary>({
   is_round_trip: false,
+  quote_number: 0,
+  selected_hours: 0,
+  selected_passengers: 1,
+  quote_tax_total: 0,
+  quote_subtotal: 0,
+  quote_total: 0,
+  user: {
+    first_name: '',
+    last_name: '',
+    phone_number: '',
+    email_address: '',
+    id: '',
+  },
   vehicle: {
     label: '',
     vehicle_image:
       'https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/b4bf6461-ba55-48bd-e0ba-d613ae383000/1024',
   },
-  service: { label: '' },
-  quote_number: 0,
-  selected_hours: 0,
-  selected_passengers: 1,
-  formatted_pickup_date: '',
-  formatted_pickup_time: '',
-  formatted_return_date: null,
-  formatted_return_time: null,
-  return_service_type: '',
+  sales_tax: { tax_name: '' },
   trips: [
     {
+      locations: [
+        {
+          full_name: '',
+        },
+      ],
+      formatted_pickup_date: '',
+      formatted_pickup_time: '',
+      service_label: '',
       line_items_tax: 0,
       line_items_subtotal: 0,
       line_items_total: 0,
-      origin_full_name: '',
-      destination_full_name: '',
       line_items_list: [
         {
           label: '',
@@ -87,46 +50,27 @@ let quote = reactive<Summary>({
       ],
     },
   ],
-  sales_tax: { tax_name: '' },
-  user: {
-    first_name: '',
-    last_name: '',
-    phone_number: '',
-    email_address: '',
-    id: '',
-  },
 })
-
-if (quoteStore.quote) {
-  Object.assign(quote, quoteStore.quote)
-  console.log('Store assigned to quote')
-}
 
 const route = useRoute()
 const { quote_number } = route.query
-// if (quote_number) {
+
 console.log('Quote Number in route:', quote_number)
-const { data, pending } = await useFetch('/api/quote', {
+const { data } = await useFetch('/api/quote', {
   method: 'GET',
   query: { quote_number: quote_number },
 })
-console.log('Fetched Data from route:', data.value)
-Object.assign(quote, data.value)
-Object.assign(quoteStore.quote, data.value)
-console.log('Fetched data assigned to quote')
-
-const itemsArray = combineLineItems(quote.trips)
-
-const totals = combineTotals(quote.trips)
+const parsedData = SummarySchema.strip().parse(data.value)
+console.log('Fetched Data from route:', parsedData)
+Object.assign(quote.value, parsedData)
 
 const printSummary = () => {
   window.print()
 }
-// const summary = ref<HTMLElement | null>(null)
 </script>
 
 <template>
-  <BaseContainer v-if="pending" class="rounded bg-gray-100 p-6">
+  <BaseContainer class="rounded bg-gray-100 p-6">
     <div class="sm:flex sm:items-center">
       <div class="sm:flex-auto">
         <h1 class="font-sans text-xl font-semibold text-gray-900">
@@ -140,6 +84,7 @@ const printSummary = () => {
             class="font-sans text-base font-bold leading-relaxed text-red-600"
           >
             HPL-{{ quote.quote_number }}</span
+          ><span class="font-sans font-medium"> {{ currentDate }}</span
           ><br />
           <span class="font-sans font-medium text-black"> For: </span>
           <span class="font-sans font-normal"
@@ -158,16 +103,16 @@ const printSummary = () => {
             Pick up Date:
           </span>
           <time
+            :datetime="quote.trips[0].formatted_pickup_date ?? undefined"
             class="font-sans font-normal"
-            :datetime="quote.trips[0].formatted_pickup_date"
             >{{ quote.trips[0].formatted_pickup_date }}
           </time>
           <br />
           <span class="font-sans font-medium text-black"> Pick up Time: </span>
           <time
             class="font-sans font-normal"
-            :datetime="quote.formatted_pickup_time"
-            >{{ quote.formatted_pickup_time }}
+            :datetime="quote.trips[0].formatted_pickup_time ?? undefined"
+            >{{ quote.trips[0].formatted_pickup_time }}
           </time>
         </p>
         <p v-if="quote.is_round_trip">
@@ -176,8 +121,8 @@ const printSummary = () => {
           </span>
           <time
             class="font-sans font-normal"
-            :datetime="quote.formatted_return_date"
-            >{{ quote.formatted_return_date }}
+            :datetime="quote.trips[1].formatted_pickup_date ?? undefined"
+            >{{ quote.trips[1].formatted_pickup_date }}
           </time>
           <br />
           <span class="font-sans font-medium text-black">
@@ -186,8 +131,8 @@ const printSummary = () => {
 
           <time
             class="font-sans font-normal"
-            :datetime="quote.formatted_return_time"
-            >{{ quote.formatted_return_time }}
+            :datetime="quote.trips[1].formatted_pickup_time ?? undefined"
+            >{{ quote.trips[1].formatted_pickup_time }}
           </time>
         </p>
       </div>
@@ -241,11 +186,11 @@ const printSummary = () => {
               </div>
               <div class="font-normal text-gray-500">
                 <span class="font-sans font-bold text-gray-900">PU: </span
-                >{{ quote.trips[0].origin_full_name }}
+                >{{ quote.trips[0].locations[0].full_name }}
               </div>
               <div class="font-normal text-gray-500">
                 <span class="font-sans font-bold text-gray-900">DO: </span>
-                {{ quote.trips[0].destination_full_name }}
+                {{ quote.trips[0].locations[1].full_name }}
               </div>
               <div class="mt-0.5 text-gray-500 sm:hidden">
                 <span class="font-sans font-bold text-gray-900"
@@ -254,13 +199,13 @@ const printSummary = () => {
                 {{ quote.vehicle.label }}<br /><span
                   class="font-bold text-gray-900"
                   >Service Type: </span
-                >{{ quote.service.label }}
+                >{{ quote.trips[0].service_label }}
               </div>
             </td>
             <td
               class="hidden px-3 py-4 text-right font-sans text-sm text-gray-500 sm:table-cell"
             >
-              {{ quote.service.label }}
+              {{ quote.trips[0].service_label }}
             </td>
             <td
               class="hidden px-3 py-4 text-right font-sans text-sm text-gray-500 sm:table-cell"
@@ -282,26 +227,26 @@ const printSummary = () => {
               </div>
               <div class="font-normal text-gray-500">
                 <span class="font-sans font-bold text-gray-900">PU: </span
-                >{{ quote.trips[0].destination_full_name }}
+                >{{ quote.trips[1].locations[0].full_name }}
               </div>
               <div class="font-normal text-gray-500">
                 <span class="font-sans font-bold text-gray-900">DO: </span>
-                {{ quote.trips[0].origin_full_name }}
+                {{ quote.trips[1].locations[1].full_name }}
               </div>
               <div class="mt-0.5 text-gray-500 sm:hidden">
                 <span class="font-sans font-bold text-gray-900"
                   >Vehicle Type:
                 </span>
-                {{ quote.service.label }}<br /><span
+                {{ quote.vehicle.label }}<br /><span
                   class="font-sans font-bold text-gray-900"
                   >Service Type: </span
-                >{{ quote.vehicle.label }}
+                >{{ quote.trips[1].service_label }}
               </div>
             </td>
             <td
               class="hidden px-3 py-4 text-right font-sans text-sm text-gray-500 sm:table-cell"
             >
-              {{ quote.return_service_type }}
+              {{ quote.trips[1].service_label }}
             </td>
             <td
               class="hidden px-3 py-4 text-right font-sans text-sm text-gray-500 sm:table-cell"
@@ -335,7 +280,7 @@ const printSummary = () => {
             <td
               class="pt-3 pl-3 pr-4 text-right font-sans text-sm font-semibold text-gray-900 sm:pr-6 md:pr-0"
             >
-              ${{ totals.line_items_total }}
+              ${{ quote.quote_total }}
             </td>
           </tr>
         </tfoot>
@@ -374,5 +319,4 @@ const printSummary = () => {
       </table>
     </div>
   </BaseContainer>
-  <div v-else>Loading....</div>
 </template>

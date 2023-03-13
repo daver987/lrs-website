@@ -6,14 +6,21 @@ import {
   darkTheme,
   useLoadingBar,
 } from 'naive-ui'
-import { WatchCallback } from 'vue'
+import { WatchCallback, Ref } from 'vue'
+import { ref } from '#imports'
 import { VueTelInput } from 'vue-tel-input'
-import { Vehicle } from '~/schema/vehicleSchema'
-import { Service } from '~/schema/serviceSchema'
-import { LineItem } from '~/schema/lineItemSchema'
-import { SalesTax } from '~/schema/salexTaxSchema'
+import {
+  Vehicle,
+  VehicleSchema,
+  Service,
+  ServiceSchema,
+  LineItem,
+  LineItemSchema,
+  SalesTax,
+  SalesTaxSchema,
+  Conversion,
+} from '~/prisma/generated/zod'
 import { Place, placeSchema } from '~/schema/placeSchema'
-import { Conversion } from '~/schema/conversionSchema'
 import { useGtm } from '@gtm-support/vue-gtm'
 import { useDataStore } from '~/stores/useDataStore'
 import { useUserStore } from '~/stores/useUserStore'
@@ -26,7 +33,7 @@ import {
   Option,
 } from '~/composables/useBuildOptions'
 
-interface FormValue {
+type FormValue = {
   user_id: string
   first_name: string | null
   last_name: string | null
@@ -48,7 +55,7 @@ interface FormValue {
   vehicle: Vehicle[]
   service: Service[]
   line_items: LineItem[]
-  sales_tax: SalesTax[]
+  sales_tax: SalesTax
 }
 
 const quoteStore = useQuoteStore()
@@ -66,14 +73,11 @@ const [vehicleTypesRes, serviceTypesRes, lineItemsRes, salesTaxesRes] =
     useFetch<LineItem[] | undefined>('/api/items'),
     useFetch<SalesTax[] | undefined>('/api/salestax'),
   ])
-//@ts-ignore
-vehicleTypes.value = vehicleTypesRes?.data || []
-//@ts-ignore
-serviceTypes.value = serviceTypesRes?.data || []
-//@ts-ignore
-lineItems.value = lineItemsRes?.data || []
-//@ts-ignore
-salesTaxes.value = salesTaxesRes?.data || []
+
+vehicleTypes.value = VehicleSchema.array().parse(vehicleTypesRes.data)
+serviceTypes.value = ServiceSchema.array().parse(serviceTypesRes.data)
+lineItems.value = LineItemSchema.array().parse(lineItemsRes.data)
+salesTaxes.value = SalesTaxSchema.array().parse(salesTaxesRes.data)
 
 dataStore.setVehicleTypes(vehicleTypes.value)
 dataStore.setServiceTypes(serviceTypes.value)
@@ -97,7 +101,7 @@ const passengerOptions = computed(() =>
 )
 
 const route = useRoute()
-const gtmValues: Conversion = route.query as Conversion
+const gtmValues: Conversion = route.query as any
 
 const gtm = useGtm()
 //Todo enable tag manager
@@ -112,7 +116,7 @@ function triggerEvent() {
   })
 }
 
-const formValue: Ref<FormValue> = ref({
+const formValue = ref({
   user_id: user_id.value,
   first_name: null,
   last_name: null,
@@ -139,7 +143,7 @@ const formValue: Ref<FormValue> = ref({
   service: serviceTypes.value,
   line_items: lineItems.value,
   sales_tax: salesTaxes.value,
-})
+}) as Ref<FormValue>
 
 const rules: FormRules = {
   pickup_date: {
@@ -308,13 +312,13 @@ async function onSubmit() {
 }
 
 function handleValidateButtonClick(e: MouseEvent) {
-  loadingBar.start()
   e.preventDefault()
   formRef.value?.validate(async (errors) => {
     if (errors) {
       console.log(errors)
       message.error('Please correct the errors on the form')
     } else {
+      loadingBar.start()
       await onSubmit()
       message.success(
         'You will receive a copy of the quote to the email address provided'

@@ -1,6 +1,11 @@
 import { computed, ref } from 'vue'
 import { z } from 'zod'
-import { Service, LineItem, Vehicle, SalesTax } from '~/prisma/generated/zod'
+import {
+  Service,
+  LineItemSchema,
+  Vehicle,
+  SalesTax,
+} from '~/prisma/generated/zod'
 
 const directionsSchema = z.object({
   routes: z.array(
@@ -20,6 +25,13 @@ const directionsSchema = z.object({
       .strip()
   ),
 })
+
+const LineItemExtendedSchema = LineItemSchema.extend({
+  tax: z.number().optional(),
+  total: z.number().optional(),
+})
+
+type LineItemExtended = z.infer<typeof LineItemExtendedSchema>
 
 type DirectionsApiResponse = z.infer<typeof directionsSchema>
 
@@ -55,7 +67,7 @@ export async function calculateDistance(
 export function usePricingEngine(
   vehicles: Vehicle[],
   services: Service[],
-  lineItems: LineItem[],
+  lineItems: LineItemExtended[],
   salesTaxes: SalesTax[]
 ) {
   // state variables
@@ -149,10 +161,8 @@ export function usePricingEngine(
 
         const tax = item.is_taxable ? +((amount * taxRate) / 100).toFixed(2) : 0
 
-        // @ts-ignore
         item.total = amount
         item.label = item.label || ''
-        // @ts-ignore
         item.tax = tax
 
         return { label: item.label, total: amount, tax: tax }

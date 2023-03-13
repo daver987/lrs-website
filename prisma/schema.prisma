@@ -73,6 +73,8 @@ model Quote {
   is_booked           Boolean    @default(false)
   user_id             String
   quote_total         Float
+  quote_subtotal      Float?
+  quote_tax_total     Float?
   service_id          Int
   vehicle_id          Int
   sales_tax_id        Int
@@ -96,8 +98,8 @@ model Trip {
   updated_at            DateTime   @updatedAt
   pickup_date           Float?
   pickup_time           Float?
-  formatted_pickup_date String?
-  formatted_pickup_time String?
+  formatted_pickup_date String
+  formatted_pickup_time String
   distance_text         String?
   duration_text         String?
   duration_value        Int?

@@ -1,11 +1,10 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import { Quote } from '~/server/api/quote.get'
 
 export const useQuoteStore = defineStore({
   id: 'quoteStore',
 
   state: () => ({
-    quote: {} as Quote,
+    quote: {},
   }),
 
   actions: {
