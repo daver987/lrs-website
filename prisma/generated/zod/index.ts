@@ -294,7 +294,7 @@ export type QuoteRelations = {
   service: ServiceWithRelations;
   vehicle: VehicleWithRelations;
   user: UserWithRelations;
-  sales_tax?: SalesTaxWithRelations | null;
+  sales_tax: SalesTaxWithRelations;
   line_items: LineItemWithRelations[];
   trips: TripWithRelations[];
   payment?: PaymentWithRelations | null;
@@ -306,7 +306,7 @@ export const QuoteWithRelationsSchema: z.ZodType<QuoteWithRelations> = QuoteSche
   service: z.lazy(() => ServiceWithRelationsSchema),
   vehicle: z.lazy(() => VehicleWithRelationsSchema),
   user: z.lazy(() => UserWithRelationsSchema),
-  sales_tax: z.lazy(() => SalesTaxWithRelationsSchema).nullable(),
+  sales_tax: z.lazy(() => SalesTaxWithRelationsSchema),
   line_items: z.lazy(() => LineItemWithRelationsSchema).array(),
   trips: z.lazy(() => TripWithRelationsSchema).array(),
   payment: z.lazy(() => PaymentWithRelationsSchema).nullable(),
@@ -319,7 +319,7 @@ export type QuotePartialRelations = {
   service?: ServicePartialWithRelations;
   vehicle?: VehiclePartialWithRelations;
   user?: UserPartialWithRelations;
-  sales_tax?: SalesTaxPartialWithRelations | null;
+  sales_tax?: SalesTaxPartialWithRelations;
   line_items?: LineItemPartialWithRelations[];
   trips?: TripPartialWithRelations[];
   payment?: PaymentPartialWithRelations | null;
@@ -331,7 +331,7 @@ export const QuotePartialWithRelationsSchema: z.ZodType<QuotePartialWithRelation
   service: z.lazy(() => ServicePartialWithRelationsSchema),
   vehicle: z.lazy(() => VehiclePartialWithRelationsSchema),
   user: z.lazy(() => UserPartialWithRelationsSchema),
-  sales_tax: z.lazy(() => SalesTaxPartialWithRelationsSchema).nullable(),
+  sales_tax: z.lazy(() => SalesTaxPartialWithRelationsSchema),
   line_items: z.lazy(() => LineItemPartialWithRelationsSchema).array(),
   trips: z.lazy(() => TripPartialWithRelationsSchema).array(),
   payment: z.lazy(() => PaymentPartialWithRelationsSchema).nullable(),
@@ -1293,7 +1293,7 @@ export const AccountWhereInputSchema: z.ZodType<Prisma.AccountWhereInput> = z.ob
   company_phone: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   company_email: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   company_account_number: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  users: z.lazy(() => UserListRelationFilterSchema).optional(),
+  users: z.lazy(() => UserListRelationFilterSchema).optional()
 }).strict();
 
 export const AccountOrderByWithRelationInputSchema: z.ZodType<Prisma.AccountOrderByWithRelationInput> = z.object({
@@ -1305,11 +1305,11 @@ export const AccountOrderByWithRelationInputSchema: z.ZodType<Prisma.AccountOrde
   company_phone: z.lazy(() => SortOrderSchema).optional(),
   company_email: z.lazy(() => SortOrderSchema).optional(),
   company_account_number: z.lazy(() => SortOrderSchema).optional(),
-  users: z.lazy(() => UserOrderByRelationAggregateInputSchema).optional(),
+  users: z.lazy(() => UserOrderByRelationAggregateInputSchema).optional()
 }).strict();
 
 export const AccountWhereUniqueInputSchema: z.ZodType<Prisma.AccountWhereUniqueInput> = z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().uuid().optional()
 }).strict();
 
 export const AccountOrderByWithAggregationInputSchema: z.ZodType<Prisma.AccountOrderByWithAggregationInput> = z.object({
@@ -1325,7 +1325,7 @@ export const AccountOrderByWithAggregationInputSchema: z.ZodType<Prisma.AccountO
   _avg: z.lazy(() => AccountAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => AccountMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => AccountMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => AccountSumOrderByAggregateInputSchema).optional(),
+  _sum: z.lazy(() => AccountSumOrderByAggregateInputSchema).optional()
 }).strict();
 
 export const AccountScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.AccountScalarWhereWithAggregatesInput> = z.object({
@@ -1380,12 +1380,12 @@ export const UserOrderByWithRelationInputSchema: z.ZodType<Prisma.UserOrderByWit
   meta_data: z.lazy(() => SortOrderSchema).optional(),
   quotes: z.lazy(() => QuoteOrderByRelationAggregateInputSchema).optional(),
   Account: z.lazy(() => AccountOrderByWithRelationInputSchema).optional(),
-  conversion: z.lazy(() => ConversionOrderByWithRelationInputSchema).optional(),
+  conversion: z.lazy(() => ConversionOrderByWithRelationInputSchema).optional()
 }).strict();
 
 export const UserWhereUniqueInputSchema: z.ZodType<Prisma.UserWhereUniqueInput> = z.object({
   id: z.string().uuid().optional(),
-  email_address: z.string().optional(),
+  email_address: z.string().optional()
 }).strict();
 
 export const UserOrderByWithAggregationInputSchema: z.ZodType<Prisma.UserOrderByWithAggregationInput> = z.object({
@@ -1404,7 +1404,7 @@ export const UserOrderByWithAggregationInputSchema: z.ZodType<Prisma.UserOrderBy
   meta_data: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => UserCountOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => UserMaxOrderByAggregateInputSchema).optional(),
-  _min: z.lazy(() => UserMinOrderByAggregateInputSchema).optional(),
+  _min: z.lazy(() => UserMinOrderByAggregateInputSchema).optional()
 }).strict();
 
 export const UserScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.UserScalarWhereWithAggregatesInput> = z.object({
@@ -1423,7 +1423,7 @@ export const UserScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.UserScal
   is_customer: z.union([ z.lazy(() => BoolWithAggregatesFilterSchema),z.boolean() ]).optional(),
   account_id: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   notes: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
-  meta_data: z.lazy(() => JsonNullableWithAggregatesFilterSchema).optional(),
+  meta_data: z.lazy(() => JsonNullableWithAggregatesFilterSchema).optional()
 }).strict();
 
 export const ConversionWhereInputSchema: z.ZodType<Prisma.ConversionWhereInput> = z.object({
@@ -1456,12 +1456,12 @@ export const ConversionOrderByWithRelationInputSchema: z.ZodType<Prisma.Conversi
   source: z.lazy(() => SortOrderSchema).optional(),
   conversion_name: z.lazy(() => SortOrderSchema).optional(),
   user_id: z.lazy(() => SortOrderSchema).optional(),
-  user: z.lazy(() => UserOrderByWithRelationInputSchema).optional(),
+  user: z.lazy(() => UserOrderByWithRelationInputSchema).optional()
 }).strict();
 
 export const ConversionWhereUniqueInputSchema: z.ZodType<Prisma.ConversionWhereUniqueInput> = z.object({
   id: z.string().uuid().optional(),
-  user_id: z.string().optional(),
+  user_id: z.string().optional()
 }).strict();
 
 export const ConversionOrderByWithAggregationInputSchema: z.ZodType<Prisma.ConversionOrderByWithAggregationInput> = z.object({
@@ -1478,7 +1478,7 @@ export const ConversionOrderByWithAggregationInputSchema: z.ZodType<Prisma.Conve
   user_id: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => ConversionCountOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => ConversionMaxOrderByAggregateInputSchema).optional(),
-  _min: z.lazy(() => ConversionMinOrderByAggregateInputSchema).optional(),
+  _min: z.lazy(() => ConversionMinOrderByAggregateInputSchema).optional()
 }).strict();
 
 export const ConversionScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.ConversionScalarWhereWithAggregatesInput> = z.object({
@@ -1519,7 +1519,7 @@ export const QuoteWhereInputSchema: z.ZodType<Prisma.QuoteWhereInput> = z.object
   service: z.union([ z.lazy(() => ServiceRelationFilterSchema),z.lazy(() => ServiceWhereInputSchema) ]).optional(),
   vehicle: z.union([ z.lazy(() => VehicleRelationFilterSchema),z.lazy(() => VehicleWhereInputSchema) ]).optional(),
   user: z.union([ z.lazy(() => UserRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
-  sales_tax: z.union([ z.lazy(() => SalesTaxRelationFilterSchema),z.lazy(() => SalesTaxWhereInputSchema) ]).optional().nullable(),
+  sales_tax: z.union([ z.lazy(() => SalesTaxRelationFilterSchema),z.lazy(() => SalesTaxWhereInputSchema) ]).optional(),
   line_items: z.lazy(() => LineItemListRelationFilterSchema).optional(),
   trips: z.lazy(() => TripListRelationFilterSchema).optional(),
   payment: z.union([ z.lazy(() => PaymentRelationFilterSchema),z.lazy(() => PaymentWhereInputSchema) ]).optional().nullable(),
@@ -1546,11 +1546,11 @@ export const QuoteOrderByWithRelationInputSchema: z.ZodType<Prisma.QuoteOrderByW
   sales_tax: z.lazy(() => SalesTaxOrderByWithRelationInputSchema).optional(),
   line_items: z.lazy(() => LineItemOrderByRelationAggregateInputSchema).optional(),
   trips: z.lazy(() => TripOrderByRelationAggregateInputSchema).optional(),
-  payment: z.lazy(() => PaymentOrderByWithRelationInputSchema).optional(),
+  payment: z.lazy(() => PaymentOrderByWithRelationInputSchema).optional()
 }).strict();
 
 export const QuoteWhereUniqueInputSchema: z.ZodType<Prisma.QuoteWhereUniqueInput> = z.object({
-  quote_number: z.number().int().optional(),
+  quote_number: z.number().int().optional()
 }).strict();
 
 export const QuoteOrderByWithAggregationInputSchema: z.ZodType<Prisma.QuoteOrderByWithAggregationInput> = z.object({
@@ -1572,7 +1572,7 @@ export const QuoteOrderByWithAggregationInputSchema: z.ZodType<Prisma.QuoteOrder
   _avg: z.lazy(() => QuoteAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => QuoteMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => QuoteMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => QuoteSumOrderByAggregateInputSchema).optional(),
+  _sum: z.lazy(() => QuoteSumOrderByAggregateInputSchema).optional()
 }).strict();
 
 export const QuoteScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.QuoteScalarWhereWithAggregatesInput> = z.object({
@@ -1657,11 +1657,11 @@ export const TripOrderByWithRelationInputSchema: z.ZodType<Prisma.TripOrderByWit
   quote: z.lazy(() => QuoteOrderByWithRelationInputSchema).optional(),
   Payment: z.lazy(() => PaymentOrderByWithRelationInputSchema).optional(),
   locations: z.lazy(() => LocationOrderByRelationAggregateInputSchema).optional(),
-  flight: z.lazy(() => FlightOrderByWithRelationInputSchema).optional(),
+  flight: z.lazy(() => FlightOrderByWithRelationInputSchema).optional()
 }).strict();
 
 export const TripWhereUniqueInputSchema: z.ZodType<Prisma.TripWhereUniqueInput> = z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().uuid().optional()
 }).strict();
 
 export const TripOrderByWithAggregationInputSchema: z.ZodType<Prisma.TripOrderByWithAggregationInput> = z.object({
@@ -1693,7 +1693,7 @@ export const TripOrderByWithAggregationInputSchema: z.ZodType<Prisma.TripOrderBy
   _avg: z.lazy(() => TripAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => TripMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => TripMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => TripSumOrderByAggregateInputSchema).optional(),
+  _sum: z.lazy(() => TripSumOrderByAggregateInputSchema).optional()
 }).strict();
 
 export const TripScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.TripScalarWhereWithAggregatesInput> = z.object({
@@ -1762,12 +1762,12 @@ export const FlightOrderByWithRelationInputSchema: z.ZodType<Prisma.FlightOrderB
   departure_time_actual: z.lazy(() => SortOrderSchema).optional(),
   arrival_time_actual: z.lazy(() => SortOrderSchema).optional(),
   trip_id: z.lazy(() => SortOrderSchema).optional(),
-  trip: z.lazy(() => TripOrderByWithRelationInputSchema).optional(),
+  trip: z.lazy(() => TripOrderByWithRelationInputSchema).optional()
 }).strict();
 
 export const FlightWhereUniqueInputSchema: z.ZodType<Prisma.FlightWhereUniqueInput> = z.object({
   id: z.string().uuid().optional(),
-  trip_id: z.string().optional(),
+  trip_id: z.string().optional()
 }).strict();
 
 export const FlightOrderByWithAggregationInputSchema: z.ZodType<Prisma.FlightOrderByWithAggregationInput> = z.object({
@@ -1787,7 +1787,7 @@ export const FlightOrderByWithAggregationInputSchema: z.ZodType<Prisma.FlightOrd
   trip_id: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => FlightCountOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => FlightMaxOrderByAggregateInputSchema).optional(),
-  _min: z.lazy(() => FlightMinOrderByAggregateInputSchema).optional(),
+  _min: z.lazy(() => FlightMinOrderByAggregateInputSchema).optional()
 }).strict();
 
 export const FlightScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.FlightScalarWhereWithAggregatesInput> = z.object({
@@ -1846,11 +1846,11 @@ export const LocationOrderByWithRelationInputSchema: z.ZodType<Prisma.LocationOr
   is_destination: z.lazy(() => SortOrderSchema).optional(),
   is_waypoint: z.lazy(() => SortOrderSchema).optional(),
   trip_id: z.lazy(() => SortOrderSchema).optional(),
-  trip: z.lazy(() => TripOrderByWithRelationInputSchema).optional(),
+  trip: z.lazy(() => TripOrderByWithRelationInputSchema).optional()
 }).strict();
 
 export const LocationWhereUniqueInputSchema: z.ZodType<Prisma.LocationWhereUniqueInput> = z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().uuid().optional()
 }).strict();
 
 export const LocationOrderByWithAggregationInputSchema: z.ZodType<Prisma.LocationOrderByWithAggregationInput> = z.object({
@@ -1872,7 +1872,7 @@ export const LocationOrderByWithAggregationInputSchema: z.ZodType<Prisma.Locatio
   _avg: z.lazy(() => LocationAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => LocationMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => LocationMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => LocationSumOrderByAggregateInputSchema).optional(),
+  _sum: z.lazy(() => LocationSumOrderByAggregateInputSchema).optional()
 }).strict();
 
 export const LocationScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.LocationScalarWhereWithAggregatesInput> = z.object({
@@ -1927,13 +1927,13 @@ export const PaymentOrderByWithRelationInputSchema: z.ZodType<Prisma.PaymentOrde
   trip_id: z.lazy(() => SortOrderSchema).optional(),
   quote_number: z.lazy(() => SortOrderSchema).optional(),
   trip: z.lazy(() => TripOrderByWithRelationInputSchema).optional(),
-  quote: z.lazy(() => QuoteOrderByWithRelationInputSchema).optional(),
+  quote: z.lazy(() => QuoteOrderByWithRelationInputSchema).optional()
 }).strict();
 
 export const PaymentWhereUniqueInputSchema: z.ZodType<Prisma.PaymentWhereUniqueInput> = z.object({
   id: z.string().uuid().optional(),
   trip_id: z.string().optional(),
-  quote_number: z.number().int().optional(),
+  quote_number: z.number().int().optional()
 }).strict();
 
 export const PaymentOrderByWithAggregationInputSchema: z.ZodType<Prisma.PaymentOrderByWithAggregationInput> = z.object({
@@ -1952,7 +1952,7 @@ export const PaymentOrderByWithAggregationInputSchema: z.ZodType<Prisma.PaymentO
   _avg: z.lazy(() => PaymentAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => PaymentMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => PaymentMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => PaymentSumOrderByAggregateInputSchema).optional(),
+  _sum: z.lazy(() => PaymentSumOrderByAggregateInputSchema).optional()
 }).strict();
 
 export const PaymentScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.PaymentScalarWhereWithAggregatesInput> = z.object({
@@ -1983,7 +1983,7 @@ export const ServiceWhereInputSchema: z.ZodType<Prisma.ServiceWhereInput> = z.ob
   is_active: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   is_hourly: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   limo_anywhere_id: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
-  quotes: z.lazy(() => QuoteListRelationFilterSchema).optional(),
+  quotes: z.lazy(() => QuoteListRelationFilterSchema).optional()
 }).strict();
 
 export const ServiceOrderByWithRelationInputSchema: z.ZodType<Prisma.ServiceOrderByWithRelationInput> = z.object({
@@ -1994,11 +1994,11 @@ export const ServiceOrderByWithRelationInputSchema: z.ZodType<Prisma.ServiceOrde
   is_active: z.lazy(() => SortOrderSchema).optional(),
   is_hourly: z.lazy(() => SortOrderSchema).optional(),
   limo_anywhere_id: z.lazy(() => SortOrderSchema).optional(),
-  quotes: z.lazy(() => QuoteOrderByRelationAggregateInputSchema).optional(),
+  quotes: z.lazy(() => QuoteOrderByRelationAggregateInputSchema).optional()
 }).strict();
 
 export const ServiceWhereUniqueInputSchema: z.ZodType<Prisma.ServiceWhereUniqueInput> = z.object({
-  value: z.number().int().optional(),
+  value: z.number().int().optional()
 }).strict();
 
 export const ServiceOrderByWithAggregationInputSchema: z.ZodType<Prisma.ServiceOrderByWithAggregationInput> = z.object({
@@ -2013,7 +2013,7 @@ export const ServiceOrderByWithAggregationInputSchema: z.ZodType<Prisma.ServiceO
   _avg: z.lazy(() => ServiceAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => ServiceMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => ServiceMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => ServiceSumOrderByAggregateInputSchema).optional(),
+  _sum: z.lazy(() => ServiceSumOrderByAggregateInputSchema).optional()
 }).strict();
 
 export const ServiceScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.ServiceScalarWhereWithAggregatesInput> = z.object({
@@ -2043,7 +2043,7 @@ export const LineItemWhereInputSchema: z.ZodType<Prisma.LineItemWhereInput> = z.
   is_active: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   amount: z.union([ z.lazy(() => FloatFilterSchema),z.number() ]).optional(),
   applies_to: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  quotes: z.lazy(() => QuoteListRelationFilterSchema).optional(),
+  quotes: z.lazy(() => QuoteListRelationFilterSchema).optional()
 }).strict();
 
 export const LineItemOrderByWithRelationInputSchema: z.ZodType<Prisma.LineItemOrderByWithRelationInput> = z.object({
@@ -2057,11 +2057,11 @@ export const LineItemOrderByWithRelationInputSchema: z.ZodType<Prisma.LineItemOr
   is_active: z.lazy(() => SortOrderSchema).optional(),
   amount: z.lazy(() => SortOrderSchema).optional(),
   applies_to: z.lazy(() => SortOrderSchema).optional(),
-  quotes: z.lazy(() => QuoteOrderByRelationAggregateInputSchema).optional(),
+  quotes: z.lazy(() => QuoteOrderByRelationAggregateInputSchema).optional()
 }).strict();
 
 export const LineItemWhereUniqueInputSchema: z.ZodType<Prisma.LineItemWhereUniqueInput> = z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().uuid().optional()
 }).strict();
 
 export const LineItemOrderByWithAggregationInputSchema: z.ZodType<Prisma.LineItemOrderByWithAggregationInput> = z.object({
@@ -2079,7 +2079,7 @@ export const LineItemOrderByWithAggregationInputSchema: z.ZodType<Prisma.LineIte
   _avg: z.lazy(() => LineItemAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => LineItemMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => LineItemMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => LineItemSumOrderByAggregateInputSchema).optional(),
+  _sum: z.lazy(() => LineItemSumOrderByAggregateInputSchema).optional()
 }).strict();
 
 export const LineItemScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.LineItemScalarWhereWithAggregatesInput> = z.object({
@@ -2109,7 +2109,7 @@ export const SalesTaxWhereInputSchema: z.ZodType<Prisma.SalesTaxWhereInput> = z.
   amount: z.union([ z.lazy(() => FloatFilterSchema),z.number() ]).optional(),
   region: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   is_active: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
-  quotes: z.lazy(() => QuoteListRelationFilterSchema).optional(),
+  quotes: z.lazy(() => QuoteListRelationFilterSchema).optional()
 }).strict();
 
 export const SalesTaxOrderByWithRelationInputSchema: z.ZodType<Prisma.SalesTaxOrderByWithRelationInput> = z.object({
@@ -2120,11 +2120,11 @@ export const SalesTaxOrderByWithRelationInputSchema: z.ZodType<Prisma.SalesTaxOr
   amount: z.lazy(() => SortOrderSchema).optional(),
   region: z.lazy(() => SortOrderSchema).optional(),
   is_active: z.lazy(() => SortOrderSchema).optional(),
-  quotes: z.lazy(() => QuoteOrderByRelationAggregateInputSchema).optional(),
+  quotes: z.lazy(() => QuoteOrderByRelationAggregateInputSchema).optional()
 }).strict();
 
 export const SalesTaxWhereUniqueInputSchema: z.ZodType<Prisma.SalesTaxWhereUniqueInput> = z.object({
-  id: z.number().int().optional(),
+  id: z.number().int().optional()
 }).strict();
 
 export const SalesTaxOrderByWithAggregationInputSchema: z.ZodType<Prisma.SalesTaxOrderByWithAggregationInput> = z.object({
@@ -2139,7 +2139,7 @@ export const SalesTaxOrderByWithAggregationInputSchema: z.ZodType<Prisma.SalesTa
   _avg: z.lazy(() => SalesTaxAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => SalesTaxMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => SalesTaxMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => SalesTaxSumOrderByAggregateInputSchema).optional(),
+  _sum: z.lazy(() => SalesTaxSumOrderByAggregateInputSchema).optional()
 }).strict();
 
 export const SalesTaxScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.SalesTaxScalarWhereWithAggregatesInput> = z.object({
@@ -2173,7 +2173,7 @@ export const VehicleWhereInputSchema: z.ZodType<Prisma.VehicleWhereInput> = z.ob
   label: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   limo_anywhere_id: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
   vehicle_image: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  quotes: z.lazy(() => QuoteListRelationFilterSchema).optional(),
+  quotes: z.lazy(() => QuoteListRelationFilterSchema).optional()
 }).strict();
 
 export const VehicleOrderByWithRelationInputSchema: z.ZodType<Prisma.VehicleOrderByWithRelationInput> = z.object({
@@ -2191,11 +2191,11 @@ export const VehicleOrderByWithRelationInputSchema: z.ZodType<Prisma.VehicleOrde
   label: z.lazy(() => SortOrderSchema).optional(),
   limo_anywhere_id: z.lazy(() => SortOrderSchema).optional(),
   vehicle_image: z.lazy(() => SortOrderSchema).optional(),
-  quotes: z.lazy(() => QuoteOrderByRelationAggregateInputSchema).optional(),
+  quotes: z.lazy(() => QuoteOrderByRelationAggregateInputSchema).optional()
 }).strict();
 
 export const VehicleWhereUniqueInputSchema: z.ZodType<Prisma.VehicleWhereUniqueInput> = z.object({
-  value: z.number().int().optional(),
+  value: z.number().int().optional()
 }).strict();
 
 export const VehicleOrderByWithAggregationInputSchema: z.ZodType<Prisma.VehicleOrderByWithAggregationInput> = z.object({
@@ -2217,7 +2217,7 @@ export const VehicleOrderByWithAggregationInputSchema: z.ZodType<Prisma.VehicleO
   _avg: z.lazy(() => VehicleAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => VehicleMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => VehicleMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => VehicleSumOrderByAggregateInputSchema).optional(),
+  _sum: z.lazy(() => VehicleSumOrderByAggregateInputSchema).optional()
 }).strict();
 
 export const VehicleScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.VehicleScalarWhereWithAggregatesInput> = z.object({
@@ -2250,11 +2250,11 @@ export const LineItemToQuoteWhereInputSchema: z.ZodType<Prisma.LineItemToQuoteWh
 
 export const LineItemToQuoteOrderByWithRelationInputSchema: z.ZodType<Prisma.LineItemToQuoteOrderByWithRelationInput> = z.object({
   A: z.lazy(() => SortOrderSchema).optional(),
-  B: z.lazy(() => SortOrderSchema).optional(),
+  B: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const LineItemToQuoteWhereUniqueInputSchema: z.ZodType<Prisma.LineItemToQuoteWhereUniqueInput> = z.object({
-  A_B: z.lazy(() => LineItemToQuoteABCompoundUniqueInputSchema).optional(),
+  A_B: z.lazy(() => LineItemToQuoteABCompoundUniqueInputSchema).optional()
 }).strict();
 
 export const LineItemToQuoteOrderByWithAggregationInputSchema: z.ZodType<Prisma.LineItemToQuoteOrderByWithAggregationInput> = z.object({
@@ -2264,7 +2264,7 @@ export const LineItemToQuoteOrderByWithAggregationInputSchema: z.ZodType<Prisma.
   _avg: z.lazy(() => LineItemToQuoteAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => LineItemToQuoteMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => LineItemToQuoteMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => LineItemToQuoteSumOrderByAggregateInputSchema).optional(),
+  _sum: z.lazy(() => LineItemToQuoteSumOrderByAggregateInputSchema).optional()
 }).strict();
 
 export const LineItemToQuoteScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.LineItemToQuoteScalarWhereWithAggregatesInput> = z.object({
@@ -2284,7 +2284,7 @@ export const AccountCreateInputSchema: z.ZodType<Prisma.AccountCreateInput> = z.
   company_phone: z.string().optional().nullable(),
   company_email: z.string(),
   company_account_number: z.number().int(),
-  users: z.lazy(() => UserCreateNestedManyWithoutAccountInputSchema).optional(),
+  users: z.lazy(() => UserCreateNestedManyWithoutAccountInputSchema).optional()
 }).strict();
 
 export const AccountUncheckedCreateInputSchema: z.ZodType<Prisma.AccountUncheckedCreateInput> = z.object({
@@ -2296,7 +2296,7 @@ export const AccountUncheckedCreateInputSchema: z.ZodType<Prisma.AccountUnchecke
   company_phone: z.string().optional().nullable(),
   company_email: z.string(),
   company_account_number: z.number().int(),
-  users: z.lazy(() => UserUncheckedCreateNestedManyWithoutAccountInputSchema).optional(),
+  users: z.lazy(() => UserUncheckedCreateNestedManyWithoutAccountInputSchema).optional()
 }).strict();
 
 export const AccountUpdateInputSchema: z.ZodType<Prisma.AccountUpdateInput> = z.object({
@@ -2308,7 +2308,7 @@ export const AccountUpdateInputSchema: z.ZodType<Prisma.AccountUpdateInput> = z.
   company_phone: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   company_email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   company_account_number: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  users: z.lazy(() => UserUpdateManyWithoutAccountNestedInputSchema).optional(),
+  users: z.lazy(() => UserUpdateManyWithoutAccountNestedInputSchema).optional()
 }).strict();
 
 export const AccountUncheckedUpdateInputSchema: z.ZodType<Prisma.AccountUncheckedUpdateInput> = z.object({
@@ -2320,7 +2320,7 @@ export const AccountUncheckedUpdateInputSchema: z.ZodType<Prisma.AccountUnchecke
   company_phone: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   company_email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   company_account_number: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  users: z.lazy(() => UserUncheckedUpdateManyWithoutAccountNestedInputSchema).optional(),
+  users: z.lazy(() => UserUncheckedUpdateManyWithoutAccountNestedInputSchema).optional()
 }).strict();
 
 export const AccountCreateManyInputSchema: z.ZodType<Prisma.AccountCreateManyInput> = z.object({
@@ -2331,7 +2331,7 @@ export const AccountCreateManyInputSchema: z.ZodType<Prisma.AccountCreateManyInp
   company_address: z.string(),
   company_phone: z.string().optional().nullable(),
   company_email: z.string(),
-  company_account_number: z.number().int(),
+  company_account_number: z.number().int()
 }).strict();
 
 export const AccountUpdateManyMutationInputSchema: z.ZodType<Prisma.AccountUpdateManyMutationInput> = z.object({
@@ -2371,7 +2371,7 @@ export const UserCreateInputSchema: z.ZodType<Prisma.UserCreateInput> = z.object
   meta_data: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   quotes: z.lazy(() => QuoteCreateNestedManyWithoutUserInputSchema).optional(),
   Account: z.lazy(() => AccountCreateNestedOneWithoutUsersInputSchema).optional(),
-  conversion: z.lazy(() => ConversionCreateNestedOneWithoutUserInputSchema).optional(),
+  conversion: z.lazy(() => ConversionCreateNestedOneWithoutUserInputSchema).optional()
 }).strict();
 
 export const UserUncheckedCreateInputSchema: z.ZodType<Prisma.UserUncheckedCreateInput> = z.object({
@@ -2389,7 +2389,7 @@ export const UserUncheckedCreateInputSchema: z.ZodType<Prisma.UserUncheckedCreat
   notes: z.string().optional().nullable(),
   meta_data: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   quotes: z.lazy(() => QuoteUncheckedCreateNestedManyWithoutUserInputSchema).optional(),
-  conversion: z.lazy(() => ConversionUncheckedCreateNestedOneWithoutUserInputSchema).optional(),
+  conversion: z.lazy(() => ConversionUncheckedCreateNestedOneWithoutUserInputSchema).optional()
 }).strict();
 
 export const UserUpdateInputSchema: z.ZodType<Prisma.UserUpdateInput> = z.object({
@@ -2407,7 +2407,7 @@ export const UserUpdateInputSchema: z.ZodType<Prisma.UserUpdateInput> = z.object
   meta_data: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   quotes: z.lazy(() => QuoteUpdateManyWithoutUserNestedInputSchema).optional(),
   Account: z.lazy(() => AccountUpdateOneWithoutUsersNestedInputSchema).optional(),
-  conversion: z.lazy(() => ConversionUpdateOneWithoutUserNestedInputSchema).optional(),
+  conversion: z.lazy(() => ConversionUpdateOneWithoutUserNestedInputSchema).optional()
 }).strict();
 
 export const UserUncheckedUpdateInputSchema: z.ZodType<Prisma.UserUncheckedUpdateInput> = z.object({
@@ -2425,7 +2425,7 @@ export const UserUncheckedUpdateInputSchema: z.ZodType<Prisma.UserUncheckedUpdat
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   meta_data: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   quotes: z.lazy(() => QuoteUncheckedUpdateManyWithoutUserNestedInputSchema).optional(),
-  conversion: z.lazy(() => ConversionUncheckedUpdateOneWithoutUserNestedInputSchema).optional(),
+  conversion: z.lazy(() => ConversionUncheckedUpdateOneWithoutUserNestedInputSchema).optional()
 }).strict();
 
 export const UserCreateManyInputSchema: z.ZodType<Prisma.UserCreateManyInput> = z.object({
@@ -2486,7 +2486,7 @@ export const ConversionCreateInputSchema: z.ZodType<Prisma.ConversionCreateInput
   gclid: z.string().optional().nullable(),
   source: z.string().optional().nullable(),
   conversion_name: z.string().optional().nullable(),
-  user: z.lazy(() => UserCreateNestedOneWithoutConversionInputSchema),
+  user: z.lazy(() => UserCreateNestedOneWithoutConversionInputSchema)
 }).strict();
 
 export const ConversionUncheckedCreateInputSchema: z.ZodType<Prisma.ConversionUncheckedCreateInput> = z.object({
@@ -2500,7 +2500,7 @@ export const ConversionUncheckedCreateInputSchema: z.ZodType<Prisma.ConversionUn
   gclid: z.string().optional().nullable(),
   source: z.string().optional().nullable(),
   conversion_name: z.string().optional().nullable(),
-  user_id: z.string(),
+  user_id: z.string()
 }).strict();
 
 export const ConversionUpdateInputSchema: z.ZodType<Prisma.ConversionUpdateInput> = z.object({
@@ -2514,7 +2514,7 @@ export const ConversionUpdateInputSchema: z.ZodType<Prisma.ConversionUpdateInput
   gclid: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   source: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   conversion_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  user: z.lazy(() => UserUpdateOneRequiredWithoutConversionNestedInputSchema).optional(),
+  user: z.lazy(() => UserUpdateOneRequiredWithoutConversionNestedInputSchema).optional()
 }).strict();
 
 export const ConversionUncheckedUpdateInputSchema: z.ZodType<Prisma.ConversionUncheckedUpdateInput> = z.object({
@@ -2542,7 +2542,7 @@ export const ConversionCreateManyInputSchema: z.ZodType<Prisma.ConversionCreateM
   gclid: z.string().optional().nullable(),
   source: z.string().optional().nullable(),
   conversion_name: z.string().optional().nullable(),
-  user_id: z.string(),
+  user_id: z.string()
 }).strict();
 
 export const ConversionUpdateManyMutationInputSchema: z.ZodType<Prisma.ConversionUpdateManyMutationInput> = z.object({
@@ -2585,10 +2585,10 @@ export const QuoteCreateInputSchema: z.ZodType<Prisma.QuoteCreateInput> = z.obje
   service: z.lazy(() => ServiceCreateNestedOneWithoutQuotesInputSchema),
   vehicle: z.lazy(() => VehicleCreateNestedOneWithoutQuotesInputSchema),
   user: z.lazy(() => UserCreateNestedOneWithoutQuotesInputSchema),
-  sales_tax: z.lazy(() => SalesTaxCreateNestedOneWithoutQuotesInputSchema).optional(),
+  sales_tax: z.lazy(() => SalesTaxCreateNestedOneWithoutQuotesInputSchema),
   line_items: z.lazy(() => LineItemCreateNestedManyWithoutQuotesInputSchema).optional(),
   trips: z.lazy(() => TripCreateNestedManyWithoutQuoteInputSchema).optional(),
-  payment: z.lazy(() => PaymentCreateNestedOneWithoutQuoteInputSchema).optional(),
+  payment: z.lazy(() => PaymentCreateNestedOneWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedCreateInputSchema: z.ZodType<Prisma.QuoteUncheckedCreateInput> = z.object({
@@ -2608,7 +2608,7 @@ export const QuoteUncheckedCreateInputSchema: z.ZodType<Prisma.QuoteUncheckedCre
   sales_tax_id: z.number().int(),
   line_items: z.lazy(() => LineItemUncheckedCreateNestedManyWithoutQuotesInputSchema).optional(),
   trips: z.lazy(() => TripUncheckedCreateNestedManyWithoutQuoteInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutQuoteInputSchema).optional(),
+  payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteUpdateInputSchema: z.ZodType<Prisma.QuoteUpdateInput> = z.object({
@@ -2624,10 +2624,10 @@ export const QuoteUpdateInputSchema: z.ZodType<Prisma.QuoteUpdateInput> = z.obje
   service: z.lazy(() => ServiceUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   vehicle: z.lazy(() => VehicleUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   user: z.lazy(() => UserUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
-  sales_tax: z.lazy(() => SalesTaxUpdateOneWithoutQuotesNestedInputSchema).optional(),
+  sales_tax: z.lazy(() => SalesTaxUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   line_items: z.lazy(() => LineItemUpdateManyWithoutQuotesNestedInputSchema).optional(),
   trips: z.lazy(() => TripUpdateManyWithoutQuoteNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUpdateOneWithoutQuoteNestedInputSchema).optional(),
+  payment: z.lazy(() => PaymentUpdateOneWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedUpdateInputSchema: z.ZodType<Prisma.QuoteUncheckedUpdateInput> = z.object({
@@ -2647,7 +2647,7 @@ export const QuoteUncheckedUpdateInputSchema: z.ZodType<Prisma.QuoteUncheckedUpd
   sales_tax_id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   line_items: z.lazy(() => LineItemUncheckedUpdateManyWithoutQuotesNestedInputSchema).optional(),
   trips: z.lazy(() => TripUncheckedUpdateManyWithoutQuoteNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutQuoteNestedInputSchema).optional(),
+  payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const QuoteCreateManyInputSchema: z.ZodType<Prisma.QuoteCreateManyInput> = z.object({
@@ -2664,7 +2664,7 @@ export const QuoteCreateManyInputSchema: z.ZodType<Prisma.QuoteCreateManyInput> 
   quote_tax_total: z.number().optional().nullable(),
   service_id: z.number().int(),
   vehicle_id: z.number().int(),
-  sales_tax_id: z.number().int(),
+  sales_tax_id: z.number().int()
 }).strict();
 
 export const QuoteUpdateManyMutationInputSchema: z.ZodType<Prisma.QuoteUpdateManyMutationInput> = z.object({
@@ -2723,7 +2723,7 @@ export const TripCreateInputSchema: z.ZodType<Prisma.TripCreateInput> = z.object
   quote: z.lazy(() => QuoteCreateNestedOneWithoutTripsInputSchema),
   Payment: z.lazy(() => PaymentCreateNestedOneWithoutTripInputSchema).optional(),
   locations: z.lazy(() => LocationCreateNestedManyWithoutTripInputSchema).optional(),
-  flight: z.lazy(() => FlightCreateNestedOneWithoutTripInputSchema).optional(),
+  flight: z.lazy(() => FlightCreateNestedOneWithoutTripInputSchema).optional()
 }).strict();
 
 export const TripUncheckedCreateInputSchema: z.ZodType<Prisma.TripUncheckedCreateInput> = z.object({
@@ -2753,7 +2753,7 @@ export const TripUncheckedCreateInputSchema: z.ZodType<Prisma.TripUncheckedCreat
   notes: z.string().optional().nullable(),
   Payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutTripInputSchema).optional(),
   locations: z.lazy(() => LocationUncheckedCreateNestedManyWithoutTripInputSchema).optional(),
-  flight: z.lazy(() => FlightUncheckedCreateNestedOneWithoutTripInputSchema).optional(),
+  flight: z.lazy(() => FlightUncheckedCreateNestedOneWithoutTripInputSchema).optional()
 }).strict();
 
 export const TripUpdateInputSchema: z.ZodType<Prisma.TripUpdateInput> = z.object({
@@ -2783,7 +2783,7 @@ export const TripUpdateInputSchema: z.ZodType<Prisma.TripUpdateInput> = z.object
   quote: z.lazy(() => QuoteUpdateOneRequiredWithoutTripsNestedInputSchema).optional(),
   Payment: z.lazy(() => PaymentUpdateOneWithoutTripNestedInputSchema).optional(),
   locations: z.lazy(() => LocationUpdateManyWithoutTripNestedInputSchema).optional(),
-  flight: z.lazy(() => FlightUpdateOneWithoutTripNestedInputSchema).optional(),
+  flight: z.lazy(() => FlightUpdateOneWithoutTripNestedInputSchema).optional()
 }).strict();
 
 export const TripUncheckedUpdateInputSchema: z.ZodType<Prisma.TripUncheckedUpdateInput> = z.object({
@@ -2813,7 +2813,7 @@ export const TripUncheckedUpdateInputSchema: z.ZodType<Prisma.TripUncheckedUpdat
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   Payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutTripNestedInputSchema).optional(),
   locations: z.lazy(() => LocationUncheckedUpdateManyWithoutTripNestedInputSchema).optional(),
-  flight: z.lazy(() => FlightUncheckedUpdateOneWithoutTripNestedInputSchema).optional(),
+  flight: z.lazy(() => FlightUncheckedUpdateOneWithoutTripNestedInputSchema).optional()
 }).strict();
 
 export const TripCreateManyInputSchema: z.ZodType<Prisma.TripCreateManyInput> = z.object({
@@ -2840,7 +2840,7 @@ export const TripCreateManyInputSchema: z.ZodType<Prisma.TripCreateManyInput> = 
   affiliate_payout: z.number().optional().nullable(),
   is_farmed_out: z.boolean().optional().nullable(),
   is_return: z.boolean().optional(),
-  notes: z.string().optional().nullable(),
+  notes: z.string().optional().nullable()
 }).strict();
 
 export const TripUpdateManyMutationInputSchema: z.ZodType<Prisma.TripUpdateManyMutationInput> = z.object({
@@ -2910,7 +2910,7 @@ export const FlightCreateInputSchema: z.ZodType<Prisma.FlightCreateInput> = z.ob
   arrival_time: z.coerce.date().optional().nullable(),
   departure_time_actual: z.coerce.date().optional().nullable(),
   arrival_time_actual: z.coerce.date().optional().nullable(),
-  trip: z.lazy(() => TripCreateNestedOneWithoutFlightInputSchema).optional(),
+  trip: z.lazy(() => TripCreateNestedOneWithoutFlightInputSchema).optional()
 }).strict();
 
 export const FlightUncheckedCreateInputSchema: z.ZodType<Prisma.FlightUncheckedCreateInput> = z.object({
@@ -2927,7 +2927,7 @@ export const FlightUncheckedCreateInputSchema: z.ZodType<Prisma.FlightUncheckedC
   arrival_time: z.coerce.date().optional().nullable(),
   departure_time_actual: z.coerce.date().optional().nullable(),
   arrival_time_actual: z.coerce.date().optional().nullable(),
-  trip_id: z.string().optional().nullable(),
+  trip_id: z.string().optional().nullable()
 }).strict();
 
 export const FlightUpdateInputSchema: z.ZodType<Prisma.FlightUpdateInput> = z.object({
@@ -2944,7 +2944,7 @@ export const FlightUpdateInputSchema: z.ZodType<Prisma.FlightUpdateInput> = z.ob
   arrival_time: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   departure_time_actual: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   arrival_time_actual: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  trip: z.lazy(() => TripUpdateOneWithoutFlightNestedInputSchema).optional(),
+  trip: z.lazy(() => TripUpdateOneWithoutFlightNestedInputSchema).optional()
 }).strict();
 
 export const FlightUncheckedUpdateInputSchema: z.ZodType<Prisma.FlightUncheckedUpdateInput> = z.object({
@@ -2978,7 +2978,7 @@ export const FlightCreateManyInputSchema: z.ZodType<Prisma.FlightCreateManyInput
   arrival_time: z.coerce.date().optional().nullable(),
   departure_time_actual: z.coerce.date().optional().nullable(),
   arrival_time_actual: z.coerce.date().optional().nullable(),
-  trip_id: z.string().optional().nullable(),
+  trip_id: z.string().optional().nullable()
 }).strict();
 
 export const FlightUpdateManyMutationInputSchema: z.ZodType<Prisma.FlightUpdateManyMutationInput> = z.object({
@@ -3028,7 +3028,7 @@ export const LocationCreateInputSchema: z.ZodType<Prisma.LocationCreateInput> = 
   is_origin: z.boolean().optional(),
   is_destination: z.boolean().optional(),
   is_waypoint: z.boolean().optional(),
-  trip: z.lazy(() => TripCreateNestedOneWithoutLocationsInputSchema).optional(),
+  trip: z.lazy(() => TripCreateNestedOneWithoutLocationsInputSchema).optional()
 }).strict();
 
 export const LocationUncheckedCreateInputSchema: z.ZodType<Prisma.LocationUncheckedCreateInput> = z.object({
@@ -3045,7 +3045,7 @@ export const LocationUncheckedCreateInputSchema: z.ZodType<Prisma.LocationUnchec
   is_origin: z.boolean().optional(),
   is_destination: z.boolean().optional(),
   is_waypoint: z.boolean().optional(),
-  trip_id: z.string(),
+  trip_id: z.string()
 }).strict();
 
 export const LocationUpdateInputSchema: z.ZodType<Prisma.LocationUpdateInput> = z.object({
@@ -3062,7 +3062,7 @@ export const LocationUpdateInputSchema: z.ZodType<Prisma.LocationUpdateInput> = 
   is_origin: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_destination: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_waypoint: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  trip: z.lazy(() => TripUpdateOneWithoutLocationsNestedInputSchema).optional(),
+  trip: z.lazy(() => TripUpdateOneWithoutLocationsNestedInputSchema).optional()
 }).strict();
 
 export const LocationUncheckedUpdateInputSchema: z.ZodType<Prisma.LocationUncheckedUpdateInput> = z.object({
@@ -3096,7 +3096,7 @@ export const LocationCreateManyInputSchema: z.ZodType<Prisma.LocationCreateManyI
   is_origin: z.boolean().optional(),
   is_destination: z.boolean().optional(),
   is_waypoint: z.boolean().optional(),
-  trip_id: z.string(),
+  trip_id: z.string()
 }).strict();
 
 export const LocationUpdateManyMutationInputSchema: z.ZodType<Prisma.LocationUpdateManyMutationInput> = z.object({
@@ -3143,7 +3143,7 @@ export const PaymentCreateInputSchema: z.ZodType<Prisma.PaymentCreateInput> = z.
   payment_type: z.string().optional().nullable(),
   notes: z.string().optional().nullable(),
   trip: z.lazy(() => TripCreateNestedOneWithoutPaymentInputSchema).optional(),
-  quote: z.lazy(() => QuoteCreateNestedOneWithoutPaymentInputSchema),
+  quote: z.lazy(() => QuoteCreateNestedOneWithoutPaymentInputSchema)
 }).strict();
 
 export const PaymentUncheckedCreateInputSchema: z.ZodType<Prisma.PaymentUncheckedCreateInput> = z.object({
@@ -3157,7 +3157,7 @@ export const PaymentUncheckedCreateInputSchema: z.ZodType<Prisma.PaymentUnchecke
   payment_type: z.string().optional().nullable(),
   notes: z.string().optional().nullable(),
   trip_id: z.string().optional().nullable(),
-  quote_number: z.number().int(),
+  quote_number: z.number().int()
 }).strict();
 
 export const PaymentUpdateInputSchema: z.ZodType<Prisma.PaymentUpdateInput> = z.object({
@@ -3171,7 +3171,7 @@ export const PaymentUpdateInputSchema: z.ZodType<Prisma.PaymentUpdateInput> = z.
   payment_type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   trip: z.lazy(() => TripUpdateOneWithoutPaymentNestedInputSchema).optional(),
-  quote: z.lazy(() => QuoteUpdateOneRequiredWithoutPaymentNestedInputSchema).optional(),
+  quote: z.lazy(() => QuoteUpdateOneRequiredWithoutPaymentNestedInputSchema).optional()
 }).strict();
 
 export const PaymentUncheckedUpdateInputSchema: z.ZodType<Prisma.PaymentUncheckedUpdateInput> = z.object({
@@ -3199,7 +3199,7 @@ export const PaymentCreateManyInputSchema: z.ZodType<Prisma.PaymentCreateManyInp
   payment_type: z.string().optional().nullable(),
   notes: z.string().optional().nullable(),
   trip_id: z.string().optional().nullable(),
-  quote_number: z.number().int(),
+  quote_number: z.number().int()
 }).strict();
 
 export const PaymentUpdateManyMutationInputSchema: z.ZodType<Prisma.PaymentUpdateManyMutationInput> = z.object({
@@ -3235,7 +3235,7 @@ export const ServiceCreateInputSchema: z.ZodType<Prisma.ServiceCreateInput> = z.
   is_active: z.boolean().optional(),
   is_hourly: z.boolean().optional(),
   limo_anywhere_id: z.number().int().optional().nullable(),
-  quotes: z.lazy(() => QuoteCreateNestedManyWithoutServiceInputSchema).optional(),
+  quotes: z.lazy(() => QuoteCreateNestedManyWithoutServiceInputSchema).optional()
 }).strict();
 
 export const ServiceUncheckedCreateInputSchema: z.ZodType<Prisma.ServiceUncheckedCreateInput> = z.object({
@@ -3246,7 +3246,7 @@ export const ServiceUncheckedCreateInputSchema: z.ZodType<Prisma.ServiceUnchecke
   is_active: z.boolean().optional(),
   is_hourly: z.boolean().optional(),
   limo_anywhere_id: z.number().int().optional().nullable(),
-  quotes: z.lazy(() => QuoteUncheckedCreateNestedManyWithoutServiceInputSchema).optional(),
+  quotes: z.lazy(() => QuoteUncheckedCreateNestedManyWithoutServiceInputSchema).optional()
 }).strict();
 
 export const ServiceUpdateInputSchema: z.ZodType<Prisma.ServiceUpdateInput> = z.object({
@@ -3256,7 +3256,7 @@ export const ServiceUpdateInputSchema: z.ZodType<Prisma.ServiceUpdateInput> = z.
   is_active: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_hourly: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   limo_anywhere_id: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  quotes: z.lazy(() => QuoteUpdateManyWithoutServiceNestedInputSchema).optional(),
+  quotes: z.lazy(() => QuoteUpdateManyWithoutServiceNestedInputSchema).optional()
 }).strict();
 
 export const ServiceUncheckedUpdateInputSchema: z.ZodType<Prisma.ServiceUncheckedUpdateInput> = z.object({
@@ -3267,7 +3267,7 @@ export const ServiceUncheckedUpdateInputSchema: z.ZodType<Prisma.ServiceUnchecke
   is_active: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_hourly: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   limo_anywhere_id: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  quotes: z.lazy(() => QuoteUncheckedUpdateManyWithoutServiceNestedInputSchema).optional(),
+  quotes: z.lazy(() => QuoteUncheckedUpdateManyWithoutServiceNestedInputSchema).optional()
 }).strict();
 
 export const ServiceCreateManyInputSchema: z.ZodType<Prisma.ServiceCreateManyInput> = z.object({
@@ -3277,7 +3277,7 @@ export const ServiceCreateManyInputSchema: z.ZodType<Prisma.ServiceCreateManyInp
   label: z.string(),
   is_active: z.boolean().optional(),
   is_hourly: z.boolean().optional(),
-  limo_anywhere_id: z.number().int().optional().nullable(),
+  limo_anywhere_id: z.number().int().optional().nullable()
 }).strict();
 
 export const ServiceUpdateManyMutationInputSchema: z.ZodType<Prisma.ServiceUpdateManyMutationInput> = z.object({
@@ -3310,7 +3310,7 @@ export const LineItemCreateInputSchema: z.ZodType<Prisma.LineItemCreateInput> = 
   is_active: z.boolean().optional(),
   amount: z.number(),
   applies_to: z.string().optional().nullable(),
-  quotes: z.lazy(() => QuoteCreateNestedManyWithoutLine_itemsInputSchema).optional(),
+  quotes: z.lazy(() => QuoteCreateNestedManyWithoutLine_itemsInputSchema).optional()
 }).strict();
 
 export const LineItemUncheckedCreateInputSchema: z.ZodType<Prisma.LineItemUncheckedCreateInput> = z.object({
@@ -3324,7 +3324,7 @@ export const LineItemUncheckedCreateInputSchema: z.ZodType<Prisma.LineItemUnchec
   is_active: z.boolean().optional(),
   amount: z.number(),
   applies_to: z.string().optional().nullable(),
-  quotes: z.lazy(() => QuoteUncheckedCreateNestedManyWithoutLine_itemsInputSchema).optional(),
+  quotes: z.lazy(() => QuoteUncheckedCreateNestedManyWithoutLine_itemsInputSchema).optional()
 }).strict();
 
 export const LineItemUpdateInputSchema: z.ZodType<Prisma.LineItemUpdateInput> = z.object({
@@ -3338,7 +3338,7 @@ export const LineItemUpdateInputSchema: z.ZodType<Prisma.LineItemUpdateInput> = 
   is_active: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   amount: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   applies_to: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  quotes: z.lazy(() => QuoteUpdateManyWithoutLine_itemsNestedInputSchema).optional(),
+  quotes: z.lazy(() => QuoteUpdateManyWithoutLine_itemsNestedInputSchema).optional()
 }).strict();
 
 export const LineItemUncheckedUpdateInputSchema: z.ZodType<Prisma.LineItemUncheckedUpdateInput> = z.object({
@@ -3352,7 +3352,7 @@ export const LineItemUncheckedUpdateInputSchema: z.ZodType<Prisma.LineItemUnchec
   is_active: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   amount: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   applies_to: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  quotes: z.lazy(() => QuoteUncheckedUpdateManyWithoutLine_itemsNestedInputSchema).optional(),
+  quotes: z.lazy(() => QuoteUncheckedUpdateManyWithoutLine_itemsNestedInputSchema).optional()
 }).strict();
 
 export const LineItemCreateManyInputSchema: z.ZodType<Prisma.LineItemCreateManyInput> = z.object({
@@ -3365,7 +3365,7 @@ export const LineItemCreateManyInputSchema: z.ZodType<Prisma.LineItemCreateManyI
   is_taxable: z.boolean().optional(),
   is_active: z.boolean().optional(),
   amount: z.number(),
-  applies_to: z.string().optional().nullable(),
+  applies_to: z.string().optional().nullable()
 }).strict();
 
 export const LineItemUpdateManyMutationInputSchema: z.ZodType<Prisma.LineItemUpdateManyMutationInput> = z.object({
@@ -3401,7 +3401,7 @@ export const SalesTaxCreateInputSchema: z.ZodType<Prisma.SalesTaxCreateInput> = 
   amount: z.number(),
   region: z.string(),
   is_active: z.boolean().optional(),
-  quotes: z.lazy(() => QuoteCreateNestedManyWithoutSales_taxInputSchema).optional(),
+  quotes: z.lazy(() => QuoteCreateNestedManyWithoutSales_taxInputSchema).optional()
 }).strict();
 
 export const SalesTaxUncheckedCreateInputSchema: z.ZodType<Prisma.SalesTaxUncheckedCreateInput> = z.object({
@@ -3412,7 +3412,7 @@ export const SalesTaxUncheckedCreateInputSchema: z.ZodType<Prisma.SalesTaxUnchec
   amount: z.number(),
   region: z.string(),
   is_active: z.boolean().optional(),
-  quotes: z.lazy(() => QuoteUncheckedCreateNestedManyWithoutSales_taxInputSchema).optional(),
+  quotes: z.lazy(() => QuoteUncheckedCreateNestedManyWithoutSales_taxInputSchema).optional()
 }).strict();
 
 export const SalesTaxUpdateInputSchema: z.ZodType<Prisma.SalesTaxUpdateInput> = z.object({
@@ -3422,7 +3422,7 @@ export const SalesTaxUpdateInputSchema: z.ZodType<Prisma.SalesTaxUpdateInput> = 
   amount: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   region: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   is_active: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  quotes: z.lazy(() => QuoteUpdateManyWithoutSales_taxNestedInputSchema).optional(),
+  quotes: z.lazy(() => QuoteUpdateManyWithoutSales_taxNestedInputSchema).optional()
 }).strict();
 
 export const SalesTaxUncheckedUpdateInputSchema: z.ZodType<Prisma.SalesTaxUncheckedUpdateInput> = z.object({
@@ -3433,7 +3433,7 @@ export const SalesTaxUncheckedUpdateInputSchema: z.ZodType<Prisma.SalesTaxUnchec
   amount: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   region: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   is_active: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  quotes: z.lazy(() => QuoteUncheckedUpdateManyWithoutSales_taxNestedInputSchema).optional(),
+  quotes: z.lazy(() => QuoteUncheckedUpdateManyWithoutSales_taxNestedInputSchema).optional()
 }).strict();
 
 export const SalesTaxCreateManyInputSchema: z.ZodType<Prisma.SalesTaxCreateManyInput> = z.object({
@@ -3443,7 +3443,7 @@ export const SalesTaxCreateManyInputSchema: z.ZodType<Prisma.SalesTaxCreateManyI
   tax_name: z.string(),
   amount: z.number(),
   region: z.string(),
-  is_active: z.boolean().optional(),
+  is_active: z.boolean().optional()
 }).strict();
 
 export const SalesTaxUpdateManyMutationInputSchema: z.ZodType<Prisma.SalesTaxUpdateManyMutationInput> = z.object({
@@ -3479,7 +3479,7 @@ export const VehicleCreateInputSchema: z.ZodType<Prisma.VehicleCreateInput> = z.
   label: z.string(),
   limo_anywhere_id: z.number().int().optional().nullable(),
   vehicle_image: z.string().optional().nullable(),
-  quotes: z.lazy(() => QuoteCreateNestedManyWithoutVehicleInputSchema).optional(),
+  quotes: z.lazy(() => QuoteCreateNestedManyWithoutVehicleInputSchema).optional()
 }).strict();
 
 export const VehicleUncheckedCreateInputSchema: z.ZodType<Prisma.VehicleUncheckedCreateInput> = z.object({
@@ -3497,7 +3497,7 @@ export const VehicleUncheckedCreateInputSchema: z.ZodType<Prisma.VehicleUnchecke
   label: z.string(),
   limo_anywhere_id: z.number().int().optional().nullable(),
   vehicle_image: z.string().optional().nullable(),
-  quotes: z.lazy(() => QuoteUncheckedCreateNestedManyWithoutVehicleInputSchema).optional(),
+  quotes: z.lazy(() => QuoteUncheckedCreateNestedManyWithoutVehicleInputSchema).optional()
 }).strict();
 
 export const VehicleUpdateInputSchema: z.ZodType<Prisma.VehicleUpdateInput> = z.object({
@@ -3514,7 +3514,7 @@ export const VehicleUpdateInputSchema: z.ZodType<Prisma.VehicleUpdateInput> = z.
   label: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   limo_anywhere_id: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   vehicle_image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  quotes: z.lazy(() => QuoteUpdateManyWithoutVehicleNestedInputSchema).optional(),
+  quotes: z.lazy(() => QuoteUpdateManyWithoutVehicleNestedInputSchema).optional()
 }).strict();
 
 export const VehicleUncheckedUpdateInputSchema: z.ZodType<Prisma.VehicleUncheckedUpdateInput> = z.object({
@@ -3532,7 +3532,7 @@ export const VehicleUncheckedUpdateInputSchema: z.ZodType<Prisma.VehicleUnchecke
   label: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   limo_anywhere_id: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   vehicle_image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  quotes: z.lazy(() => QuoteUncheckedUpdateManyWithoutVehicleNestedInputSchema).optional(),
+  quotes: z.lazy(() => QuoteUncheckedUpdateManyWithoutVehicleNestedInputSchema).optional()
 }).strict();
 
 export const VehicleCreateManyInputSchema: z.ZodType<Prisma.VehicleCreateManyInput> = z.object({
@@ -3549,7 +3549,7 @@ export const VehicleCreateManyInputSchema: z.ZodType<Prisma.VehicleCreateManyInp
   is_active: z.boolean().optional(),
   label: z.string(),
   limo_anywhere_id: z.number().int().optional().nullable(),
-  vehicle_image: z.string().optional().nullable(),
+  vehicle_image: z.string().optional().nullable()
 }).strict();
 
 export const VehicleUpdateManyMutationInputSchema: z.ZodType<Prisma.VehicleUpdateManyMutationInput> = z.object({
@@ -3587,12 +3587,12 @@ export const VehicleUncheckedUpdateManyInputSchema: z.ZodType<Prisma.VehicleUnch
 
 export const LineItemToQuoteCreateInputSchema: z.ZodType<Prisma.LineItemToQuoteCreateInput> = z.object({
   A: z.string(),
-  B: z.number().int(),
+  B: z.number().int()
 }).strict();
 
 export const LineItemToQuoteUncheckedCreateInputSchema: z.ZodType<Prisma.LineItemToQuoteUncheckedCreateInput> = z.object({
   A: z.string(),
-  B: z.number().int(),
+  B: z.number().int()
 }).strict();
 
 export const LineItemToQuoteUpdateInputSchema: z.ZodType<Prisma.LineItemToQuoteUpdateInput> = z.object({
@@ -3607,7 +3607,7 @@ export const LineItemToQuoteUncheckedUpdateInputSchema: z.ZodType<Prisma.LineIte
 
 export const LineItemToQuoteCreateManyInputSchema: z.ZodType<Prisma.LineItemToQuoteCreateManyInput> = z.object({
   A: z.string(),
-  B: z.number().int(),
+  B: z.number().int()
 }).strict();
 
 export const LineItemToQuoteUpdateManyMutationInputSchema: z.ZodType<Prisma.LineItemToQuoteUpdateManyMutationInput> = z.object({
@@ -3673,11 +3673,11 @@ export const IntFilterSchema: z.ZodType<Prisma.IntFilter> = z.object({
 export const UserListRelationFilterSchema: z.ZodType<Prisma.UserListRelationFilter> = z.object({
   every: z.lazy(() => UserWhereInputSchema).optional(),
   some: z.lazy(() => UserWhereInputSchema).optional(),
-  none: z.lazy(() => UserWhereInputSchema).optional(),
+  none: z.lazy(() => UserWhereInputSchema).optional()
 }).strict();
 
 export const UserOrderByRelationAggregateInputSchema: z.ZodType<Prisma.UserOrderByRelationAggregateInput> = z.object({
-  _count: z.lazy(() => SortOrderSchema).optional(),
+  _count: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const AccountCountOrderByAggregateInputSchema: z.ZodType<Prisma.AccountCountOrderByAggregateInput> = z.object({
@@ -3688,11 +3688,11 @@ export const AccountCountOrderByAggregateInputSchema: z.ZodType<Prisma.AccountCo
   company_address: z.lazy(() => SortOrderSchema).optional(),
   company_phone: z.lazy(() => SortOrderSchema).optional(),
   company_email: z.lazy(() => SortOrderSchema).optional(),
-  company_account_number: z.lazy(() => SortOrderSchema).optional(),
+  company_account_number: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const AccountAvgOrderByAggregateInputSchema: z.ZodType<Prisma.AccountAvgOrderByAggregateInput> = z.object({
-  company_account_number: z.lazy(() => SortOrderSchema).optional(),
+  company_account_number: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const AccountMaxOrderByAggregateInputSchema: z.ZodType<Prisma.AccountMaxOrderByAggregateInput> = z.object({
@@ -3703,7 +3703,7 @@ export const AccountMaxOrderByAggregateInputSchema: z.ZodType<Prisma.AccountMaxO
   company_address: z.lazy(() => SortOrderSchema).optional(),
   company_phone: z.lazy(() => SortOrderSchema).optional(),
   company_email: z.lazy(() => SortOrderSchema).optional(),
-  company_account_number: z.lazy(() => SortOrderSchema).optional(),
+  company_account_number: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const AccountMinOrderByAggregateInputSchema: z.ZodType<Prisma.AccountMinOrderByAggregateInput> = z.object({
@@ -3714,11 +3714,11 @@ export const AccountMinOrderByAggregateInputSchema: z.ZodType<Prisma.AccountMinO
   company_address: z.lazy(() => SortOrderSchema).optional(),
   company_phone: z.lazy(() => SortOrderSchema).optional(),
   company_email: z.lazy(() => SortOrderSchema).optional(),
-  company_account_number: z.lazy(() => SortOrderSchema).optional(),
+  company_account_number: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const AccountSumOrderByAggregateInputSchema: z.ZodType<Prisma.AccountSumOrderByAggregateInput> = z.object({
-  company_account_number: z.lazy(() => SortOrderSchema).optional(),
+  company_account_number: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const StringWithAggregatesFilterSchema: z.ZodType<Prisma.StringWithAggregatesFilter> = z.object({
@@ -3735,7 +3735,7 @@ export const StringWithAggregatesFilterSchema: z.ZodType<Prisma.StringWithAggreg
   not: z.union([ z.string(),z.lazy(() => NestedStringWithAggregatesFilterSchema) ]).optional(),
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedStringFilterSchema).optional(),
-  _max: z.lazy(() => NestedStringFilterSchema).optional(),
+  _max: z.lazy(() => NestedStringFilterSchema).optional()
 }).strict();
 
 export const DateTimeWithAggregatesFilterSchema: z.ZodType<Prisma.DateTimeWithAggregatesFilter> = z.object({
@@ -3749,7 +3749,7 @@ export const DateTimeWithAggregatesFilterSchema: z.ZodType<Prisma.DateTimeWithAg
   not: z.union([ z.coerce.date(),z.lazy(() => NestedDateTimeWithAggregatesFilterSchema) ]).optional(),
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedDateTimeFilterSchema).optional(),
-  _max: z.lazy(() => NestedDateTimeFilterSchema).optional(),
+  _max: z.lazy(() => NestedDateTimeFilterSchema).optional()
 }).strict();
 
 export const StringNullableWithAggregatesFilterSchema: z.ZodType<Prisma.StringNullableWithAggregatesFilter> = z.object({
@@ -3766,7 +3766,7 @@ export const StringNullableWithAggregatesFilterSchema: z.ZodType<Prisma.StringNu
   not: z.union([ z.string(),z.lazy(() => NestedStringNullableWithAggregatesFilterSchema) ]).optional().nullable(),
   _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
   _min: z.lazy(() => NestedStringNullableFilterSchema).optional(),
-  _max: z.lazy(() => NestedStringNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedStringNullableFilterSchema).optional()
 }).strict();
 
 export const IntWithAggregatesFilterSchema: z.ZodType<Prisma.IntWithAggregatesFilter> = z.object({
@@ -3782,7 +3782,7 @@ export const IntWithAggregatesFilterSchema: z.ZodType<Prisma.IntWithAggregatesFi
   _avg: z.lazy(() => NestedFloatFilterSchema).optional(),
   _sum: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedIntFilterSchema).optional(),
-  _max: z.lazy(() => NestedIntFilterSchema).optional(),
+  _max: z.lazy(() => NestedIntFilterSchema).optional()
 }).strict();
 
 export const BoolFilterSchema: z.ZodType<Prisma.BoolFilter> = z.object({
@@ -3809,21 +3809,21 @@ export const JsonNullableFilterSchema: z.ZodType<Prisma.JsonNullableFilter> = z.
 export const QuoteListRelationFilterSchema: z.ZodType<Prisma.QuoteListRelationFilter> = z.object({
   every: z.lazy(() => QuoteWhereInputSchema).optional(),
   some: z.lazy(() => QuoteWhereInputSchema).optional(),
-  none: z.lazy(() => QuoteWhereInputSchema).optional(),
+  none: z.lazy(() => QuoteWhereInputSchema).optional()
 }).strict();
 
 export const AccountRelationFilterSchema: z.ZodType<Prisma.AccountRelationFilter> = z.object({
   is: z.lazy(() => AccountWhereInputSchema).optional().nullable(),
-  isNot: z.lazy(() => AccountWhereInputSchema).optional().nullable(),
+  isNot: z.lazy(() => AccountWhereInputSchema).optional().nullable()
 }).strict();
 
 export const ConversionRelationFilterSchema: z.ZodType<Prisma.ConversionRelationFilter> = z.object({
   is: z.lazy(() => ConversionWhereInputSchema).optional().nullable(),
-  isNot: z.lazy(() => ConversionWhereInputSchema).optional().nullable(),
+  isNot: z.lazy(() => ConversionWhereInputSchema).optional().nullable()
 }).strict();
 
 export const QuoteOrderByRelationAggregateInputSchema: z.ZodType<Prisma.QuoteOrderByRelationAggregateInput> = z.object({
-  _count: z.lazy(() => SortOrderSchema).optional(),
+  _count: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const UserCountOrderByAggregateInputSchema: z.ZodType<Prisma.UserCountOrderByAggregateInput> = z.object({
@@ -3839,7 +3839,7 @@ export const UserCountOrderByAggregateInputSchema: z.ZodType<Prisma.UserCountOrd
   is_customer: z.lazy(() => SortOrderSchema).optional(),
   account_id: z.lazy(() => SortOrderSchema).optional(),
   notes: z.lazy(() => SortOrderSchema).optional(),
-  meta_data: z.lazy(() => SortOrderSchema).optional(),
+  meta_data: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const UserMaxOrderByAggregateInputSchema: z.ZodType<Prisma.UserMaxOrderByAggregateInput> = z.object({
@@ -3854,7 +3854,7 @@ export const UserMaxOrderByAggregateInputSchema: z.ZodType<Prisma.UserMaxOrderBy
   stripe_customer_id: z.lazy(() => SortOrderSchema).optional(),
   is_customer: z.lazy(() => SortOrderSchema).optional(),
   account_id: z.lazy(() => SortOrderSchema).optional(),
-  notes: z.lazy(() => SortOrderSchema).optional(),
+  notes: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const UserMinOrderByAggregateInputSchema: z.ZodType<Prisma.UserMinOrderByAggregateInput> = z.object({
@@ -3869,7 +3869,7 @@ export const UserMinOrderByAggregateInputSchema: z.ZodType<Prisma.UserMinOrderBy
   stripe_customer_id: z.lazy(() => SortOrderSchema).optional(),
   is_customer: z.lazy(() => SortOrderSchema).optional(),
   account_id: z.lazy(() => SortOrderSchema).optional(),
-  notes: z.lazy(() => SortOrderSchema).optional(),
+  notes: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const BoolWithAggregatesFilterSchema: z.ZodType<Prisma.BoolWithAggregatesFilter> = z.object({
@@ -3877,7 +3877,7 @@ export const BoolWithAggregatesFilterSchema: z.ZodType<Prisma.BoolWithAggregates
   not: z.union([ z.boolean(),z.lazy(() => NestedBoolWithAggregatesFilterSchema) ]).optional(),
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedBoolFilterSchema).optional(),
-  _max: z.lazy(() => NestedBoolFilterSchema).optional(),
+  _max: z.lazy(() => NestedBoolFilterSchema).optional()
 }).strict();
 
 export const JsonNullableWithAggregatesFilterSchema: z.ZodType<Prisma.JsonNullableWithAggregatesFilter> = z.object({
@@ -3896,12 +3896,12 @@ export const JsonNullableWithAggregatesFilterSchema: z.ZodType<Prisma.JsonNullab
   not: z.union([ InputJsonValue,z.lazy(() => JsonNullValueFilterSchema) ]).optional(),
   _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
   _min: z.lazy(() => NestedJsonNullableFilterSchema).optional(),
-  _max: z.lazy(() => NestedJsonNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedJsonNullableFilterSchema).optional()
 }).strict();
 
 export const UserRelationFilterSchema: z.ZodType<Prisma.UserRelationFilter> = z.object({
   is: z.lazy(() => UserWhereInputSchema).optional(),
-  isNot: z.lazy(() => UserWhereInputSchema).optional(),
+  isNot: z.lazy(() => UserWhereInputSchema).optional()
 }).strict();
 
 export const ConversionCountOrderByAggregateInputSchema: z.ZodType<Prisma.ConversionCountOrderByAggregateInput> = z.object({
@@ -3915,7 +3915,7 @@ export const ConversionCountOrderByAggregateInputSchema: z.ZodType<Prisma.Conver
   gclid: z.lazy(() => SortOrderSchema).optional(),
   source: z.lazy(() => SortOrderSchema).optional(),
   conversion_name: z.lazy(() => SortOrderSchema).optional(),
-  user_id: z.lazy(() => SortOrderSchema).optional(),
+  user_id: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const ConversionMaxOrderByAggregateInputSchema: z.ZodType<Prisma.ConversionMaxOrderByAggregateInput> = z.object({
@@ -3929,7 +3929,7 @@ export const ConversionMaxOrderByAggregateInputSchema: z.ZodType<Prisma.Conversi
   gclid: z.lazy(() => SortOrderSchema).optional(),
   source: z.lazy(() => SortOrderSchema).optional(),
   conversion_name: z.lazy(() => SortOrderSchema).optional(),
-  user_id: z.lazy(() => SortOrderSchema).optional(),
+  user_id: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const ConversionMinOrderByAggregateInputSchema: z.ZodType<Prisma.ConversionMinOrderByAggregateInput> = z.object({
@@ -3943,7 +3943,7 @@ export const ConversionMinOrderByAggregateInputSchema: z.ZodType<Prisma.Conversi
   gclid: z.lazy(() => SortOrderSchema).optional(),
   source: z.lazy(() => SortOrderSchema).optional(),
   conversion_name: z.lazy(() => SortOrderSchema).optional(),
-  user_id: z.lazy(() => SortOrderSchema).optional(),
+  user_id: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const IntNullableFilterSchema: z.ZodType<Prisma.IntNullableFilter> = z.object({
@@ -3981,42 +3981,42 @@ export const FloatNullableFilterSchema: z.ZodType<Prisma.FloatNullableFilter> = 
 
 export const ServiceRelationFilterSchema: z.ZodType<Prisma.ServiceRelationFilter> = z.object({
   is: z.lazy(() => ServiceWhereInputSchema).optional(),
-  isNot: z.lazy(() => ServiceWhereInputSchema).optional(),
+  isNot: z.lazy(() => ServiceWhereInputSchema).optional()
 }).strict();
 
 export const VehicleRelationFilterSchema: z.ZodType<Prisma.VehicleRelationFilter> = z.object({
   is: z.lazy(() => VehicleWhereInputSchema).optional(),
-  isNot: z.lazy(() => VehicleWhereInputSchema).optional(),
+  isNot: z.lazy(() => VehicleWhereInputSchema).optional()
 }).strict();
 
 export const SalesTaxRelationFilterSchema: z.ZodType<Prisma.SalesTaxRelationFilter> = z.object({
-  is: z.lazy(() => SalesTaxWhereInputSchema).optional().nullable(),
-  isNot: z.lazy(() => SalesTaxWhereInputSchema).optional().nullable(),
+  is: z.lazy(() => SalesTaxWhereInputSchema).optional(),
+  isNot: z.lazy(() => SalesTaxWhereInputSchema).optional()
 }).strict();
 
 export const LineItemListRelationFilterSchema: z.ZodType<Prisma.LineItemListRelationFilter> = z.object({
   every: z.lazy(() => LineItemWhereInputSchema).optional(),
   some: z.lazy(() => LineItemWhereInputSchema).optional(),
-  none: z.lazy(() => LineItemWhereInputSchema).optional(),
+  none: z.lazy(() => LineItemWhereInputSchema).optional()
 }).strict();
 
 export const TripListRelationFilterSchema: z.ZodType<Prisma.TripListRelationFilter> = z.object({
   every: z.lazy(() => TripWhereInputSchema).optional(),
   some: z.lazy(() => TripWhereInputSchema).optional(),
-  none: z.lazy(() => TripWhereInputSchema).optional(),
+  none: z.lazy(() => TripWhereInputSchema).optional()
 }).strict();
 
 export const PaymentRelationFilterSchema: z.ZodType<Prisma.PaymentRelationFilter> = z.object({
   is: z.lazy(() => PaymentWhereInputSchema).optional().nullable(),
-  isNot: z.lazy(() => PaymentWhereInputSchema).optional().nullable(),
+  isNot: z.lazy(() => PaymentWhereInputSchema).optional().nullable()
 }).strict();
 
 export const LineItemOrderByRelationAggregateInputSchema: z.ZodType<Prisma.LineItemOrderByRelationAggregateInput> = z.object({
-  _count: z.lazy(() => SortOrderSchema).optional(),
+  _count: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const TripOrderByRelationAggregateInputSchema: z.ZodType<Prisma.TripOrderByRelationAggregateInput> = z.object({
-  _count: z.lazy(() => SortOrderSchema).optional(),
+  _count: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const QuoteCountOrderByAggregateInputSchema: z.ZodType<Prisma.QuoteCountOrderByAggregateInput> = z.object({
@@ -4033,7 +4033,7 @@ export const QuoteCountOrderByAggregateInputSchema: z.ZodType<Prisma.QuoteCountO
   quote_tax_total: z.lazy(() => SortOrderSchema).optional(),
   service_id: z.lazy(() => SortOrderSchema).optional(),
   vehicle_id: z.lazy(() => SortOrderSchema).optional(),
-  sales_tax_id: z.lazy(() => SortOrderSchema).optional(),
+  sales_tax_id: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const QuoteAvgOrderByAggregateInputSchema: z.ZodType<Prisma.QuoteAvgOrderByAggregateInput> = z.object({
@@ -4045,7 +4045,7 @@ export const QuoteAvgOrderByAggregateInputSchema: z.ZodType<Prisma.QuoteAvgOrder
   quote_tax_total: z.lazy(() => SortOrderSchema).optional(),
   service_id: z.lazy(() => SortOrderSchema).optional(),
   vehicle_id: z.lazy(() => SortOrderSchema).optional(),
-  sales_tax_id: z.lazy(() => SortOrderSchema).optional(),
+  sales_tax_id: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const QuoteMaxOrderByAggregateInputSchema: z.ZodType<Prisma.QuoteMaxOrderByAggregateInput> = z.object({
@@ -4062,7 +4062,7 @@ export const QuoteMaxOrderByAggregateInputSchema: z.ZodType<Prisma.QuoteMaxOrder
   quote_tax_total: z.lazy(() => SortOrderSchema).optional(),
   service_id: z.lazy(() => SortOrderSchema).optional(),
   vehicle_id: z.lazy(() => SortOrderSchema).optional(),
-  sales_tax_id: z.lazy(() => SortOrderSchema).optional(),
+  sales_tax_id: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const QuoteMinOrderByAggregateInputSchema: z.ZodType<Prisma.QuoteMinOrderByAggregateInput> = z.object({
@@ -4079,7 +4079,7 @@ export const QuoteMinOrderByAggregateInputSchema: z.ZodType<Prisma.QuoteMinOrder
   quote_tax_total: z.lazy(() => SortOrderSchema).optional(),
   service_id: z.lazy(() => SortOrderSchema).optional(),
   vehicle_id: z.lazy(() => SortOrderSchema).optional(),
-  sales_tax_id: z.lazy(() => SortOrderSchema).optional(),
+  sales_tax_id: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const QuoteSumOrderByAggregateInputSchema: z.ZodType<Prisma.QuoteSumOrderByAggregateInput> = z.object({
@@ -4091,7 +4091,7 @@ export const QuoteSumOrderByAggregateInputSchema: z.ZodType<Prisma.QuoteSumOrder
   quote_tax_total: z.lazy(() => SortOrderSchema).optional(),
   service_id: z.lazy(() => SortOrderSchema).optional(),
   vehicle_id: z.lazy(() => SortOrderSchema).optional(),
-  sales_tax_id: z.lazy(() => SortOrderSchema).optional(),
+  sales_tax_id: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const IntNullableWithAggregatesFilterSchema: z.ZodType<Prisma.IntNullableWithAggregatesFilter> = z.object({
@@ -4107,7 +4107,7 @@ export const IntNullableWithAggregatesFilterSchema: z.ZodType<Prisma.IntNullable
   _avg: z.lazy(() => NestedFloatNullableFilterSchema).optional(),
   _sum: z.lazy(() => NestedIntNullableFilterSchema).optional(),
   _min: z.lazy(() => NestedIntNullableFilterSchema).optional(),
-  _max: z.lazy(() => NestedIntNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedIntNullableFilterSchema).optional()
 }).strict();
 
 export const FloatWithAggregatesFilterSchema: z.ZodType<Prisma.FloatWithAggregatesFilter> = z.object({
@@ -4123,7 +4123,7 @@ export const FloatWithAggregatesFilterSchema: z.ZodType<Prisma.FloatWithAggregat
   _avg: z.lazy(() => NestedFloatFilterSchema).optional(),
   _sum: z.lazy(() => NestedFloatFilterSchema).optional(),
   _min: z.lazy(() => NestedFloatFilterSchema).optional(),
-  _max: z.lazy(() => NestedFloatFilterSchema).optional(),
+  _max: z.lazy(() => NestedFloatFilterSchema).optional()
 }).strict();
 
 export const FloatNullableWithAggregatesFilterSchema: z.ZodType<Prisma.FloatNullableWithAggregatesFilter> = z.object({
@@ -4139,7 +4139,7 @@ export const FloatNullableWithAggregatesFilterSchema: z.ZodType<Prisma.FloatNull
   _avg: z.lazy(() => NestedFloatNullableFilterSchema).optional(),
   _sum: z.lazy(() => NestedFloatNullableFilterSchema).optional(),
   _min: z.lazy(() => NestedFloatNullableFilterSchema).optional(),
-  _max: z.lazy(() => NestedFloatNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedFloatNullableFilterSchema).optional()
 }).strict();
 
 export const BoolNullableFilterSchema: z.ZodType<Prisma.BoolNullableFilter> = z.object({
@@ -4149,22 +4149,22 @@ export const BoolNullableFilterSchema: z.ZodType<Prisma.BoolNullableFilter> = z.
 
 export const QuoteRelationFilterSchema: z.ZodType<Prisma.QuoteRelationFilter> = z.object({
   is: z.lazy(() => QuoteWhereInputSchema).optional(),
-  isNot: z.lazy(() => QuoteWhereInputSchema).optional(),
+  isNot: z.lazy(() => QuoteWhereInputSchema).optional()
 }).strict();
 
 export const LocationListRelationFilterSchema: z.ZodType<Prisma.LocationListRelationFilter> = z.object({
   every: z.lazy(() => LocationWhereInputSchema).optional(),
   some: z.lazy(() => LocationWhereInputSchema).optional(),
-  none: z.lazy(() => LocationWhereInputSchema).optional(),
+  none: z.lazy(() => LocationWhereInputSchema).optional()
 }).strict();
 
 export const FlightRelationFilterSchema: z.ZodType<Prisma.FlightRelationFilter> = z.object({
   is: z.lazy(() => FlightWhereInputSchema).optional().nullable(),
-  isNot: z.lazy(() => FlightWhereInputSchema).optional().nullable(),
+  isNot: z.lazy(() => FlightWhereInputSchema).optional().nullable()
 }).strict();
 
 export const LocationOrderByRelationAggregateInputSchema: z.ZodType<Prisma.LocationOrderByRelationAggregateInput> = z.object({
-  _count: z.lazy(() => SortOrderSchema).optional(),
+  _count: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const TripCountOrderByAggregateInputSchema: z.ZodType<Prisma.TripCountOrderByAggregateInput> = z.object({
@@ -4191,7 +4191,7 @@ export const TripCountOrderByAggregateInputSchema: z.ZodType<Prisma.TripCountOrd
   affiliate_payout: z.lazy(() => SortOrderSchema).optional(),
   is_farmed_out: z.lazy(() => SortOrderSchema).optional(),
   is_return: z.lazy(() => SortOrderSchema).optional(),
-  notes: z.lazy(() => SortOrderSchema).optional(),
+  notes: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const TripAvgOrderByAggregateInputSchema: z.ZodType<Prisma.TripAvgOrderByAggregateInput> = z.object({
@@ -4204,7 +4204,7 @@ export const TripAvgOrderByAggregateInputSchema: z.ZodType<Prisma.TripAvgOrderBy
   line_items_subtotal: z.lazy(() => SortOrderSchema).optional(),
   line_items_tax: z.lazy(() => SortOrderSchema).optional(),
   line_items_total: z.lazy(() => SortOrderSchema).optional(),
-  affiliate_payout: z.lazy(() => SortOrderSchema).optional(),
+  affiliate_payout: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const TripMaxOrderByAggregateInputSchema: z.ZodType<Prisma.TripMaxOrderByAggregateInput> = z.object({
@@ -4229,7 +4229,7 @@ export const TripMaxOrderByAggregateInputSchema: z.ZodType<Prisma.TripMaxOrderBy
   affiliate_payout: z.lazy(() => SortOrderSchema).optional(),
   is_farmed_out: z.lazy(() => SortOrderSchema).optional(),
   is_return: z.lazy(() => SortOrderSchema).optional(),
-  notes: z.lazy(() => SortOrderSchema).optional(),
+  notes: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const TripMinOrderByAggregateInputSchema: z.ZodType<Prisma.TripMinOrderByAggregateInput> = z.object({
@@ -4254,7 +4254,7 @@ export const TripMinOrderByAggregateInputSchema: z.ZodType<Prisma.TripMinOrderBy
   affiliate_payout: z.lazy(() => SortOrderSchema).optional(),
   is_farmed_out: z.lazy(() => SortOrderSchema).optional(),
   is_return: z.lazy(() => SortOrderSchema).optional(),
-  notes: z.lazy(() => SortOrderSchema).optional(),
+  notes: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const TripSumOrderByAggregateInputSchema: z.ZodType<Prisma.TripSumOrderByAggregateInput> = z.object({
@@ -4267,7 +4267,7 @@ export const TripSumOrderByAggregateInputSchema: z.ZodType<Prisma.TripSumOrderBy
   line_items_subtotal: z.lazy(() => SortOrderSchema).optional(),
   line_items_tax: z.lazy(() => SortOrderSchema).optional(),
   line_items_total: z.lazy(() => SortOrderSchema).optional(),
-  affiliate_payout: z.lazy(() => SortOrderSchema).optional(),
+  affiliate_payout: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const BoolNullableWithAggregatesFilterSchema: z.ZodType<Prisma.BoolNullableWithAggregatesFilter> = z.object({
@@ -4275,7 +4275,7 @@ export const BoolNullableWithAggregatesFilterSchema: z.ZodType<Prisma.BoolNullab
   not: z.union([ z.boolean(),z.lazy(() => NestedBoolNullableWithAggregatesFilterSchema) ]).optional().nullable(),
   _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
   _min: z.lazy(() => NestedBoolNullableFilterSchema).optional(),
-  _max: z.lazy(() => NestedBoolNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedBoolNullableFilterSchema).optional()
 }).strict();
 
 export const DateTimeNullableFilterSchema: z.ZodType<Prisma.DateTimeNullableFilter> = z.object({
@@ -4291,7 +4291,7 @@ export const DateTimeNullableFilterSchema: z.ZodType<Prisma.DateTimeNullableFilt
 
 export const TripRelationFilterSchema: z.ZodType<Prisma.TripRelationFilter> = z.object({
   is: z.lazy(() => TripWhereInputSchema).optional().nullable(),
-  isNot: z.lazy(() => TripWhereInputSchema).optional().nullable(),
+  isNot: z.lazy(() => TripWhereInputSchema).optional().nullable()
 }).strict();
 
 export const FlightCountOrderByAggregateInputSchema: z.ZodType<Prisma.FlightCountOrderByAggregateInput> = z.object({
@@ -4308,7 +4308,7 @@ export const FlightCountOrderByAggregateInputSchema: z.ZodType<Prisma.FlightCoun
   arrival_time: z.lazy(() => SortOrderSchema).optional(),
   departure_time_actual: z.lazy(() => SortOrderSchema).optional(),
   arrival_time_actual: z.lazy(() => SortOrderSchema).optional(),
-  trip_id: z.lazy(() => SortOrderSchema).optional(),
+  trip_id: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const FlightMaxOrderByAggregateInputSchema: z.ZodType<Prisma.FlightMaxOrderByAggregateInput> = z.object({
@@ -4325,7 +4325,7 @@ export const FlightMaxOrderByAggregateInputSchema: z.ZodType<Prisma.FlightMaxOrd
   arrival_time: z.lazy(() => SortOrderSchema).optional(),
   departure_time_actual: z.lazy(() => SortOrderSchema).optional(),
   arrival_time_actual: z.lazy(() => SortOrderSchema).optional(),
-  trip_id: z.lazy(() => SortOrderSchema).optional(),
+  trip_id: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const FlightMinOrderByAggregateInputSchema: z.ZodType<Prisma.FlightMinOrderByAggregateInput> = z.object({
@@ -4342,7 +4342,7 @@ export const FlightMinOrderByAggregateInputSchema: z.ZodType<Prisma.FlightMinOrd
   arrival_time: z.lazy(() => SortOrderSchema).optional(),
   departure_time_actual: z.lazy(() => SortOrderSchema).optional(),
   arrival_time_actual: z.lazy(() => SortOrderSchema).optional(),
-  trip_id: z.lazy(() => SortOrderSchema).optional(),
+  trip_id: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const DateTimeNullableWithAggregatesFilterSchema: z.ZodType<Prisma.DateTimeNullableWithAggregatesFilter> = z.object({
@@ -4356,7 +4356,7 @@ export const DateTimeNullableWithAggregatesFilterSchema: z.ZodType<Prisma.DateTi
   not: z.union([ z.coerce.date(),z.lazy(() => NestedDateTimeNullableWithAggregatesFilterSchema) ]).optional().nullable(),
   _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
   _min: z.lazy(() => NestedDateTimeNullableFilterSchema).optional(),
-  _max: z.lazy(() => NestedDateTimeNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedDateTimeNullableFilterSchema).optional()
 }).strict();
 
 export const JsonFilterSchema: z.ZodType<Prisma.JsonFilter> = z.object({
@@ -4389,12 +4389,12 @@ export const LocationCountOrderByAggregateInputSchema: z.ZodType<Prisma.Location
   is_origin: z.lazy(() => SortOrderSchema).optional(),
   is_destination: z.lazy(() => SortOrderSchema).optional(),
   is_waypoint: z.lazy(() => SortOrderSchema).optional(),
-  trip_id: z.lazy(() => SortOrderSchema).optional(),
+  trip_id: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const LocationAvgOrderByAggregateInputSchema: z.ZodType<Prisma.LocationAvgOrderByAggregateInput> = z.object({
   lat: z.lazy(() => SortOrderSchema).optional(),
-  lng: z.lazy(() => SortOrderSchema).optional(),
+  lng: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const LocationMaxOrderByAggregateInputSchema: z.ZodType<Prisma.LocationMaxOrderByAggregateInput> = z.object({
@@ -4410,7 +4410,7 @@ export const LocationMaxOrderByAggregateInputSchema: z.ZodType<Prisma.LocationMa
   is_origin: z.lazy(() => SortOrderSchema).optional(),
   is_destination: z.lazy(() => SortOrderSchema).optional(),
   is_waypoint: z.lazy(() => SortOrderSchema).optional(),
-  trip_id: z.lazy(() => SortOrderSchema).optional(),
+  trip_id: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const LocationMinOrderByAggregateInputSchema: z.ZodType<Prisma.LocationMinOrderByAggregateInput> = z.object({
@@ -4426,12 +4426,12 @@ export const LocationMinOrderByAggregateInputSchema: z.ZodType<Prisma.LocationMi
   is_origin: z.lazy(() => SortOrderSchema).optional(),
   is_destination: z.lazy(() => SortOrderSchema).optional(),
   is_waypoint: z.lazy(() => SortOrderSchema).optional(),
-  trip_id: z.lazy(() => SortOrderSchema).optional(),
+  trip_id: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const LocationSumOrderByAggregateInputSchema: z.ZodType<Prisma.LocationSumOrderByAggregateInput> = z.object({
   lat: z.lazy(() => SortOrderSchema).optional(),
-  lng: z.lazy(() => SortOrderSchema).optional(),
+  lng: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const JsonWithAggregatesFilterSchema: z.ZodType<Prisma.JsonWithAggregatesFilter> = z.object({
@@ -4450,7 +4450,7 @@ export const JsonWithAggregatesFilterSchema: z.ZodType<Prisma.JsonWithAggregates
   not: z.union([ InputJsonValue,z.lazy(() => JsonNullValueFilterSchema) ]).optional(),
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedJsonFilterSchema).optional(),
-  _max: z.lazy(() => NestedJsonFilterSchema).optional(),
+  _max: z.lazy(() => NestedJsonFilterSchema).optional()
 }).strict();
 
 export const PaymentCountOrderByAggregateInputSchema: z.ZodType<Prisma.PaymentCountOrderByAggregateInput> = z.object({
@@ -4464,11 +4464,11 @@ export const PaymentCountOrderByAggregateInputSchema: z.ZodType<Prisma.PaymentCo
   payment_type: z.lazy(() => SortOrderSchema).optional(),
   notes: z.lazy(() => SortOrderSchema).optional(),
   trip_id: z.lazy(() => SortOrderSchema).optional(),
-  quote_number: z.lazy(() => SortOrderSchema).optional(),
+  quote_number: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const PaymentAvgOrderByAggregateInputSchema: z.ZodType<Prisma.PaymentAvgOrderByAggregateInput> = z.object({
-  quote_number: z.lazy(() => SortOrderSchema).optional(),
+  quote_number: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const PaymentMaxOrderByAggregateInputSchema: z.ZodType<Prisma.PaymentMaxOrderByAggregateInput> = z.object({
@@ -4480,7 +4480,7 @@ export const PaymentMaxOrderByAggregateInputSchema: z.ZodType<Prisma.PaymentMaxO
   payment_type: z.lazy(() => SortOrderSchema).optional(),
   notes: z.lazy(() => SortOrderSchema).optional(),
   trip_id: z.lazy(() => SortOrderSchema).optional(),
-  quote_number: z.lazy(() => SortOrderSchema).optional(),
+  quote_number: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const PaymentMinOrderByAggregateInputSchema: z.ZodType<Prisma.PaymentMinOrderByAggregateInput> = z.object({
@@ -4492,11 +4492,11 @@ export const PaymentMinOrderByAggregateInputSchema: z.ZodType<Prisma.PaymentMinO
   payment_type: z.lazy(() => SortOrderSchema).optional(),
   notes: z.lazy(() => SortOrderSchema).optional(),
   trip_id: z.lazy(() => SortOrderSchema).optional(),
-  quote_number: z.lazy(() => SortOrderSchema).optional(),
+  quote_number: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const PaymentSumOrderByAggregateInputSchema: z.ZodType<Prisma.PaymentSumOrderByAggregateInput> = z.object({
-  quote_number: z.lazy(() => SortOrderSchema).optional(),
+  quote_number: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const ServiceCountOrderByAggregateInputSchema: z.ZodType<Prisma.ServiceCountOrderByAggregateInput> = z.object({
@@ -4506,12 +4506,12 @@ export const ServiceCountOrderByAggregateInputSchema: z.ZodType<Prisma.ServiceCo
   label: z.lazy(() => SortOrderSchema).optional(),
   is_active: z.lazy(() => SortOrderSchema).optional(),
   is_hourly: z.lazy(() => SortOrderSchema).optional(),
-  limo_anywhere_id: z.lazy(() => SortOrderSchema).optional(),
+  limo_anywhere_id: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const ServiceAvgOrderByAggregateInputSchema: z.ZodType<Prisma.ServiceAvgOrderByAggregateInput> = z.object({
   value: z.lazy(() => SortOrderSchema).optional(),
-  limo_anywhere_id: z.lazy(() => SortOrderSchema).optional(),
+  limo_anywhere_id: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const ServiceMaxOrderByAggregateInputSchema: z.ZodType<Prisma.ServiceMaxOrderByAggregateInput> = z.object({
@@ -4521,7 +4521,7 @@ export const ServiceMaxOrderByAggregateInputSchema: z.ZodType<Prisma.ServiceMaxO
   label: z.lazy(() => SortOrderSchema).optional(),
   is_active: z.lazy(() => SortOrderSchema).optional(),
   is_hourly: z.lazy(() => SortOrderSchema).optional(),
-  limo_anywhere_id: z.lazy(() => SortOrderSchema).optional(),
+  limo_anywhere_id: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const ServiceMinOrderByAggregateInputSchema: z.ZodType<Prisma.ServiceMinOrderByAggregateInput> = z.object({
@@ -4531,12 +4531,12 @@ export const ServiceMinOrderByAggregateInputSchema: z.ZodType<Prisma.ServiceMinO
   label: z.lazy(() => SortOrderSchema).optional(),
   is_active: z.lazy(() => SortOrderSchema).optional(),
   is_hourly: z.lazy(() => SortOrderSchema).optional(),
-  limo_anywhere_id: z.lazy(() => SortOrderSchema).optional(),
+  limo_anywhere_id: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const ServiceSumOrderByAggregateInputSchema: z.ZodType<Prisma.ServiceSumOrderByAggregateInput> = z.object({
   value: z.lazy(() => SortOrderSchema).optional(),
-  limo_anywhere_id: z.lazy(() => SortOrderSchema).optional(),
+  limo_anywhere_id: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const LineItemCountOrderByAggregateInputSchema: z.ZodType<Prisma.LineItemCountOrderByAggregateInput> = z.object({
@@ -4549,11 +4549,11 @@ export const LineItemCountOrderByAggregateInputSchema: z.ZodType<Prisma.LineItem
   is_taxable: z.lazy(() => SortOrderSchema).optional(),
   is_active: z.lazy(() => SortOrderSchema).optional(),
   amount: z.lazy(() => SortOrderSchema).optional(),
-  applies_to: z.lazy(() => SortOrderSchema).optional(),
+  applies_to: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const LineItemAvgOrderByAggregateInputSchema: z.ZodType<Prisma.LineItemAvgOrderByAggregateInput> = z.object({
-  amount: z.lazy(() => SortOrderSchema).optional(),
+  amount: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const LineItemMaxOrderByAggregateInputSchema: z.ZodType<Prisma.LineItemMaxOrderByAggregateInput> = z.object({
@@ -4566,7 +4566,7 @@ export const LineItemMaxOrderByAggregateInputSchema: z.ZodType<Prisma.LineItemMa
   is_taxable: z.lazy(() => SortOrderSchema).optional(),
   is_active: z.lazy(() => SortOrderSchema).optional(),
   amount: z.lazy(() => SortOrderSchema).optional(),
-  applies_to: z.lazy(() => SortOrderSchema).optional(),
+  applies_to: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const LineItemMinOrderByAggregateInputSchema: z.ZodType<Prisma.LineItemMinOrderByAggregateInput> = z.object({
@@ -4579,11 +4579,11 @@ export const LineItemMinOrderByAggregateInputSchema: z.ZodType<Prisma.LineItemMi
   is_taxable: z.lazy(() => SortOrderSchema).optional(),
   is_active: z.lazy(() => SortOrderSchema).optional(),
   amount: z.lazy(() => SortOrderSchema).optional(),
-  applies_to: z.lazy(() => SortOrderSchema).optional(),
+  applies_to: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const LineItemSumOrderByAggregateInputSchema: z.ZodType<Prisma.LineItemSumOrderByAggregateInput> = z.object({
-  amount: z.lazy(() => SortOrderSchema).optional(),
+  amount: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const SalesTaxCountOrderByAggregateInputSchema: z.ZodType<Prisma.SalesTaxCountOrderByAggregateInput> = z.object({
@@ -4593,12 +4593,12 @@ export const SalesTaxCountOrderByAggregateInputSchema: z.ZodType<Prisma.SalesTax
   tax_name: z.lazy(() => SortOrderSchema).optional(),
   amount: z.lazy(() => SortOrderSchema).optional(),
   region: z.lazy(() => SortOrderSchema).optional(),
-  is_active: z.lazy(() => SortOrderSchema).optional(),
+  is_active: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const SalesTaxAvgOrderByAggregateInputSchema: z.ZodType<Prisma.SalesTaxAvgOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
-  amount: z.lazy(() => SortOrderSchema).optional(),
+  amount: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const SalesTaxMaxOrderByAggregateInputSchema: z.ZodType<Prisma.SalesTaxMaxOrderByAggregateInput> = z.object({
@@ -4608,7 +4608,7 @@ export const SalesTaxMaxOrderByAggregateInputSchema: z.ZodType<Prisma.SalesTaxMa
   tax_name: z.lazy(() => SortOrderSchema).optional(),
   amount: z.lazy(() => SortOrderSchema).optional(),
   region: z.lazy(() => SortOrderSchema).optional(),
-  is_active: z.lazy(() => SortOrderSchema).optional(),
+  is_active: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const SalesTaxMinOrderByAggregateInputSchema: z.ZodType<Prisma.SalesTaxMinOrderByAggregateInput> = z.object({
@@ -4618,12 +4618,12 @@ export const SalesTaxMinOrderByAggregateInputSchema: z.ZodType<Prisma.SalesTaxMi
   tax_name: z.lazy(() => SortOrderSchema).optional(),
   amount: z.lazy(() => SortOrderSchema).optional(),
   region: z.lazy(() => SortOrderSchema).optional(),
-  is_active: z.lazy(() => SortOrderSchema).optional(),
+  is_active: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const SalesTaxSumOrderByAggregateInputSchema: z.ZodType<Prisma.SalesTaxSumOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
-  amount: z.lazy(() => SortOrderSchema).optional(),
+  amount: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const VehicleCountOrderByAggregateInputSchema: z.ZodType<Prisma.VehicleCountOrderByAggregateInput> = z.object({
@@ -4640,7 +4640,7 @@ export const VehicleCountOrderByAggregateInputSchema: z.ZodType<Prisma.VehicleCo
   is_active: z.lazy(() => SortOrderSchema).optional(),
   label: z.lazy(() => SortOrderSchema).optional(),
   limo_anywhere_id: z.lazy(() => SortOrderSchema).optional(),
-  vehicle_image: z.lazy(() => SortOrderSchema).optional(),
+  vehicle_image: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const VehicleAvgOrderByAggregateInputSchema: z.ZodType<Prisma.VehicleAvgOrderByAggregateInput> = z.object({
@@ -4652,7 +4652,7 @@ export const VehicleAvgOrderByAggregateInputSchema: z.ZodType<Prisma.VehicleAvgO
   min_hours: z.lazy(() => SortOrderSchema).optional(),
   min_distance: z.lazy(() => SortOrderSchema).optional(),
   min_rate: z.lazy(() => SortOrderSchema).optional(),
-  limo_anywhere_id: z.lazy(() => SortOrderSchema).optional(),
+  limo_anywhere_id: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const VehicleMaxOrderByAggregateInputSchema: z.ZodType<Prisma.VehicleMaxOrderByAggregateInput> = z.object({
@@ -4669,7 +4669,7 @@ export const VehicleMaxOrderByAggregateInputSchema: z.ZodType<Prisma.VehicleMaxO
   is_active: z.lazy(() => SortOrderSchema).optional(),
   label: z.lazy(() => SortOrderSchema).optional(),
   limo_anywhere_id: z.lazy(() => SortOrderSchema).optional(),
-  vehicle_image: z.lazy(() => SortOrderSchema).optional(),
+  vehicle_image: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const VehicleMinOrderByAggregateInputSchema: z.ZodType<Prisma.VehicleMinOrderByAggregateInput> = z.object({
@@ -4686,7 +4686,7 @@ export const VehicleMinOrderByAggregateInputSchema: z.ZodType<Prisma.VehicleMinO
   is_active: z.lazy(() => SortOrderSchema).optional(),
   label: z.lazy(() => SortOrderSchema).optional(),
   limo_anywhere_id: z.lazy(() => SortOrderSchema).optional(),
-  vehicle_image: z.lazy(() => SortOrderSchema).optional(),
+  vehicle_image: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const VehicleSumOrderByAggregateInputSchema: z.ZodType<Prisma.VehicleSumOrderByAggregateInput> = z.object({
@@ -4698,35 +4698,35 @@ export const VehicleSumOrderByAggregateInputSchema: z.ZodType<Prisma.VehicleSumO
   min_hours: z.lazy(() => SortOrderSchema).optional(),
   min_distance: z.lazy(() => SortOrderSchema).optional(),
   min_rate: z.lazy(() => SortOrderSchema).optional(),
-  limo_anywhere_id: z.lazy(() => SortOrderSchema).optional(),
+  limo_anywhere_id: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const LineItemToQuoteABCompoundUniqueInputSchema: z.ZodType<Prisma.LineItemToQuoteABCompoundUniqueInput> = z.object({
   A: z.string(),
-  B: z.number(),
+  B: z.number()
 }).strict();
 
 export const LineItemToQuoteCountOrderByAggregateInputSchema: z.ZodType<Prisma.LineItemToQuoteCountOrderByAggregateInput> = z.object({
   A: z.lazy(() => SortOrderSchema).optional(),
-  B: z.lazy(() => SortOrderSchema).optional(),
+  B: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const LineItemToQuoteAvgOrderByAggregateInputSchema: z.ZodType<Prisma.LineItemToQuoteAvgOrderByAggregateInput> = z.object({
-  B: z.lazy(() => SortOrderSchema).optional(),
+  B: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const LineItemToQuoteMaxOrderByAggregateInputSchema: z.ZodType<Prisma.LineItemToQuoteMaxOrderByAggregateInput> = z.object({
   A: z.lazy(() => SortOrderSchema).optional(),
-  B: z.lazy(() => SortOrderSchema).optional(),
+  B: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const LineItemToQuoteMinOrderByAggregateInputSchema: z.ZodType<Prisma.LineItemToQuoteMinOrderByAggregateInput> = z.object({
   A: z.lazy(() => SortOrderSchema).optional(),
-  B: z.lazy(() => SortOrderSchema).optional(),
+  B: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const LineItemToQuoteSumOrderByAggregateInputSchema: z.ZodType<Prisma.LineItemToQuoteSumOrderByAggregateInput> = z.object({
-  B: z.lazy(() => SortOrderSchema).optional(),
+  B: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const UserCreateNestedManyWithoutAccountInputSchema: z.ZodType<Prisma.UserCreateNestedManyWithoutAccountInput> = z.object({
@@ -4744,15 +4744,15 @@ export const UserUncheckedCreateNestedManyWithoutAccountInputSchema: z.ZodType<P
 }).strict();
 
 export const StringFieldUpdateOperationsInputSchema: z.ZodType<Prisma.StringFieldUpdateOperationsInput> = z.object({
-  set: z.string().optional(),
+  set: z.string().optional()
 }).strict();
 
 export const DateTimeFieldUpdateOperationsInputSchema: z.ZodType<Prisma.DateTimeFieldUpdateOperationsInput> = z.object({
-  set: z.coerce.date().optional(),
+  set: z.coerce.date().optional()
 }).strict();
 
 export const NullableStringFieldUpdateOperationsInputSchema: z.ZodType<Prisma.NullableStringFieldUpdateOperationsInput> = z.object({
-  set: z.string().optional().nullable(),
+  set: z.string().optional().nullable()
 }).strict();
 
 export const IntFieldUpdateOperationsInputSchema: z.ZodType<Prisma.IntFieldUpdateOperationsInput> = z.object({
@@ -4760,7 +4760,7 @@ export const IntFieldUpdateOperationsInputSchema: z.ZodType<Prisma.IntFieldUpdat
   increment: z.number().optional(),
   decrement: z.number().optional(),
   multiply: z.number().optional(),
-  divide: z.number().optional(),
+  divide: z.number().optional()
 }).strict();
 
 export const UserUpdateManyWithoutAccountNestedInputSchema: z.ZodType<Prisma.UserUpdateManyWithoutAccountNestedInput> = z.object({
@@ -4801,13 +4801,13 @@ export const QuoteCreateNestedManyWithoutUserInputSchema: z.ZodType<Prisma.Quote
 export const AccountCreateNestedOneWithoutUsersInputSchema: z.ZodType<Prisma.AccountCreateNestedOneWithoutUsersInput> = z.object({
   create: z.union([ z.lazy(() => AccountCreateWithoutUsersInputSchema),z.lazy(() => AccountUncheckedCreateWithoutUsersInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => AccountCreateOrConnectWithoutUsersInputSchema).optional(),
-  connect: z.lazy(() => AccountWhereUniqueInputSchema).optional(),
+  connect: z.lazy(() => AccountWhereUniqueInputSchema).optional()
 }).strict();
 
 export const ConversionCreateNestedOneWithoutUserInputSchema: z.ZodType<Prisma.ConversionCreateNestedOneWithoutUserInput> = z.object({
   create: z.union([ z.lazy(() => ConversionCreateWithoutUserInputSchema),z.lazy(() => ConversionUncheckedCreateWithoutUserInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => ConversionCreateOrConnectWithoutUserInputSchema).optional(),
-  connect: z.lazy(() => ConversionWhereUniqueInputSchema).optional(),
+  connect: z.lazy(() => ConversionWhereUniqueInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedCreateNestedManyWithoutUserInputSchema: z.ZodType<Prisma.QuoteUncheckedCreateNestedManyWithoutUserInput> = z.object({
@@ -4820,11 +4820,11 @@ export const QuoteUncheckedCreateNestedManyWithoutUserInputSchema: z.ZodType<Pri
 export const ConversionUncheckedCreateNestedOneWithoutUserInputSchema: z.ZodType<Prisma.ConversionUncheckedCreateNestedOneWithoutUserInput> = z.object({
   create: z.union([ z.lazy(() => ConversionCreateWithoutUserInputSchema),z.lazy(() => ConversionUncheckedCreateWithoutUserInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => ConversionCreateOrConnectWithoutUserInputSchema).optional(),
-  connect: z.lazy(() => ConversionWhereUniqueInputSchema).optional(),
+  connect: z.lazy(() => ConversionWhereUniqueInputSchema).optional()
 }).strict();
 
 export const BoolFieldUpdateOperationsInputSchema: z.ZodType<Prisma.BoolFieldUpdateOperationsInput> = z.object({
-  set: z.boolean().optional(),
+  set: z.boolean().optional()
 }).strict();
 
 export const QuoteUpdateManyWithoutUserNestedInputSchema: z.ZodType<Prisma.QuoteUpdateManyWithoutUserNestedInput> = z.object({
@@ -4888,7 +4888,7 @@ export const ConversionUncheckedUpdateOneWithoutUserNestedInputSchema: z.ZodType
 export const UserCreateNestedOneWithoutConversionInputSchema: z.ZodType<Prisma.UserCreateNestedOneWithoutConversionInput> = z.object({
   create: z.union([ z.lazy(() => UserCreateWithoutConversionInputSchema),z.lazy(() => UserUncheckedCreateWithoutConversionInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutConversionInputSchema).optional(),
-  connect: z.lazy(() => UserWhereUniqueInputSchema).optional(),
+  connect: z.lazy(() => UserWhereUniqueInputSchema).optional()
 }).strict();
 
 export const UserUpdateOneRequiredWithoutConversionNestedInputSchema: z.ZodType<Prisma.UserUpdateOneRequiredWithoutConversionNestedInput> = z.object({
@@ -4902,25 +4902,25 @@ export const UserUpdateOneRequiredWithoutConversionNestedInputSchema: z.ZodType<
 export const ServiceCreateNestedOneWithoutQuotesInputSchema: z.ZodType<Prisma.ServiceCreateNestedOneWithoutQuotesInput> = z.object({
   create: z.union([ z.lazy(() => ServiceCreateWithoutQuotesInputSchema),z.lazy(() => ServiceUncheckedCreateWithoutQuotesInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => ServiceCreateOrConnectWithoutQuotesInputSchema).optional(),
-  connect: z.lazy(() => ServiceWhereUniqueInputSchema).optional(),
+  connect: z.lazy(() => ServiceWhereUniqueInputSchema).optional()
 }).strict();
 
 export const VehicleCreateNestedOneWithoutQuotesInputSchema: z.ZodType<Prisma.VehicleCreateNestedOneWithoutQuotesInput> = z.object({
   create: z.union([ z.lazy(() => VehicleCreateWithoutQuotesInputSchema),z.lazy(() => VehicleUncheckedCreateWithoutQuotesInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => VehicleCreateOrConnectWithoutQuotesInputSchema).optional(),
-  connect: z.lazy(() => VehicleWhereUniqueInputSchema).optional(),
+  connect: z.lazy(() => VehicleWhereUniqueInputSchema).optional()
 }).strict();
 
 export const UserCreateNestedOneWithoutQuotesInputSchema: z.ZodType<Prisma.UserCreateNestedOneWithoutQuotesInput> = z.object({
   create: z.union([ z.lazy(() => UserCreateWithoutQuotesInputSchema),z.lazy(() => UserUncheckedCreateWithoutQuotesInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutQuotesInputSchema).optional(),
-  connect: z.lazy(() => UserWhereUniqueInputSchema).optional(),
+  connect: z.lazy(() => UserWhereUniqueInputSchema).optional()
 }).strict();
 
 export const SalesTaxCreateNestedOneWithoutQuotesInputSchema: z.ZodType<Prisma.SalesTaxCreateNestedOneWithoutQuotesInput> = z.object({
   create: z.union([ z.lazy(() => SalesTaxCreateWithoutQuotesInputSchema),z.lazy(() => SalesTaxUncheckedCreateWithoutQuotesInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => SalesTaxCreateOrConnectWithoutQuotesInputSchema).optional(),
-  connect: z.lazy(() => SalesTaxWhereUniqueInputSchema).optional(),
+  connect: z.lazy(() => SalesTaxWhereUniqueInputSchema).optional()
 }).strict();
 
 export const LineItemCreateNestedManyWithoutQuotesInputSchema: z.ZodType<Prisma.LineItemCreateNestedManyWithoutQuotesInput> = z.object({
@@ -4939,7 +4939,7 @@ export const TripCreateNestedManyWithoutQuoteInputSchema: z.ZodType<Prisma.TripC
 export const PaymentCreateNestedOneWithoutQuoteInputSchema: z.ZodType<Prisma.PaymentCreateNestedOneWithoutQuoteInput> = z.object({
   create: z.union([ z.lazy(() => PaymentCreateWithoutQuoteInputSchema),z.lazy(() => PaymentUncheckedCreateWithoutQuoteInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => PaymentCreateOrConnectWithoutQuoteInputSchema).optional(),
-  connect: z.lazy(() => PaymentWhereUniqueInputSchema).optional(),
+  connect: z.lazy(() => PaymentWhereUniqueInputSchema).optional()
 }).strict();
 
 export const LineItemUncheckedCreateNestedManyWithoutQuotesInputSchema: z.ZodType<Prisma.LineItemUncheckedCreateNestedManyWithoutQuotesInput> = z.object({
@@ -4958,7 +4958,7 @@ export const TripUncheckedCreateNestedManyWithoutQuoteInputSchema: z.ZodType<Pri
 export const PaymentUncheckedCreateNestedOneWithoutQuoteInputSchema: z.ZodType<Prisma.PaymentUncheckedCreateNestedOneWithoutQuoteInput> = z.object({
   create: z.union([ z.lazy(() => PaymentCreateWithoutQuoteInputSchema),z.lazy(() => PaymentUncheckedCreateWithoutQuoteInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => PaymentCreateOrConnectWithoutQuoteInputSchema).optional(),
-  connect: z.lazy(() => PaymentWhereUniqueInputSchema).optional(),
+  connect: z.lazy(() => PaymentWhereUniqueInputSchema).optional()
 }).strict();
 
 export const NullableIntFieldUpdateOperationsInputSchema: z.ZodType<Prisma.NullableIntFieldUpdateOperationsInput> = z.object({
@@ -4966,7 +4966,7 @@ export const NullableIntFieldUpdateOperationsInputSchema: z.ZodType<Prisma.Nulla
   increment: z.number().optional(),
   decrement: z.number().optional(),
   multiply: z.number().optional(),
-  divide: z.number().optional(),
+  divide: z.number().optional()
 }).strict();
 
 export const FloatFieldUpdateOperationsInputSchema: z.ZodType<Prisma.FloatFieldUpdateOperationsInput> = z.object({
@@ -4974,7 +4974,7 @@ export const FloatFieldUpdateOperationsInputSchema: z.ZodType<Prisma.FloatFieldU
   increment: z.number().optional(),
   decrement: z.number().optional(),
   multiply: z.number().optional(),
-  divide: z.number().optional(),
+  divide: z.number().optional()
 }).strict();
 
 export const NullableFloatFieldUpdateOperationsInputSchema: z.ZodType<Prisma.NullableFloatFieldUpdateOperationsInput> = z.object({
@@ -4982,7 +4982,7 @@ export const NullableFloatFieldUpdateOperationsInputSchema: z.ZodType<Prisma.Nul
   increment: z.number().optional(),
   decrement: z.number().optional(),
   multiply: z.number().optional(),
-  divide: z.number().optional(),
+  divide: z.number().optional()
 }).strict();
 
 export const ServiceUpdateOneRequiredWithoutQuotesNestedInputSchema: z.ZodType<Prisma.ServiceUpdateOneRequiredWithoutQuotesNestedInput> = z.object({
@@ -5009,12 +5009,10 @@ export const UserUpdateOneRequiredWithoutQuotesNestedInputSchema: z.ZodType<Pris
   update: z.union([ z.lazy(() => UserUpdateWithoutQuotesInputSchema),z.lazy(() => UserUncheckedUpdateWithoutQuotesInputSchema) ]).optional(),
 }).strict();
 
-export const SalesTaxUpdateOneWithoutQuotesNestedInputSchema: z.ZodType<Prisma.SalesTaxUpdateOneWithoutQuotesNestedInput> = z.object({
+export const SalesTaxUpdateOneRequiredWithoutQuotesNestedInputSchema: z.ZodType<Prisma.SalesTaxUpdateOneRequiredWithoutQuotesNestedInput> = z.object({
   create: z.union([ z.lazy(() => SalesTaxCreateWithoutQuotesInputSchema),z.lazy(() => SalesTaxUncheckedCreateWithoutQuotesInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => SalesTaxCreateOrConnectWithoutQuotesInputSchema).optional(),
   upsert: z.lazy(() => SalesTaxUpsertWithoutQuotesInputSchema).optional(),
-  disconnect: z.boolean().optional(),
-  delete: z.boolean().optional(),
   connect: z.lazy(() => SalesTaxWhereUniqueInputSchema).optional(),
   update: z.union([ z.lazy(() => SalesTaxUpdateWithoutQuotesInputSchema),z.lazy(() => SalesTaxUncheckedUpdateWithoutQuotesInputSchema) ]).optional(),
 }).strict();
@@ -5096,13 +5094,13 @@ export const PaymentUncheckedUpdateOneWithoutQuoteNestedInputSchema: z.ZodType<P
 export const QuoteCreateNestedOneWithoutTripsInputSchema: z.ZodType<Prisma.QuoteCreateNestedOneWithoutTripsInput> = z.object({
   create: z.union([ z.lazy(() => QuoteCreateWithoutTripsInputSchema),z.lazy(() => QuoteUncheckedCreateWithoutTripsInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => QuoteCreateOrConnectWithoutTripsInputSchema).optional(),
-  connect: z.lazy(() => QuoteWhereUniqueInputSchema).optional(),
+  connect: z.lazy(() => QuoteWhereUniqueInputSchema).optional()
 }).strict();
 
 export const PaymentCreateNestedOneWithoutTripInputSchema: z.ZodType<Prisma.PaymentCreateNestedOneWithoutTripInput> = z.object({
   create: z.union([ z.lazy(() => PaymentCreateWithoutTripInputSchema),z.lazy(() => PaymentUncheckedCreateWithoutTripInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => PaymentCreateOrConnectWithoutTripInputSchema).optional(),
-  connect: z.lazy(() => PaymentWhereUniqueInputSchema).optional(),
+  connect: z.lazy(() => PaymentWhereUniqueInputSchema).optional()
 }).strict();
 
 export const LocationCreateNestedManyWithoutTripInputSchema: z.ZodType<Prisma.LocationCreateNestedManyWithoutTripInput> = z.object({
@@ -5115,13 +5113,13 @@ export const LocationCreateNestedManyWithoutTripInputSchema: z.ZodType<Prisma.Lo
 export const FlightCreateNestedOneWithoutTripInputSchema: z.ZodType<Prisma.FlightCreateNestedOneWithoutTripInput> = z.object({
   create: z.union([ z.lazy(() => FlightCreateWithoutTripInputSchema),z.lazy(() => FlightUncheckedCreateWithoutTripInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => FlightCreateOrConnectWithoutTripInputSchema).optional(),
-  connect: z.lazy(() => FlightWhereUniqueInputSchema).optional(),
+  connect: z.lazy(() => FlightWhereUniqueInputSchema).optional()
 }).strict();
 
 export const PaymentUncheckedCreateNestedOneWithoutTripInputSchema: z.ZodType<Prisma.PaymentUncheckedCreateNestedOneWithoutTripInput> = z.object({
   create: z.union([ z.lazy(() => PaymentCreateWithoutTripInputSchema),z.lazy(() => PaymentUncheckedCreateWithoutTripInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => PaymentCreateOrConnectWithoutTripInputSchema).optional(),
-  connect: z.lazy(() => PaymentWhereUniqueInputSchema).optional(),
+  connect: z.lazy(() => PaymentWhereUniqueInputSchema).optional()
 }).strict();
 
 export const LocationUncheckedCreateNestedManyWithoutTripInputSchema: z.ZodType<Prisma.LocationUncheckedCreateNestedManyWithoutTripInput> = z.object({
@@ -5134,11 +5132,11 @@ export const LocationUncheckedCreateNestedManyWithoutTripInputSchema: z.ZodType<
 export const FlightUncheckedCreateNestedOneWithoutTripInputSchema: z.ZodType<Prisma.FlightUncheckedCreateNestedOneWithoutTripInput> = z.object({
   create: z.union([ z.lazy(() => FlightCreateWithoutTripInputSchema),z.lazy(() => FlightUncheckedCreateWithoutTripInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => FlightCreateOrConnectWithoutTripInputSchema).optional(),
-  connect: z.lazy(() => FlightWhereUniqueInputSchema).optional(),
+  connect: z.lazy(() => FlightWhereUniqueInputSchema).optional()
 }).strict();
 
 export const NullableBoolFieldUpdateOperationsInputSchema: z.ZodType<Prisma.NullableBoolFieldUpdateOperationsInput> = z.object({
-  set: z.boolean().optional().nullable(),
+  set: z.boolean().optional().nullable()
 }).strict();
 
 export const QuoteUpdateOneRequiredWithoutTripsNestedInputSchema: z.ZodType<Prisma.QuoteUpdateOneRequiredWithoutTripsNestedInput> = z.object({
@@ -5220,11 +5218,11 @@ export const FlightUncheckedUpdateOneWithoutTripNestedInputSchema: z.ZodType<Pri
 export const TripCreateNestedOneWithoutFlightInputSchema: z.ZodType<Prisma.TripCreateNestedOneWithoutFlightInput> = z.object({
   create: z.union([ z.lazy(() => TripCreateWithoutFlightInputSchema),z.lazy(() => TripUncheckedCreateWithoutFlightInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => TripCreateOrConnectWithoutFlightInputSchema).optional(),
-  connect: z.lazy(() => TripWhereUniqueInputSchema).optional(),
+  connect: z.lazy(() => TripWhereUniqueInputSchema).optional()
 }).strict();
 
 export const NullableDateTimeFieldUpdateOperationsInputSchema: z.ZodType<Prisma.NullableDateTimeFieldUpdateOperationsInput> = z.object({
-  set: z.coerce.date().optional().nullable(),
+  set: z.coerce.date().optional().nullable()
 }).strict();
 
 export const TripUpdateOneWithoutFlightNestedInputSchema: z.ZodType<Prisma.TripUpdateOneWithoutFlightNestedInput> = z.object({
@@ -5240,7 +5238,7 @@ export const TripUpdateOneWithoutFlightNestedInputSchema: z.ZodType<Prisma.TripU
 export const TripCreateNestedOneWithoutLocationsInputSchema: z.ZodType<Prisma.TripCreateNestedOneWithoutLocationsInput> = z.object({
   create: z.union([ z.lazy(() => TripCreateWithoutLocationsInputSchema),z.lazy(() => TripUncheckedCreateWithoutLocationsInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => TripCreateOrConnectWithoutLocationsInputSchema).optional(),
-  connect: z.lazy(() => TripWhereUniqueInputSchema).optional(),
+  connect: z.lazy(() => TripWhereUniqueInputSchema).optional()
 }).strict();
 
 export const TripUpdateOneWithoutLocationsNestedInputSchema: z.ZodType<Prisma.TripUpdateOneWithoutLocationsNestedInput> = z.object({
@@ -5256,13 +5254,13 @@ export const TripUpdateOneWithoutLocationsNestedInputSchema: z.ZodType<Prisma.Tr
 export const TripCreateNestedOneWithoutPaymentInputSchema: z.ZodType<Prisma.TripCreateNestedOneWithoutPaymentInput> = z.object({
   create: z.union([ z.lazy(() => TripCreateWithoutPaymentInputSchema),z.lazy(() => TripUncheckedCreateWithoutPaymentInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => TripCreateOrConnectWithoutPaymentInputSchema).optional(),
-  connect: z.lazy(() => TripWhereUniqueInputSchema).optional(),
+  connect: z.lazy(() => TripWhereUniqueInputSchema).optional()
 }).strict();
 
 export const QuoteCreateNestedOneWithoutPaymentInputSchema: z.ZodType<Prisma.QuoteCreateNestedOneWithoutPaymentInput> = z.object({
   create: z.union([ z.lazy(() => QuoteCreateWithoutPaymentInputSchema),z.lazy(() => QuoteUncheckedCreateWithoutPaymentInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => QuoteCreateOrConnectWithoutPaymentInputSchema).optional(),
-  connect: z.lazy(() => QuoteWhereUniqueInputSchema).optional(),
+  connect: z.lazy(() => QuoteWhereUniqueInputSchema).optional()
 }).strict();
 
 export const TripUpdateOneWithoutPaymentNestedInputSchema: z.ZodType<Prisma.TripUpdateOneWithoutPaymentNestedInput> = z.object({
@@ -5511,7 +5509,7 @@ export const NestedStringWithAggregatesFilterSchema: z.ZodType<Prisma.NestedStri
   not: z.union([ z.string(),z.lazy(() => NestedStringWithAggregatesFilterSchema) ]).optional(),
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedStringFilterSchema).optional(),
-  _max: z.lazy(() => NestedStringFilterSchema).optional(),
+  _max: z.lazy(() => NestedStringFilterSchema).optional()
 }).strict();
 
 export const NestedDateTimeWithAggregatesFilterSchema: z.ZodType<Prisma.NestedDateTimeWithAggregatesFilter> = z.object({
@@ -5525,7 +5523,7 @@ export const NestedDateTimeWithAggregatesFilterSchema: z.ZodType<Prisma.NestedDa
   not: z.union([ z.coerce.date(),z.lazy(() => NestedDateTimeWithAggregatesFilterSchema) ]).optional(),
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedDateTimeFilterSchema).optional(),
-  _max: z.lazy(() => NestedDateTimeFilterSchema).optional(),
+  _max: z.lazy(() => NestedDateTimeFilterSchema).optional()
 }).strict();
 
 export const NestedStringNullableWithAggregatesFilterSchema: z.ZodType<Prisma.NestedStringNullableWithAggregatesFilter> = z.object({
@@ -5542,7 +5540,7 @@ export const NestedStringNullableWithAggregatesFilterSchema: z.ZodType<Prisma.Ne
   not: z.union([ z.string(),z.lazy(() => NestedStringNullableWithAggregatesFilterSchema) ]).optional().nullable(),
   _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
   _min: z.lazy(() => NestedStringNullableFilterSchema).optional(),
-  _max: z.lazy(() => NestedStringNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedStringNullableFilterSchema).optional()
 }).strict();
 
 export const NestedIntNullableFilterSchema: z.ZodType<Prisma.NestedIntNullableFilter> = z.object({
@@ -5569,7 +5567,7 @@ export const NestedIntWithAggregatesFilterSchema: z.ZodType<Prisma.NestedIntWith
   _avg: z.lazy(() => NestedFloatFilterSchema).optional(),
   _sum: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedIntFilterSchema).optional(),
-  _max: z.lazy(() => NestedIntFilterSchema).optional(),
+  _max: z.lazy(() => NestedIntFilterSchema).optional()
 }).strict();
 
 export const NestedFloatFilterSchema: z.ZodType<Prisma.NestedFloatFilter> = z.object({
@@ -5593,7 +5591,7 @@ export const NestedBoolWithAggregatesFilterSchema: z.ZodType<Prisma.NestedBoolWi
   not: z.union([ z.boolean(),z.lazy(() => NestedBoolWithAggregatesFilterSchema) ]).optional(),
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedBoolFilterSchema).optional(),
-  _max: z.lazy(() => NestedBoolFilterSchema).optional(),
+  _max: z.lazy(() => NestedBoolFilterSchema).optional()
 }).strict();
 
 export const NestedJsonNullableFilterSchema: z.ZodType<Prisma.NestedJsonNullableFilter> = z.object({
@@ -5636,7 +5634,7 @@ export const NestedIntNullableWithAggregatesFilterSchema: z.ZodType<Prisma.Neste
   _avg: z.lazy(() => NestedFloatNullableFilterSchema).optional(),
   _sum: z.lazy(() => NestedIntNullableFilterSchema).optional(),
   _min: z.lazy(() => NestedIntNullableFilterSchema).optional(),
-  _max: z.lazy(() => NestedIntNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedIntNullableFilterSchema).optional()
 }).strict();
 
 export const NestedFloatWithAggregatesFilterSchema: z.ZodType<Prisma.NestedFloatWithAggregatesFilter> = z.object({
@@ -5652,7 +5650,7 @@ export const NestedFloatWithAggregatesFilterSchema: z.ZodType<Prisma.NestedFloat
   _avg: z.lazy(() => NestedFloatFilterSchema).optional(),
   _sum: z.lazy(() => NestedFloatFilterSchema).optional(),
   _min: z.lazy(() => NestedFloatFilterSchema).optional(),
-  _max: z.lazy(() => NestedFloatFilterSchema).optional(),
+  _max: z.lazy(() => NestedFloatFilterSchema).optional()
 }).strict();
 
 export const NestedFloatNullableWithAggregatesFilterSchema: z.ZodType<Prisma.NestedFloatNullableWithAggregatesFilter> = z.object({
@@ -5668,7 +5666,7 @@ export const NestedFloatNullableWithAggregatesFilterSchema: z.ZodType<Prisma.Nes
   _avg: z.lazy(() => NestedFloatNullableFilterSchema).optional(),
   _sum: z.lazy(() => NestedFloatNullableFilterSchema).optional(),
   _min: z.lazy(() => NestedFloatNullableFilterSchema).optional(),
-  _max: z.lazy(() => NestedFloatNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedFloatNullableFilterSchema).optional()
 }).strict();
 
 export const NestedBoolNullableFilterSchema: z.ZodType<Prisma.NestedBoolNullableFilter> = z.object({
@@ -5681,7 +5679,7 @@ export const NestedBoolNullableWithAggregatesFilterSchema: z.ZodType<Prisma.Nest
   not: z.union([ z.boolean(),z.lazy(() => NestedBoolNullableWithAggregatesFilterSchema) ]).optional().nullable(),
   _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
   _min: z.lazy(() => NestedBoolNullableFilterSchema).optional(),
-  _max: z.lazy(() => NestedBoolNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedBoolNullableFilterSchema).optional()
 }).strict();
 
 export const NestedDateTimeNullableFilterSchema: z.ZodType<Prisma.NestedDateTimeNullableFilter> = z.object({
@@ -5706,7 +5704,7 @@ export const NestedDateTimeNullableWithAggregatesFilterSchema: z.ZodType<Prisma.
   not: z.union([ z.coerce.date(),z.lazy(() => NestedDateTimeNullableWithAggregatesFilterSchema) ]).optional().nullable(),
   _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
   _min: z.lazy(() => NestedDateTimeNullableFilterSchema).optional(),
-  _max: z.lazy(() => NestedDateTimeNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedDateTimeNullableFilterSchema).optional()
 }).strict();
 
 export const NestedJsonFilterSchema: z.ZodType<Prisma.NestedJsonFilter> = z.object({
@@ -5739,7 +5737,7 @@ export const UserCreateWithoutAccountInputSchema: z.ZodType<Prisma.UserCreateWit
   notes: z.string().optional().nullable(),
   meta_data: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   quotes: z.lazy(() => QuoteCreateNestedManyWithoutUserInputSchema).optional(),
-  conversion: z.lazy(() => ConversionCreateNestedOneWithoutUserInputSchema).optional(),
+  conversion: z.lazy(() => ConversionCreateNestedOneWithoutUserInputSchema).optional()
 }).strict();
 
 export const UserUncheckedCreateWithoutAccountInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutAccountInput> = z.object({
@@ -5756,7 +5754,7 @@ export const UserUncheckedCreateWithoutAccountInputSchema: z.ZodType<Prisma.User
   notes: z.string().optional().nullable(),
   meta_data: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   quotes: z.lazy(() => QuoteUncheckedCreateNestedManyWithoutUserInputSchema).optional(),
-  conversion: z.lazy(() => ConversionUncheckedCreateNestedOneWithoutUserInputSchema).optional(),
+  conversion: z.lazy(() => ConversionUncheckedCreateNestedOneWithoutUserInputSchema).optional()
 }).strict();
 
 export const UserCreateOrConnectWithoutAccountInputSchema: z.ZodType<Prisma.UserCreateOrConnectWithoutAccountInput> = z.object({
@@ -5766,7 +5764,7 @@ export const UserCreateOrConnectWithoutAccountInputSchema: z.ZodType<Prisma.User
 
 export const UserCreateManyAccountInputEnvelopeSchema: z.ZodType<Prisma.UserCreateManyAccountInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => UserCreateManyAccountInputSchema),z.lazy(() => UserCreateManyAccountInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional(),
+  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const UserUpsertWithWhereUniqueWithoutAccountInputSchema: z.ZodType<Prisma.UserUpsertWithWhereUniqueWithoutAccountInput> = z.object({
@@ -5801,7 +5799,7 @@ export const UserScalarWhereInputSchema: z.ZodType<Prisma.UserScalarWhereInput> 
   is_customer: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   account_id: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   notes: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  meta_data: z.lazy(() => JsonNullableFilterSchema).optional(),
+  meta_data: z.lazy(() => JsonNullableFilterSchema).optional()
 }).strict();
 
 export const QuoteCreateWithoutUserInputSchema: z.ZodType<Prisma.QuoteCreateWithoutUserInput> = z.object({
@@ -5816,10 +5814,10 @@ export const QuoteCreateWithoutUserInputSchema: z.ZodType<Prisma.QuoteCreateWith
   quote_tax_total: z.number().optional().nullable(),
   service: z.lazy(() => ServiceCreateNestedOneWithoutQuotesInputSchema),
   vehicle: z.lazy(() => VehicleCreateNestedOneWithoutQuotesInputSchema),
-  sales_tax: z.lazy(() => SalesTaxCreateNestedOneWithoutQuotesInputSchema).optional(),
+  sales_tax: z.lazy(() => SalesTaxCreateNestedOneWithoutQuotesInputSchema),
   line_items: z.lazy(() => LineItemCreateNestedManyWithoutQuotesInputSchema).optional(),
   trips: z.lazy(() => TripCreateNestedManyWithoutQuoteInputSchema).optional(),
-  payment: z.lazy(() => PaymentCreateNestedOneWithoutQuoteInputSchema).optional(),
+  payment: z.lazy(() => PaymentCreateNestedOneWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedCreateWithoutUserInputSchema: z.ZodType<Prisma.QuoteUncheckedCreateWithoutUserInput> = z.object({
@@ -5838,7 +5836,7 @@ export const QuoteUncheckedCreateWithoutUserInputSchema: z.ZodType<Prisma.QuoteU
   sales_tax_id: z.number(),
   line_items: z.lazy(() => LineItemUncheckedCreateNestedManyWithoutQuotesInputSchema).optional(),
   trips: z.lazy(() => TripUncheckedCreateNestedManyWithoutQuoteInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutQuoteInputSchema).optional(),
+  payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteCreateOrConnectWithoutUserInputSchema: z.ZodType<Prisma.QuoteCreateOrConnectWithoutUserInput> = z.object({
@@ -5848,7 +5846,7 @@ export const QuoteCreateOrConnectWithoutUserInputSchema: z.ZodType<Prisma.QuoteC
 
 export const QuoteCreateManyUserInputEnvelopeSchema: z.ZodType<Prisma.QuoteCreateManyUserInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => QuoteCreateManyUserInputSchema),z.lazy(() => QuoteCreateManyUserInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional(),
+  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const AccountCreateWithoutUsersInputSchema: z.ZodType<Prisma.AccountCreateWithoutUsersInput> = z.object({
@@ -5859,7 +5857,7 @@ export const AccountCreateWithoutUsersInputSchema: z.ZodType<Prisma.AccountCreat
   company_address: z.string(),
   company_phone: z.string().optional().nullable(),
   company_email: z.string(),
-  company_account_number: z.number(),
+  company_account_number: z.number()
 }).strict();
 
 export const AccountUncheckedCreateWithoutUsersInputSchema: z.ZodType<Prisma.AccountUncheckedCreateWithoutUsersInput> = z.object({
@@ -5870,7 +5868,7 @@ export const AccountUncheckedCreateWithoutUsersInputSchema: z.ZodType<Prisma.Acc
   company_address: z.string(),
   company_phone: z.string().optional().nullable(),
   company_email: z.string(),
-  company_account_number: z.number(),
+  company_account_number: z.number()
 }).strict();
 
 export const AccountCreateOrConnectWithoutUsersInputSchema: z.ZodType<Prisma.AccountCreateOrConnectWithoutUsersInput> = z.object({
@@ -5888,7 +5886,7 @@ export const ConversionCreateWithoutUserInputSchema: z.ZodType<Prisma.Conversion
   utm_campaign: z.string().optional().nullable(),
   gclid: z.string().optional().nullable(),
   source: z.string().optional().nullable(),
-  conversion_name: z.string().optional().nullable(),
+  conversion_name: z.string().optional().nullable()
 }).strict();
 
 export const ConversionUncheckedCreateWithoutUserInputSchema: z.ZodType<Prisma.ConversionUncheckedCreateWithoutUserInput> = z.object({
@@ -5901,7 +5899,7 @@ export const ConversionUncheckedCreateWithoutUserInputSchema: z.ZodType<Prisma.C
   utm_campaign: z.string().optional().nullable(),
   gclid: z.string().optional().nullable(),
   source: z.string().optional().nullable(),
-  conversion_name: z.string().optional().nullable(),
+  conversion_name: z.string().optional().nullable()
 }).strict();
 
 export const ConversionCreateOrConnectWithoutUserInputSchema: z.ZodType<Prisma.ConversionCreateOrConnectWithoutUserInput> = z.object({
@@ -6017,7 +6015,7 @@ export const UserCreateWithoutConversionInputSchema: z.ZodType<Prisma.UserCreate
   notes: z.string().optional().nullable(),
   meta_data: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   quotes: z.lazy(() => QuoteCreateNestedManyWithoutUserInputSchema).optional(),
-  Account: z.lazy(() => AccountCreateNestedOneWithoutUsersInputSchema).optional(),
+  Account: z.lazy(() => AccountCreateNestedOneWithoutUsersInputSchema).optional()
 }).strict();
 
 export const UserUncheckedCreateWithoutConversionInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutConversionInput> = z.object({
@@ -6034,7 +6032,7 @@ export const UserUncheckedCreateWithoutConversionInputSchema: z.ZodType<Prisma.U
   account_id: z.string().optional().nullable(),
   notes: z.string().optional().nullable(),
   meta_data: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
-  quotes: z.lazy(() => QuoteUncheckedCreateNestedManyWithoutUserInputSchema).optional(),
+  quotes: z.lazy(() => QuoteUncheckedCreateNestedManyWithoutUserInputSchema).optional()
 }).strict();
 
 export const UserCreateOrConnectWithoutConversionInputSchema: z.ZodType<Prisma.UserCreateOrConnectWithoutConversionInput> = z.object({
@@ -6061,7 +6059,7 @@ export const UserUpdateWithoutConversionInputSchema: z.ZodType<Prisma.UserUpdate
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   meta_data: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   quotes: z.lazy(() => QuoteUpdateManyWithoutUserNestedInputSchema).optional(),
-  Account: z.lazy(() => AccountUpdateOneWithoutUsersNestedInputSchema).optional(),
+  Account: z.lazy(() => AccountUpdateOneWithoutUsersNestedInputSchema).optional()
 }).strict();
 
 export const UserUncheckedUpdateWithoutConversionInputSchema: z.ZodType<Prisma.UserUncheckedUpdateWithoutConversionInput> = z.object({
@@ -6078,7 +6076,7 @@ export const UserUncheckedUpdateWithoutConversionInputSchema: z.ZodType<Prisma.U
   account_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   meta_data: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
-  quotes: z.lazy(() => QuoteUncheckedUpdateManyWithoutUserNestedInputSchema).optional(),
+  quotes: z.lazy(() => QuoteUncheckedUpdateManyWithoutUserNestedInputSchema).optional()
 }).strict();
 
 export const ServiceCreateWithoutQuotesInputSchema: z.ZodType<Prisma.ServiceCreateWithoutQuotesInput> = z.object({
@@ -6087,7 +6085,7 @@ export const ServiceCreateWithoutQuotesInputSchema: z.ZodType<Prisma.ServiceCrea
   label: z.string(),
   is_active: z.boolean().optional(),
   is_hourly: z.boolean().optional(),
-  limo_anywhere_id: z.number().optional().nullable(),
+  limo_anywhere_id: z.number().optional().nullable()
 }).strict();
 
 export const ServiceUncheckedCreateWithoutQuotesInputSchema: z.ZodType<Prisma.ServiceUncheckedCreateWithoutQuotesInput> = z.object({
@@ -6097,7 +6095,7 @@ export const ServiceUncheckedCreateWithoutQuotesInputSchema: z.ZodType<Prisma.Se
   label: z.string(),
   is_active: z.boolean().optional(),
   is_hourly: z.boolean().optional(),
-  limo_anywhere_id: z.number().optional().nullable(),
+  limo_anywhere_id: z.number().optional().nullable()
 }).strict();
 
 export const ServiceCreateOrConnectWithoutQuotesInputSchema: z.ZodType<Prisma.ServiceCreateOrConnectWithoutQuotesInput> = z.object({
@@ -6118,7 +6116,7 @@ export const VehicleCreateWithoutQuotesInputSchema: z.ZodType<Prisma.VehicleCrea
   is_active: z.boolean().optional(),
   label: z.string(),
   limo_anywhere_id: z.number().optional().nullable(),
-  vehicle_image: z.string().optional().nullable(),
+  vehicle_image: z.string().optional().nullable()
 }).strict();
 
 export const VehicleUncheckedCreateWithoutQuotesInputSchema: z.ZodType<Prisma.VehicleUncheckedCreateWithoutQuotesInput> = z.object({
@@ -6135,7 +6133,7 @@ export const VehicleUncheckedCreateWithoutQuotesInputSchema: z.ZodType<Prisma.Ve
   is_active: z.boolean().optional(),
   label: z.string(),
   limo_anywhere_id: z.number().optional().nullable(),
-  vehicle_image: z.string().optional().nullable(),
+  vehicle_image: z.string().optional().nullable()
 }).strict();
 
 export const VehicleCreateOrConnectWithoutQuotesInputSchema: z.ZodType<Prisma.VehicleCreateOrConnectWithoutQuotesInput> = z.object({
@@ -6157,7 +6155,7 @@ export const UserCreateWithoutQuotesInputSchema: z.ZodType<Prisma.UserCreateWith
   notes: z.string().optional().nullable(),
   meta_data: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   Account: z.lazy(() => AccountCreateNestedOneWithoutUsersInputSchema).optional(),
-  conversion: z.lazy(() => ConversionCreateNestedOneWithoutUserInputSchema).optional(),
+  conversion: z.lazy(() => ConversionCreateNestedOneWithoutUserInputSchema).optional()
 }).strict();
 
 export const UserUncheckedCreateWithoutQuotesInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutQuotesInput> = z.object({
@@ -6174,7 +6172,7 @@ export const UserUncheckedCreateWithoutQuotesInputSchema: z.ZodType<Prisma.UserU
   account_id: z.string().optional().nullable(),
   notes: z.string().optional().nullable(),
   meta_data: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
-  conversion: z.lazy(() => ConversionUncheckedCreateNestedOneWithoutUserInputSchema).optional(),
+  conversion: z.lazy(() => ConversionUncheckedCreateNestedOneWithoutUserInputSchema).optional()
 }).strict();
 
 export const UserCreateOrConnectWithoutQuotesInputSchema: z.ZodType<Prisma.UserCreateOrConnectWithoutQuotesInput> = z.object({
@@ -6188,7 +6186,7 @@ export const SalesTaxCreateWithoutQuotesInputSchema: z.ZodType<Prisma.SalesTaxCr
   tax_name: z.string(),
   amount: z.number(),
   region: z.string(),
-  is_active: z.boolean().optional(),
+  is_active: z.boolean().optional()
 }).strict();
 
 export const SalesTaxUncheckedCreateWithoutQuotesInputSchema: z.ZodType<Prisma.SalesTaxUncheckedCreateWithoutQuotesInput> = z.object({
@@ -6198,7 +6196,7 @@ export const SalesTaxUncheckedCreateWithoutQuotesInputSchema: z.ZodType<Prisma.S
   tax_name: z.string(),
   amount: z.number(),
   region: z.string(),
-  is_active: z.boolean().optional(),
+  is_active: z.boolean().optional()
 }).strict();
 
 export const SalesTaxCreateOrConnectWithoutQuotesInputSchema: z.ZodType<Prisma.SalesTaxCreateOrConnectWithoutQuotesInput> = z.object({
@@ -6216,7 +6214,7 @@ export const LineItemCreateWithoutQuotesInputSchema: z.ZodType<Prisma.LineItemCr
   is_taxable: z.boolean().optional(),
   is_active: z.boolean().optional(),
   amount: z.number(),
-  applies_to: z.string().optional().nullable(),
+  applies_to: z.string().optional().nullable()
 }).strict();
 
 export const LineItemUncheckedCreateWithoutQuotesInputSchema: z.ZodType<Prisma.LineItemUncheckedCreateWithoutQuotesInput> = z.object({
@@ -6229,7 +6227,7 @@ export const LineItemUncheckedCreateWithoutQuotesInputSchema: z.ZodType<Prisma.L
   is_taxable: z.boolean().optional(),
   is_active: z.boolean().optional(),
   amount: z.number(),
-  applies_to: z.string().optional().nullable(),
+  applies_to: z.string().optional().nullable()
 }).strict();
 
 export const LineItemCreateOrConnectWithoutQuotesInputSchema: z.ZodType<Prisma.LineItemCreateOrConnectWithoutQuotesInput> = z.object({
@@ -6263,7 +6261,7 @@ export const TripCreateWithoutQuoteInputSchema: z.ZodType<Prisma.TripCreateWitho
   notes: z.string().optional().nullable(),
   Payment: z.lazy(() => PaymentCreateNestedOneWithoutTripInputSchema).optional(),
   locations: z.lazy(() => LocationCreateNestedManyWithoutTripInputSchema).optional(),
-  flight: z.lazy(() => FlightCreateNestedOneWithoutTripInputSchema).optional(),
+  flight: z.lazy(() => FlightCreateNestedOneWithoutTripInputSchema).optional()
 }).strict();
 
 export const TripUncheckedCreateWithoutQuoteInputSchema: z.ZodType<Prisma.TripUncheckedCreateWithoutQuoteInput> = z.object({
@@ -6292,7 +6290,7 @@ export const TripUncheckedCreateWithoutQuoteInputSchema: z.ZodType<Prisma.TripUn
   notes: z.string().optional().nullable(),
   Payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutTripInputSchema).optional(),
   locations: z.lazy(() => LocationUncheckedCreateNestedManyWithoutTripInputSchema).optional(),
-  flight: z.lazy(() => FlightUncheckedCreateNestedOneWithoutTripInputSchema).optional(),
+  flight: z.lazy(() => FlightUncheckedCreateNestedOneWithoutTripInputSchema).optional()
 }).strict();
 
 export const TripCreateOrConnectWithoutQuoteInputSchema: z.ZodType<Prisma.TripCreateOrConnectWithoutQuoteInput> = z.object({
@@ -6302,7 +6300,7 @@ export const TripCreateOrConnectWithoutQuoteInputSchema: z.ZodType<Prisma.TripCr
 
 export const TripCreateManyQuoteInputEnvelopeSchema: z.ZodType<Prisma.TripCreateManyQuoteInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => TripCreateManyQuoteInputSchema),z.lazy(() => TripCreateManyQuoteInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional(),
+  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const PaymentCreateWithoutQuoteInputSchema: z.ZodType<Prisma.PaymentCreateWithoutQuoteInput> = z.object({
@@ -6315,7 +6313,7 @@ export const PaymentCreateWithoutQuoteInputSchema: z.ZodType<Prisma.PaymentCreat
   payment_intent: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   payment_type: z.string().optional().nullable(),
   notes: z.string().optional().nullable(),
-  trip: z.lazy(() => TripCreateNestedOneWithoutPaymentInputSchema).optional(),
+  trip: z.lazy(() => TripCreateNestedOneWithoutPaymentInputSchema).optional()
 }).strict();
 
 export const PaymentUncheckedCreateWithoutQuoteInputSchema: z.ZodType<Prisma.PaymentUncheckedCreateWithoutQuoteInput> = z.object({
@@ -6328,7 +6326,7 @@ export const PaymentUncheckedCreateWithoutQuoteInputSchema: z.ZodType<Prisma.Pay
   payment_intent: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   payment_type: z.string().optional().nullable(),
   notes: z.string().optional().nullable(),
-  trip_id: z.string().optional().nullable(),
+  trip_id: z.string().optional().nullable()
 }).strict();
 
 export const PaymentCreateOrConnectWithoutQuoteInputSchema: z.ZodType<Prisma.PaymentCreateOrConnectWithoutQuoteInput> = z.object({
@@ -6417,7 +6415,7 @@ export const UserUpdateWithoutQuotesInputSchema: z.ZodType<Prisma.UserUpdateWith
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   meta_data: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   Account: z.lazy(() => AccountUpdateOneWithoutUsersNestedInputSchema).optional(),
-  conversion: z.lazy(() => ConversionUpdateOneWithoutUserNestedInputSchema).optional(),
+  conversion: z.lazy(() => ConversionUpdateOneWithoutUserNestedInputSchema).optional()
 }).strict();
 
 export const UserUncheckedUpdateWithoutQuotesInputSchema: z.ZodType<Prisma.UserUncheckedUpdateWithoutQuotesInput> = z.object({
@@ -6434,7 +6432,7 @@ export const UserUncheckedUpdateWithoutQuotesInputSchema: z.ZodType<Prisma.UserU
   account_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   meta_data: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
-  conversion: z.lazy(() => ConversionUncheckedUpdateOneWithoutUserNestedInputSchema).optional(),
+  conversion: z.lazy(() => ConversionUncheckedUpdateOneWithoutUserNestedInputSchema).optional()
 }).strict();
 
 export const SalesTaxUpsertWithoutQuotesInputSchema: z.ZodType<Prisma.SalesTaxUpsertWithoutQuotesInput> = z.object({
@@ -6554,7 +6552,7 @@ export const PaymentUpdateWithoutQuoteInputSchema: z.ZodType<Prisma.PaymentUpdat
   payment_intent: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   payment_type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  trip: z.lazy(() => TripUpdateOneWithoutPaymentNestedInputSchema).optional(),
+  trip: z.lazy(() => TripUpdateOneWithoutPaymentNestedInputSchema).optional()
 }).strict();
 
 export const PaymentUncheckedUpdateWithoutQuoteInputSchema: z.ZodType<Prisma.PaymentUncheckedUpdateWithoutQuoteInput> = z.object({
@@ -6583,9 +6581,9 @@ export const QuoteCreateWithoutTripsInputSchema: z.ZodType<Prisma.QuoteCreateWit
   service: z.lazy(() => ServiceCreateNestedOneWithoutQuotesInputSchema),
   vehicle: z.lazy(() => VehicleCreateNestedOneWithoutQuotesInputSchema),
   user: z.lazy(() => UserCreateNestedOneWithoutQuotesInputSchema),
-  sales_tax: z.lazy(() => SalesTaxCreateNestedOneWithoutQuotesInputSchema).optional(),
+  sales_tax: z.lazy(() => SalesTaxCreateNestedOneWithoutQuotesInputSchema),
   line_items: z.lazy(() => LineItemCreateNestedManyWithoutQuotesInputSchema).optional(),
-  payment: z.lazy(() => PaymentCreateNestedOneWithoutQuoteInputSchema).optional(),
+  payment: z.lazy(() => PaymentCreateNestedOneWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedCreateWithoutTripsInputSchema: z.ZodType<Prisma.QuoteUncheckedCreateWithoutTripsInput> = z.object({
@@ -6604,7 +6602,7 @@ export const QuoteUncheckedCreateWithoutTripsInputSchema: z.ZodType<Prisma.Quote
   vehicle_id: z.number(),
   sales_tax_id: z.number(),
   line_items: z.lazy(() => LineItemUncheckedCreateNestedManyWithoutQuotesInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutQuoteInputSchema).optional(),
+  payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteCreateOrConnectWithoutTripsInputSchema: z.ZodType<Prisma.QuoteCreateOrConnectWithoutTripsInput> = z.object({
@@ -6622,7 +6620,7 @@ export const PaymentCreateWithoutTripInputSchema: z.ZodType<Prisma.PaymentCreate
   payment_intent: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   payment_type: z.string().optional().nullable(),
   notes: z.string().optional().nullable(),
-  quote: z.lazy(() => QuoteCreateNestedOneWithoutPaymentInputSchema),
+  quote: z.lazy(() => QuoteCreateNestedOneWithoutPaymentInputSchema)
 }).strict();
 
 export const PaymentUncheckedCreateWithoutTripInputSchema: z.ZodType<Prisma.PaymentUncheckedCreateWithoutTripInput> = z.object({
@@ -6635,7 +6633,7 @@ export const PaymentUncheckedCreateWithoutTripInputSchema: z.ZodType<Prisma.Paym
   payment_intent: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   payment_type: z.string().optional().nullable(),
   notes: z.string().optional().nullable(),
-  quote_number: z.number(),
+  quote_number: z.number()
 }).strict();
 
 export const PaymentCreateOrConnectWithoutTripInputSchema: z.ZodType<Prisma.PaymentCreateOrConnectWithoutTripInput> = z.object({
@@ -6656,7 +6654,7 @@ export const LocationCreateWithoutTripInputSchema: z.ZodType<Prisma.LocationCrea
   types: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValue ]),
   is_origin: z.boolean().optional(),
   is_destination: z.boolean().optional(),
-  is_waypoint: z.boolean().optional(),
+  is_waypoint: z.boolean().optional()
 }).strict();
 
 export const LocationUncheckedCreateWithoutTripInputSchema: z.ZodType<Prisma.LocationUncheckedCreateWithoutTripInput> = z.object({
@@ -6672,7 +6670,7 @@ export const LocationUncheckedCreateWithoutTripInputSchema: z.ZodType<Prisma.Loc
   types: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValue ]),
   is_origin: z.boolean().optional(),
   is_destination: z.boolean().optional(),
-  is_waypoint: z.boolean().optional(),
+  is_waypoint: z.boolean().optional()
 }).strict();
 
 export const LocationCreateOrConnectWithoutTripInputSchema: z.ZodType<Prisma.LocationCreateOrConnectWithoutTripInput> = z.object({
@@ -6682,7 +6680,7 @@ export const LocationCreateOrConnectWithoutTripInputSchema: z.ZodType<Prisma.Loc
 
 export const LocationCreateManyTripInputEnvelopeSchema: z.ZodType<Prisma.LocationCreateManyTripInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => LocationCreateManyTripInputSchema),z.lazy(() => LocationCreateManyTripInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional(),
+  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const FlightCreateWithoutTripInputSchema: z.ZodType<Prisma.FlightCreateWithoutTripInput> = z.object({
@@ -6698,7 +6696,7 @@ export const FlightCreateWithoutTripInputSchema: z.ZodType<Prisma.FlightCreateWi
   departure_time: z.coerce.date().optional().nullable(),
   arrival_time: z.coerce.date().optional().nullable(),
   departure_time_actual: z.coerce.date().optional().nullable(),
-  arrival_time_actual: z.coerce.date().optional().nullable(),
+  arrival_time_actual: z.coerce.date().optional().nullable()
 }).strict();
 
 export const FlightUncheckedCreateWithoutTripInputSchema: z.ZodType<Prisma.FlightUncheckedCreateWithoutTripInput> = z.object({
@@ -6714,7 +6712,7 @@ export const FlightUncheckedCreateWithoutTripInputSchema: z.ZodType<Prisma.Fligh
   departure_time: z.coerce.date().optional().nullable(),
   arrival_time: z.coerce.date().optional().nullable(),
   departure_time_actual: z.coerce.date().optional().nullable(),
-  arrival_time_actual: z.coerce.date().optional().nullable(),
+  arrival_time_actual: z.coerce.date().optional().nullable()
 }).strict();
 
 export const FlightCreateOrConnectWithoutTripInputSchema: z.ZodType<Prisma.FlightCreateOrConnectWithoutTripInput> = z.object({
@@ -6740,9 +6738,9 @@ export const QuoteUpdateWithoutTripsInputSchema: z.ZodType<Prisma.QuoteUpdateWit
   service: z.lazy(() => ServiceUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   vehicle: z.lazy(() => VehicleUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   user: z.lazy(() => UserUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
-  sales_tax: z.lazy(() => SalesTaxUpdateOneWithoutQuotesNestedInputSchema).optional(),
+  sales_tax: z.lazy(() => SalesTaxUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   line_items: z.lazy(() => LineItemUpdateManyWithoutQuotesNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUpdateOneWithoutQuoteNestedInputSchema).optional(),
+  payment: z.lazy(() => PaymentUpdateOneWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedUpdateWithoutTripsInputSchema: z.ZodType<Prisma.QuoteUncheckedUpdateWithoutTripsInput> = z.object({
@@ -6761,7 +6759,7 @@ export const QuoteUncheckedUpdateWithoutTripsInputSchema: z.ZodType<Prisma.Quote
   vehicle_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   sales_tax_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   line_items: z.lazy(() => LineItemUncheckedUpdateManyWithoutQuotesNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutQuoteNestedInputSchema).optional(),
+  payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const PaymentUpsertWithoutTripInputSchema: z.ZodType<Prisma.PaymentUpsertWithoutTripInput> = z.object({
@@ -6779,7 +6777,7 @@ export const PaymentUpdateWithoutTripInputSchema: z.ZodType<Prisma.PaymentUpdate
   payment_intent: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   payment_type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  quote: z.lazy(() => QuoteUpdateOneRequiredWithoutPaymentNestedInputSchema).optional(),
+  quote: z.lazy(() => QuoteUpdateOneRequiredWithoutPaymentNestedInputSchema).optional()
 }).strict();
 
 export const PaymentUncheckedUpdateWithoutTripInputSchema: z.ZodType<Prisma.PaymentUncheckedUpdateWithoutTripInput> = z.object({
@@ -6894,7 +6892,7 @@ export const TripCreateWithoutFlightInputSchema: z.ZodType<Prisma.TripCreateWith
   notes: z.string().optional().nullable(),
   quote: z.lazy(() => QuoteCreateNestedOneWithoutTripsInputSchema),
   Payment: z.lazy(() => PaymentCreateNestedOneWithoutTripInputSchema).optional(),
-  locations: z.lazy(() => LocationCreateNestedManyWithoutTripInputSchema).optional(),
+  locations: z.lazy(() => LocationCreateNestedManyWithoutTripInputSchema).optional()
 }).strict();
 
 export const TripUncheckedCreateWithoutFlightInputSchema: z.ZodType<Prisma.TripUncheckedCreateWithoutFlightInput> = z.object({
@@ -6923,7 +6921,7 @@ export const TripUncheckedCreateWithoutFlightInputSchema: z.ZodType<Prisma.TripU
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable(),
   Payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutTripInputSchema).optional(),
-  locations: z.lazy(() => LocationUncheckedCreateNestedManyWithoutTripInputSchema).optional(),
+  locations: z.lazy(() => LocationUncheckedCreateNestedManyWithoutTripInputSchema).optional()
 }).strict();
 
 export const TripCreateOrConnectWithoutFlightInputSchema: z.ZodType<Prisma.TripCreateOrConnectWithoutFlightInput> = z.object({
@@ -6962,7 +6960,7 @@ export const TripUpdateWithoutFlightInputSchema: z.ZodType<Prisma.TripUpdateWith
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   quote: z.lazy(() => QuoteUpdateOneRequiredWithoutTripsNestedInputSchema).optional(),
   Payment: z.lazy(() => PaymentUpdateOneWithoutTripNestedInputSchema).optional(),
-  locations: z.lazy(() => LocationUpdateManyWithoutTripNestedInputSchema).optional(),
+  locations: z.lazy(() => LocationUpdateManyWithoutTripNestedInputSchema).optional()
 }).strict();
 
 export const TripUncheckedUpdateWithoutFlightInputSchema: z.ZodType<Prisma.TripUncheckedUpdateWithoutFlightInput> = z.object({
@@ -6991,7 +6989,7 @@ export const TripUncheckedUpdateWithoutFlightInputSchema: z.ZodType<Prisma.TripU
   is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   Payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutTripNestedInputSchema).optional(),
-  locations: z.lazy(() => LocationUncheckedUpdateManyWithoutTripNestedInputSchema).optional(),
+  locations: z.lazy(() => LocationUncheckedUpdateManyWithoutTripNestedInputSchema).optional()
 }).strict();
 
 export const TripCreateWithoutLocationsInputSchema: z.ZodType<Prisma.TripCreateWithoutLocationsInput> = z.object({
@@ -7020,7 +7018,7 @@ export const TripCreateWithoutLocationsInputSchema: z.ZodType<Prisma.TripCreateW
   notes: z.string().optional().nullable(),
   quote: z.lazy(() => QuoteCreateNestedOneWithoutTripsInputSchema),
   Payment: z.lazy(() => PaymentCreateNestedOneWithoutTripInputSchema).optional(),
-  flight: z.lazy(() => FlightCreateNestedOneWithoutTripInputSchema).optional(),
+  flight: z.lazy(() => FlightCreateNestedOneWithoutTripInputSchema).optional()
 }).strict();
 
 export const TripUncheckedCreateWithoutLocationsInputSchema: z.ZodType<Prisma.TripUncheckedCreateWithoutLocationsInput> = z.object({
@@ -7049,7 +7047,7 @@ export const TripUncheckedCreateWithoutLocationsInputSchema: z.ZodType<Prisma.Tr
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable(),
   Payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutTripInputSchema).optional(),
-  flight: z.lazy(() => FlightUncheckedCreateNestedOneWithoutTripInputSchema).optional(),
+  flight: z.lazy(() => FlightUncheckedCreateNestedOneWithoutTripInputSchema).optional()
 }).strict();
 
 export const TripCreateOrConnectWithoutLocationsInputSchema: z.ZodType<Prisma.TripCreateOrConnectWithoutLocationsInput> = z.object({
@@ -7088,7 +7086,7 @@ export const TripUpdateWithoutLocationsInputSchema: z.ZodType<Prisma.TripUpdateW
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   quote: z.lazy(() => QuoteUpdateOneRequiredWithoutTripsNestedInputSchema).optional(),
   Payment: z.lazy(() => PaymentUpdateOneWithoutTripNestedInputSchema).optional(),
-  flight: z.lazy(() => FlightUpdateOneWithoutTripNestedInputSchema).optional(),
+  flight: z.lazy(() => FlightUpdateOneWithoutTripNestedInputSchema).optional()
 }).strict();
 
 export const TripUncheckedUpdateWithoutLocationsInputSchema: z.ZodType<Prisma.TripUncheckedUpdateWithoutLocationsInput> = z.object({
@@ -7117,7 +7115,7 @@ export const TripUncheckedUpdateWithoutLocationsInputSchema: z.ZodType<Prisma.Tr
   is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   Payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutTripNestedInputSchema).optional(),
-  flight: z.lazy(() => FlightUncheckedUpdateOneWithoutTripNestedInputSchema).optional(),
+  flight: z.lazy(() => FlightUncheckedUpdateOneWithoutTripNestedInputSchema).optional()
 }).strict();
 
 export const TripCreateWithoutPaymentInputSchema: z.ZodType<Prisma.TripCreateWithoutPaymentInput> = z.object({
@@ -7146,7 +7144,7 @@ export const TripCreateWithoutPaymentInputSchema: z.ZodType<Prisma.TripCreateWit
   notes: z.string().optional().nullable(),
   quote: z.lazy(() => QuoteCreateNestedOneWithoutTripsInputSchema),
   locations: z.lazy(() => LocationCreateNestedManyWithoutTripInputSchema).optional(),
-  flight: z.lazy(() => FlightCreateNestedOneWithoutTripInputSchema).optional(),
+  flight: z.lazy(() => FlightCreateNestedOneWithoutTripInputSchema).optional()
 }).strict();
 
 export const TripUncheckedCreateWithoutPaymentInputSchema: z.ZodType<Prisma.TripUncheckedCreateWithoutPaymentInput> = z.object({
@@ -7175,7 +7173,7 @@ export const TripUncheckedCreateWithoutPaymentInputSchema: z.ZodType<Prisma.Trip
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable(),
   locations: z.lazy(() => LocationUncheckedCreateNestedManyWithoutTripInputSchema).optional(),
-  flight: z.lazy(() => FlightUncheckedCreateNestedOneWithoutTripInputSchema).optional(),
+  flight: z.lazy(() => FlightUncheckedCreateNestedOneWithoutTripInputSchema).optional()
 }).strict();
 
 export const TripCreateOrConnectWithoutPaymentInputSchema: z.ZodType<Prisma.TripCreateOrConnectWithoutPaymentInput> = z.object({
@@ -7196,9 +7194,9 @@ export const QuoteCreateWithoutPaymentInputSchema: z.ZodType<Prisma.QuoteCreateW
   service: z.lazy(() => ServiceCreateNestedOneWithoutQuotesInputSchema),
   vehicle: z.lazy(() => VehicleCreateNestedOneWithoutQuotesInputSchema),
   user: z.lazy(() => UserCreateNestedOneWithoutQuotesInputSchema),
-  sales_tax: z.lazy(() => SalesTaxCreateNestedOneWithoutQuotesInputSchema).optional(),
+  sales_tax: z.lazy(() => SalesTaxCreateNestedOneWithoutQuotesInputSchema),
   line_items: z.lazy(() => LineItemCreateNestedManyWithoutQuotesInputSchema).optional(),
-  trips: z.lazy(() => TripCreateNestedManyWithoutQuoteInputSchema).optional(),
+  trips: z.lazy(() => TripCreateNestedManyWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedCreateWithoutPaymentInputSchema: z.ZodType<Prisma.QuoteUncheckedCreateWithoutPaymentInput> = z.object({
@@ -7217,7 +7215,7 @@ export const QuoteUncheckedCreateWithoutPaymentInputSchema: z.ZodType<Prisma.Quo
   vehicle_id: z.number(),
   sales_tax_id: z.number(),
   line_items: z.lazy(() => LineItemUncheckedCreateNestedManyWithoutQuotesInputSchema).optional(),
-  trips: z.lazy(() => TripUncheckedCreateNestedManyWithoutQuoteInputSchema).optional(),
+  trips: z.lazy(() => TripUncheckedCreateNestedManyWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteCreateOrConnectWithoutPaymentInputSchema: z.ZodType<Prisma.QuoteCreateOrConnectWithoutPaymentInput> = z.object({
@@ -7256,7 +7254,7 @@ export const TripUpdateWithoutPaymentInputSchema: z.ZodType<Prisma.TripUpdateWit
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   quote: z.lazy(() => QuoteUpdateOneRequiredWithoutTripsNestedInputSchema).optional(),
   locations: z.lazy(() => LocationUpdateManyWithoutTripNestedInputSchema).optional(),
-  flight: z.lazy(() => FlightUpdateOneWithoutTripNestedInputSchema).optional(),
+  flight: z.lazy(() => FlightUpdateOneWithoutTripNestedInputSchema).optional()
 }).strict();
 
 export const TripUncheckedUpdateWithoutPaymentInputSchema: z.ZodType<Prisma.TripUncheckedUpdateWithoutPaymentInput> = z.object({
@@ -7285,7 +7283,7 @@ export const TripUncheckedUpdateWithoutPaymentInputSchema: z.ZodType<Prisma.Trip
   is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   locations: z.lazy(() => LocationUncheckedUpdateManyWithoutTripNestedInputSchema).optional(),
-  flight: z.lazy(() => FlightUncheckedUpdateOneWithoutTripNestedInputSchema).optional(),
+  flight: z.lazy(() => FlightUncheckedUpdateOneWithoutTripNestedInputSchema).optional()
 }).strict();
 
 export const QuoteUpsertWithoutPaymentInputSchema: z.ZodType<Prisma.QuoteUpsertWithoutPaymentInput> = z.object({
@@ -7306,9 +7304,9 @@ export const QuoteUpdateWithoutPaymentInputSchema: z.ZodType<Prisma.QuoteUpdateW
   service: z.lazy(() => ServiceUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   vehicle: z.lazy(() => VehicleUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   user: z.lazy(() => UserUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
-  sales_tax: z.lazy(() => SalesTaxUpdateOneWithoutQuotesNestedInputSchema).optional(),
+  sales_tax: z.lazy(() => SalesTaxUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   line_items: z.lazy(() => LineItemUpdateManyWithoutQuotesNestedInputSchema).optional(),
-  trips: z.lazy(() => TripUpdateManyWithoutQuoteNestedInputSchema).optional(),
+  trips: z.lazy(() => TripUpdateManyWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedUpdateWithoutPaymentInputSchema: z.ZodType<Prisma.QuoteUncheckedUpdateWithoutPaymentInput> = z.object({
@@ -7327,7 +7325,7 @@ export const QuoteUncheckedUpdateWithoutPaymentInputSchema: z.ZodType<Prisma.Quo
   vehicle_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   sales_tax_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   line_items: z.lazy(() => LineItemUncheckedUpdateManyWithoutQuotesNestedInputSchema).optional(),
-  trips: z.lazy(() => TripUncheckedUpdateManyWithoutQuoteNestedInputSchema).optional(),
+  trips: z.lazy(() => TripUncheckedUpdateManyWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const QuoteCreateWithoutServiceInputSchema: z.ZodType<Prisma.QuoteCreateWithoutServiceInput> = z.object({
@@ -7342,10 +7340,10 @@ export const QuoteCreateWithoutServiceInputSchema: z.ZodType<Prisma.QuoteCreateW
   quote_tax_total: z.number().optional().nullable(),
   vehicle: z.lazy(() => VehicleCreateNestedOneWithoutQuotesInputSchema),
   user: z.lazy(() => UserCreateNestedOneWithoutQuotesInputSchema),
-  sales_tax: z.lazy(() => SalesTaxCreateNestedOneWithoutQuotesInputSchema).optional(),
+  sales_tax: z.lazy(() => SalesTaxCreateNestedOneWithoutQuotesInputSchema),
   line_items: z.lazy(() => LineItemCreateNestedManyWithoutQuotesInputSchema).optional(),
   trips: z.lazy(() => TripCreateNestedManyWithoutQuoteInputSchema).optional(),
-  payment: z.lazy(() => PaymentCreateNestedOneWithoutQuoteInputSchema).optional(),
+  payment: z.lazy(() => PaymentCreateNestedOneWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedCreateWithoutServiceInputSchema: z.ZodType<Prisma.QuoteUncheckedCreateWithoutServiceInput> = z.object({
@@ -7364,7 +7362,7 @@ export const QuoteUncheckedCreateWithoutServiceInputSchema: z.ZodType<Prisma.Quo
   sales_tax_id: z.number(),
   line_items: z.lazy(() => LineItemUncheckedCreateNestedManyWithoutQuotesInputSchema).optional(),
   trips: z.lazy(() => TripUncheckedCreateNestedManyWithoutQuoteInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutQuoteInputSchema).optional(),
+  payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteCreateOrConnectWithoutServiceInputSchema: z.ZodType<Prisma.QuoteCreateOrConnectWithoutServiceInput> = z.object({
@@ -7374,7 +7372,7 @@ export const QuoteCreateOrConnectWithoutServiceInputSchema: z.ZodType<Prisma.Quo
 
 export const QuoteCreateManyServiceInputEnvelopeSchema: z.ZodType<Prisma.QuoteCreateManyServiceInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => QuoteCreateManyServiceInputSchema),z.lazy(() => QuoteCreateManyServiceInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional(),
+  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const QuoteUpsertWithWhereUniqueWithoutServiceInputSchema: z.ZodType<Prisma.QuoteUpsertWithWhereUniqueWithoutServiceInput> = z.object({
@@ -7406,9 +7404,9 @@ export const QuoteCreateWithoutLine_itemsInputSchema: z.ZodType<Prisma.QuoteCrea
   service: z.lazy(() => ServiceCreateNestedOneWithoutQuotesInputSchema),
   vehicle: z.lazy(() => VehicleCreateNestedOneWithoutQuotesInputSchema),
   user: z.lazy(() => UserCreateNestedOneWithoutQuotesInputSchema),
-  sales_tax: z.lazy(() => SalesTaxCreateNestedOneWithoutQuotesInputSchema).optional(),
+  sales_tax: z.lazy(() => SalesTaxCreateNestedOneWithoutQuotesInputSchema),
   trips: z.lazy(() => TripCreateNestedManyWithoutQuoteInputSchema).optional(),
-  payment: z.lazy(() => PaymentCreateNestedOneWithoutQuoteInputSchema).optional(),
+  payment: z.lazy(() => PaymentCreateNestedOneWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedCreateWithoutLine_itemsInputSchema: z.ZodType<Prisma.QuoteUncheckedCreateWithoutLine_itemsInput> = z.object({
@@ -7427,7 +7425,7 @@ export const QuoteUncheckedCreateWithoutLine_itemsInputSchema: z.ZodType<Prisma.
   vehicle_id: z.number(),
   sales_tax_id: z.number(),
   trips: z.lazy(() => TripUncheckedCreateNestedManyWithoutQuoteInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutQuoteInputSchema).optional(),
+  payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteCreateOrConnectWithoutLine_itemsInputSchema: z.ZodType<Prisma.QuoteCreateOrConnectWithoutLine_itemsInput> = z.object({
@@ -7466,7 +7464,7 @@ export const QuoteCreateWithoutSales_taxInputSchema: z.ZodType<Prisma.QuoteCreat
   user: z.lazy(() => UserCreateNestedOneWithoutQuotesInputSchema),
   line_items: z.lazy(() => LineItemCreateNestedManyWithoutQuotesInputSchema).optional(),
   trips: z.lazy(() => TripCreateNestedManyWithoutQuoteInputSchema).optional(),
-  payment: z.lazy(() => PaymentCreateNestedOneWithoutQuoteInputSchema).optional(),
+  payment: z.lazy(() => PaymentCreateNestedOneWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedCreateWithoutSales_taxInputSchema: z.ZodType<Prisma.QuoteUncheckedCreateWithoutSales_taxInput> = z.object({
@@ -7485,7 +7483,7 @@ export const QuoteUncheckedCreateWithoutSales_taxInputSchema: z.ZodType<Prisma.Q
   vehicle_id: z.number(),
   line_items: z.lazy(() => LineItemUncheckedCreateNestedManyWithoutQuotesInputSchema).optional(),
   trips: z.lazy(() => TripUncheckedCreateNestedManyWithoutQuoteInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutQuoteInputSchema).optional(),
+  payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteCreateOrConnectWithoutSales_taxInputSchema: z.ZodType<Prisma.QuoteCreateOrConnectWithoutSales_taxInput> = z.object({
@@ -7495,7 +7493,7 @@ export const QuoteCreateOrConnectWithoutSales_taxInputSchema: z.ZodType<Prisma.Q
 
 export const QuoteCreateManySales_taxInputEnvelopeSchema: z.ZodType<Prisma.QuoteCreateManySales_taxInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => QuoteCreateManySales_taxInputSchema),z.lazy(() => QuoteCreateManySales_taxInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional(),
+  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const QuoteUpsertWithWhereUniqueWithoutSales_taxInputSchema: z.ZodType<Prisma.QuoteUpsertWithWhereUniqueWithoutSales_taxInput> = z.object({
@@ -7526,10 +7524,10 @@ export const QuoteCreateWithoutVehicleInputSchema: z.ZodType<Prisma.QuoteCreateW
   quote_tax_total: z.number().optional().nullable(),
   service: z.lazy(() => ServiceCreateNestedOneWithoutQuotesInputSchema),
   user: z.lazy(() => UserCreateNestedOneWithoutQuotesInputSchema),
-  sales_tax: z.lazy(() => SalesTaxCreateNestedOneWithoutQuotesInputSchema).optional(),
+  sales_tax: z.lazy(() => SalesTaxCreateNestedOneWithoutQuotesInputSchema),
   line_items: z.lazy(() => LineItemCreateNestedManyWithoutQuotesInputSchema).optional(),
   trips: z.lazy(() => TripCreateNestedManyWithoutQuoteInputSchema).optional(),
-  payment: z.lazy(() => PaymentCreateNestedOneWithoutQuoteInputSchema).optional(),
+  payment: z.lazy(() => PaymentCreateNestedOneWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedCreateWithoutVehicleInputSchema: z.ZodType<Prisma.QuoteUncheckedCreateWithoutVehicleInput> = z.object({
@@ -7548,7 +7546,7 @@ export const QuoteUncheckedCreateWithoutVehicleInputSchema: z.ZodType<Prisma.Quo
   sales_tax_id: z.number(),
   line_items: z.lazy(() => LineItemUncheckedCreateNestedManyWithoutQuotesInputSchema).optional(),
   trips: z.lazy(() => TripUncheckedCreateNestedManyWithoutQuoteInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutQuoteInputSchema).optional(),
+  payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteCreateOrConnectWithoutVehicleInputSchema: z.ZodType<Prisma.QuoteCreateOrConnectWithoutVehicleInput> = z.object({
@@ -7558,7 +7556,7 @@ export const QuoteCreateOrConnectWithoutVehicleInputSchema: z.ZodType<Prisma.Quo
 
 export const QuoteCreateManyVehicleInputEnvelopeSchema: z.ZodType<Prisma.QuoteCreateManyVehicleInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => QuoteCreateManyVehicleInputSchema),z.lazy(() => QuoteCreateManyVehicleInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional(),
+  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const QuoteUpsertWithWhereUniqueWithoutVehicleInputSchema: z.ZodType<Prisma.QuoteUpsertWithWhereUniqueWithoutVehicleInput> = z.object({
@@ -7606,7 +7604,7 @@ export const UserUpdateWithoutAccountInputSchema: z.ZodType<Prisma.UserUpdateWit
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   meta_data: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   quotes: z.lazy(() => QuoteUpdateManyWithoutUserNestedInputSchema).optional(),
-  conversion: z.lazy(() => ConversionUpdateOneWithoutUserNestedInputSchema).optional(),
+  conversion: z.lazy(() => ConversionUpdateOneWithoutUserNestedInputSchema).optional()
 }).strict();
 
 export const UserUncheckedUpdateWithoutAccountInputSchema: z.ZodType<Prisma.UserUncheckedUpdateWithoutAccountInput> = z.object({
@@ -7623,7 +7621,7 @@ export const UserUncheckedUpdateWithoutAccountInputSchema: z.ZodType<Prisma.User
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   meta_data: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   quotes: z.lazy(() => QuoteUncheckedUpdateManyWithoutUserNestedInputSchema).optional(),
-  conversion: z.lazy(() => ConversionUncheckedUpdateOneWithoutUserNestedInputSchema).optional(),
+  conversion: z.lazy(() => ConversionUncheckedUpdateOneWithoutUserNestedInputSchema).optional()
 }).strict();
 
 export const UserUncheckedUpdateManyWithoutUsersInputSchema: z.ZodType<Prisma.UserUncheckedUpdateManyWithoutUsersInput> = z.object({
@@ -7654,7 +7652,7 @@ export const QuoteCreateManyUserInputSchema: z.ZodType<Prisma.QuoteCreateManyUse
   quote_tax_total: z.number().optional().nullable(),
   service_id: z.number().int(),
   vehicle_id: z.number().int(),
-  sales_tax_id: z.number().int(),
+  sales_tax_id: z.number().int()
 }).strict();
 
 export const QuoteUpdateWithoutUserInputSchema: z.ZodType<Prisma.QuoteUpdateWithoutUserInput> = z.object({
@@ -7669,10 +7667,10 @@ export const QuoteUpdateWithoutUserInputSchema: z.ZodType<Prisma.QuoteUpdateWith
   quote_tax_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   service: z.lazy(() => ServiceUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   vehicle: z.lazy(() => VehicleUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
-  sales_tax: z.lazy(() => SalesTaxUpdateOneWithoutQuotesNestedInputSchema).optional(),
+  sales_tax: z.lazy(() => SalesTaxUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   line_items: z.lazy(() => LineItemUpdateManyWithoutQuotesNestedInputSchema).optional(),
   trips: z.lazy(() => TripUpdateManyWithoutQuoteNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUpdateOneWithoutQuoteNestedInputSchema).optional(),
+  payment: z.lazy(() => PaymentUpdateOneWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedUpdateWithoutUserInputSchema: z.ZodType<Prisma.QuoteUncheckedUpdateWithoutUserInput> = z.object({
@@ -7691,7 +7689,7 @@ export const QuoteUncheckedUpdateWithoutUserInputSchema: z.ZodType<Prisma.QuoteU
   sales_tax_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   line_items: z.lazy(() => LineItemUncheckedUpdateManyWithoutQuotesNestedInputSchema).optional(),
   trips: z.lazy(() => TripUncheckedUpdateManyWithoutQuoteNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutQuoteNestedInputSchema).optional(),
+  payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedUpdateManyWithoutQuotesInputSchema: z.ZodType<Prisma.QuoteUncheckedUpdateManyWithoutQuotesInput> = z.object({
@@ -7733,7 +7731,7 @@ export const TripCreateManyQuoteInputSchema: z.ZodType<Prisma.TripCreateManyQuot
   affiliate_payout: z.number().optional().nullable(),
   is_farmed_out: z.boolean().optional().nullable(),
   is_return: z.boolean().optional(),
-  notes: z.string().optional().nullable(),
+  notes: z.string().optional().nullable()
 }).strict();
 
 export const LineItemUpdateWithoutQuotesInputSchema: z.ZodType<Prisma.LineItemUpdateWithoutQuotesInput> = z.object({
@@ -7801,7 +7799,7 @@ export const TripUpdateWithoutQuoteInputSchema: z.ZodType<Prisma.TripUpdateWitho
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   Payment: z.lazy(() => PaymentUpdateOneWithoutTripNestedInputSchema).optional(),
   locations: z.lazy(() => LocationUpdateManyWithoutTripNestedInputSchema).optional(),
-  flight: z.lazy(() => FlightUpdateOneWithoutTripNestedInputSchema).optional(),
+  flight: z.lazy(() => FlightUpdateOneWithoutTripNestedInputSchema).optional()
 }).strict();
 
 export const TripUncheckedUpdateWithoutQuoteInputSchema: z.ZodType<Prisma.TripUncheckedUpdateWithoutQuoteInput> = z.object({
@@ -7830,7 +7828,7 @@ export const TripUncheckedUpdateWithoutQuoteInputSchema: z.ZodType<Prisma.TripUn
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   Payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutTripNestedInputSchema).optional(),
   locations: z.lazy(() => LocationUncheckedUpdateManyWithoutTripNestedInputSchema).optional(),
-  flight: z.lazy(() => FlightUncheckedUpdateOneWithoutTripNestedInputSchema).optional(),
+  flight: z.lazy(() => FlightUncheckedUpdateOneWithoutTripNestedInputSchema).optional()
 }).strict();
 
 export const TripUncheckedUpdateManyWithoutTripsInputSchema: z.ZodType<Prisma.TripUncheckedUpdateManyWithoutTripsInput> = z.object({
@@ -7872,7 +7870,7 @@ export const LocationCreateManyTripInputSchema: z.ZodType<Prisma.LocationCreateM
   types: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValue ]),
   is_origin: z.boolean().optional(),
   is_destination: z.boolean().optional(),
-  is_waypoint: z.boolean().optional(),
+  is_waypoint: z.boolean().optional()
 }).strict();
 
 export const LocationUpdateWithoutTripInputSchema: z.ZodType<Prisma.LocationUpdateWithoutTripInput> = z.object({
@@ -7936,7 +7934,7 @@ export const QuoteCreateManyServiceInputSchema: z.ZodType<Prisma.QuoteCreateMany
   quote_subtotal: z.number().optional().nullable(),
   quote_tax_total: z.number().optional().nullable(),
   vehicle_id: z.number().int(),
-  sales_tax_id: z.number().int(),
+  sales_tax_id: z.number().int()
 }).strict();
 
 export const QuoteUpdateWithoutServiceInputSchema: z.ZodType<Prisma.QuoteUpdateWithoutServiceInput> = z.object({
@@ -7951,10 +7949,10 @@ export const QuoteUpdateWithoutServiceInputSchema: z.ZodType<Prisma.QuoteUpdateW
   quote_tax_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   vehicle: z.lazy(() => VehicleUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   user: z.lazy(() => UserUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
-  sales_tax: z.lazy(() => SalesTaxUpdateOneWithoutQuotesNestedInputSchema).optional(),
+  sales_tax: z.lazy(() => SalesTaxUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   line_items: z.lazy(() => LineItemUpdateManyWithoutQuotesNestedInputSchema).optional(),
   trips: z.lazy(() => TripUpdateManyWithoutQuoteNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUpdateOneWithoutQuoteNestedInputSchema).optional(),
+  payment: z.lazy(() => PaymentUpdateOneWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedUpdateWithoutServiceInputSchema: z.ZodType<Prisma.QuoteUncheckedUpdateWithoutServiceInput> = z.object({
@@ -7973,7 +7971,7 @@ export const QuoteUncheckedUpdateWithoutServiceInputSchema: z.ZodType<Prisma.Quo
   sales_tax_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   line_items: z.lazy(() => LineItemUncheckedUpdateManyWithoutQuotesNestedInputSchema).optional(),
   trips: z.lazy(() => TripUncheckedUpdateManyWithoutQuoteNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutQuoteNestedInputSchema).optional(),
+  payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const QuoteUpdateWithoutLine_itemsInputSchema: z.ZodType<Prisma.QuoteUpdateWithoutLine_itemsInput> = z.object({
@@ -7989,9 +7987,9 @@ export const QuoteUpdateWithoutLine_itemsInputSchema: z.ZodType<Prisma.QuoteUpda
   service: z.lazy(() => ServiceUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   vehicle: z.lazy(() => VehicleUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   user: z.lazy(() => UserUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
-  sales_tax: z.lazy(() => SalesTaxUpdateOneWithoutQuotesNestedInputSchema).optional(),
+  sales_tax: z.lazy(() => SalesTaxUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   trips: z.lazy(() => TripUpdateManyWithoutQuoteNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUpdateOneWithoutQuoteNestedInputSchema).optional(),
+  payment: z.lazy(() => PaymentUpdateOneWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedUpdateWithoutLine_itemsInputSchema: z.ZodType<Prisma.QuoteUncheckedUpdateWithoutLine_itemsInput> = z.object({
@@ -8010,7 +8008,7 @@ export const QuoteUncheckedUpdateWithoutLine_itemsInputSchema: z.ZodType<Prisma.
   vehicle_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   sales_tax_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   trips: z.lazy(() => TripUncheckedUpdateManyWithoutQuoteNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutQuoteNestedInputSchema).optional(),
+  payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const QuoteCreateManySales_taxInputSchema: z.ZodType<Prisma.QuoteCreateManySales_taxInput> = z.object({
@@ -8026,7 +8024,7 @@ export const QuoteCreateManySales_taxInputSchema: z.ZodType<Prisma.QuoteCreateMa
   quote_subtotal: z.number().optional().nullable(),
   quote_tax_total: z.number().optional().nullable(),
   service_id: z.number().int(),
-  vehicle_id: z.number().int(),
+  vehicle_id: z.number().int()
 }).strict();
 
 export const QuoteUpdateWithoutSales_taxInputSchema: z.ZodType<Prisma.QuoteUpdateWithoutSales_taxInput> = z.object({
@@ -8044,7 +8042,7 @@ export const QuoteUpdateWithoutSales_taxInputSchema: z.ZodType<Prisma.QuoteUpdat
   user: z.lazy(() => UserUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   line_items: z.lazy(() => LineItemUpdateManyWithoutQuotesNestedInputSchema).optional(),
   trips: z.lazy(() => TripUpdateManyWithoutQuoteNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUpdateOneWithoutQuoteNestedInputSchema).optional(),
+  payment: z.lazy(() => PaymentUpdateOneWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedUpdateWithoutSales_taxInputSchema: z.ZodType<Prisma.QuoteUncheckedUpdateWithoutSales_taxInput> = z.object({
@@ -8063,7 +8061,7 @@ export const QuoteUncheckedUpdateWithoutSales_taxInputSchema: z.ZodType<Prisma.Q
   vehicle_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   line_items: z.lazy(() => LineItemUncheckedUpdateManyWithoutQuotesNestedInputSchema).optional(),
   trips: z.lazy(() => TripUncheckedUpdateManyWithoutQuoteNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutQuoteNestedInputSchema).optional(),
+  payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const QuoteCreateManyVehicleInputSchema: z.ZodType<Prisma.QuoteCreateManyVehicleInput> = z.object({
@@ -8079,7 +8077,7 @@ export const QuoteCreateManyVehicleInputSchema: z.ZodType<Prisma.QuoteCreateMany
   quote_subtotal: z.number().optional().nullable(),
   quote_tax_total: z.number().optional().nullable(),
   service_id: z.number().int(),
-  sales_tax_id: z.number().int(),
+  sales_tax_id: z.number().int()
 }).strict();
 
 export const QuoteUpdateWithoutVehicleInputSchema: z.ZodType<Prisma.QuoteUpdateWithoutVehicleInput> = z.object({
@@ -8094,10 +8092,10 @@ export const QuoteUpdateWithoutVehicleInputSchema: z.ZodType<Prisma.QuoteUpdateW
   quote_tax_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   service: z.lazy(() => ServiceUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   user: z.lazy(() => UserUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
-  sales_tax: z.lazy(() => SalesTaxUpdateOneWithoutQuotesNestedInputSchema).optional(),
+  sales_tax: z.lazy(() => SalesTaxUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   line_items: z.lazy(() => LineItemUpdateManyWithoutQuotesNestedInputSchema).optional(),
   trips: z.lazy(() => TripUpdateManyWithoutQuoteNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUpdateOneWithoutQuoteNestedInputSchema).optional(),
+  payment: z.lazy(() => PaymentUpdateOneWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedUpdateWithoutVehicleInputSchema: z.ZodType<Prisma.QuoteUncheckedUpdateWithoutVehicleInput> = z.object({
@@ -8116,7 +8114,7 @@ export const QuoteUncheckedUpdateWithoutVehicleInputSchema: z.ZodType<Prisma.Quo
   sales_tax_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   line_items: z.lazy(() => LineItemUncheckedUpdateManyWithoutQuotesNestedInputSchema).optional(),
   trips: z.lazy(() => TripUncheckedUpdateManyWithoutQuoteNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutQuoteNestedInputSchema).optional(),
+  payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 /////////////////////////////////////////
