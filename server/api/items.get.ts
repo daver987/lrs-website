@@ -5,6 +5,7 @@ export default defineEventHandler(async (event) => {
   try {
     const data = await prisma.lineItem.findMany()
     if (data) {
+      console.log('Line Items SS:', data)
       return LineItemSchema.array().parse(data)
     } else {
       console.log('No Line Items found')

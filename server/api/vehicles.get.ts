@@ -6,6 +6,7 @@ export default defineEventHandler(async (event) => {
     const data = await prisma.vehicle.findMany()
 
     if (data) {
+      console.log('Vehicles SS:', data)
       return VehicleSchema.array().parse(data)
     } else {
       console.log('No data found')

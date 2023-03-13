@@ -66,18 +66,23 @@ const dataStore = useDataStore()
 const { vehicleTypes, serviceTypes, lineItems, salesTaxes } =
   storeToRefs(dataStore)
 
-const [vehicleTypesRes, serviceTypesRes, lineItemsRes, salesTaxesRes] =
-  await Promise.all([
-    useFetch<Vehicle[] | undefined>('/api/vehicles'),
-    useFetch<Service[] | undefined>('/api/services'),
-    useFetch<LineItem[] | undefined>('/api/items'),
-    useFetch<SalesTax[] | undefined>('/api/salestax'),
-  ])
+const { data: vehicleTypesRes } = await useFetch<Vehicle[] | undefined>(
+  '/api/vehicles'
+)
+const { data: serviceTypesRes } = await useFetch<Service[] | undefined>(
+  '/api/services'
+)
+const { data: lineItemsRes } = await useFetch<LineItem[] | undefined>(
+  '/api/items'
+)
+const { data: salesTaxesRes } = await useFetch<SalesTax[] | undefined>(
+  '/api/salestax'
+)
 
-vehicleTypes.value = VehicleSchema.array().parse(vehicleTypesRes.data)
-serviceTypes.value = ServiceSchema.array().parse(serviceTypesRes.data)
-lineItems.value = LineItemSchema.array().parse(lineItemsRes.data)
-salesTaxes.value = SalesTaxSchema.array().parse(salesTaxesRes.data)
+vehicleTypes.value = VehicleSchema.array().parse(vehicleTypesRes.value)
+serviceTypes.value = ServiceSchema.array().parse(serviceTypesRes.value)
+lineItems.value = LineItemSchema.array().parse(lineItemsRes.value)
+salesTaxes.value = SalesTaxSchema.array().parse(salesTaxesRes.value)
 
 dataStore.setVehicleTypes(vehicleTypes.value)
 dataStore.setServiceTypes(serviceTypes.value)
@@ -143,7 +148,7 @@ const formValue = ref({
   service: serviceTypes.value,
   line_items: lineItems.value,
   sales_tax: salesTaxes.value,
-}) as Ref<FormValue>
+}) as unknown as Ref<FormValue>
 
 const rules: FormRules = {
   pickup_date: {

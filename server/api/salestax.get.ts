@@ -5,6 +5,7 @@ export default defineEventHandler(async (event) => {
   try {
     const data = await prisma.salesTax.findMany()
     if (data) {
+      console.log('Sales Tax SS:', data)
       return SalesTaxSchema.array().parse(data)
     } else {
       console.log('No data found')

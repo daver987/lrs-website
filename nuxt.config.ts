@@ -1,4 +1,4 @@
-// import '@total-typescript/ts-reset'
+import '@total-typescript/ts-reset'
 
 export default defineNuxtConfig({
   app: {
@@ -6,7 +6,7 @@ export default defineNuxtConfig({
     layoutTransition: { name: 'layout', mode: 'out-in' },
   },
   build: {
-    transpile: ['@headlessui/vue', '@googlemaps/js-api-loader', 'trpc-nuxt'],
+    transpile: ['@headlessui/vue', '@googlemaps/js-api-loader'],
   },
   css: ['vue-tel-input/dist/vue-tel-input.css'],
   modules: [
