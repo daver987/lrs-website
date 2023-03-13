@@ -10,7 +10,7 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "prisma generate"
+    "postinstall": "npx prisma generate"
   },
   "devDependencies": {
     "@googlemaps/js-api-loader": "^1.15.1",

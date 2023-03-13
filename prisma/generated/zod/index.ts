@@ -111,32 +111,6 @@ export const AccountPartialSchema = AccountSchema.partial()
 
 export type AccountPartial = z.infer<typeof AccountPartialSchema>
 
-// ACCOUNT RELATION SCHEMA
-//------------------------------------------------------
-
-export type AccountRelations = {
-  users: UserWithRelations[];
-};
-
-export type AccountWithRelations = z.infer<typeof AccountSchema> & AccountRelations
-
-export const AccountWithRelationsSchema: z.ZodType<AccountWithRelations> = AccountSchema.merge(z.object({
-  users: z.lazy(() => UserWithRelationsSchema).array(),
-}))
-
-// ACCOUNT PARTIAL RELATION SCHEMA
-//------------------------------------------------------
-
-export type AccountPartialRelations = {
-  users?: UserPartialWithRelations[];
-};
-
-export type AccountPartialWithRelations = z.infer<typeof AccountPartialSchema> & AccountPartialRelations
-
-export const AccountPartialWithRelationsSchema: z.ZodType<AccountPartialWithRelations> = AccountPartialSchema.merge(z.object({
-  users: z.lazy(() => UserPartialWithRelationsSchema).array(),
-})).partial()
-
 /////////////////////////////////////////
 // USER SCHEMA
 /////////////////////////////////////////
@@ -166,44 +140,6 @@ export const UserPartialSchema = UserSchema.partial()
 
 export type UserPartial = z.infer<typeof UserPartialSchema>
 
-// USER RELATION SCHEMA
-//------------------------------------------------------
-
-export type UserRelations = {
-  quotes: QuoteWithRelations[];
-  Account?: AccountWithRelations | null;
-  conversion?: ConversionWithRelations | null;
-};
-
-export type UserWithRelations = Omit<z.infer<typeof UserSchema>, "meta_data"> & {
-  meta_data?: NullableJsonInput;
-} & UserRelations
-
-export const UserWithRelationsSchema: z.ZodType<UserWithRelations> = UserSchema.merge(z.object({
-  quotes: z.lazy(() => QuoteWithRelationsSchema).array(),
-  Account: z.lazy(() => AccountWithRelationsSchema).nullable(),
-  conversion: z.lazy(() => ConversionWithRelationsSchema).nullable(),
-}))
-
-// USER PARTIAL RELATION SCHEMA
-//------------------------------------------------------
-
-export type UserPartialRelations = {
-  quotes?: QuotePartialWithRelations[];
-  Account?: AccountPartialWithRelations | null;
-  conversion?: ConversionPartialWithRelations | null;
-};
-
-export type UserPartialWithRelations = Omit<z.infer<typeof UserPartialSchema>, "meta_data"> & {
-  meta_data?: NullableJsonInput;
-} & UserPartialRelations
-
-export const UserPartialWithRelationsSchema: z.ZodType<UserPartialWithRelations> = UserPartialSchema.merge(z.object({
-  quotes: z.lazy(() => QuotePartialWithRelationsSchema).array(),
-  Account: z.lazy(() => AccountPartialWithRelationsSchema).nullable(),
-  conversion: z.lazy(() => ConversionPartialWithRelationsSchema).nullable(),
-})).partial()
-
 /////////////////////////////////////////
 // CONVERSION SCHEMA
 /////////////////////////////////////////
@@ -230,32 +166,6 @@ export type Conversion = z.infer<typeof ConversionSchema>
 export const ConversionPartialSchema = ConversionSchema.partial()
 
 export type ConversionPartial = z.infer<typeof ConversionPartialSchema>
-
-// CONVERSION RELATION SCHEMA
-//------------------------------------------------------
-
-export type ConversionRelations = {
-  user: UserWithRelations;
-};
-
-export type ConversionWithRelations = z.infer<typeof ConversionSchema> & ConversionRelations
-
-export const ConversionWithRelationsSchema: z.ZodType<ConversionWithRelations> = ConversionSchema.merge(z.object({
-  user: z.lazy(() => UserWithRelationsSchema),
-}))
-
-// CONVERSION PARTIAL RELATION SCHEMA
-//------------------------------------------------------
-
-export type ConversionPartialRelations = {
-  user?: UserPartialWithRelations;
-};
-
-export type ConversionPartialWithRelations = z.infer<typeof ConversionPartialSchema> & ConversionPartialRelations
-
-export const ConversionPartialWithRelationsSchema: z.ZodType<ConversionPartialWithRelations> = ConversionPartialSchema.merge(z.object({
-  user: z.lazy(() => UserPartialWithRelationsSchema),
-})).partial()
 
 /////////////////////////////////////////
 // QUOTE SCHEMA
@@ -286,56 +196,6 @@ export type Quote = z.infer<typeof QuoteSchema>
 export const QuotePartialSchema = QuoteSchema.partial()
 
 export type QuotePartial = z.infer<typeof QuotePartialSchema>
-
-// QUOTE RELATION SCHEMA
-//------------------------------------------------------
-
-export type QuoteRelations = {
-  service: ServiceWithRelations;
-  vehicle: VehicleWithRelations;
-  user: UserWithRelations;
-  sales_tax: SalesTaxWithRelations;
-  line_items: LineItemWithRelations[];
-  trips: TripWithRelations[];
-  payment?: PaymentWithRelations | null;
-};
-
-export type QuoteWithRelations = z.infer<typeof QuoteSchema> & QuoteRelations
-
-export const QuoteWithRelationsSchema: z.ZodType<QuoteWithRelations> = QuoteSchema.merge(z.object({
-  service: z.lazy(() => ServiceWithRelationsSchema),
-  vehicle: z.lazy(() => VehicleWithRelationsSchema),
-  user: z.lazy(() => UserWithRelationsSchema),
-  sales_tax: z.lazy(() => SalesTaxWithRelationsSchema),
-  line_items: z.lazy(() => LineItemWithRelationsSchema).array(),
-  trips: z.lazy(() => TripWithRelationsSchema).array(),
-  payment: z.lazy(() => PaymentWithRelationsSchema).nullable(),
-}))
-
-// QUOTE PARTIAL RELATION SCHEMA
-//------------------------------------------------------
-
-export type QuotePartialRelations = {
-  service?: ServicePartialWithRelations;
-  vehicle?: VehiclePartialWithRelations;
-  user?: UserPartialWithRelations;
-  sales_tax?: SalesTaxPartialWithRelations;
-  line_items?: LineItemPartialWithRelations[];
-  trips?: TripPartialWithRelations[];
-  payment?: PaymentPartialWithRelations | null;
-};
-
-export type QuotePartialWithRelations = z.infer<typeof QuotePartialSchema> & QuotePartialRelations
-
-export const QuotePartialWithRelationsSchema: z.ZodType<QuotePartialWithRelations> = QuotePartialSchema.merge(z.object({
-  service: z.lazy(() => ServicePartialWithRelationsSchema),
-  vehicle: z.lazy(() => VehiclePartialWithRelationsSchema),
-  user: z.lazy(() => UserPartialWithRelationsSchema),
-  sales_tax: z.lazy(() => SalesTaxPartialWithRelationsSchema),
-  line_items: z.lazy(() => LineItemPartialWithRelationsSchema).array(),
-  trips: z.lazy(() => TripPartialWithRelationsSchema).array(),
-  payment: z.lazy(() => PaymentPartialWithRelationsSchema).nullable(),
-})).partial()
 
 /////////////////////////////////////////
 // TRIP SCHEMA
@@ -377,50 +237,6 @@ export const TripPartialSchema = TripSchema.partial()
 
 export type TripPartial = z.infer<typeof TripPartialSchema>
 
-// TRIP RELATION SCHEMA
-//------------------------------------------------------
-
-export type TripRelations = {
-  quote: QuoteWithRelations;
-  Payment?: PaymentWithRelations | null;
-  locations: LocationWithRelations[];
-  flight?: FlightWithRelations | null;
-};
-
-export type TripWithRelations = Omit<z.infer<typeof TripSchema>, "flight_information" | "line_items_list"> & {
-  flight_information?: NullableJsonInput;
-  line_items_list?: NullableJsonInput;
-} & TripRelations
-
-export const TripWithRelationsSchema: z.ZodType<TripWithRelations> = TripSchema.merge(z.object({
-  quote: z.lazy(() => QuoteWithRelationsSchema),
-  Payment: z.lazy(() => PaymentWithRelationsSchema).nullable(),
-  locations: z.lazy(() => LocationWithRelationsSchema).array(),
-  flight: z.lazy(() => FlightWithRelationsSchema).nullable(),
-}))
-
-// TRIP PARTIAL RELATION SCHEMA
-//------------------------------------------------------
-
-export type TripPartialRelations = {
-  quote?: QuotePartialWithRelations;
-  Payment?: PaymentPartialWithRelations | null;
-  locations?: LocationPartialWithRelations[];
-  flight?: FlightPartialWithRelations | null;
-};
-
-export type TripPartialWithRelations = Omit<z.infer<typeof TripPartialSchema>, "flight_information" | "line_items_list"> & {
-  flight_information?: NullableJsonInput;
-  line_items_list?: NullableJsonInput;
-} & TripPartialRelations
-
-export const TripPartialWithRelationsSchema: z.ZodType<TripPartialWithRelations> = TripPartialSchema.merge(z.object({
-  quote: z.lazy(() => QuotePartialWithRelationsSchema),
-  Payment: z.lazy(() => PaymentPartialWithRelationsSchema).nullable(),
-  locations: z.lazy(() => LocationPartialWithRelationsSchema).array(),
-  flight: z.lazy(() => FlightPartialWithRelationsSchema).nullable(),
-})).partial()
-
 /////////////////////////////////////////
 // FLIGHT SCHEMA
 /////////////////////////////////////////
@@ -450,32 +266,6 @@ export type Flight = z.infer<typeof FlightSchema>
 export const FlightPartialSchema = FlightSchema.partial()
 
 export type FlightPartial = z.infer<typeof FlightPartialSchema>
-
-// FLIGHT RELATION SCHEMA
-//------------------------------------------------------
-
-export type FlightRelations = {
-  trip?: TripWithRelations | null;
-};
-
-export type FlightWithRelations = z.infer<typeof FlightSchema> & FlightRelations
-
-export const FlightWithRelationsSchema: z.ZodType<FlightWithRelations> = FlightSchema.merge(z.object({
-  trip: z.lazy(() => TripWithRelationsSchema).nullable(),
-}))
-
-// FLIGHT PARTIAL RELATION SCHEMA
-//------------------------------------------------------
-
-export type FlightPartialRelations = {
-  trip?: TripPartialWithRelations | null;
-};
-
-export type FlightPartialWithRelations = z.infer<typeof FlightPartialSchema> & FlightPartialRelations
-
-export const FlightPartialWithRelationsSchema: z.ZodType<FlightPartialWithRelations> = FlightPartialSchema.merge(z.object({
-  trip: z.lazy(() => TripPartialWithRelationsSchema).nullable(),
-})).partial()
 
 /////////////////////////////////////////
 // LOCATION SCHEMA
@@ -507,32 +297,6 @@ export const LocationPartialSchema = LocationSchema.partial()
 
 export type LocationPartial = z.infer<typeof LocationPartialSchema>
 
-// LOCATION RELATION SCHEMA
-//------------------------------------------------------
-
-export type LocationRelations = {
-  trip?: TripWithRelations | null;
-};
-
-export type LocationWithRelations = z.infer<typeof LocationSchema> & LocationRelations
-
-export const LocationWithRelationsSchema: z.ZodType<LocationWithRelations> = LocationSchema.merge(z.object({
-  trip: z.lazy(() => TripWithRelationsSchema).nullable(),
-}))
-
-// LOCATION PARTIAL RELATION SCHEMA
-//------------------------------------------------------
-
-export type LocationPartialRelations = {
-  trip?: TripPartialWithRelations | null;
-};
-
-export type LocationPartialWithRelations = z.infer<typeof LocationPartialSchema> & LocationPartialRelations
-
-export const LocationPartialWithRelationsSchema: z.ZodType<LocationPartialWithRelations> = LocationPartialSchema.merge(z.object({
-  trip: z.lazy(() => TripPartialWithRelationsSchema).nullable(),
-})).partial()
-
 /////////////////////////////////////////
 // PAYMENT SCHEMA
 /////////////////////////////////////////
@@ -560,42 +324,6 @@ export const PaymentPartialSchema = PaymentSchema.partial()
 
 export type PaymentPartial = z.infer<typeof PaymentPartialSchema>
 
-// PAYMENT RELATION SCHEMA
-//------------------------------------------------------
-
-export type PaymentRelations = {
-  trip?: TripWithRelations | null;
-  quote: QuoteWithRelations;
-};
-
-export type PaymentWithRelations = Omit<z.infer<typeof PaymentSchema>, "setup_intent" | "payment_intent"> & {
-  setup_intent?: NullableJsonInput;
-  payment_intent?: NullableJsonInput;
-} & PaymentRelations
-
-export const PaymentWithRelationsSchema: z.ZodType<PaymentWithRelations> = PaymentSchema.merge(z.object({
-  trip: z.lazy(() => TripWithRelationsSchema).nullable(),
-  quote: z.lazy(() => QuoteWithRelationsSchema),
-}))
-
-// PAYMENT PARTIAL RELATION SCHEMA
-//------------------------------------------------------
-
-export type PaymentPartialRelations = {
-  trip?: TripPartialWithRelations | null;
-  quote?: QuotePartialWithRelations;
-};
-
-export type PaymentPartialWithRelations = Omit<z.infer<typeof PaymentPartialSchema>, "setup_intent" | "payment_intent"> & {
-  setup_intent?: NullableJsonInput;
-  payment_intent?: NullableJsonInput;
-} & PaymentPartialRelations
-
-export const PaymentPartialWithRelationsSchema: z.ZodType<PaymentPartialWithRelations> = PaymentPartialSchema.merge(z.object({
-  trip: z.lazy(() => TripPartialWithRelationsSchema).nullable(),
-  quote: z.lazy(() => QuotePartialWithRelationsSchema),
-})).partial()
-
 /////////////////////////////////////////
 // SERVICE SCHEMA
 /////////////////////////////////////////
@@ -618,32 +346,6 @@ export type Service = z.infer<typeof ServiceSchema>
 export const ServicePartialSchema = ServiceSchema.partial()
 
 export type ServicePartial = z.infer<typeof ServicePartialSchema>
-
-// SERVICE RELATION SCHEMA
-//------------------------------------------------------
-
-export type ServiceRelations = {
-  quotes: QuoteWithRelations[];
-};
-
-export type ServiceWithRelations = z.infer<typeof ServiceSchema> & ServiceRelations
-
-export const ServiceWithRelationsSchema: z.ZodType<ServiceWithRelations> = ServiceSchema.merge(z.object({
-  quotes: z.lazy(() => QuoteWithRelationsSchema).array(),
-}))
-
-// SERVICE PARTIAL RELATION SCHEMA
-//------------------------------------------------------
-
-export type ServicePartialRelations = {
-  quotes?: QuotePartialWithRelations[];
-};
-
-export type ServicePartialWithRelations = z.infer<typeof ServicePartialSchema> & ServicePartialRelations
-
-export const ServicePartialWithRelationsSchema: z.ZodType<ServicePartialWithRelations> = ServicePartialSchema.merge(z.object({
-  quotes: z.lazy(() => QuotePartialWithRelationsSchema).array(),
-})).partial()
 
 /////////////////////////////////////////
 // LINE ITEM SCHEMA
@@ -671,32 +373,6 @@ export const LineItemPartialSchema = LineItemSchema.partial()
 
 export type LineItemPartial = z.infer<typeof LineItemPartialSchema>
 
-// LINE ITEM RELATION SCHEMA
-//------------------------------------------------------
-
-export type LineItemRelations = {
-  quotes: QuoteWithRelations[];
-};
-
-export type LineItemWithRelations = z.infer<typeof LineItemSchema> & LineItemRelations
-
-export const LineItemWithRelationsSchema: z.ZodType<LineItemWithRelations> = LineItemSchema.merge(z.object({
-  quotes: z.lazy(() => QuoteWithRelationsSchema).array(),
-}))
-
-// LINE ITEM PARTIAL RELATION SCHEMA
-//------------------------------------------------------
-
-export type LineItemPartialRelations = {
-  quotes?: QuotePartialWithRelations[];
-};
-
-export type LineItemPartialWithRelations = z.infer<typeof LineItemPartialSchema> & LineItemPartialRelations
-
-export const LineItemPartialWithRelationsSchema: z.ZodType<LineItemPartialWithRelations> = LineItemPartialSchema.merge(z.object({
-  quotes: z.lazy(() => QuotePartialWithRelationsSchema).array(),
-})).partial()
-
 /////////////////////////////////////////
 // SALES TAX SCHEMA
 /////////////////////////////////////////
@@ -719,32 +395,6 @@ export type SalesTax = z.infer<typeof SalesTaxSchema>
 export const SalesTaxPartialSchema = SalesTaxSchema.partial()
 
 export type SalesTaxPartial = z.infer<typeof SalesTaxPartialSchema>
-
-// SALES TAX RELATION SCHEMA
-//------------------------------------------------------
-
-export type SalesTaxRelations = {
-  quotes: QuoteWithRelations[];
-};
-
-export type SalesTaxWithRelations = z.infer<typeof SalesTaxSchema> & SalesTaxRelations
-
-export const SalesTaxWithRelationsSchema: z.ZodType<SalesTaxWithRelations> = SalesTaxSchema.merge(z.object({
-  quotes: z.lazy(() => QuoteWithRelationsSchema).array(),
-}))
-
-// SALES TAX PARTIAL RELATION SCHEMA
-//------------------------------------------------------
-
-export type SalesTaxPartialRelations = {
-  quotes?: QuotePartialWithRelations[];
-};
-
-export type SalesTaxPartialWithRelations = z.infer<typeof SalesTaxPartialSchema> & SalesTaxPartialRelations
-
-export const SalesTaxPartialWithRelationsSchema: z.ZodType<SalesTaxPartialWithRelations> = SalesTaxPartialSchema.merge(z.object({
-  quotes: z.lazy(() => QuotePartialWithRelationsSchema).array(),
-})).partial()
 
 /////////////////////////////////////////
 // VEHICLE SCHEMA
@@ -775,32 +425,6 @@ export type Vehicle = z.infer<typeof VehicleSchema>
 export const VehiclePartialSchema = VehicleSchema.partial()
 
 export type VehiclePartial = z.infer<typeof VehiclePartialSchema>
-
-// VEHICLE RELATION SCHEMA
-//------------------------------------------------------
-
-export type VehicleRelations = {
-  quotes: QuoteWithRelations[];
-};
-
-export type VehicleWithRelations = z.infer<typeof VehicleSchema> & VehicleRelations
-
-export const VehicleWithRelationsSchema: z.ZodType<VehicleWithRelations> = VehicleSchema.merge(z.object({
-  quotes: z.lazy(() => QuoteWithRelationsSchema).array(),
-}))
-
-// VEHICLE PARTIAL RELATION SCHEMA
-//------------------------------------------------------
-
-export type VehiclePartialRelations = {
-  quotes?: QuotePartialWithRelations[];
-};
-
-export type VehiclePartialWithRelations = z.infer<typeof VehiclePartialSchema> & VehiclePartialRelations
-
-export const VehiclePartialWithRelationsSchema: z.ZodType<VehiclePartialWithRelations> = VehiclePartialSchema.merge(z.object({
-  quotes: z.lazy(() => QuotePartialWithRelationsSchema).array(),
-})).partial()
 
 /////////////////////////////////////////
 // LINE ITEM TO QUOTE SCHEMA
