@@ -81,7 +81,7 @@ model Quote {
   service             Service    @relation(fields: [service_id], references: [value])
   vehicle             Vehicle    @relation(fields: [vehicle_id], references: [value])
   user                User       @relation(fields: [user_id], references: [id])
-  sales_tax           SalesTax?  @relation(fields: [sales_tax_id], references: [id])
+  sales_tax           SalesTax   @relation(fields: [sales_tax_id], references: [id])
   line_items          LineItem[]
   trips               Trip[]
   payment             Payment?

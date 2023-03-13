@@ -1,11 +1,8 @@
 <script setup lang="ts">
 // import { exportToPDF } from '#imports'
-import { format } from 'date-fns'
 import { SummarySchema } from '~/schema/summarySchema'
 import type { Summary } from '~/schema/summarySchema'
 import { ref } from '#imports'
-
-const currentDate = format(new Date(), 'PPP')
 
 const quote = ref<Summary>({
   is_round_trip: false,
@@ -31,6 +28,9 @@ const quote = ref<Summary>({
   trips: [
     {
       locations: [
+        {
+          full_name: '',
+        },
         {
           full_name: '',
         },
@@ -84,7 +84,6 @@ const printSummary = () => {
             class="font-sans text-base font-bold leading-relaxed text-red-600"
           >
             HPL-{{ quote.quote_number }}</span
-          ><span class="font-sans font-medium"> {{ currentDate }}</span
           ><br />
           <span class="font-sans font-medium text-black"> For: </span>
           <span class="font-sans font-normal"

@@ -15,7 +15,20 @@ const stripe = await stripeInit()
 
 const quoteStore = useQuoteStore()
 const { quote } = storeToRefs(quoteStore)
-const { quote_number } = quote.value
+
+const {
+  is_round_trip,
+  quote_number,
+  selected_hours,
+  selected_passengers,
+  quote_tax_total,
+  quote_subtotal,
+  quote_total,
+  user,
+  vehicle,
+  sales_tax,
+  trips,
+} = quote.value
 
 const appearance = {
   theme: 'stripe',
@@ -60,21 +73,6 @@ async function submitHandler() {
   }
 }
 
-const products = [
-  {
-    id: 1,
-    name: 'High Wall Tote',
-    href: '#',
-    price: '$210.00',
-    color: 'White and black',
-    size: '15L',
-    imageSrc:
-      'https://tailwindui.com/img/ecommerce-images/checkout-page-07-product-01.jpg',
-    imageAlt:
-      'Front of zip tote bag with white canvas, white handles, and black drawstring top.',
-  },
-  // More products...
-]
 //todo: add in proper html for order
 //todo: add in the creation of draft invoice in stripe
 //todo: add spot for flight information in the checkout flow
@@ -132,7 +130,7 @@ const products = [
           <dl>
             <dt class="text-sm font-medium">Amount due</dt>
             <dd class="mt-1 text-3xl font-bold tracking-tight text-white">
-              $232.00
+              $ {{ quote_total }}
             </dd>
           </dl>
 
@@ -141,22 +139,24 @@ const products = [
             class="divide-y divide-white divide-opacity-10 text-sm font-medium"
           >
             <li
-              v-for="product in products"
-              :key="product.id"
+              v-for="trip in trips"
+              :key="trip.formatted_pickup_time"
               class="flex items-start space-x-4 py-6"
             >
-              <img
-                :src="product.imageSrc"
-                :alt="product.imageAlt"
-                class="h-20 w-20 flex-none rounded-md object-cover object-center"
+              <NuxtPicture
+                :img-attrs="{
+                  class:
+                    'h-32 w-32 flex-none rounded-md object-contain object-center',
+                }"
+                :src="vehicle.vehicle_image"
+                :alt="vehicle.label"
               />
               <div class="flex-auto space-y-1">
-                <h3 class="text-white">{{ product.name }}</h3>
-                <p>{{ product.color }}</p>
-                <p>{{ product.size }}</p>
+                <h3 class="text-white">{{ trip.service_label }}</h3>
+                <p class="text-brand-200">{{ vehicle.label }}</p>
               </div>
               <p class="flex-none text-base font-medium text-white">
-                {{ product.price }}
+                {{ trip.line_items_total }}
               </p>
             </li>
           </ul>
@@ -166,24 +166,19 @@ const products = [
           >
             <div class="flex items-center justify-between">
               <dt>Subtotal</dt>
-              <dd>$570.00</dd>
-            </div>
-
-            <div class="flex items-center justify-between">
-              <dt>Shipping</dt>
-              <dd>$25.00</dd>
+              <dd>${{ quote_subtotal }}</dd>
             </div>
 
             <div class="flex items-center justify-between">
               <dt>Taxes</dt>
-              <dd>$47.60</dd>
+              <dd>${{ quote_tax_total }}</dd>
             </div>
 
             <div
               class="flex items-center justify-between border-t border-white border-opacity-10 pt-6 text-white"
             >
               <dt class="text-base">Total</dt>
-              <dd class="text-base">$642.60</dd>
+              <dd class="text-base">${{ quote_total }}</dd>
             </div>
           </dl>
         </div>
@@ -214,7 +209,7 @@ const products = [
                 <button
                   type="submit"
                   id="submit"
-                  class="rounded-md border border-transparent bg-brand-600 py-2 px-4 text-sm font-medium uppercase text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-gray-50"
+                  class="w-full rounded-md border border-transparent bg-brand-600 py-2 px-4 text-sm font-medium uppercase text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-gray-50"
                 >
                   <div class="spinner hidden" id="spinner"></div>
                   <span id="button-text">Complete Booking</span>
@@ -222,7 +217,7 @@ const products = [
                 <div id="payment-message" class="hidden"></div>
               </div>
             </form>
-            <div class="mb-2 flex flex-col">
+            <div class="my-4 flex flex-col">
               <p class="font-sans text-sm font-bold text-gray-900">
                 We require a credit card to hold your reservation
               </p>

@@ -3,6 +3,7 @@ import { createAircallContact } from './services/createAircallContact'
 import { sendBookingConfirmationEmail } from './services/sendGridEmail'
 import { formatAddress } from '~/utils/formatAddress'
 import { computed } from 'vue'
+import { SummarySchema } from '~/schema/summarySchema'
 import _ from 'lodash'
 import {
   VehicleSchema,
@@ -118,7 +119,7 @@ export default defineEventHandler(async (event) => {
         quote_subtotal: is_round_trip
           ? totalAmount.value + returnSubTotal.value
           : subTotal.value,
-        quote_taxtotal: is_round_trip
+        quote_tax_total: is_round_trip
           ? totalAmount.value + returnTaxTotal.value
           : taxTotal.value,
         trips: is_round_trip
@@ -324,7 +325,7 @@ export default defineEventHandler(async (event) => {
         user: true,
       },
     }
-
+    //@ts-ignore
     const newQuote = await prisma.quote.create(quotes)
     const quote = newQuote
 
@@ -341,9 +342,9 @@ export default defineEventHandler(async (event) => {
         to: phone_number as string,
       })
     }, 10000)
-
+    console.log('SS Returned from prisma', newQuote)
     return {
-      quote,
+      quote: SummarySchema.strip().parse(newQuote),
     }
   } catch (e) {
     console.error(e)

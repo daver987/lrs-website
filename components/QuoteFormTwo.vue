@@ -25,13 +25,14 @@ import { useGtm } from '@gtm-support/vue-gtm'
 import { useDataStore } from '~/stores/useDataStore'
 import { useUserStore } from '~/stores/useUserStore'
 import { useQuoteStore } from '~/stores/useQuoteStore'
-import { Quote } from '~/server/api/quote.get'
 import { storeToRefs } from 'pinia'
 import {
   buildPassengerOptions,
   buildHoursOptions,
   Option,
 } from '~/composables/useBuildOptions'
+import { Summary } from '~/schema/summarySchema'
+import { z } from 'zod'
 
 type FormValue = {
   user_id: string
@@ -289,29 +290,35 @@ const message = useMessage()
 const formRef = ref<FormInst | null>(null)
 const loading = ref(false)
 const loadingBar = useLoadingBar()
+const quoteNumberSchema = z.number()
 
 async function onSubmit() {
   try {
     loading.value = true
     userStore.setFullName(formValue.value.first_name, formValue.value.last_name)
-    const { data: quoteData } = await useFetch('/api/quote', {
+    const { data: response } = await useFetch('/api/quote', {
       method: 'POST',
       body: formValue.value,
     })
-    console.log('Returned Quote:', quoteData.value)
+    const quoteData = await response.value
+    console.log('Returned Quote:', quoteData)
+    //@ts-ignore
+    const { quote_number } = quoteData.quote as unknown as Summary
 
     setTimeout(async () => {
-      quoteStore.setQuote(quoteData.value as Quote)
-      console.log('Routed quote Data', quoteStore.quote)
+      quoteStore.setQuote(quoteData)
+      const number = quoteNumberSchema.parse(quote_number)
       loadingBar.finish()
-      // Navigate to checkout page
-      await navigateTo(`/cart`)
+      await navigateTo({
+        path: '/cart',
+        query: { quote_number: number },
+      })
       loading.value = false
     }, 500)
   } catch (e) {
     setTimeout(() => {
       loading.value = false
-      console.log('error')
+      console.log('error', e)
     }, 500)
   }
 }
