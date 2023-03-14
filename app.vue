@@ -20,7 +20,6 @@ userStore.setUserId(user_id.value)
   <NLoadingBarProvider>
     <NMessageProvider>
       <NuxtLayout>
-        <!--        <SeoKit />-->
         <NuxtPage />
       </NuxtLayout>
     </NMessageProvider>

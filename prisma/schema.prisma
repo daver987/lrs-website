@@ -1,18 +1,16 @@
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["clientExtensions"]
-}
-
-generator zod {
-  provider                  = "zod-prisma-types"
-  createRelationValuesTypes = "true"
-  createPartialTypes        = "true"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider     = "mysql"
   url          = env("DATABASE_URL")
   relationMode = "prisma"
+}
+
+generator zod {
+  provider           = "zod-prisma-types"
+  createPartialTypes = "true"
 }
 
 model Account {
