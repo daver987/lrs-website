@@ -52,7 +52,7 @@ const nav = navigation as NavigationItem[]
         </div>
         <div class="my-8 space-y-4">
           <h3
-            class="font-subheading text-xl uppercase tracking-widest text-primary"
+            class="text-xs uppercase leading-relaxed tracking-[0.5em] text-brand md:text-sm text-xl uppercase tracking-widest text-primary"
           >
             Quick Links
           </h3>
@@ -74,7 +74,7 @@ const nav = navigation as NavigationItem[]
         <div class="my-8 space-y-6 lg:space-y-4">
           <label
             for="email"
-            class="font-subheading text-xl uppercase tracking-widest text-primary"
+            class="text-xs uppercase leading-relaxed tracking-[0.5em] text-brand md:text-sm text-xl uppercase tracking-widest text-primary"
           >
             Sign Up
           </label>

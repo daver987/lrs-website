@@ -38,10 +38,10 @@ defineProps({
       <div :style="image"
         class="relative bg-black bg-opacity-60 bg-cover bg-center bg-no-repeat py-32 bg-blend-darken md:col-span-2 md:px-10">
         <div class="space-y-4 text-center md:text-left">
-          <p class="text-center font-subheading text-sm tracking-widest text-brand md:text-left">
+          <p class="text-center text-xs uppercase leading-relaxed tracking-[0.5em] text-brand md:text-sm text-sm tracking-widest text-brand md:text-left">
             {{ aboveHeading }}
           </p>
-          <h1 class="text-center font-heading capitalize leading-tight text-white md:text-left">
+          <h1 class="text-center text-4xl uppercase text-heading lg:text-5xl capitalize leading-tight text-white md:text-left">
             {{ heading }}
           </h1>
           <p class="mx-auto max-w-xs md:m-0 md:text-left">

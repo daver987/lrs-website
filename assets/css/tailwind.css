@@ -202,27 +202,6 @@
     url('./assets/fonts/Inter-BlackItalic.woff?v=3.19') format('woff');
 }
 
-@layer components {
-  .subheading {
-    @apply font-subheading text-xs uppercase leading-relaxed tracking-[0.5em] text-brand md:text-sm;
-  }
-
-  .heading {
-    @apply font-heading text-4xl uppercase text-heading lg:text-5xl;
-  }
-
-  .font-subheading {
-    @apply text-4xl uppercase lg:text-5xl;
-  }
-
-  .font-heading {
-    @apply text-4xl uppercase lg:text-5xl;
-  }
-
-  p {
-    @apply font-body text-sm text-body;
-  }
-}
 
 body {
   background-color: #ebebeb;
