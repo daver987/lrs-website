@@ -15,7 +15,7 @@ specifiers:
   '@prisma/client': 4.11.0
   '@sendgrid/mail': ^7.7.0
   '@sidebase/nuxt-pdf': ^0.1.1
-  '@stripe/stripe-js': ^1.48.0
+  '@stripe/stripe-js': ^1.49.0
   '@tailwindcss/aspect-ratio': ^0.4.2
   '@tailwindcss/container-queries': ^0.1.0
   '@tailwindcss/forms': ^0.5.3
@@ -65,7 +65,7 @@ devDependencies:
   '@pinia/nuxt': 0.4.7_hmuptsblhheur2tugfgucj7gc4
   '@sendgrid/mail': 7.7.0
   '@sidebase/nuxt-pdf': 0.1.1
-  '@stripe/stripe-js': 1.48.0
+  '@stripe/stripe-js': 1.49.0
   '@tailwindcss/aspect-ratio': 0.4.2_tailwindcss@3.2.7
   '@tailwindcss/container-queries': 0.1.0_tailwindcss@3.2.7
   '@tailwindcss/forms': 0.5.3_tailwindcss@3.2.7
@@ -2011,8 +2011,8 @@ packages:
       - supports-color
     dev: true
 
-  /@stripe/stripe-js/1.48.0:
-    resolution: {integrity: sha512-Kw2BRXk6z/wnTU9m2IJOhxJNrx9xzmpFSbk6D/Z0x6LJntMafiHeHFag2PvSF30O2quMb1UUdWsnZqGVDruZww==}
+  /@stripe/stripe-js/1.49.0:
+    resolution: {integrity: sha512-wcXxHtfb3hkwQnOfLzu4fO3J+1laWjrxE9Jfyvpk+fCUAxs8Rif9WrsSZ8m6BRFazQqGoGKvqzXB7gsVB5phJw==}
     dev: true
 
   /@swc/helpers/0.3.17:
@@ -2099,13 +2099,13 @@ packages:
     resolution: {integrity: sha512-9K4zoImiZc3HlIp6AVUDE4CWYx22a+lhSZMYNpbjW04+YF0KWj4pJXnEMjdnFTiQibFFmElcsasJXDbdI/EPhA==}
     dependencies:
       '@types/eslint': 8.21.1
-      '@types/estree': 0.0.51
+      '@types/estree': 1.0.0
     dev: true
 
   /@types/eslint/8.21.1:
     resolution: {integrity: sha512-rc9K8ZpVjNcLs8Fp0dkozd5Pt2Apk1glO4Vgz8ix1u6yFByxfqo5Yavpy65o+93TAe24jr7v+eSBtFLvOQtCRQ==}
     dependencies:
-      '@types/estree': 0.0.51
+      '@types/estree': 1.0.0
       '@types/json-schema': 7.0.11
     dev: true
 

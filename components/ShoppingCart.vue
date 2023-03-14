@@ -62,11 +62,6 @@ const quote = ref<Summary>({
   ],
 })
 
-// if (quoteStore.quote) {
-//   Object.assign(quote.value, quoteStore.quote)
-//   console.log('Store assigned to quote')
-// }
-
 const route = useRoute()
 const { quote_number } = route.query
 
@@ -76,21 +71,6 @@ const { data } = await useFetch('/api/quote', {
 })
 Object.assign(quote.value, data.value)
 console.log('Assigned to quote:', quote.value)
-// console.log('Fetched Data from route:', quote.value)
-// Object.assign(quote, quote.value)
-// console.log('Data assigned to quote:', quote)
-// Object.assign(quoteStore.quote, quoteData.value)
-// if (quote_number) {
-//   console.log('Quote Number in route:', quote_number)
-//   const { data: parsedQuote } = await useFetch('/api/quote', {
-//     method: 'GET',
-//     query: { quote_number: quote_number },
-//   })
-//   console.log('Fetched Data from route:', parsedQuote)
-//   Object.assign(quote, parsedQuote)
-//   Object.assign(quoteStore.quote, parsedQuote)
-//   console.log('Fetched data assigned to quote')
-// }
 
 const checkoutLoading = ref(false)
 

@@ -9,8 +9,7 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "npx prisma generate"
+    "preview": "nuxt preview"
   },
   "devDependencies": {
     "@googlemaps/js-api-loader": "^1.15.1",
@@ -26,7 +25,7 @@
     "@pinia/nuxt": "^0.4.7",
     "@sendgrid/mail": "^7.7.0",
     "@sidebase/nuxt-pdf": "^0.1.1",
-    "@stripe/stripe-js": "^1.48.0",
+    "@stripe/stripe-js": "^1.49.0",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/container-queries": "^0.1.0",
     "@tailwindcss/forms": "^0.5.3",

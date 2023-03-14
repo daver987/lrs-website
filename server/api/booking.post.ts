@@ -3,22 +3,20 @@ import {
   createSetupIntent,
   getCustomerByEmail,
 } from './services/stripe'
-import { Quote } from './quote.get'
-import { Prisma } from '@prisma/client'
 
 export default defineEventHandler(async (event) => {
   try {
     const prisma = event.context.prisma
     const quote = await readBody(event)
     console.log('Body is read:', quote)
-    const { user } = quote as Quote
+    const { user } = quote
     // Check if the customer exists in Stripe
     let customer = await getCustomerByEmail({ email: user.email_address })
     console.log('Checked Strip Customer:', customer)
 
     if (!customer) {
       // If the customer does not exist, create a new customer
-      customer = await createCustomer(quote as Quote)
+      customer = await createCustomer(quote)
       console.log('Created Customer:', customer)
     }
 
@@ -36,7 +34,7 @@ export default defineEventHandler(async (event) => {
     })
     const createSetup = await prisma.payment.create({
       data: {
-        setup_intent: setupIntent as unknown as Prisma.InputJsonValue,
+        setup_intent: setupIntent,
         quote: {
           connect: {
             quote_number: quote.quote_number,

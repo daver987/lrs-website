@@ -6,7 +6,7 @@ import {
   darkTheme,
   useLoadingBar,
 } from 'naive-ui'
-import { WatchCallback, Ref } from 'vue'
+import { Ref } from 'vue'
 import { ref } from '#imports'
 import { VueTelInput } from 'vue-tel-input'
 import {
@@ -56,7 +56,7 @@ type FormValue = {
   vehicle: Vehicle[]
   service: Service[]
   line_items: LineItem[]
-  sales_tax: SalesTax
+  sales_tax: SalesTax[]
 }
 
 const quoteStore = useQuoteStore()
@@ -302,8 +302,7 @@ async function onSubmit() {
     })
     const quoteData = await response.value
     console.log('Returned Quote:', quoteData)
-    //@ts-ignore
-    const { quote_number } = quoteData.quote as unknown as Summary
+    const { quote_number } = quoteData!.quote satisfies Summary
 
     setTimeout(async () => {
       quoteStore.setQuote(quoteData)
@@ -375,13 +374,13 @@ const disablePreviousDate = (ts: number) => ts < Date.now()
               <n-form-item-gi
                 :show-label="false"
                 :span="24"
-                label="Dropoff Location"
+                label="Drop-off Location"
                 path="destination"
               >
                 <InputPlacesAutocompleteDark
                   name="destination"
                   @change="handleChangeDestination"
-                  placeholder="Enter Dropoff Location...."
+                  placeholder="Enter Drop-off Location...."
                 />
               </n-form-item-gi>
               <n-form-item-gi
