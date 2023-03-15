@@ -22,11 +22,17 @@ export const appRouter = router({
     )
     .query(({ ctx, input }) => {
       return ctx.prisma.quote.findUnique({
-        where: {
-          quote_number: input.quote_number,
-        },
+        where: { quote_number: input.quote_number },
         include: {
-          trips: true,
+          service: true,
+          vehicle: true,
+          user: true,
+          sales_tax: true,
+          trips: {
+            include: {
+              locations: true,
+            },
+          },
         },
       })
     }),

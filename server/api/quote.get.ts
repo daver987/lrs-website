@@ -14,12 +14,16 @@ export default defineEventHandler(async (event) => {
         service: true,
         vehicle: true,
         user: true,
+        sales_tax: true,
         trips: {
           include: {
-            locations: true,
+            locations: {
+              orderBy: {
+                created_at: 'asc',
+              },
+            },
           },
         },
-        sales_tax: true,
       },
     })
     if (data) {

@@ -1,5 +1,5 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import { Vehicle, Service, LineItem, SalesTax } from '~/prisma/generated/zod'
+// import { Vehicle, Service, LineItem, SalesTax } from '~/prisma/generated/zod'
 
 export const useDataStore = defineStore('data', {
   state: () => {

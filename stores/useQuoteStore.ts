@@ -1,10 +1,9 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import type { Summary } from '~/schema/summarySchema'
 
 export const useQuoteStore = defineStore('quoteStore', {
   state: () => {
     return {
-      quote: <Summary | null>null,
+      quote: {},
     }
   },
   actions: {

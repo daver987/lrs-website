@@ -71,13 +71,9 @@ const quoteNumberSchema = z.coerce.number()
 const quoteNumber = quoteNumberSchema.parse(quote_number)
 
 const { data } = await $client.getQuote.useQuery({ quote_number: quoteNumber })
-console.log('New Quote', data)
+console.log('New Quote', data.value!.trips[0].duration_text)
 
-// const { data } = await useFetch('/api/quote', {
-//   method: 'GET',
-//   query: { quote_number: quote_number },
-// })
-Object.assign(quote.value, data)
+Object.assign(quote.value, data.value)
 console.log('Assigned to quote:', quote.value)
 
 const checkoutLoading = ref(false)
@@ -167,6 +163,7 @@ const createBooking = async () => {
           role="list"
           class="divide-y divide-gray-200 border-t border-b border-gray-200"
         >
+          <!--          One Way Trip-->
           <li class="flex py-6 sm:py-8">
             <div class="flex-shrink-0">
               <NuxtPicture
@@ -219,7 +216,7 @@ const createBooking = async () => {
                   </div>
                   <p class="text-gray-500 dark:text-gray-100">
                     <span class="text-brand-400">Base Rate: </span>$
-                    {{ quote.quote_subtotal }}
+                    {{ quote.trips[0].line_items_list[0].total }}
                   </p>
                 </div>
 
@@ -262,6 +259,8 @@ const createBooking = async () => {
               </p>
             </div>
           </li>
+
+          <!--          Return Trip-->
           <li v-if="quote.is_round_trip" class="flex py-6 sm:py-10">
             <div class="flex-shrink-0">
               <NuxtPicture
