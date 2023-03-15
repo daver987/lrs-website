@@ -72,4 +72,9 @@ export default defineNuxtConfig({
   typescript: {
     shim: false,
   },
+  vite: {
+    resolve: {
+      alias: { '.prisma/client/index-browser': `@prisma/client/index-browser` },
+    },
+  },
 })

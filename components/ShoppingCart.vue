@@ -91,7 +91,7 @@ const createBooking = async () => {
         customer,
         setupIntent,
         statusCode,
-        update: prismaData,
+        updatedUser: prismaData,
       } = response.value
       console.log('Prisma Data:', prismaData)
       console.log('Stripe Customer:', customer)

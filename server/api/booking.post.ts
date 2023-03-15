@@ -3,6 +3,7 @@ import {
   createSetupIntent,
   getCustomerByEmail,
 } from './services/stripe'
+import { Prisma } from '@prisma/client'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -38,6 +39,11 @@ export default defineEventHandler(async (event) => {
         quote: {
           connect: {
             quote_number: quote.quote_number,
+          },
+        },
+        trip: {
+          connect: {
+            id: updatedUser.id,
           },
         },
       },
