@@ -19,7 +19,6 @@ export default defineNuxtConfig({
     'nuxt-icon',
     'nuxt-vitest',
     '@huntersofbook/naive-ui-nuxt',
-    '@sidebase/nuxt-pdf',
     [
       '@pinia/nuxt',
       {

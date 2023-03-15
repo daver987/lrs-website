@@ -58,7 +58,6 @@
     "vite-node": "^0.29.2",
     "vitest": "^0.29.2",
     "vue-tel-input": "^6.0.5",
-    "@sidebase/nuxt-pdf": "^0.1.1",
     "zod-prisma-types": "^2.5.1"
   },
   "overrides": {
