@@ -4,6 +4,7 @@ import { sendBookingConfirmationEmail } from './services/sendGridEmail'
 import { formatAddress } from '~/utils/formatAddress'
 import { computed } from 'vue'
 import { SummarySchema } from '~/schema/summarySchema'
+import type { Summary } from '~/schema/summarySchema'
 import _ from 'lodash'
 import {
   VehicleSchema,
@@ -79,6 +80,7 @@ export default defineEventHandler(async (event) => {
     if (service_id != null) {
       pricingEngine.serviceTypeId.value = service_id
     }
+
     pricingEngine.selectedHours.value = selected_hours!
 
     // Wait for the distance to be set before updating other values
@@ -93,6 +95,7 @@ export default defineEventHandler(async (event) => {
     const returnLineItemsList = pricingEngine.updateLineItemsTotal(
       destination.place_id
     )
+
     const {
       lineItemDetails: returnLineItemsDetails,
       taxTotal: returnTaxTotal,
@@ -322,9 +325,14 @@ export default defineEventHandler(async (event) => {
             locations: true,
           },
         },
-        user: true,
+        user: {
+          include: {
+            conversion: true,
+          },
+        },
       },
     }
+    //@ts-ignore
     const newQuote = await prisma.quote.create(quotes)
     const quote = newQuote
 

@@ -1,27 +1,27 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
-// import { Vehicle, Service, LineItem, SalesTax } from '~/prisma/generated/zod'
+import { Vehicle, Service, LineItem, SalesTax } from '~/prisma/generated/zod'
 
 export const useDataStore = defineStore('data', {
   state: () => {
     return {
-      lineItems: [] as unknown,
-      salesTaxes: [] as unknown,
-      serviceTypes: [] as unknown,
-      vehicleTypes: [] as unknown,
+      lineItems: [] as LineItem[],
+      salesTaxes: [] as SalesTax[],
+      serviceTypes: [] as Service[],
+      vehicleTypes: [] as Vehicle[],
     }
   },
 
   actions: {
-    setLineItems(items: unknown) {
+    setLineItems(items: LineItem[]) {
       this.lineItems = items
     },
-    setSalesTaxes(taxes: unknown) {
+    setSalesTaxes(taxes: SalesTax[]) {
       this.salesTaxes = taxes
     },
-    setServiceTypes(services: unknown) {
+    setServiceTypes(services: Service[]) {
       this.serviceTypes = services
     },
-    setVehicleTypes(vehicles: unknown) {
+    setVehicleTypes(vehicles: Vehicle[]) {
       this.vehicleTypes = vehicles
     },
   },

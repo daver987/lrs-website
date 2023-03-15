@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
     const prisma = event.context.prisma
     const quote = await readBody(event)
     console.log('Body is read:', quote)
-    const { user } = quote
+    const { user, trips } = quote
     // Check if the customer exists in Stripe
     let customer = await getCustomerByEmail({ email: user.email_address })
     console.log('Checked Strip Customer:', customer)
@@ -36,14 +36,12 @@ export default defineEventHandler(async (event) => {
     const createSetup = await prisma.payment.create({
       data: {
         setup_intent: JSON.stringify(setupIntent),
+        trip: {
+          connect: { id: trips[0].id },
+        },
         quote: {
           connect: {
             quote_number: quote.quote_number,
-          },
-        },
-        trip: {
-          connect: {
-            id: updatedUser.id,
           },
         },
       },

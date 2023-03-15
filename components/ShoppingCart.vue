@@ -31,6 +31,13 @@ const quote = ref<Summary>({
     phone_number: '',
     email_address: '',
     id: '',
+    conversion: {
+      utm_medium: null,
+      utm_source: null,
+      utm_campaign: null,
+      utm_term: null,
+      gclid: null,
+    },
   },
   vehicle: {
     label: '',
@@ -70,7 +77,7 @@ const { quote_number } = route.query
 const quoteNumberSchema = z.coerce.number()
 const quoteNumber = quoteNumberSchema.parse(quote_number)
 
-const { data } = await $client.getQuote.useQuery({ quote_number: quoteNumber })
+const { data } = await $client.quote.get.useQuery({ quote_number: quoteNumber })
 console.log('New Quote', data.value!.trips[0].duration_text)
 
 Object.assign(quote.value, data.value)
@@ -83,7 +90,7 @@ const createBooking = async () => {
   try {
     const { data: response } = await useFetch('/api/booking', {
       method: 'POST',
-      body: quote,
+      body: quote.value,
     })
     console.log('Stripe Response', response.value)
     if (response.value) {

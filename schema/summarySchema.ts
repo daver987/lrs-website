@@ -6,12 +6,20 @@ import {
   UserSchema,
   SalesTaxSchema,
   LocationSchema,
+  ConversionPartialSchema,
 } from '~/prisma/generated/zod'
 
 const summaryLineItemsList = z.object({
   label: z.string(),
   tax: z.number(),
   total: z.number(),
+})
+const summaryConversion = ConversionPartialSchema.pick({
+  utm_medium: true,
+  utm_source: true,
+  utm_campaign: true,
+  utm_term: true,
+  gclid: true,
 })
 const summaryVehicle = VehicleSchema.pick({ label: true, vehicle_image: true })
 const summaryUser = UserSchema.pick({
@@ -20,6 +28,9 @@ const summaryUser = UserSchema.pick({
   last_name: true,
   phone_number: true,
   id: true,
+})
+const summaryUserExtended = summaryUser.extend({
+  conversion: summaryConversion,
 })
 const summaryLocations = LocationSchema.pick({ full_name: true })
 const summaryTrips = TripSchema.pick({
@@ -50,7 +61,7 @@ export const SummarySchema = summaryQuote.extend({
   trips: summaryTripsExtended.array(),
   vehicle: summaryVehicle,
   sales_tax: summarySalesTax,
-  user: summaryUser,
+  user: summaryUserExtended,
 })
 
 export type Summary = z.infer<typeof SummarySchema>

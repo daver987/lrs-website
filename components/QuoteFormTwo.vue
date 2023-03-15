@@ -7,7 +7,7 @@ import {
   useLoadingBar,
 } from 'naive-ui'
 import { Ref, WatchCallback } from 'vue'
-import { ref } from '#imports'
+import { ref, computed } from '#imports'
 import { VueTelInput } from 'vue-tel-input'
 import {
   Vehicle,
@@ -34,7 +34,7 @@ import {
 import { Summary } from '~/schema/summarySchema'
 import { z } from 'zod'
 import { useNuxtApp } from '#app'
-import { sub, format } from 'date-fns'
+// import { sub, format } from 'date-fns'
 
 const { $client } = useNuxtApp()
 
@@ -71,13 +71,13 @@ const dataStore = useDataStore()
 const { vehicleTypes, serviceTypes, lineItems, salesTaxes } =
   storeToRefs(dataStore)
 
-const serviceTypesRes = await $client.getServices.query()
+const serviceTypesRes = await $client.service.get.query()
 console.log('client services', serviceTypesRes)
-const lineItemsRes = await $client.getLineItems.query()
+const lineItemsRes = await $client.lineItem.get.query()
 console.log('client lineItems', lineItemsRes)
-const vehicleTypesRes = await $client.getVehicles.query()
+const vehicleTypesRes = await $client.vehicle.get.query()
 console.log('client vehicles', vehicleTypesRes)
-const salesTaxesRes = await $client.getSalesTax.query()
+const salesTaxesRes = await $client.salesTax.get.query()
 console.log('client Sales Tax', salesTaxesRes)
 
 vehicleTypes.value = VehicleSchema.array().parse(vehicleTypesRes)
@@ -341,12 +341,11 @@ function handleValidateButtonClick(e: MouseEvent) {
 function disablePreviousDate(ts: number) {
   return ts < new Date().getTime() - 24 * 60 * 60 * 1000
 }
-// const disabled = () => format(disablePreviousDate, 'T')
 </script>
 
 <template>
   <NConfigProvider :theme="darkTheme">
-    <n-grid :cols="1">
+    <n-grid :cols="1" responsive="self">
       <n-grid-item :span="1">
         <div
           class="border-1 rounded border border-white bg-black p-4 sm:mx-auto sm:w-full sm:max-w-2xl sm:overflow-hidden sm:rounded-lg"
@@ -360,7 +359,7 @@ function disablePreviousDate(ts: number) {
             :model="formValue"
             :rules="rules"
           >
-            <n-grid :cols="24" :x-gap="12">
+            <n-grid :cols="24" :x-gap="12" cols="2 400:4 600:6">
               <n-form-item-gi
                 :show-label="false"
                 label="Pickup Location"
