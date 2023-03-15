@@ -14,7 +14,22 @@ export const appRouter = router({
   getSalesTax: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.salesTax.findMany()
   }),
-  getQuote: publicProcedure.query(({ ctx, input }) => {}),
+  getQuote: publicProcedure
+    .input(
+      z.object({
+        quote_number: z.number(),
+      })
+    )
+    .query(({ ctx, input }) => {
+      return ctx.prisma.quote.findUnique({
+        where: {
+          quote_number: input.quote_number,
+        },
+        include: {
+          trips: true,
+        },
+      })
+    }),
 })
 
 // export type definition of API

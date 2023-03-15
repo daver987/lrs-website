@@ -6,7 +6,10 @@ import { useStripeStore } from '~/stores/useStripeStore'
 import { format } from 'date-fns'
 import type { Summary } from '~/schema/summarySchema'
 import { ref } from '#imports'
+import { useNuxtApp } from '#app'
+import { z } from 'zod'
 
+const { $client } = useNuxtApp()
 const quoteStore = useQuoteStore()
 const cartStore = useCartStore()
 const stripeStore = useStripeStore()
@@ -64,12 +67,17 @@ const quote = ref<Summary>({
 
 const route = useRoute()
 const { quote_number } = route.query
+const quoteNumberSchema = z.coerce.number()
+const quoteNumber = quoteNumberSchema.parse(quote_number)
 
-const { data } = await useFetch('/api/quote', {
-  method: 'GET',
-  query: { quote_number: quote_number },
-})
-Object.assign(quote.value, data.value)
+const { data } = await $client.getQuote.useQuery({ quote_number: quoteNumber })
+console.log('New Quote', data)
+
+// const { data } = await useFetch('/api/quote', {
+//   method: 'GET',
+//   query: { quote_number: quote_number },
+// })
+Object.assign(quote.value, data)
 console.log('Assigned to quote:', quote.value)
 
 const checkoutLoading = ref(false)
