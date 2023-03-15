@@ -2,11 +2,12 @@ import { defineStore, acceptHMRUpdate } from 'pinia'
 import { v4 as uuidv4 } from 'uuid'
 
 export const useUserStore = defineStore('user', {
-  state: () => ({
-    user_id: '',
-    fullName: '',
-  }),
-
+  state: () => {
+    return {
+      user_id: '',
+      fullName: '',
+    }
+  },
   actions: {
     setUserId(user_id: string) {
       this.user_id = user_id

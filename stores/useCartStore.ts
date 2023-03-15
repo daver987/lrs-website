@@ -1,14 +1,8 @@
-import { defineStore, acceptHMRUpdate } from 'pinia'
-
-interface CartState {
-  addedToCart: boolean
-  loading: boolean
-}
+import { acceptHMRUpdate, defineStore } from 'pinia'
 
 export const useCartStore = defineStore('cartStore', {
-  state: (): CartState => ({ addedToCart: false, loading: false }),
-  getters: {
-    //
+  state: () => {
+    return { addedToCart: false, loading: false }
   },
   actions: {
     async addToCart() {
@@ -25,8 +19,6 @@ export const useCartStore = defineStore('cartStore', {
     },
   },
 })
-
-export const { addToCart, removeFromCart } = useCartStore()
 
 if (import.meta.hot) {
   import.meta.hot.accept(acceptHMRUpdate(useCartStore, import.meta.hot))

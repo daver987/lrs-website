@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from '#imports'
+// import {useNuxtApp} from "#app";
+
+// const { $client } = useNuxtApp()
+
+// const { data: hello } = await $client.hello.useQuery({ text: 'client' })
+
+
 
 const airline = ref('')
 const flightNumber = ref('')
@@ -78,6 +85,8 @@ const submitForm = () => {
   validateFlight()
   showResults.value = true
 }
+
+const {data: myData} =
 </script>
 
 <template>

@@ -6,7 +6,7 @@ export default defineNuxtConfig({
     layoutTransition: { name: 'layout', mode: 'out-in' },
   },
   build: {
-    transpile: ['@headlessui/vue', '@googlemaps/js-api-loader'],
+    transpile: ['@headlessui/vue', '@googlemaps/js-api-loader', 'trpc-nuxt'],
   },
   css: ['vue-tel-input/dist/vue-tel-input.css'],
   modules: [

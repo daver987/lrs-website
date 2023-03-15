@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
 import { storeToRefs } from 'pinia'
-import { useCartStore, removeFromCart } from '~/stores/useCartStore'
+import { useCartStore } from '~/stores/useCartStore'
 import { useQuoteStore } from '~/stores/useQuoteStore'
 
 const cartStore = useCartStore()
@@ -11,7 +11,7 @@ const quoteStore = useQuoteStore()
 const { quote } = storeToRefs(quoteStore)
 
 const itemsInCart = computed(() =>
-  addedToCart.value ? (quote.value.is_round_trip ? 2 : 1) : 0
+  addedToCart.value ? (quote.value!.is_round_trip ? 2 : 1) : 0
 )
 </script>
 
@@ -73,7 +73,7 @@ const itemsInCart = computed(() =>
               />
               <div class="ml-4 flex-auto">
                 <h3 class="font-brand-body font-medium text-neutral-900">
-                  <NuxtLink to="#">{{ quote?.service.label }}</NuxtLink>
+                  <NuxtLink to="#">{{ quote.trips }}</NuxtLink>
                 </h3>
                 <p class="font-brand-body text-neutral-500">
                   {{ quote?.service.label }}

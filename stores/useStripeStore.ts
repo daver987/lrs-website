@@ -1,14 +1,13 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
 
-export const useStripeStore = defineStore({
-  id: 'stripeStore',
-
-  state: () => ({
-    customer: {},
-    session: {},
-    client_secret: '',
-  }),
-
+export const useStripeStore = defineStore('stripeStore', {
+  state: () => {
+    return {
+      customer: {},
+      session: {},
+      client_secret: '',
+    }
+  },
   actions: {
     setCustomer(items: any) {
       this.customer = items

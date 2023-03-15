@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
 
     const setupIntent = await createSetupIntent(quote, stripeId)
 
-    const update = await prisma.user.update({
+    const updatedUser = await prisma.user.update({
       where: {
         email_address: quote.user.email_address,
       },
@@ -34,7 +34,7 @@ export default defineEventHandler(async (event) => {
     })
     const createSetup = await prisma.payment.create({
       data: {
-        setup_intent: setupIntent,
+        setup_intent: JSON.stringify(setupIntent),
         quote: {
           connect: {
             quote_number: quote.quote_number,
@@ -42,7 +42,7 @@ export default defineEventHandler(async (event) => {
         },
       },
     })
-    return { createSetup, update, setupIntent, customer, statusCode: 200 }
+    return { createSetup, updatedUser, setupIntent, customer, statusCode: 200 }
   } catch (err) {
     // Handle any errors that occur
     throw err

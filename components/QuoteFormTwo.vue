@@ -33,6 +33,8 @@ import {
 } from '~/composables/useBuildOptions'
 import { Summary } from '~/schema/summarySchema'
 import { z } from 'zod'
+import { useNuxtApp } from '#app'
+const { $client } = useNuxtApp()
 
 type FormValue = {
   user_id: string
@@ -67,23 +69,19 @@ const dataStore = useDataStore()
 const { vehicleTypes, serviceTypes, lineItems, salesTaxes } =
   storeToRefs(dataStore)
 
-const { data: vehicleTypesRes } = await useFetch<Vehicle[] | undefined>(
-  '/api/vehicles'
-)
-const { data: serviceTypesRes } = await useFetch<Service[] | undefined>(
-  '/api/services'
-)
-const { data: lineItemsRes } = await useFetch<LineItem[] | undefined>(
-  '/api/items'
-)
-const { data: salesTaxesRes } = await useFetch<SalesTax[] | undefined>(
-  '/api/salestax'
-)
+const serviceTypesRes = await $client.getServices.query()
+console.log('client services', serviceTypesRes)
+const lineItemsRes = await $client.getLineItems.query()
+console.log('client lineItems', lineItemsRes)
+const vehicleTypesRes = await $client.getVehicles.query()
+console.log('client vehicles', vehicleTypesRes)
+const salesTaxesRes = await $client.getSalesTax.query()
+console.log('client Sales Tax', salesTaxesRes)
 
-vehicleTypes.value = VehicleSchema.array().parse(vehicleTypesRes.value)
-serviceTypes.value = ServiceSchema.array().parse(serviceTypesRes.value)
-lineItems.value = LineItemSchema.array().parse(lineItemsRes.value)
-salesTaxes.value = SalesTaxSchema.array().parse(salesTaxesRes.value)
+vehicleTypes.value = VehicleSchema.array().parse(vehicleTypesRes)
+serviceTypes.value = ServiceSchema.array().parse(serviceTypesRes)
+lineItems.value = LineItemSchema.array().parse(lineItemsRes)
+salesTaxes.value = SalesTaxSchema.array().parse(salesTaxesRes)
 
 dataStore.setVehicleTypes(vehicleTypes.value)
 dataStore.setServiceTypes(serviceTypes.value)
