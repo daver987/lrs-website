@@ -40,9 +40,11 @@ const {
 
 <template>
   <div>
-    <label :for="name" class="block text-sm font-medium text-gray-700">{{
-      label
-    }}</label>
+    <label
+      :for="name"
+      class="block text-sm font-medium text-neutral-700 dark:text-neutral-200"
+      >{{ label }}</label
+    >
     <div class="relative mt-1 rounded-md shadow-sm">
       <input
         :class="[
@@ -50,7 +52,7 @@ const {
             ? 'border-red-300 pr-10 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500'
             : 'border-gray-300  focus:border-brand focus:ring-brand',
         ]"
-        class="block w-full rounded-md sm:text-sm"
+        class="block w-full rounded-md dark:bg-neutral-200 sm:text-sm"
         :name="name"
         :id="name"
         :type="type"

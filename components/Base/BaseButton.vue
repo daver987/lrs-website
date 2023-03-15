@@ -11,15 +11,15 @@ interface Props {
 
 const buttonStyles: { [key: string]: string } = {
   'btn-light':
-    'border-white text-white hover:border-brand hover:text-brand focus:border-brand focus:ring focus:ring-brand',
+    'border-neutral-100 text-neutral-100 hover:border-brand hover:text-brand focus:border-brand focus:ring focus:ring-brand',
   'btn-brand':
     'border-brand text-brand hover:border-brand hover:text-brand focus:border-brand focus:ring focus:ring-brand',
   'btn-dark':
-    'border-background-dark text-background-dark hover:border-brand hover:text-brand focus:border-brand focus:ring focus:ring-brand',
+    'border-neutral-900 text-neutral-900 focus:border-brand focus:ring focus:ring-brand dark:text-neutral-400 dark:border-neutral-400 hover:border-brand hover:text-brand',
   'btn-flat':
-    'border-0 text-brand font-sans hover:border-brand hover:text-brand active:outline-none focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand',
+    'border-0 text-brand font-brand-body hover:border-brand hover:text-brand active:outline-none focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand',
   'btn-solid':
-    'bg-brand border-brand text-background-dark hover:border-brand hover:text-background-dark',
+    'bg-brand border-brand text-neutral-900 hover:border-brand hover:text-neutral-900',
 }
 
 const props = defineProps<Props>()

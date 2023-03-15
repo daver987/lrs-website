@@ -6,30 +6,26 @@ definePageMeta({
   name: 'Home',
   layout: 'default',
 })
-</script>
-
-<script lang="ts">
-export default {
-  computed: {
-    fleetImage(): any {
-      const imgUrl = this.$img(
-        'https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/5d10059a-b5c4-44cc-ef3f-6ef867396000/1920',
-        { width: 100, loading: 'lazy' }
-      )
-      return { backgroundImage: `url('${imgUrl}')` }
-    },
-  },
-}
+const $img = useImage()
+const backgroundImage = computed(() => {
+  const imgUrl = $img(
+    'https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/c2f2c5f0-7a8d-4617-e4aa-d81156a40600/4200',
+    { width: 100 }
+  )
+  return { backgroundImage: `url('${imgUrl}')` }
+})
+const fleetImage = computed(() => {
+  const imgUrl = $img(
+    'https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/5d10059a-b5c4-44cc-ef3f-6ef867396000/1920',
+    { width: 100 }
+  )
+  return { backgroundImage: `url('${imgUrl}')` }
+})
 </script>
 
 <template>
   <div>
-    <div
-      class="relative min-h-screen overflow-hidden"
-      style="
-        background-image: url('https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/c2f2c5f0-7a8d-4617-e4aa-d81156a40600/4200');
-      "
-    >
+    <div class="relative min-h-screen overflow-hidden" :style="backgroundImage">
       <AppNavigation />
       <div class="relative">
         <div class="mt-16 sm:mt-24">
@@ -40,11 +36,13 @@ export default {
               >
                 <div class="align-center lg:align-start flex flex-col">
                   <h1
-                    class="mb-2 text-center font-heading text-3xl capitalize text-white sm:text-4xl md:text-left md:text-5xl"
+                    class="mb-2 text-center font-brand-heading text-3xl capitalize text-white sm:text-4xl md:text-left md:text-5xl"
                   >
                     Experience Toronto's Finest Car Service
                   </h1>
-                  <p class="subheading text-center md:text-left">
+                  <p
+                    class="text-center font-brand-subheading uppercase tracking-widest text-brand md:text-left"
+                  >
                     High Park Livery
                   </p>
                   <NuxtPicture
@@ -74,25 +72,28 @@ export default {
           <IconBlockServices
             v-for="feature in features"
             :key="feature.title"
-            :altText="feature.altText"
             :body="feature.body"
-            :image="feature.image"
+            :icon-name="feature.iconName"
             :title="feature.title"
           />
         </BaseContainer>
       </BaseSection>
       <BaseSection
-        class="bg-fit bg-center bg-no-repeat pt-10"
+        class="bg-cover bg-center bg-no-repeat pt-10 bg-blend-darken"
         :style="fleetImage"
       >
         <BaseContainer
           class="flex flex-col place-items-center justify-between lg:flex-row"
         >
           <div class="mb-4 space-y-4">
-            <p class="subheading text-center lg:text-left">
+            <p
+              class="text-center font-brand-subheading uppercase tracking-widest text-brand lg:text-left"
+            >
               The Many Types of Comfort We offer
             </p>
-            <h2 class="heading text-center capitalize text-white lg:text-left">
+            <h2
+              class="text-center font-heading text-4xl capitalize text-neutral-100 lg:text-left lg:text-5xl"
+            >
               Our Fleet
             </h2>
           </div>
@@ -108,13 +109,15 @@ export default {
       </BaseSection>
       <BaseSection class="px-4 pt-0 sm:px-6 lg:px-8">
         <BaseContainer
-          class="-mt-6 grid grid-cols-6 gap-6 bg-white shadow-xl md:grid-cols-12"
+          class="-mt-6 grid grid-cols-6 gap-6 bg-white shadow-xl dark:bg-neutral-700 md:grid-cols-12"
         >
-          <div class="col-span-6 p-6 md:col-span-7">
-            <p class="font-sans text-sm text-gray-500">
-              <span class="font-sans text-gray-500">
+          <div
+            class="col-span-6 p-6 font-brand-body text-neutral-400 md:col-span-7"
+          >
+            <p class="text-sm">
+              <span>
                 Experience luxury and reliability with
-                <span class="font-body text-sm font-bold uppercase text-brand"
+                <span class="font-brand-subheading text-sm uppercase text-brand"
                   >High Park Livery's</span
                 >
                 Toronto car service. For over a decade, we have consistently
@@ -196,12 +199,20 @@ export default {
         />
       </BaseSection>
       <BaseSection class="px-4 pt-0 sm:px-6 lg:px-8">
-        <BaseContainer class="-mt-16 bg-white pt-32 pb-16">
-          <p class="subheading text-center">WHAT High Park Livery OFFERS YOU</p>
-          <h2 class="heading mt-4 text-center">We Offer</h2>
+        <BaseContainer class="-mt-16 bg-white pt-32 pb-16 dark:bg-neutral-700">
+          <p
+            class="text-center font-brand-subheading uppercase tracking-[0.4em] text-brand"
+          >
+            WHAT High Park Livery OFFERS YOU
+          </p>
+          <h2
+            class="mt-4 text-center font-brand-heading text-4xl uppercase dark:text-neutral-300 lg:text-5xl"
+          >
+            We Offer
+          </h2>
         </BaseContainer>
         <div
-          class="mx-auto -mt-8 grid max-w-7xl grid-cols-1 gap-4 bg-white p-6 shadow-xl @container lg:grid-cols-2"
+          class="mx-auto -mt-8 grid max-w-7xl grid-cols-1 gap-4 bg-white p-6 shadow-xl @container dark:bg-neutral-700 lg:grid-cols-2"
         >
           <IconBlockAbout
             v-for="service in servicesHome"
@@ -216,8 +227,16 @@ export default {
       </BaseSection>
       <BaseSection>
         <BaseContainer class="space-y-8">
-          <p class="subheading text-center">High Park Livery PARTNERS</p>
-          <h2 class="heading text-center">They Trust Us</h2>
+          <p
+            class="text-center font-brand-subheading uppercase tracking-[0.4em] text-brand"
+          >
+            High Park Livery PARTNERS
+          </p>
+          <h2
+            class="text-center font-brand-heading text-4xl uppercase dark:text-neutral-400 lg:text-5xl"
+          >
+            They Trust Us
+          </h2>
         </BaseContainer>
         <TheLogoCloud />
       </BaseSection>

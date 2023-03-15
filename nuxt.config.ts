@@ -15,6 +15,7 @@ export default defineNuxtConfig({
     '@nuxtjs/robots',
     '@nuxtjs/tailwindcss',
     '@nuxt/image-edge',
+    '@nuxtjs/color-mode',
     'nuxt-icon',
     'nuxt-vitest',
     '@huntersofbook/naive-ui-nuxt',
@@ -26,6 +27,9 @@ export default defineNuxtConfig({
       },
     ],
   ],
+  colorMode: {
+    classSuffix: '',
+  },
   naiveUI: {
     themeOverrides: {
       common: {

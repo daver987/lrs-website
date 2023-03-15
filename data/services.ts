@@ -21,7 +21,7 @@ export const services = [
     boxPosition: 'md:col-span-2 md:grid md:grid-cols-2 mb-8',
     imagePosition: 'md:col-span-1 md:col-start-2 md:self-center',
     infoPosition: 'md:col-span-1 md:col-start-1 md:row-start-1',
-    infoBoxPosition: 'bg-white shadow-xl self-center',
+    infoBoxPosition: 'bg-white shadow-xl self-center dark:bg-neutral-700',
   },
   {
     title: 'POINT TO POINT',
@@ -33,7 +33,7 @@ export const services = [
     boxPosition: 'md:col-span-2 md:grid md:grid-cols-2 mb-8',
     imagePosition: 'md:col-span-1 md:col-start-1 md:self-center',
     infoPosition: 'md:col-span-1 md:col-start-2 row-start-1',
-    infoBoxPosition: 'bg-white shadow-xl self-center',
+    infoBoxPosition: 'bg-white shadow-xl self-center dark:bg-neutral-700',
   },
   {
     title: 'NIGHT ON THE TOWN',
@@ -46,7 +46,7 @@ export const services = [
     imagePosition: 'md:col-span-1 md:row-start-1 md:max-w-md md:mx-auto',
     infoPosition: 'md:self-stretch md:col-span-1 md:row-start-2',
     infoBoxPosition:
-      'bg-white shadow-xl px-4 py-6 md:px-6 lg:px-8 md:mx-2 md:pt-16 md:-mt-16',
+      'bg-white shadow-xl px-4 py-6 md:px-6 lg:px-8 md:mx-2 md:pt-16 md:-mt-16 dark:bg-neutral-700',
   },
   {
     title: 'HOURLY SERVICE',
@@ -60,7 +60,7 @@ export const services = [
     imagePosition: 'md:col-span-1 md:row-start-1 md:max-w-md md:mx-auto',
     infoPosition: 'md:col-span-1 md:row-start-2',
     infoBoxPosition:
-      'bg-white shadow-xl px-4 py-6 md:px-6 lg:px-8 md:mx-2 md:pt-16 md:-mt-16',
+      'bg-white shadow-xl px-4 py-6 md:px-6 lg:px-8 md:mx-2 md:pt-16 md:-mt-16 dark:bg-neutral-700',
   },
   {
     title: 'CORPORATE TRAVEL',
@@ -72,7 +72,7 @@ export const services = [
     boxPosition: 'md:col-span-2 md:grid md:grid-cols-2 mb-8',
     imagePosition: 'md:col-span-1 md:col-start-2 md:self-center',
     infoPosition: 'md:col-span-1 md:col-start-1 md:row-start-1',
-    infoBoxPosition: 'bg-white shadow-xl self-center',
+    infoBoxPosition: 'bg-white shadow-xl self-center dark:bg-neutral-700',
   },
   {
     title: 'INTERCITY TRAVEL',
@@ -84,6 +84,6 @@ export const services = [
     boxPosition: 'md:col-span-2 md:grid md:grid-cols-2 mb-8',
     imagePosition: 'md:col-span-1 md:col-start-1 md:self-center',
     infoPosition: 'md:col-span-1 md:col-start-2 row-start-1',
-    infoBoxPosition: 'bg-white shadow-xl self-center',
+    infoBoxPosition: 'bg-white shadow-xl self-center dark:bg-neutral-700',
   },
 ] as Service[]

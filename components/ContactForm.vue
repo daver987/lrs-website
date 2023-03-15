@@ -2,20 +2,19 @@
 import { toFormValidator } from '@vee-validate/zod'
 import { useForm, ErrorMessage, Field } from 'vee-validate'
 import { z } from 'zod'
+import { ref } from '#imports'
 
-const schema = toFormValidator(
-  z.object({
-    first_name: z.string(),
-    last_name: z.string(),
-    email_address: z.string().email(),
-    phone_number: z.string(),
-    subject: z.string(),
-    message: z.string(),
-  })
-)
+const formSchema = z.object({
+  first_name: z.string(),
+  last_name: z.string(),
+  email_address: z.string().email(),
+  phone_number: z.string(),
+  subject: z.string(),
+  message: z.string(),
+})
 
-type ValidationSchema = z.infer<typeof schema>
-
+const schema = toFormValidator(formSchema)
+type ValidationSchema = z.infer<typeof formSchema>
 const { handleSubmit, errors, resetForm } = useForm({
   validationSchema: schema,
 })
@@ -50,7 +49,7 @@ const onSubmit = handleSubmit(async (values: ValidationSchema) => {
     <main class="overflow-hidden">
       <section class="relative" aria-labelledby="contact-heading">
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
-          <div class="relative bg-white shadow-xl">
+          <div class="relative bg-white shadow-xl dark:bg-neutral-700">
             <h2 id="contact-heading" class="sr-only">Contact us</h2>
 
             <div class="grid grid-cols-1 lg:grid-cols-3">
@@ -158,8 +157,14 @@ const onSubmit = handleSubmit(async (values: ValidationSchema) => {
                     </defs>
                   </svg>
                 </div>
-                <h3 class="text-lg font-medium text-white">Get In Touch</h3>
-                <p class="mt-6 max-w-3xl text-base text-brand-50">
+                <h3
+                  class="font-brand-subheading text-lg font-medium uppercase tracking-[0.4em] text-neutral-200"
+                >
+                  Get In Touch
+                </h3>
+                <p
+                  class="mt-6 max-w-3xl font-brand-body text-base text-brand-50"
+                >
                   At High Park Livery, we strive to make your travel experience
                   as elegant and effortless as possible. Contact us today.
                 </p>
@@ -238,7 +243,9 @@ const onSubmit = handleSubmit(async (values: ValidationSchema) => {
 
               <!-- Contact form -->
               <div class="py-10 px-6 sm:px-10 lg:col-span-2 xl:p-12">
-                <h3 class="text-warm-gray-900 text-lg font-medium">
+                <h3
+                  class="font-brand-subheading text-lg uppercase tracking-[0.4em] text-neutral-900 dark:text-neutral-400"
+                >
                   Send us a message
                 </h3>
                 <form
@@ -250,6 +257,7 @@ const onSubmit = handleSubmit(async (values: ValidationSchema) => {
                       type="text"
                       name="first_name"
                       label="First name"
+                      placeholder="First Name..."
                     />
                   </div>
                   <div>
@@ -257,6 +265,7 @@ const onSubmit = handleSubmit(async (values: ValidationSchema) => {
                       type="text"
                       name="last_name"
                       label="Last name"
+                      placeholder="Last Name..."
                     />
                   </div>
                   <div>
@@ -264,6 +273,7 @@ const onSubmit = handleSubmit(async (values: ValidationSchema) => {
                       type="email"
                       name="email_address"
                       label="Email"
+                      placeholder="Email Address..."
                     />
                   </div>
                   <div>
@@ -272,6 +282,7 @@ const onSubmit = handleSubmit(async (values: ValidationSchema) => {
                       type="tel"
                       name="phone_number"
                       label="Phone Number"
+                      placeholder="Phone Number..."
                     />
                   </div>
                   <div class="sm:col-span-2">
@@ -279,16 +290,19 @@ const onSubmit = handleSubmit(async (values: ValidationSchema) => {
                       type="text"
                       name="subject"
                       label="Subject"
+                      placeholder="Enter in a Subject"
                     />
                   </div>
                   <div class="sm:col-span-2">
                     <div class="flex justify-between">
                       <label
                         for="message"
-                        class="block text-sm font-medium text-gray-700"
+                        class="block text-sm font-medium text-neutral-700"
                         >Message</label
                       >
-                      <span id="message-max" class="text-warm-gray-500 text-sm"
+                      <span
+                        id="message-max"
+                        class="text-sm text-neutral-500 dark:text-neutral-400"
                         >Max. 500 characters</span
                       >
                     </div>
@@ -299,10 +313,10 @@ const onSubmit = handleSubmit(async (values: ValidationSchema) => {
                           id="message"
                           name="message"
                           rows="4"
-                          class="block w-full rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-brand focus:ring-brand"
+                          class="block w-full rounded-md border-neutral-300 py-3 px-4 shadow-sm focus:border-brand focus:ring-brand dark:bg-neutral-200"
                           aria-describedby="message-max"
                         />
-                        <ErrorMessage name="message" />
+                        <ErrorMessage class="red-700" name="message" />
                       </Field>
                     </div>
                   </div>

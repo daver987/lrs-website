@@ -2,7 +2,9 @@
   <div>
     <div class="mb-12 grid grid-cols-1 place-items-center md:grid-cols-2">
       <div>
-        <h2 class="heading pt-8 text-center md:text-left">
+        <h2
+          class="text-center font-brand-heading text-4xl uppercase dark:text-neutral-400 lg:text-left lg:text-5xl"
+        >
           Lincoln Navigator SUV
         </h2>
       </div>
@@ -16,8 +18,10 @@
     </div>
     <div class="mb-12 grid grid-cols-1 place-items-center md:grid-cols-2">
       <BaseCard class="space-y-6">
-        <h3 class="subheading">About The Vehicle</h3>
-        <p class="font-sans text-gray-500">
+        <h3 class="font-brand-subheading uppercase tracking-[0.4em] text-brand">
+          About The Vehicle
+        </h3>
+        <p class="font-brand-body text-neutral-400">
           The Lincoln Navigator is one of the best vehicles to use for your
           night on the town. It comfortably fits six people, has plenty of
           amenities, and delivers luxury. The three-tonne colossus can easily
@@ -58,3 +62,4 @@
     </div>
   </div>
 </template>
+<script setup lang="ts"></script>

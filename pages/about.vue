@@ -48,13 +48,23 @@ const qualities = [
     <main class="px-6">
       <BaseSection class="md:-mt-16">
         <BaseContainer class="md:grid md:grid-cols-2">
-          <div class="relative -mt-8 overflow-hidden bg-white py-6 shadow-xl">
+          <div
+            class="relative -mt-8 overflow-hidden bg-white py-6 shadow-xl dark:bg-neutral-700"
+          >
             <div class="py-5">
-              <p class="subheading text-center">Behind The Wheel</p>
-              <h2 class="heading mt-6 text-center">The Driver</h2>
+              <p
+                class="text-center font-brand-subheading uppercase tracking-[0.4em] text-brand"
+              >
+                Behind The Wheel
+              </p>
+              <h2
+                class="mt-6 text-center font-brand-heading text-4xl uppercase text-neutral-900 dark:text-neutral-400 lg:text-5xl"
+              >
+                The Driver
+              </h2>
             </div>
             <div class="px-4 py-5 sm:p-6">
-              <p class="font-sans text-sm text-gray-500">
+              <p class="font-brand-body text-neutral-500 dark:text-neutral-400">
                 Our team of chauffeurs is some of the most experienced in the
                 industry. All of our professional chauffeurs are safe,
                 courteous, and fully certified drivers by the city of Toronto.
@@ -102,7 +112,7 @@ const qualities = [
             src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/f56d5571-1af0-4986-7db7-bd29dc818200/4200"
             width="1920"
           />
-          <div class="bg-white shadow-xl">
+          <div class="bg-white shadow-xl dark:bg-neutral-700">
             <IconBlockAbout
               v-for="quality in qualities"
               :key="quality.id"
@@ -124,18 +134,26 @@ const qualities = [
           src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/d0f63a6f-1d68-49fe-b643-224003dd5f00/4200"
           width="4200"
         />
-        <BaseContainer class="bg-white shadow-xl">
-          <div class="overflow-hidden bg-white py-6 md:px-2 lg:px-4">
+        <BaseContainer class="bg-white shadow-xl dark:bg-neutral-700">
+          <div
+            class="overflow-hidden bg-white py-6 dark:bg-neutral-700 md:px-2 lg:px-4"
+          >
             <div class="px-4 py-5 sm:px-6">
-              <p class="subheading text-center uppercase md:text-left">
+              <p
+                class="text-center font-brand-subheading uppercase tracking-[0.4em] text-brand md:text-left"
+              >
                 High Park Livery?
               </p>
-              <h2 class="heading mt-6 text-center text-heading md:text-left">
+              <h2
+                class="mt-6 text-center font-brand-heading text-4xl uppercase text-neutral-900 dark:text-neutral-400 md:text-left lg:text-5xl"
+              >
                 WHO WE ARE
               </h2>
             </div>
-            <div class="px-3 py-4 sm:p-6">
-              <p class="font-sans text-sm text-gray-500">
+            <div
+              class="px-3 py-4 font-brand-body text-neutral-500 dark:text-neutral-400 sm:p-6"
+            >
+              <p>
                 High Park Livery is a Toronto-based car service company. We
                 provide luxury transportation to clients in the Greater Toronto
                 and southern Ontario area. In addition to offering a variety of
@@ -143,7 +161,7 @@ const qualities = [
                 corporate and non-corporate clients with highly personalized
                 services that aim to exceed all expectations.
               </p>
-              <p class="font-sans text-sm text-gray-500">
+              <p>
                 When you choose to work with High Park Livery, you'll work with
                 highly trained professionals who know about the industry. We are
                 committed to customer satisfaction and punctuality in all that
@@ -152,13 +170,13 @@ const qualities = [
                 create an atmosphere that ensures passengers feel comfortable
                 and relaxed throughout their journey.
               </p>
-              <p class="font-sans text-sm text-gray-500">
+              <p>
                 At High Park Livery, we don't cut corners or skimp on your
                 comfort to offer you a low price. We believe that all of our
                 luxury cars should be maintained to the highest industry
                 standards, ensuring a safe and unforgettable experience.
               </p>
-              <p class="font-sans text-sm text-gray-500">
+              <p>
                 Whether it's a night out on the town or a business meeting
                 across downtown Toronto, High Park Livery can provide a
                 luxurious ride that fits perfectly within your schedule and

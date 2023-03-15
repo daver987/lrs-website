@@ -10,7 +10,7 @@ datasource db {
 
 generator zod {
   provider           = "zod-prisma-types"
-  createPartialTypes = "true"
+  createPartialTypes = true
 }
 
 model Account {

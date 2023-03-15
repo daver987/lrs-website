@@ -6,7 +6,7 @@ import {
   darkTheme,
   useLoadingBar,
 } from 'naive-ui'
-import { Ref } from 'vue'
+import { Ref, WatchCallback } from 'vue'
 import { ref } from '#imports'
 import { VueTelInput } from 'vue-tel-input'
 import {

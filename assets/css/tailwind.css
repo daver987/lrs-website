@@ -204,8 +204,12 @@
 
 
 body {
-  background-color: #ebebeb;
+  background-color: #fafafa;
   min-height: 100dvh;
+}
+
+body:dark {
+  background-color: #171717;
 }
 
 textarea:focus {

@@ -25,8 +25,12 @@ defineProps({
       <img :alt="altText" :src="`/icons/${image}.svg`" class="w-16" />
     </div>
     <div>
-      <h3 class="font-subheading text-lg text-brand">{{ title }}</h3>
-      <p class="mt-1 font-sans text-gray-500">{{ body }}</p>
+      <h3
+        class="font-brand-subheading text-lg uppercase tracking-widest text-brand"
+      >
+        {{ title }}
+      </h3>
+      <p class="mt-1 font-brand-body text-neutral-400">{{ body }}</p>
     </div>
   </div>
 </template>
