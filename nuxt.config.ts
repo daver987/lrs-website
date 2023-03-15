@@ -32,8 +32,15 @@ export default defineNuxtConfig({
   },
   naiveUI: {
     themeOverrides: {
+      DatePicker: {
+        itemColorActive: '#674D32',
+        itemTextColorActive: '#000',
+      },
+      TimePicker: {
+        itemTextColorActive: '#000',
+      },
       common: {
-        primaryColor: '#9f6c27',
+        primaryColor: '#8A6642',
         primaryColorHover: '#674D32',
       },
     },

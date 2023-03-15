@@ -34,6 +34,8 @@ import {
 import { Summary } from '~/schema/summarySchema'
 import { z } from 'zod'
 import { useNuxtApp } from '#app'
+import { sub, format } from 'date-fns'
+
 const { $client } = useNuxtApp()
 
 type FormValue = {
@@ -336,7 +338,10 @@ function handleValidateButtonClick(e: MouseEvent) {
   })
 }
 
-const disablePreviousDate = (ts: number) => ts < Date.now()
+function disablePreviousDate(ts: number) {
+  return ts < new Date().getTime() - 24 * 60 * 60 * 1000
+}
+// const disabled = () => format(disablePreviousDate, 'T')
 </script>
 
 <template>
@@ -406,6 +411,7 @@ const disablePreviousDate = (ts: number) => ts < Date.now()
                     v-model:value="formValue.pickup_time"
                     format="h:mm a"
                     :clearable="true"
+                    use12-hours
                   />
                   <n-switch v-model:value="formValue.is_round_trip">
                     <template #checked> Round</template>
@@ -427,6 +433,7 @@ const disablePreviousDate = (ts: number) => ts < Date.now()
                     type="date"
                     placeholder="Select Return Date"
                     :default-value="Date.now()"
+                    :is-date-disabled="disablePreviousDate"
                   />
                 </n-form-item-gi>
                 <n-form-item-gi
@@ -439,6 +446,7 @@ const disablePreviousDate = (ts: number) => ts < Date.now()
                     v-model:value="formValue.return_time"
                     format="h:mm a"
                     :clearable="true"
+                    use12-hours
                   />
                 </n-form-item-gi>
               </n-grid>
