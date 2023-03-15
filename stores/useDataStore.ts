@@ -4,24 +4,24 @@ import { acceptHMRUpdate, defineStore } from 'pinia'
 export const useDataStore = defineStore('data', {
   state: () => {
     return {
-      lineItems: [] as LineItem[],
-      salesTaxes: [] as SalesTax[],
-      serviceTypes: [] as Service[],
-      vehicleTypes: [] as Vehicle[],
+      lineItems: [] as unknown,
+      salesTaxes: [] as unknown,
+      serviceTypes: [] as unknown,
+      vehicleTypes: [] as unknown,
     }
   },
 
   actions: {
-    setLineItems(items: LineItem[]) {
+    setLineItems(items: unknown) {
       this.lineItems = items
     },
-    setSalesTaxes(taxes: SalesTax[]) {
+    setSalesTaxes(taxes: unknown) {
       this.salesTaxes = taxes
     },
-    setServiceTypes(services: Service[]) {
+    setServiceTypes(services: unknown) {
       this.serviceTypes = services
     },
-    setVehicleTypes(vehicles: Vehicle[]) {
+    setVehicleTypes(vehicles: unknown) {
       this.vehicleTypes = vehicles
     },
   },
