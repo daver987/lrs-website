@@ -4,10 +4,6 @@ defineProps({
     type: String,
     required: true,
   },
-  altText: {
-    type: String,
-    required: true,
-  },
   title: {
     type: String,
     required: true,
