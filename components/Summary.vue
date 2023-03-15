@@ -1,8 +1,11 @@
 <script setup lang="ts">
 // import { exportToPDF } from '#imports'
-import { SummarySchema } from '~/schema/summarySchema'
 import type { Summary } from '~/schema/summarySchema'
 import { ref } from '#imports'
+import { z } from 'zod'
+import { useNuxtApp } from '#app'
+
+const { $client } = useNuxtApp()
 
 const quote = ref<Summary>({
   is_round_trip: false,
@@ -18,6 +21,13 @@ const quote = ref<Summary>({
     phone_number: '',
     email_address: '',
     id: '',
+    conversion: {
+      utm_medium: null,
+      utm_source: null,
+      utm_campaign: null,
+      utm_term: null,
+      gclid: null,
+    },
   },
   vehicle: {
     label: '',
@@ -54,15 +64,14 @@ const quote = ref<Summary>({
 
 const route = useRoute()
 const { quote_number } = route.query
+const quoteNumberSchema = z.coerce.number()
+const quoteNumber = quoteNumberSchema.parse(quote_number)
 
-console.log('Quote Number in route:', quote_number)
-const { data } = await useFetch('/api/quote', {
-  method: 'GET',
-  query: { quote_number: quote_number },
+const { data: parsedData } = await $client.quote.get.useQuery({
+  quote_number: quoteNumber,
 })
-const parsedData = SummarySchema.strip().parse(data.value)
-console.log('Fetched Data from route:', parsedData)
-Object.assign(quote.value, parsedData)
+console.log('Fetched Data from route:', parsedData.value)
+Object.assign(quote.value, parsedData.value)
 
 const printSummary = () => {
   window.print()
@@ -139,7 +148,7 @@ const printSummary = () => {
         <button
           @click="printSummary"
           type="button"
-          class="inline-flex items-center justify-center rounded-md border border-transparent bg-primary px-4 py-2 font-sans text-sm font-medium uppercase tracking-wider text-white shadow-sm hover:bg-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 sm:w-auto"
+          class="bg-primary hover:bg-primary focus:ring-primary inline-flex items-center justify-center rounded-md border border-transparent px-4 py-2 font-sans text-sm font-medium uppercase tracking-wider text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 sm:w-auto"
         >
           Print
         </button>
