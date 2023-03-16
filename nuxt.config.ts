@@ -15,7 +15,7 @@ export default defineNuxtConfig({
     '@nuxtjs/robots',
     '@nuxtjs/tailwindcss',
     '@nuxt/image-edge',
-    '@nuxtjs/color-mode',
+    // '@nuxtjs/color-mode',
     'nuxt-icon',
     'nuxt-vitest',
     '@huntersofbook/naive-ui-nuxt',

@@ -64,183 +64,179 @@ const fleetImage = computed(() => {
         </div>
       </div>
     </div>
-    <main>
-      <BaseSection>
-        <BaseContainer
-          class="grid grid-cols-1 gap-3 @container md:grid-cols-2 lg:max-w-7xl lg:grid-cols-4"
-        >
-          <IconBlockServices
-            v-for="feature in features"
-            :key="feature.title"
-            :body="feature.body"
-            :icon-name="feature.iconName"
-            :title="feature.title"
-          />
-        </BaseContainer>
-      </BaseSection>
-      <BaseSection
-        class="bg-cover bg-center bg-no-repeat pt-10 bg-blend-darken"
-        :style="fleetImage"
+
+    <BaseSection class="px-4">
+      <div
+        class="mx-auto grid grid-cols-1 gap-3 @container md:grid-cols-2 lg:max-w-7xl lg:grid-cols-4"
       >
-        <BaseContainer
-          class="flex flex-col place-items-center justify-between lg:flex-row"
-        >
-          <div class="mb-4 space-y-4">
-            <p
-              class="text-center font-brand-subheading uppercase tracking-widest text-brand lg:text-left"
-            >
-              The Many Types of Comfort We offer
-            </p>
-            <h2
-              class="text-center font-heading text-4xl capitalize text-neutral-100 lg:text-left lg:text-5xl"
-            >
-              Our Fleet
-            </h2>
-          </div>
-          <div>
-            <BaseButton
-              kind="btn-light"
-              label="View All"
-              to="/fleet"
-              :nuxtLink="true"
-            />
-          </div>
-        </BaseContainer>
-      </BaseSection>
-      <BaseSection class="px-4 pt-0 sm:px-6 lg:px-8">
-        <BaseContainer
-          class="-mt-6 grid grid-cols-6 gap-6 bg-white shadow-xl dark:bg-neutral-700 md:grid-cols-12"
-        >
-          <div
-            class="col-span-6 p-6 font-brand-body text-neutral-400 md:col-span-7"
-          >
-            <p class="text-sm">
-              <span>
-                Experience luxury and reliability with
-                <span class="font-brand-subheading text-sm uppercase text-brand"
-                  >High Park Livery's</span
-                >
-                Toronto car service. For over a decade, we have consistently
-                maintained a fleet of top-of-the-line vehicles to meet the
-                demands of the Toronto GTA market. Our clients can expect only
-                the best in chauffeur service with our selection of premium
-                cars, including the Cadillac XTS, Lincoln Navigator SUV,
-                Cadillac Escalade SUV, and Lincoln Continental. <br /><br />Our
-                highly trained drivers provide exceptional service for even the
-                most discerning clientele. As a full-service transportation
-                company,
-                <strong class="text-brand"
-                  >we have a variety of vehicles to meet any transportation
-                  need, including specialty 6+ person vehicles for larger tour
-                  groups.</strong
-                >
-                Contact us to explore the various options available from our
-                limo service.
-              </span>
-            </p>
-          </div>
-          <div
-            class="col-span-2 flex w-full place-items-center justify-center p-6"
-          >
-            <NuxtPicture
-              class="w-96 self-center"
-              src="/icons/24-hours.svg"
-              alt="24 hours icon"
-            />
-          </div>
-        </BaseContainer>
-      </BaseSection>
-      <BaseSection>
-        <BaseContainer
-          class="mx-auto mb-8 flex max-w-4xl flex-col md:mb-4 md:grid md:flex-none md:grid-cols-2 md:grid-rows-1 md:items-stretch lg:max-w-7xl"
-        >
-          <IconBlockFleet
-            heading="Cadillac XTS"
-            class="order-1 md:order-first md:col-span-1 md:col-start-1 md:w-full md:self-center"
-          />
-          <IconBlockFleetImage
-            altText="XTS Interior"
-            image="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/f0204aa2-4cb2-4204-10e5-5c3bed0d3500/1920"
-            class="md:col-span-1 md:col-start-2"
-          />
-        </BaseContainer>
-        <BaseContainer
-          class="mx-auto flex max-w-4xl flex-col items-stretch gap-x-2 md:grid md:flex-none md:grid-cols-2 lg:max-w-7xl"
-        >
-          <IconBlockFleet
-            class="order-2 mb-8 w-full md:col-span-1 md:col-start-1 md:row-start-2 md:mb-4 md:max-w-[80%] md:justify-self-end"
-            heading="Cadillac Escalade"
-          />
-          <IconBlockFleetImage
-            altText="Escalade Interior"
-            class="order-1 md:col-span-1 md:col-start-1 md:row-start-1 md:row-end-2 md:mb-0 md:self-end"
-            image="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/180e12f4-a0c1-4c70-b5af-5f05bbfa4700/1920"
-          />
-          <IconBlockFleet
-            class="order-4 w-full md:order-first md:max-w-[80%] md:place-self-end md:justify-self-end md:pb-8"
-            heading="Lincoln Continental"
-          />
-          <IconBlockFleetImage
-            altText="Continental Interior"
-            class="order-3 md:col-start-2 md:row-start-2 md:-mt-8"
-            image="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/7968b80b-ad94-4501-02ca-43e552c67100/1920"
-          />
-        </BaseContainer>
-      </BaseSection>
-      <BaseSection class="pb-0">
-        <NuxtPicture
-          alt="Toronto Skyline"
-          :img-attrs="{
-            class: 'object-cover object-center lg:mx-auto lg:max-w-6xl',
-          }"
-          src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/d7e1f6bc-c349-4e62-48c4-642bbfcb3c00/1920"
-          width="1920"
-          loading="lazy"
+        <IconBlockServices
+          v-for="feature in features"
+          :key="feature.title"
+          :body="feature.body"
+          :subtitle="feature.subtitle"
+          :icon-name="feature.iconName"
+          :title="feature.title"
         />
-      </BaseSection>
-      <BaseSection class="px-4 pt-0 sm:px-6 lg:px-8">
-        <BaseContainer class="-mt-16 bg-white pt-32 pb-16 dark:bg-neutral-700">
+      </div>
+    </BaseSection>
+    <BaseSection
+      class="bg-black/50 bg-cover bg-center bg-no-repeat pt-10 bg-blend-hard-light"
+      :style="fleetImage"
+    >
+      <BaseContainer
+        class="flex flex-col place-items-center justify-between lg:flex-row"
+      >
+        <div class="mb-4 space-y-4">
           <p
-            class="text-center font-brand-subheading uppercase tracking-[0.4em] text-brand"
+            class="text-center font-brand-subheading uppercase tracking-widest text-brand lg:text-left"
           >
-            WHAT High Park Livery OFFERS YOU
+            The Many Types of Comfort We offer
           </p>
           <h2
-            class="mt-4 text-center font-brand-heading text-4xl uppercase dark:text-neutral-300 lg:text-5xl"
+            class="text-center font-heading text-4xl capitalize text-neutral-100 lg:text-left lg:text-5xl"
           >
-            We Offer
+            Our Fleet
           </h2>
-        </BaseContainer>
-        <div
-          class="mx-auto -mt-8 grid max-w-7xl grid-cols-1 gap-4 bg-white p-6 shadow-xl @container dark:bg-neutral-700 lg:grid-cols-2"
-        >
-          <IconBlockAbout
-            v-for="service in servicesHome"
-            :key="service.title"
-            :alt-text="service.altText"
-            :body="service.body"
-            :image="service.image"
-            :title="service.title"
-            class="shadow-none"
+        </div>
+        <div>
+          <BaseButton
+            kind="btn-light"
+            label="View All"
+            to="/fleet"
+            :nuxtLink="true"
           />
         </div>
-      </BaseSection>
-      <BaseSection>
-        <BaseContainer class="space-y-8">
-          <p
-            class="text-center font-brand-subheading uppercase tracking-[0.4em] text-brand"
-          >
-            High Park Livery PARTNERS
+      </BaseContainer>
+    </BaseSection>
+    <BaseSection class="px-4 pt-0 sm:px-6 lg:px-8">
+      <BaseContainer
+        class="-mt-12 grid grid-cols-1 gap-6 bg-white shadow-xl dark:bg-neutral-700 md:grid-cols-2"
+      >
+        <div class="py-10 px-6 font-brand-body text-neutral-400 md:pr-12">
+          <p class="font-brand-body text-sm">
+            Upgrade your travel experience with
+            <span class="font-brand-subheading text-sm uppercase text-brand"
+              >High Park Livery's</span
+            >
+            exceptional car service in Toronto. Our carefully curated fleet
+            showcases the finest in luxury transportation, ensuring that every
+            journey exceeds your expectations. Select from a range of premium
+            vehicles, including the Cadillac XTS, Lincoln Navigator SUV,
+            Cadillac Escalade SUV, and Lincoln Continental, all designed to
+            cater to the discerning tastes of our clientele.<br /><br />
+            For over a decade, High Park Livery has provided unparalleled
+            chauffeur service to the Toronto GTA market. Our expert drivers are
+            dedicated to delivering top-notch service, ensuring a smooth and
+            comfortable ride. As a comprehensive transportation provider, we
+            cater to diverse travel requirements with our versatile fleet,
+            offering specialty vehicles for larger groups and customized
+            tours.<br /><br />
+            Discover the exceptional options available with High Park Livery's
+            limo service. Contact us to learn more about our distinguished fleet
+            and experience the ultimate in luxury transportation.
           </p>
-          <h2
-            class="text-center font-brand-heading text-4xl uppercase dark:text-neutral-400 lg:text-5xl"
-          >
-            They Trust Us
-          </h2>
-        </BaseContainer>
-        <TheLogoCloud />
-      </BaseSection>
-    </main>
+        </div>
+        <div class="flex w-full place-items-center justify-center p-6">
+          <NuxtPicture
+            class="w-80 self-center"
+            src="/icons/24-hours.svg"
+            alt="24 hours icon"
+          />
+        </div>
+      </BaseContainer>
+    </BaseSection>
+
+    <BaseSection>
+      <BaseContainer
+        class="mx-auto mb-8 flex max-w-4xl flex-col md:mb-4 md:grid md:flex-none md:grid-cols-2 md:grid-rows-1 md:items-stretch lg:max-w-7xl"
+      >
+        <IconBlockFleet
+          heading="Cadillac XTS"
+          class="order-1 md:order-first md:col-span-1 md:col-start-1 md:w-full md:self-center"
+        />
+        <IconBlockFleetImage
+          altText="XTS Interior"
+          image="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/f0204aa2-4cb2-4204-10e5-5c3bed0d3500/1920"
+          class="md:col-span-1 md:col-start-2"
+        />
+      </BaseContainer>
+      <BaseContainer
+        class="mx-auto flex max-w-4xl flex-col items-stretch gap-x-2 md:grid md:flex-none md:grid-cols-2 lg:max-w-7xl"
+      >
+        <IconBlockFleet
+          class="order-2 mb-8 w-full md:col-span-1 md:col-start-1 md:row-start-2 md:mb-4 md:max-w-[80%] md:justify-self-end"
+          heading="Cadillac Escalade"
+        />
+        <IconBlockFleetImage
+          altText="Escalade Interior"
+          class="order-1 md:col-span-1 md:col-start-1 md:row-start-1 md:row-end-2 md:mb-0 md:self-end"
+          image="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/180e12f4-a0c1-4c70-b5af-5f05bbfa4700/1920"
+        />
+        <IconBlockFleet
+          class="order-4 w-full md:order-first md:max-w-[80%] md:place-self-end md:justify-self-end md:pb-8"
+          heading="Lincoln Continental"
+        />
+        <IconBlockFleetImage
+          altText="Continental Interior"
+          class="order-3 md:col-start-2 md:row-start-2 md:-mt-8"
+          image="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/7968b80b-ad94-4501-02ca-43e552c67100/1920"
+        />
+      </BaseContainer>
+    </BaseSection>
+    <BaseSection class="pb-0">
+      <NuxtPicture
+        alt="Toronto Skyline"
+        :img-attrs="{
+          class: 'object-cover object-center lg:mx-auto lg:max-w-6xl',
+        }"
+        src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/d7e1f6bc-c349-4e62-48c4-642bbfcb3c00/1920"
+        width="1920"
+        loading="lazy"
+      />
+    </BaseSection>
+    <BaseSection class="px-4 pt-0 sm:px-6 lg:px-8">
+      <BaseContainer class="-mt-16 bg-white pt-32 pb-16 dark:bg-neutral-700">
+        <p
+          class="text-center font-brand-subheading uppercase tracking-[0.4em] text-brand"
+        >
+          WHAT High Park Livery OFFERS YOU
+        </p>
+        <h2
+          class="mt-4 text-center font-brand-heading text-4xl uppercase dark:text-neutral-300 lg:text-5xl"
+        >
+          We Offer
+        </h2>
+      </BaseContainer>
+      <div
+        class="mx-auto -mt-8 grid max-w-7xl grid-cols-1 gap-4 bg-white p-6 shadow-xl @container dark:bg-neutral-700 lg:grid-cols-2"
+      >
+        <IconBlockAbout
+          v-for="service in servicesHome"
+          :key="service.title"
+          :alt-text="service.altText"
+          :body="service.body"
+          :image="service.image"
+          :title="service.title"
+          class="shadow-none"
+        />
+      </div>
+    </BaseSection>
+    <BaseSection>
+      <BaseContainer class="space-y-8">
+        <p
+          class="text-center font-brand-subheading uppercase tracking-[0.4em] text-brand"
+        >
+          High Park Livery PARTNERS
+        </p>
+        <h2
+          class="text-center font-brand-heading text-4xl uppercase dark:text-neutral-400 lg:text-5xl"
+        >
+          They Trust Us
+        </h2>
+      </BaseContainer>
+      <TheLogoCloud />
+    </BaseSection>
+
     <AppFooter />
   </div>
 </template>
