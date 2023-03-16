@@ -9,6 +9,7 @@ import {
 import { Ref, WatchCallback } from 'vue'
 import { ref, computed } from '#imports'
 import { VueTelInput } from 'vue-tel-input'
+//import zod validation auto generated from the prisma schema
 import {
   Vehicle,
   VehicleSchema,
@@ -34,10 +35,11 @@ import {
 import { Summary } from '~/schema/summarySchema'
 import { z } from 'zod'
 import { useNuxtApp } from '#app'
-// import { sub, format } from 'date-fns'
 
+// trpc client that has been imported from the useNuxtApp composable
 const { $client } = useNuxtApp()
 
+//The type for the inputs and other information that gets sent to the api route
 type FormValue = {
   user_id: string
   first_name: string | null
@@ -63,14 +65,18 @@ type FormValue = {
   sales_tax: SalesTax[]
 }
 
+//The pinia stores that are imported
 const quoteStore = useQuoteStore()
 const userStore = useUserStore()
+//the user id generated for the user that is stored in local storage
 const { user_id } = storeToRefs(userStore)
 
+//the data for the vehicle type, service type and different line items line gratuity etc. They are in the store and retrieved from the database
 const dataStore = useDataStore()
 const { vehicleTypes, serviceTypes, lineItems, salesTaxes } =
   storeToRefs(dataStore)
 
+//the trpc query that fetches from the database the data for the service types, vehicle types etc.
 const serviceTypesRes = await $client.service.get.query()
 console.log('client services', serviceTypesRes)
 const lineItemsRes = await $client.lineItem.get.query()
@@ -80,19 +86,24 @@ console.log('client vehicles', vehicleTypesRes)
 const salesTaxesRes = await $client.salesTax.get.query()
 console.log('client Sales Tax', salesTaxesRes)
 
+//the validation of the data fetched from the database
 vehicleTypes.value = VehicleSchema.array().parse(vehicleTypesRes)
 serviceTypes.value = ServiceSchema.array().parse(serviceTypesRes)
 lineItems.value = LineItemSchema.array().parse(lineItemsRes)
 salesTaxes.value = SalesTaxSchema.array().parse(salesTaxesRes)
 
+//setting the data to the Pinia Store
 dataStore.setVehicleTypes(vehicleTypes.value)
 dataStore.setServiceTypes(serviceTypes.value)
 dataStore.setLineItems(lineItems.value)
 dataStore.setSalesTaxes(salesTaxes.value)
 
+//setting the data to variables so they can be set on the UI component that displays the data
 const serviceTypeOptions = serviceTypes
 const vehicleTypeOptions = vehicleTypes
 
+//Building the options dynamically for vehicle types, hours etc so that they can change according to what the user selects
+//example, if the Standard sedan can only hold 3 passengers then we only want 3 passengers to be displayed in that option
 const hoursOptions = buildHoursOptions()
 const maxPassengers = computed<number>(() => {
   const vehicleType = vehicleTypeOptions.value.find(
@@ -106,9 +117,11 @@ const passengerOptions = computed(() =>
   buildPassengerOptions(maxPassengers.value)
 )
 
+//capturing the params from the url string so that we can track where the user found the website
 const route = useRoute()
 const gtmValues: Conversion = route.query as any
 
+//tag manager
 const gtm = useGtm()
 //Todo enable tag manager
 function triggerEvent() {
@@ -122,6 +135,7 @@ function triggerEvent() {
   })
 }
 
+//the object where the various values that are captured from the form are stored
 const formValue = ref({
   user_id: user_id.value,
   first_name: null,
@@ -151,6 +165,7 @@ const formValue = ref({
   sales_tax: salesTaxes.value,
 }) as unknown as Ref<FormValue>
 
+//the naive UI validation rules
 const rules: FormRules = {
   pickup_date: {
     type: 'number',
@@ -222,6 +237,7 @@ const rules: FormRules = {
   },
 }
 
+//the input options for vue-tel-input
 const inputOptions = ref({
   id: 'phone_number',
   showDialCode: true,
@@ -238,6 +254,8 @@ const dropdownOptions = ref({
   showDialCodeInList: true,
 })
 
+//Checking the types returned from the autocomplete and if airport is present then automatically switch the service type option
+//to either To Airport or From Airport
 function isAirport(place?: Place): boolean {
   if (!place) {
     return false
@@ -248,7 +266,7 @@ function isAirport(place?: Place): boolean {
     return false
   }
 }
-
+//watching the values in the origin or destination inputs to know when to automatically change the service type
 const handleFormValueChange: WatchCallback<
   [typeof formValue.value.origin, typeof formValue.value.destination]
 > = ([origin, destination]) => {
@@ -286,16 +304,18 @@ const handleChangeDestination = (evt: Place) => {
   formValue.value.destination = evt
 }
 
+//setting initial state
 const message = useMessage()
 const formRef = ref<FormInst | null>(null)
 const loading = ref(false)
 const loadingBar = useLoadingBar()
 const quoteNumberSchema = z.number()
 
+//submit function
 async function onSubmit() {
   try {
     loading.value = true
-    userStore.setFullName(formValue.value.first_name, formValue.value.last_name)
+    // submitting the form data using built in nuxt 3 composables
     const { data: response } = await useFetch('/api/quote', {
       method: 'POST',
       body: formValue.value,
@@ -306,6 +326,7 @@ async function onSubmit() {
 
     setTimeout(async () => {
       quoteStore.setQuote(quoteData)
+      //validating the destructured quote number
       const number = quoteNumberSchema.parse(quote_number)
       loadingBar.finish()
       await navigateTo({
@@ -322,6 +343,7 @@ async function onSubmit() {
   }
 }
 
+//validation of the form before it is submitted
 function handleValidateButtonClick(e: MouseEvent) {
   e.preventDefault()
   formRef.value?.validate(async (errors) => {
@@ -337,7 +359,7 @@ function handleValidateButtonClick(e: MouseEvent) {
     }
   })
 }
-
+//calculating the start date on the calendar component
 function disablePreviousDate(ts: number) {
   return ts < new Date().getTime() - 24 * 60 * 60 * 1000
 }

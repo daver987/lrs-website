@@ -22,7 +22,7 @@ const summaryConversion = ConversionPartialSchema.pick({
   gclid: true,
 })
 const summaryVehicle = VehicleSchema.pick({ label: true, vehicle_image: true })
-const summaryUser = UserSchema.pick({
+export const summaryUser = UserSchema.pick({
   email_address: true,
   first_name: true,
   last_name: true,

@@ -29,10 +29,10 @@ model User {
   id                   String      @id @default(uuid())
   created_at           DateTime    @default(now())
   updated_at           DateTime    @updatedAt
-  first_name           String?
-  last_name            String?
-  email_address        String?     @unique
-  phone_number         String?
+  first_name           String
+  last_name            String
+  email_address        String      @unique
+  phone_number         String
   phone_number_country String?
   stripe_customer_id   String?
   is_customer          Boolean     @default(false)
@@ -73,6 +73,7 @@ model Quote {
   quote_total         Float
   quote_subtotal      Float?
   quote_tax_total     Float?
+  short_link          String?
   service_id          Int
   vehicle_id          Int
   sales_tax_id        Int

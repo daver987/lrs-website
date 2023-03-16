@@ -12,7 +12,10 @@ export function createContext(_event: H3Event) {
    * return { prisma: _event.context.prisma }
    * ```
    */
-  return { prisma: _event.context.prisma }
+  return {
+    prisma: _event.context.prisma,
+    twilioClient: _event.context.twilioClient,
+  }
 }
 
 export type Context = inferAsyncReturnType<typeof createContext>

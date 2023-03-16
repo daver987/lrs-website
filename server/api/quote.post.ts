@@ -3,25 +3,93 @@ import { createAircallContact } from './services/createAircallContact'
 import { sendBookingConfirmationEmail } from './services/sendGridEmail'
 import { formatAddress } from '~/utils/formatAddress'
 import { computed } from 'vue'
+import { useLinkShortener } from '~/composables/useLinkShortener'
+import { format } from 'date-fns'
 import { SummarySchema } from '~/schema/summarySchema'
-import type { Summary } from '~/schema/summarySchema'
 import _ from 'lodash'
 import {
-  VehicleSchema,
-  LineItemSchema,
-  SalesTaxSchema,
   ConversionPartialSchema,
-  ServiceSchema,
+  LineItemSchema,
   QuotePartialSchema,
-  UserPartialSchema,
+  SalesTaxSchema,
+  ServiceSchema,
+  VehicleSchema,
 } from '~/prisma/generated/zod'
-import {
-  useFormattedDate,
-  useFormattedTime,
-} from '~/composables/useFormattedDateTime'
+import { PrismaClient } from '@prisma/client'
+import { Twilio } from 'twilio'
+import { summaryUser } from '~/schema/summarySchema'
 
 const aircallSecret = useRuntimeConfig().AIRCALL_API_TOKEN
+const sendGridKey = useRuntimeConfig().SENDGRID_API_KEY
 
+async function createQuote(quotes: any, prisma: PrismaClient) {
+  try {
+    const newQuote = await prisma.quote.create(quotes)
+    return SummarySchema.parse(newQuote)
+  } catch (e) {
+    console.error('Error creating quote:', e)
+    throw e
+  }
+}
+
+async function sendConfirmationEmail(
+  quote: any,
+  sendGridKey: string,
+  shortLink: string
+) {
+  try {
+    await sendBookingConfirmationEmail(quote, sendGridKey, shortLink)
+  } catch (e) {
+    console.error('Error sending confirmation email:', e)
+    throw e
+  }
+}
+
+async function createContact(aircallSecret: string, quote: any) {
+  try {
+    await createAircallContact(aircallSecret, quote)
+  } catch (e) {
+    console.error('Error creating Aircall contact:', e)
+    throw e
+  }
+}
+
+async function updateShortLink(
+  prisma: PrismaClient,
+  quote: any,
+  shortLink: string
+) {
+  try {
+    return await prisma.quote.update({
+      where: {
+        quote_number: quote.quote_number,
+      },
+      data: {
+        short_link: shortLink,
+      },
+    })
+  } catch (e) {
+    console.error('Error Updating Short Link', e)
+  }
+}
+
+const { shortLink, createShortLink } = useLinkShortener('highparklivery.com')
+
+async function sentTwilioSms(
+  twilioClient: Twilio,
+  firstName: string,
+  phoneNumber: string,
+  checkoutLink: string
+) {
+  const message = `Hi ${firstName} This is High Park Livery. Thank you for requesting a quote. Please use this link to book: ${checkoutLink}.`
+  setTimeout(async () => {
+    await twilioClient.messages.create({
+      body: message,
+      messagingServiceSid: 'MG211e359fc267bbde46acacf4a428a03f',
+      to: phoneNumber,
+    })
+  }, 10000)
+}
 export default defineEventHandler(async (event) => {
   try {
     const prisma = event.context.prisma
@@ -39,11 +107,9 @@ export default defineEventHandler(async (event) => {
     const line_items = LineItemSchema.array().parse(data.line_items)
     const sales_tax = SalesTaxSchema.array().parse(data.sales_tax)
     const service = ServiceSchema.array().parse(data.service)
-    const conversionData = ConversionPartialSchema.strip().parse(
-      data.conversion
-    )
-    const quoteData = QuotePartialSchema.strip().parse(data)
-    const user = UserPartialSchema.strip().parse(data)
+    const conversionData = ConversionPartialSchema.parse(data.conversion)
+    const quoteData = QuotePartialSchema.parse(data)
+    const user = summaryUser.parse(data)
 
     const {
       user_id,
@@ -63,7 +129,7 @@ export default defineEventHandler(async (event) => {
         ? 'To Airport'
         : service[0].label
     )
-
+    //calculate the price using the usePricingEngine composable
     const pricingEngine = usePricingEngine(
       vehicle,
       service,
@@ -103,28 +169,35 @@ export default defineEventHandler(async (event) => {
       totalAmount: returnTotalAmount,
     } = returnLineItemsList
 
+    //calculate trip values
+    const isRoundTrip = ref(is_round_trip)
+    const quoteTotal = isRoundTrip.value
+      ? totalAmount.value + returnTotalAmount.value
+      : totalAmount.value
+    const quoteSubtotal = isRoundTrip.value
+      ? totalAmount.value + returnSubTotal.value
+      : subTotal.value
+    const quoteTaxTotal = isRoundTrip.value
+      ? totalAmount.value + returnTaxTotal.value
+      : taxTotal.value
+
     //format date times
-    const formattedPickupDate = useFormattedDate(pickup_date)
-    const formattedPickupTime = useFormattedTime(pickup_time)
-    const formattedReturnDate = useFormattedDate(return_date)
-    const formattedReturnTime = useFormattedTime(return_time)
+    const formattedPickupDate = format(new Date(pickup_date), 'MMMM dd, yyyy')
+    const formattedPickupTime = format(new Date(pickup_time), 'hh:mm a')
+    const formattedReturnDate = format(new Date(return_date), 'MMMM dd, yyyy')
+    const formattedReturnTime = format(new Date(return_time), 'hh:mm a')
     const returnServiceType = returnServiceTypeLabel.value
     const routeData = pricingEngine.routeData.value
 
+    //Data for the prisma query
     const quotes = {
       data: {
         selected_hours: _.toNumber(selected_hours),
         selected_passengers: selected_passengers,
         is_round_trip: is_round_trip,
-        quote_total: is_round_trip
-          ? totalAmount.value + returnTotalAmount.value
-          : totalAmount.value,
-        quote_subtotal: is_round_trip
-          ? totalAmount.value + returnSubTotal.value
-          : subTotal.value,
-        quote_tax_total: is_round_trip
-          ? totalAmount.value + returnTaxTotal.value
-          : taxTotal.value,
+        quote_total: quoteTotal,
+        quote_subtotal: quoteSubtotal,
+        quote_tax_total: quoteTaxTotal,
         trips: is_round_trip
           ? {
               create: [
@@ -332,26 +405,15 @@ export default defineEventHandler(async (event) => {
         },
       },
     }
-    //@ts-ignore
-    const newQuote = await prisma.quote.create(quotes)
-    const quote = newQuote
 
-    const sendGridKey = useRuntimeConfig().SENDGRID_API_KEY
-    await sendBookingConfirmationEmail(newQuote, sendGridKey)
-    await createAircallContact(aircallSecret, quote)
-    const checkoutLink = `https://highparklivery.com/checkout?quote_number=${quote.quote_number}`
-    const message = `Hi ${first_name} This is High Park Livery. Thank you for requesting a quote. Please use this link to book: ${checkoutLink}.`
-
-    setTimeout(async () => {
-      await twilioClient.messages.create({
-        body: message,
-        messagingServiceSid: 'MG211e359fc267bbde46acacf4a428a03f',
-        to: phone_number as string,
-      })
-    }, 10000)
-    console.log('SS Returned from prisma', newQuote)
+    const quote = await createQuote(quotes, prisma)
+    shortLink.value = createShortLink(quote.quote_number)
+    await sendConfirmationEmail(quote, sendGridKey, shortLink.value)
+    await createContact(aircallSecret, quote)
+    await updateShortLink(prisma, quote, shortLink.value)
+    await sentTwilioSms(twilioClient, first_name, phone_number, shortLink.value)
     return {
-      quote: SummarySchema.parse(newQuote),
+      quote: quote,
     }
   } catch (e) {
     console.error(e)

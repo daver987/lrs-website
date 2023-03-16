@@ -26,9 +26,9 @@ export default defineNuxtConfig({
       },
     ],
   ],
-  colorMode: {
-    classSuffix: '',
-  },
+  // colorMode: {
+  //   classSuffix: '',
+  // },
   naiveUI: {
     themeOverrides: {
       DatePicker: {
