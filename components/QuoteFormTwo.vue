@@ -137,7 +137,7 @@ function triggerEvent() {
 
 //the object where the various values that are captured from the form are stored
 const formValue = ref({
-  user_id: user_id.value,
+  id: user_id.value,
   first_name: null,
   last_name: null,
   email_address: null,
@@ -315,7 +315,7 @@ const quoteNumberSchema = z.number()
 async function onSubmit() {
   try {
     loading.value = true
-    // submitting the form data using built in nuxt 3 composables
+    console.log('Quote Values Before Submission', formValue.value)
     const { data: response } = await useFetch('/api/quote', {
       method: 'POST',
       body: formValue.value,
