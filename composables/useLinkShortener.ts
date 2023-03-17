@@ -27,7 +27,7 @@ export function useLinkShortener(domain: string) {
 
   function createShortLink(quoteNumber: number): string {
     const shortCode = encode(quoteNumber)
-    return `https://${domain}/${shortCode}`
+    return `${domain}/${shortCode}`
   }
 
   return {

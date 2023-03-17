@@ -22,6 +22,7 @@ import { summaryUser } from '~/schema/summarySchema'
 
 const aircallSecret = useRuntimeConfig().AIRCALL_API_TOKEN
 const sendGridKey = useRuntimeConfig().SENDGRID_API_KEY
+const domain = useRuntimeConfig().public.WEBSITE_URL
 
 async function createQuote(
   quotes: any,
@@ -55,7 +56,7 @@ async function updateShortLink(
   }
 }
 
-const { shortLink, createShortLink } = useLinkShortener('highparklivery.com')
+const { shortLink, createShortLink } = useLinkShortener(domain)
 
 export default defineEventHandler(async (event) => {
   try {
