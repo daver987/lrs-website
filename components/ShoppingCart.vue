@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useQuoteStore } from '~/stores/useQuoteStore'
 import { useCartStore } from '~/stores/useCartStore'
 import { storeToRefs } from 'pinia'
 import { useStripeStore } from '~/stores/useStripeStore'
@@ -92,12 +91,7 @@ const createBooking = async () => {
     })
     console.log('Stripe Response', response.value)
     if (response.value) {
-      const {
-        customer,
-        setupIntent,
-        statusCode,
-        updatedUser: prismaData,
-      } = response.value
+      const { customer, setupIntent } = response.value
       stripeStore.setCustomer(customer)
       stripeStore.setClientSecret(setupIntent)
     }
