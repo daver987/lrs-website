@@ -1,8 +1,8 @@
-import {
-  createCustomer,
-  createSetupIntent,
-  getCustomerByEmail,
-} from './services/stripe'
+// import {
+//   createCustomer,
+//   createSetupIntent,
+//   getCustomerByEmail,
+// } from './services/stripe'
 import { Prisma } from '@prisma/client'
 
 export default defineEventHandler(async (event) => {

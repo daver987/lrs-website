@@ -15,10 +15,10 @@ import {
   QuotePartialSchema,
   SalesTaxSchema,
   ServiceSchema,
+  UserPartialSchema,
   VehicleSchema,
 } from '~/prisma/generated/zod'
 import { PrismaClient } from '@prisma/client'
-import { summaryUser } from '~/schema/summarySchema'
 
 const aircallSecret = useRuntimeConfig().AIRCALL_API_TOKEN
 const sendGridKey = useRuntimeConfig().SENDGRID_API_KEY
@@ -77,7 +77,7 @@ export default defineEventHandler(async (event) => {
     const service = ServiceSchema.array().parse(data.service)
     const conversionData = ConversionPartialSchema.parse(data.conversion)
     const quoteData = QuotePartialSchema.parse(data)
-    const user = summaryUser.parse(data)
+    const user = UserPartialSchema.parse(data)
 
     console.log('SS Quote Data', quoteData)
 
@@ -356,6 +356,7 @@ export default defineEventHandler(async (event) => {
               id: user_id,
               first_name: first_name,
               last_name: last_name,
+              full_name: `${first_name} ${last_name}`,
               phone_number: phone_number,
               email_address: email_address,
               conversion: {
@@ -412,7 +413,12 @@ export default defineEventHandler(async (event) => {
       sendQuoteEmail(quote, sendGridKey, shortLink.value),
       createAircallContact(aircallSecret, quote),
       updateShortLink(prisma, quote, shortLink.value),
-      sendTwilioSms(twilioClient, first_name, phone_number, shortLink.value),
+      sendTwilioSms(
+        twilioClient,
+        first_name as string,
+        phone_number as string,
+        shortLink.value
+      ),
     ])
     return {
       quote: quote,

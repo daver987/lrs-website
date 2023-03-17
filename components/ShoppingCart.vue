@@ -2,6 +2,7 @@
 import { useCartStore } from '~/stores/useCartStore'
 import { storeToRefs } from 'pinia'
 import { useStripeStore } from '~/stores/useStripeStore'
+import { useQuoteStore } from '~/stores/useQuoteStore'
 import { format } from 'date-fns'
 import type { Summary } from '~/schema/summarySchema'
 import { ref } from '#imports'
@@ -10,7 +11,7 @@ import { z } from 'zod'
 
 const { $client } = useNuxtApp()
 const cartStore = useCartStore()
-const stripeStore = useStripeStore()
+const quoteStore = useQuoteStore()
 
 const { addedToCart, loading } = storeToRefs(cartStore)
 const currentDate = format(new Date(), 'PPPP')
@@ -28,6 +29,7 @@ const quote = ref<Summary>({
     last_name: '',
     phone_number: '',
     email_address: '',
+    full_name: '',
     id: '',
     conversion: {
       utm_medium: null,
@@ -75,38 +77,44 @@ const { quote_number } = route.query
 const quoteNumberSchema = z.coerce.number()
 const quoteNumber = quoteNumberSchema.parse(quote_number)
 
-const { data } = await $client.quote.get.useQuery({ quote_number: quoteNumber })
+const { data } = await $client.quote.get.useQuery({
+  quote_number: quoteNumber,
+})
 
 Object.assign(quote.value, data.value)
+quoteStore.setQuote(data.value as any)
 console.log('Assigned to quote:', quote.value)
+const { user } = quote.value
 
 const checkoutLoading = ref(false)
 
 const createBooking = async () => {
+  const stripeStore = useStripeStore()
   checkoutLoading.value = true
+
   try {
-    const { data: response } = await useFetch('/api/booking', {
-      method: 'POST',
-      body: quote.value,
-    })
-    console.log('Stripe Response', response.value)
-    if (response.value) {
-      const { customer, setupIntent } = response.value
-      stripeStore.setCustomer(customer)
+    const { setupIntent, stripeId, statusCode } =
+      await $client.stripe.createCheckout.mutate({
+        userId: user.id,
+        quoteNumber,
+      })
+
+    console.log('Stripe Response', setupIntent)
+
+    if (statusCode === 200) {
+      stripeStore.setCustomer(stripeId)
       stripeStore.setClientSecret(setupIntent)
+
+      await navigateTo('/checkout', {
+        redirectCode: 303,
+        external: false,
+      })
+    } else {
+      console.error('Failed to create booking. Status code:', statusCode)
     }
-
-    await until(response.value).toBeTruthy() // use wait utility function to avoid setTimeout
-
-    checkoutLoading.value = false
-
-    await navigateTo('/checkout', {
-      redirectCode: 303,
-      external: false,
-    })
   } catch (error) {
-    console.error(error)
-
+    console.error('Error creating booking:', error)
+  } finally {
     checkoutLoading.value = false
   }
 }
@@ -213,7 +221,7 @@ const createBooking = async () => {
                   </div>
                   <p class="text-neutral-500 dark:text-neutral-100">
                     <span class="text-brand-400">Base Rate: </span>$
-                    {{ quote.trips[0].line_items_list[0].total }}
+                    {{ quote.trips[0].line_items_list[0].total.toFixed(2) }}
                   </p>
                 </div>
 
@@ -359,7 +367,7 @@ const createBooking = async () => {
       <!-- Order summary -->
       <section
         aria-labelledby="summary-heading"
-        class="mt-16 rounded-lg bg-neutral-100 px-4 py-6 dark:bg-grey-800 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8"
+        class="mt-16 rounded-lg bg-neutral-100 px-4 py-6 dark:bg-neutral-900 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8"
       >
         <h2
           id="summary-heading"
@@ -395,7 +403,7 @@ const createBooking = async () => {
             <dd
               class="text-sm font-medium text-neutral-900 dark:text-neutral-100"
             >
-              $ {{ item.total }}
+              $ {{ item.total.toFixed(2) }}
             </dd>
           </div>
           <div
@@ -437,7 +445,7 @@ const createBooking = async () => {
               class="text-base font-medium text-neutral-900 dark:text-neutral-100"
             >
               $
-              {{ quote.quote_total }}
+              {{ quote.quote_total.toFixed(2) }}
             </dd>
           </div>
         </dl>

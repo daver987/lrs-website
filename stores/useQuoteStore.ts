@@ -1,14 +1,17 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
+import { Summary } from '~/schema/summarySchema'
+
+interface QuoteState {
+  quote: Summary | null
+}
 
 export const useQuoteStore = defineStore('quoteStore', {
-  state: () => {
-    return {
-      quote: {},
-    }
-  },
+  state: (): QuoteState => ({
+    quote: null,
+  }),
   actions: {
-    setQuote(items: any) {
-      this.quote = items.quote
+    setQuote(quote: Summary) {
+      this.quote = quote
       console.log('Set Quote Fired')
     },
   },

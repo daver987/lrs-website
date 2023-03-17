@@ -9,12 +9,9 @@ import {
 import { Ref, WatchCallback } from 'vue'
 import { ref, computed } from '#imports'
 import { VueTelInput } from 'vue-tel-input'
-//import zod validation auto generated from the prisma schema
 import {
   Vehicle,
-  VehicleSchema,
   Service,
-  ServiceSchema,
   LineItem,
   LineItemSchema,
   SalesTax,
@@ -35,78 +32,45 @@ import {
 import { Summary } from '~/schema/summarySchema'
 import { z } from 'zod'
 import { useNuxtApp } from '#app'
+import type { FormValue } from '~/schema/quoteFormValues'
 
-// trpc client that has been imported from the useNuxtApp composable
 const { $client } = useNuxtApp()
 
-//The type for the inputs and other information that gets sent to the api route
-type FormValue = {
-  user_id: string
-  first_name: string | null
-  last_name: string | null
-  email_address: string | null
-  phone_number: string | null
-  conversion: any
-  origin: Place
-  destination: Place
-  pickup_date: number | null
-  pickup_time: number | null
-  return_date: number | null
-  return_time: number | null
-  selected_hours: number | null
-  selected_passengers: number | null
-  is_hourly: boolean
-  vehicle_id: number | null
-  service_id: number | null
-  is_round_trip: boolean
-  vehicle: Vehicle[]
-  service: Service[]
-  line_items: LineItem[]
-  sales_tax: SalesTax[]
-}
-
-//The pinia stores that are imported
 const quoteStore = useQuoteStore()
 const userStore = useUserStore()
-//the user id generated for the user that is stored in local storage
 const { user_id } = storeToRefs(userStore)
 
-//the data for the vehicle type, service type and different line items line gratuity etc. They are in the store and retrieved from the database
 const dataStore = useDataStore()
 const { vehicleTypes, serviceTypes, lineItems, salesTaxes } =
   storeToRefs(dataStore)
 
-//the trpc query that fetches from the database the data for the service types, vehicle types etc.
-const serviceTypesRes = await $client.service.get.query()
-console.log('client services', serviceTypesRes)
+const serviceTypeOptions = await $client.service.get.query()
+// console.log('client services', serviceTypesRes)
 const lineItemsRes = await $client.lineItem.get.query()
 console.log('client lineItems', lineItemsRes)
-const vehicleTypesRes = await $client.vehicle.get.query()
-console.log('client vehicles', vehicleTypesRes)
+const vehicleTypeOptions = await $client.vehicle.get.query()
+// console.log('client vehicles', vehicleTypesRes)
 const salesTaxesRes = await $client.salesTax.get.query()
 console.log('client Sales Tax', salesTaxesRes)
 
 //the validation of the data fetched from the database
-vehicleTypes.value = VehicleSchema.array().parse(vehicleTypesRes)
-serviceTypes.value = ServiceSchema.array().parse(serviceTypesRes)
+// vehicleTypes.value = VehicleSchema.array().parse(vehicleTypesRes)
+// serviceTypes.value = ServiceSchema.array().parse(serviceTypesRes)
 lineItems.value = LineItemSchema.array().parse(lineItemsRes)
 salesTaxes.value = SalesTaxSchema.array().parse(salesTaxesRes)
 
 //setting the data to the Pinia Store
-dataStore.setVehicleTypes(vehicleTypes.value)
-dataStore.setServiceTypes(serviceTypes.value)
+dataStore.setVehicleTypes(vehicleTypeOptions)
+dataStore.setServiceTypes(serviceTypeOptions)
 dataStore.setLineItems(lineItems.value)
 dataStore.setSalesTaxes(salesTaxes.value)
 
-//setting the data to variables so they can be set on the UI component that displays the data
-const serviceTypeOptions = serviceTypes
-const vehicleTypeOptions = vehicleTypes
+// const serviceTypeOptions = serviceTypes
+// const vehicleTypeOptions = vehicleTypes
 
-//Building the options dynamically for vehicle types, hours etc so that they can change according to what the user selects
-//example, if the Standard sedan can only hold 3 passengers then we only want 3 passengers to be displayed in that option
 const hoursOptions = buildHoursOptions()
 const maxPassengers = computed<number>(() => {
-  const vehicleType = vehicleTypeOptions.value.find(
+  const vehicleType = vehicleTypeOptions.find(
     (type: Option) => type.value === formValue.value.vehicle_id
   )
   formValue.value.selected_passengers = null
@@ -117,7 +81,6 @@ const passengerOptions = computed(() =>
   buildPassengerOptions(maxPassengers.value)
 )
 
-//capturing the params from the url string so that we can track where the user found the website
 const route = useRoute()
 const gtmValues: Conversion = route.query as any
 
@@ -135,7 +98,6 @@ function triggerEvent() {
   })
 }
 
-//the object where the various values that are captured from the form are stored
 const formValue = ref({
   id: user_id.value,
   first_name: null,
@@ -165,7 +127,6 @@ const formValue = ref({
   sales_tax: salesTaxes.value,
 }) as unknown as Ref<FormValue>
 
-//the naive UI validation rules
 const rules: FormRules = {
   pickup_date: {
     type: 'number',
@@ -254,8 +215,6 @@ const dropdownOptions = ref({
   showDialCodeInList: true,
 })
 
-//Checking the types returned from the autocomplete and if airport is present then automatically switch the service type option
-//to either To Airport or From Airport
 function isAirport(place?: Place): boolean {
   if (!place) {
     return false
@@ -266,7 +225,6 @@ function isAirport(place?: Place): boolean {
     return false
   }
 }
-//watching the values in the origin or destination inputs to know when to automatically change the service type
 const handleFormValueChange: WatchCallback<
   [typeof formValue.value.origin, typeof formValue.value.destination]
 > = ([origin, destination]) => {
@@ -322,10 +280,10 @@ async function onSubmit() {
     })
     const quoteData = await response.value
     console.log('Returned Quote:', quoteData)
+    quoteStore.setQuote(quoteData)
     const { quote_number } = quoteData!.quote satisfies Summary
 
     setTimeout(async () => {
-      quoteStore.setQuote(quoteData)
       //validating the destructured quote number
       const number = quoteNumberSchema.parse(quote_number)
       loadingBar.finish()

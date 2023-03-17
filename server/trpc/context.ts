@@ -1,5 +1,6 @@
 import { inferAsyncReturnType } from '@trpc/server'
 import type { H3Event } from 'h3'
+import { stripe } from '~/server/api/services/stripeInit'
 
 /**
  * Creates context for an incoming request
@@ -15,6 +16,7 @@ export function createContext(_event: H3Event) {
   return {
     prisma: _event.context.prisma,
     twilioClient: _event.context.twilioClient,
+    stripe: stripe,
   }
 }
 

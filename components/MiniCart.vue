@@ -3,15 +3,25 @@ import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
 import { storeToRefs } from 'pinia'
 import { useCartStore } from '~/stores/useCartStore'
 import { useQuoteStore } from '~/stores/useQuoteStore'
+import { SummarySchema } from '~/schema/summarySchema'
 
 const cartStore = useCartStore()
 const { addedToCart } = storeToRefs(cartStore)
 
 const quoteStore = useQuoteStore()
-const { quote } = storeToRefs(quoteStore)
+const { quote: quoteFromStore } = storeToRefs(quoteStore)
+
+const quote = computed(() => (addedToCart.value ? quoteFromStore.value : null))
 
 const itemsInCart = computed(() =>
   addedToCart.value ? (quote.value!.is_round_trip ? 2 : 1) : 0
+)
+
+const trips = computed(() => (quote.value ? quote.value.trips : []))
+const serviceLabel = computed(() =>
+  quote.value && quote.value.trips.length > 0
+    ? quote.value.trips[0].service_label
+    : ''
 )
 </script>
 
@@ -73,15 +83,14 @@ const itemsInCart = computed(() =>
               />
               <div class="ml-4 flex-auto">
                 <h3 class="font-brand-body font-medium text-neutral-900">
-                  <NuxtLink to="#">{{ quote.trips }}</NuxtLink>
+                  <NuxtLink to="#">{{ trips }}</NuxtLink>
                 </h3>
                 <p class="font-brand-body text-neutral-500">
-                  {{ quote?.service.label }}
+                  {{ serviceLabel }}
                 </p>
               </div>
             </li>
           </ul>
-
           <button
             v-if="addedToCart"
             type="submit"
@@ -92,7 +101,7 @@ const itemsInCart = computed(() =>
 
           <p v-if="addedToCart" class="mt-6 text-center">
             <button
-              @click="removeFromCart"
+              @click="cartStore.removeFromCart"
               class="font-brand-body text-sm font-medium text-brand-600 hover:text-brand"
             >
               Remove From Cart

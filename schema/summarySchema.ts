@@ -26,6 +26,7 @@ export const summaryUser = UserSchema.pick({
   email_address: true,
   first_name: true,
   last_name: true,
+  full_name: true,
   phone_number: true,
   id: true,
 })
@@ -40,6 +41,10 @@ const summaryTrips = TripSchema.pick({
   line_items_subtotal: true,
   line_items_total: true,
   service_label: true,
+})
+
+const TripForStripeSchema = TripSchema.pick({
+  id: true,
 })
 
 const summaryTripsExtended = summaryTrips.extend({
@@ -57,6 +62,12 @@ const summaryQuote = QuoteSchema.pick({
   quote_tax_total: true,
 })
 
+const QuoteForStripe = QuoteSchema.pick({
+  quote_number: true,
+})
+const QuoteForStripeExtended = QuoteForStripe.extend({
+  tripId: TripForStripeSchema,
+})
 export const SummarySchema = summaryQuote.extend({
   trips: summaryTripsExtended.array(),
   vehicle: summaryVehicle,
@@ -65,3 +76,4 @@ export const SummarySchema = summaryQuote.extend({
 })
 
 export type Summary = z.infer<typeof SummarySchema>
+export type QuoteForStrip = z.infer<typeof QuoteForStripeExtended>

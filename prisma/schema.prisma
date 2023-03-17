@@ -31,6 +31,7 @@ model User {
   updated_at           DateTime    @updatedAt
   first_name           String
   last_name            String
+  full_name            String?
   email_address        String      @unique
   phone_number         String
   phone_number_country String?
@@ -123,22 +124,20 @@ model Trip {
   @@index([quote_number])
 }
 
-model Flight {
-  id                    String    @id @default(uuid())
-  created_at            DateTime  @default(now())
-  updated_at            DateTime  @updatedAt
-  airline_code          String
-  airline_name          String?
-  flight_number         String
-  is_active             Boolean   @default(false)
-  is_landed             Boolean   @default(false)
-  is_arrived            Boolean   @default(false)
-  departure_time        DateTime?
-  arrival_time          DateTime?
-  departure_time_actual DateTime?
-  arrival_time_actual   DateTime?
-  trip_id               String?   @unique
-  trip                  Trip?     @relation(fields: [trip_id], references: [id])
+model Payment {
+  id               String   @id @default(uuid())
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+  is_preauthorized Boolean  @default(false)
+  is_paid          Boolean  @default(false)
+  setup_intent     Json?
+  payment_intent   Json?
+  payment_type     String?
+  notes            String?
+  trip_id          String   @unique
+  quote_number     Int      @unique
+  trip             Trip     @relation(fields: [trip_id], references: [id])
+  quote            Quote    @relation(fields: [quote_number], references: [quote_number])
 }
 
 model Location {
@@ -162,20 +161,22 @@ model Location {
   @@index([trip_id])
 }
 
-model Payment {
-  id               String   @id @default(uuid())
-  created_at       DateTime @default(now())
-  updated_at       DateTime @updatedAt
-  is_preauthorized Boolean  @default(false)
-  is_paid          Boolean  @default(false)
-  setup_intent     Json?
-  payment_intent   Json?
-  payment_type     String?
-  notes            String?
-  trip_id          String   @unique
-  quote_number     Int      @unique
-  trip             Trip     @relation(fields: [trip_id], references: [id])
-  quote            Quote    @relation(fields: [quote_number], references: [quote_number])
+model Flight {
+  id                    String    @id @default(uuid())
+  created_at            DateTime  @default(now())
+  updated_at            DateTime  @updatedAt
+  airline_code          String
+  airline_name          String?
+  flight_number         String
+  is_active             Boolean   @default(false)
+  is_landed             Boolean   @default(false)
+  is_arrived            Boolean   @default(false)
+  departure_time        DateTime?
+  arrival_time          DateTime?
+  departure_time_actual DateTime?
+  arrival_time_actual   DateTime?
+  trip_id               String?   @unique
+  trip                  Trip?     @relation(fields: [trip_id], references: [id])
 }
 
 model Service {

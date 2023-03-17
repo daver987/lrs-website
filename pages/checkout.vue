@@ -1,9 +1,16 @@
 <script setup lang="ts">
+import type {
+  Stripe,
+  StripeElements,
+  StripeLinkAuthenticationElement,
+  StripePaymentElement,
+} from '@stripe/stripe-js'
+import { Ref } from 'vue'
 import { stripeInit } from '~/services/stripeClientInit'
 import { useStripeStore } from '~/stores/useStripeStore'
 import { storeToRefs } from 'pinia'
-import { buildURL } from '~/utils/buildUrl'
 import { useQuoteStore } from '~/stores/useQuoteStore'
+
 definePageMeta({
   name: 'checkout',
   layout: 'auth',
@@ -11,11 +18,10 @@ definePageMeta({
 
 const stripeStore = useStripeStore()
 const { client_secret } = storeToRefs(stripeStore)
-const stripe = await stripeInit()
+const stripe: Stripe | null = await stripeInit()
 
 const quoteStore = useQuoteStore()
 const { quote } = storeToRefs(quoteStore)
-
 const {
   is_round_trip,
   quote_number,
@@ -28,7 +34,7 @@ const {
   vehicle,
   sales_tax,
   trips,
-} = quote.value
+} = quote.value!
 
 const appearance = {
   theme: 'stripe',
@@ -43,33 +49,48 @@ const appearance = {
   },
 } as const
 
-const stripeElements = reactive<any>({})
+const elements: Ref<StripeElements | undefined> = ref()
 
 onMounted(() => {
   nextTick(() => {
-    console.log('clientSecret:', client_secret.value)
-    stripeElements.elements = stripe?.elements({
+    elements.value = stripe?.elements({
       clientSecret: client_secret.value,
       appearance,
     })
-    const paymentElement = stripeElements?.elements?.create('payment')
+    const paymentElement: StripePaymentElement | undefined =
+      elements.value?.create('payment')
+    const linkAuthenticationElement:
+      | StripeLinkAuthenticationElement
+      | undefined = elements.value?.create('linkAuthentication')
+    linkAuthenticationElement?.mount('#link-authentication-element')
     paymentElement?.mount('#payment-element')
   })
 })
 
-const websiteUrl = buildURL('/success', `quote_number=${quote_number}`)
-console.log('Website Redirect Url:', websiteUrl.value)
-async function submitHandler() {
-  console.log('clientSecret:', client_secret.value)
-  console.log('Stripe Elements:', stripeElements.elements)
-  const { error } = await stripe!.confirmSetup({
-    elements: stripeElements.elements,
-    confirmParams: {
-      return_url: websiteUrl.value,
-    },
-  })
-  if (error) {
-    alert(error)
+const url = useRuntimeConfig().public.WEBSITE_URL
+const websiteUrl = `${url}/success?quote_number=${quote_number}`
+
+async function submitHandler(): Promise<void> {
+  if (!stripe || !elements.value) {
+    console.error('Stripe is not initialized.')
+    return
+  }
+
+  try {
+    const { error } = await stripe.confirmSetup({
+      elements: elements.value,
+      confirmParams: {
+        return_url: websiteUrl,
+      },
+    })
+
+    if (error) {
+      console.error('Stripe error:', error)
+      // Display the error to the user, consider using a UI component to show the error
+    }
+  } catch (error) {
+    console.error('Error during setup confirmation:', error)
+    // Handle any other errors during setup confirmation, consider using a UI component to show the error
   }
 }
 
@@ -202,6 +223,7 @@ async function submitHandler() {
             </h3>
 
             <form id="payment-form" @submit.prevent="submitHandler">
+              <div id="link-authentication-element"></div>
               <div id="payment-element">
                 <!--Stripe.js injects the Payment Element-->
               </div>
