@@ -3,7 +3,6 @@ import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
 import { storeToRefs } from 'pinia'
 import { useCartStore } from '~/stores/useCartStore'
 import { useQuoteStore } from '~/stores/useQuoteStore'
-import { SummarySchema } from '~/schema/summarySchema'
 
 const cartStore = useCartStore()
 const { addedToCart } = storeToRefs(cartStore)

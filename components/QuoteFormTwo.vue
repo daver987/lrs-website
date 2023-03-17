@@ -10,11 +10,7 @@ import { Ref, WatchCallback } from 'vue'
 import { ref, computed } from '#imports'
 import { VueTelInput } from 'vue-tel-input'
 import {
-  Vehicle,
-  Service,
-  LineItem,
   LineItemSchema,
-  SalesTax,
   SalesTaxSchema,
   Conversion,
 } from '~/prisma/generated/zod'
