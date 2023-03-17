@@ -5,7 +5,7 @@ import { formatAddress } from '~/utils/formatAddress'
 import { computed, ref } from 'vue'
 import { useLinkShortener } from '~/composables/useLinkShortener'
 import { sendTwilioSms } from './services/sendTwilioSms'
-import { format } from 'date-fns'
+import { formatDate } from '~/utils/formatDate'
 import { SummarySchema } from '~/schema/summarySchema'
 import type { Summary } from '~/schema/summarySchema'
 import _ from 'lodash'
@@ -156,10 +156,27 @@ export default defineEventHandler(async (event) => {
       : taxTotal.value
 
     //format date times
-    const formattedPickupDate = format(new Date(pickup_date), 'MMMM dd, yyyy')
-    const formattedPickupTime = format(new Date(pickup_time), 'hh:mm a')
-    const formattedReturnDate = format(new Date(return_date), 'MMMM dd, yyyy')
-    const formattedReturnTime = format(new Date(return_time), 'hh:mm a')
+    const formattedPickupDate = formatDate(new Date(pickup_date), {
+      year: 'numeric',
+      month: 'long',
+      day: '2-digit',
+    })
+    const formattedPickupTime = formatDate(new Date(pickup_time), {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    })
+    const formattedReturnDate = formatDate(new Date(return_date), {
+      year: 'numeric',
+      month: 'long',
+      day: '2-digit',
+    })
+    const formattedReturnTime = formatDate(new Date(return_time), {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    })
+
     const returnServiceType = returnServiceTypeLabel.value
     const routeData = pricingEngine.routeData.value
 
@@ -169,9 +186,9 @@ export default defineEventHandler(async (event) => {
         selected_hours: _.toNumber(selected_hours),
         selected_passengers: selected_passengers,
         is_round_trip: is_round_trip,
-        quote_total: quoteTotal,
-        quote_subtotal: quoteSubtotal,
-        quote_tax_total: quoteTaxTotal,
+        quote_total: parseFloat(quoteTotal.toFixed(2)),
+        quote_subtotal: parseFloat(quoteSubtotal.toFixed(2)),
+        quote_tax_total: parseFloat(quoteTaxTotal.toFixed(2)),
         trips: is_round_trip
           ? {
               create: [
@@ -188,9 +205,9 @@ export default defineEventHandler(async (event) => {
                   service_label: pricingEngine.selectedService.value?.label,
                   vehicle_label: pricingEngine.selectedVehicle.value?.label,
                   line_items_list: lineItemDetails,
-                  line_items_subtotal: subTotal.value,
-                  line_items_tax: taxTotal.value,
-                  line_items_total: totalAmount.value,
+                  line_items_subtotal: parseFloat(subTotal.value.toFixed(2)),
+                  line_items_tax: parseFloat(taxTotal.value.toFixed(2)),
+                  line_items_total: parseFloat(totalAmount.value.toFixed(2)),
                   is_return: false,
                   locations: {
                     create: [
@@ -238,9 +255,9 @@ export default defineEventHandler(async (event) => {
                   service_label: returnServiceType,
                   vehicle_label: pricingEngine.selectedVehicle.value?.label,
                   line_items_list: returnLineItemsDetails,
-                  line_items_subtotal: returnSubTotal.value,
-                  line_items_tax: returnTaxTotal.value,
-                  line_items_total: returnTotalAmount.value,
+                  line_items_subtotal: parseFloat(subTotal.value.toFixed(2)),
+                  line_items_tax: parseFloat(taxTotal.value.toFixed(2)),
+                  line_items_total: parseFloat(totalAmount.value.toFixed(2)),
                   is_return: true,
                   locations: {
                     create: [
@@ -292,9 +309,9 @@ export default defineEventHandler(async (event) => {
                   service_label: pricingEngine.selectedService.value?.label,
                   vehicle_label: pricingEngine.selectedVehicle.value?.label,
                   line_items_list: lineItemDetails,
-                  line_items_subtotal: subTotal.value,
-                  line_items_tax: taxTotal.value,
-                  line_items_total: totalAmount.value,
+                  line_items_subtotal: parseFloat(subTotal.value.toFixed(2)),
+                  line_items_tax: parseFloat(taxTotal.value.toFixed(2)),
+                  line_items_total: parseFloat(totalAmount.value.toFixed(2)),
                   is_return: false,
                   locations: {
                     create: [
@@ -333,7 +350,7 @@ export default defineEventHandler(async (event) => {
             },
         user: {
           connectOrCreate: {
-            where: { email_address: email_address as string },
+            where: { email_address: email_address },
             create: {
               id: user_id,
               first_name: first_name,
