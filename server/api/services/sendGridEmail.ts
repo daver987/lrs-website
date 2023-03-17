@@ -1,57 +1,59 @@
-import {
-  QuotePartialSchema,
-  ServicePartialSchema,
-  TripPartialSchema,
-  UserPartialSchema,
-  VehiclePartialSchema,
-} from '~/prisma/generated/zod'
+import type { Summary } from '~/schema/summarySchema'
+import { SummarySchema } from '~/schema/summarySchema'
 
-export async function sendBookingConfirmationEmail(
-  newQuote: any,
-  apiKey: string
+export async function sendQuoteEmail(
+  newQuote: Summary,
+  apiKey: string,
+  shortLink: string
 ): Promise<void> {
   const url = 'https://api.sendgrid.com/v3/mail/send'
   try {
-    const trips = TripPartialSchema.strip().array().parse(newQuote.trips)
-    const user = UserPartialSchema.strip().parse(newQuote.user)
-    const vehicle = VehiclePartialSchema.strip().parse(newQuote.vehicle)
-    const service = ServicePartialSchema.strip().parse(newQuote.service)
-    const quote = QuotePartialSchema.strip().parse(newQuote)
-
+    const quote = SummarySchema.parse(newQuote)
+    console.log('Parsed Quote in Send Email:', quote)
+    console.log('Email Short link:', shortLink)
     if (!apiKey) {
       throw new Error('SendGrid API key not provided')
     }
-    const total_price = trips[0].line_items_total!
-    const return_total_price = trips[0].line_items_total! * 2
 
     const msg = {
       personalizations: [
         {
           to: [
             {
-              email: user.email_address,
+              email: quote.user.email_address,
             },
           ],
           dynamic_template_data: {
-            first_name: user.first_name,
-            last_name: user.last_name,
-            email_address: user.email_address,
-            phone_number: user.phone_number,
-            total_fare: total_price.toFixed(2),
-            round_trip_total: return_total_price.toFixed(2),
-            vehicle_label: vehicle.label,
-            service_label: service.label,
+            first_name: quote.user.first_name,
+            last_name: quote.user.last_name,
+            email_address: quote.user.email_address,
+            phone_number: quote.user.phone_number,
+            total_price: quote.quote_total.toFixed(2),
+            vehicle_label: quote.vehicle.label,
+            service_label: quote.trips[0].service_label,
+            return_service_label: quote.is_round_trip
+              ? quote.trips[1].service_label
+              : '',
             is_round_trip: quote.is_round_trip,
-            pickup_date: quote.formatted_pickup_date,
-            pickup_time: quote.formatted_pickup_time,
-            return_date: quote.formatted_return_date,
-            return_time: quote.formatted_return_time,
-            //@ts-ignore
+            pickup_date: quote.trips[0].formatted_pickup_date,
+            pickup_time: quote.trips[0].formatted_pickup_time,
+            return_date: quote.is_round_trip
+              ? quote.trips[1].formatted_pickup_date
+              : '',
+            return_time: quote.is_round_trip
+              ? quote.trips[1].formatted_pickup_time
+              : '',
             quote_number: quote.quote_number.toString(),
-            origin_full_name: trips[0].origin_full_name as string,
-            destination_full_name: trips[0].destination_full_name as string,
-            vehicle_image: vehicle.vehicle_image,
-            visibility: 'visibility: hidden;',
+            origin_full_name: quote.trips[0].locations[0].full_name,
+            destination_full_name: quote.trips[0].locations[1].full_name,
+            return_origin_full_name: quote.is_round_trip
+              ? quote.trips[1].locations[0].full_name
+              : '',
+            return_destination_full_name: quote.is_round_trip
+              ? quote.trips[1].locations[1].full_name
+              : '',
+            vehicle_image: quote.vehicle.vehicle_image,
+            short_link: shortLink,
           },
         },
       ],
@@ -64,7 +66,7 @@ export async function sendBookingConfirmationEmail(
         name: 'High Park Livery',
       },
       subject: 'High Park Livery Invites you to Complete Your Booking',
-      template_id: 'd-a84d49d56c0c4666b6442473fcccf297',
+      template_id: 'd-2ce85a8f9e8447ce8e5f43a4c5a45b6e',
       ipPoolName: 'transactional email',
       mailSettings: {
         bypassListManagement: {
@@ -101,6 +103,6 @@ export async function sendBookingConfirmationEmail(
     })
     console.log(response)
   } catch (e) {
-    console.error(e)
+    console.error('Error Sending Email', e)
   }
 }

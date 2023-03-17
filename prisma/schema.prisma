@@ -152,6 +152,7 @@ model Location {
   full_name         String?
   place_id          String
   types             Json
+  route_order       Int      @default(value: 0)
   is_origin         Boolean  @default(false)
   is_destination    Boolean  @default(false)
   is_waypoint       Boolean  @default(false)

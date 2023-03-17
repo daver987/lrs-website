@@ -62,7 +62,7 @@ export const LineItemScalarFieldEnumSchema = z.enum(['id','created_at','updated_
 
 export const LineItemToQuoteScalarFieldEnumSchema = z.enum(['A','B']);
 
-export const LocationScalarFieldEnumSchema = z.enum(['id','created_at','updated_at','lat','lng','name','formatted_address','full_name','place_id','types','is_origin','is_destination','is_waypoint','trip_id']);
+export const LocationScalarFieldEnumSchema = z.enum(['id','created_at','updated_at','lat','lng','name','formatted_address','full_name','place_id','types','route_order','is_origin','is_destination','is_waypoint','trip_id']);
 
 export const NullableJsonNullValueInputSchema = z.enum(['DbNull','JsonNull',]).transform((v) => transformJsonNull(v));
 
@@ -282,6 +282,7 @@ export const LocationSchema = z.object({
   full_name: z.string().nullable(),
   place_id: z.string(),
   types: InputJsonValue,
+  route_order: z.number().int(),
   is_origin: z.boolean(),
   is_destination: z.boolean(),
   is_waypoint: z.boolean(),
@@ -714,6 +715,7 @@ export const LocationSelectSchema: z.ZodType<Prisma.LocationSelect> = z.object({
   full_name: z.boolean().optional(),
   place_id: z.boolean().optional(),
   types: z.boolean().optional(),
+  route_order: z.boolean().optional(),
   is_origin: z.boolean().optional(),
   is_destination: z.boolean().optional(),
   is_waypoint: z.boolean().optional(),
@@ -1448,6 +1450,7 @@ export const LocationWhereInputSchema: z.ZodType<Prisma.LocationWhereInput> = z.
   full_name: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   place_id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   types: z.lazy(() => JsonFilterSchema).optional(),
+  route_order: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   is_origin: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   is_destination: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   is_waypoint: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
@@ -1466,6 +1469,7 @@ export const LocationOrderByWithRelationInputSchema: z.ZodType<Prisma.LocationOr
   full_name: z.lazy(() => SortOrderSchema).optional(),
   place_id: z.lazy(() => SortOrderSchema).optional(),
   types: z.lazy(() => SortOrderSchema).optional(),
+  route_order: z.lazy(() => SortOrderSchema).optional(),
   is_origin: z.lazy(() => SortOrderSchema).optional(),
   is_destination: z.lazy(() => SortOrderSchema).optional(),
   is_waypoint: z.lazy(() => SortOrderSchema).optional(),
@@ -1488,6 +1492,7 @@ export const LocationOrderByWithAggregationInputSchema: z.ZodType<Prisma.Locatio
   full_name: z.lazy(() => SortOrderSchema).optional(),
   place_id: z.lazy(() => SortOrderSchema).optional(),
   types: z.lazy(() => SortOrderSchema).optional(),
+  route_order: z.lazy(() => SortOrderSchema).optional(),
   is_origin: z.lazy(() => SortOrderSchema).optional(),
   is_destination: z.lazy(() => SortOrderSchema).optional(),
   is_waypoint: z.lazy(() => SortOrderSchema).optional(),
@@ -1513,6 +1518,7 @@ export const LocationScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Loca
   full_name: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   place_id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   types: z.lazy(() => JsonWithAggregatesFilterSchema).optional(),
+  route_order: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
   is_origin: z.union([ z.lazy(() => BoolWithAggregatesFilterSchema),z.boolean() ]).optional(),
   is_destination: z.union([ z.lazy(() => BoolWithAggregatesFilterSchema),z.boolean() ]).optional(),
   is_waypoint: z.union([ z.lazy(() => BoolWithAggregatesFilterSchema),z.boolean() ]).optional(),
@@ -2649,6 +2655,7 @@ export const LocationCreateInputSchema: z.ZodType<Prisma.LocationCreateInput> = 
   full_name: z.string().optional().nullable(),
   place_id: z.string(),
   types: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValue ]),
+  route_order: z.number().int().optional(),
   is_origin: z.boolean().optional(),
   is_destination: z.boolean().optional(),
   is_waypoint: z.boolean().optional(),
@@ -2666,6 +2673,7 @@ export const LocationUncheckedCreateInputSchema: z.ZodType<Prisma.LocationUnchec
   full_name: z.string().optional().nullable(),
   place_id: z.string(),
   types: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValue ]),
+  route_order: z.number().int().optional(),
   is_origin: z.boolean().optional(),
   is_destination: z.boolean().optional(),
   is_waypoint: z.boolean().optional(),
@@ -2683,6 +2691,7 @@ export const LocationUpdateInputSchema: z.ZodType<Prisma.LocationUpdateInput> = 
   full_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   place_id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   types: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValue ]).optional(),
+  route_order: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   is_origin: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_destination: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_waypoint: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
@@ -2700,6 +2709,7 @@ export const LocationUncheckedUpdateInputSchema: z.ZodType<Prisma.LocationUnchec
   full_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   place_id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   types: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValue ]).optional(),
+  route_order: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   is_origin: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_destination: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_waypoint: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
@@ -2717,6 +2727,7 @@ export const LocationCreateManyInputSchema: z.ZodType<Prisma.LocationCreateManyI
   full_name: z.string().optional().nullable(),
   place_id: z.string(),
   types: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValue ]),
+  route_order: z.number().int().optional(),
   is_origin: z.boolean().optional(),
   is_destination: z.boolean().optional(),
   is_waypoint: z.boolean().optional(),
@@ -2734,6 +2745,7 @@ export const LocationUpdateManyMutationInputSchema: z.ZodType<Prisma.LocationUpd
   full_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   place_id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   types: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValue ]).optional(),
+  route_order: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   is_origin: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_destination: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_waypoint: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
@@ -2750,6 +2762,7 @@ export const LocationUncheckedUpdateManyInputSchema: z.ZodType<Prisma.LocationUn
   full_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   place_id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   types: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValue ]).optional(),
+  route_order: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   is_origin: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_destination: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_waypoint: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
@@ -4012,6 +4025,7 @@ export const LocationCountOrderByAggregateInputSchema: z.ZodType<Prisma.Location
   full_name: z.lazy(() => SortOrderSchema).optional(),
   place_id: z.lazy(() => SortOrderSchema).optional(),
   types: z.lazy(() => SortOrderSchema).optional(),
+  route_order: z.lazy(() => SortOrderSchema).optional(),
   is_origin: z.lazy(() => SortOrderSchema).optional(),
   is_destination: z.lazy(() => SortOrderSchema).optional(),
   is_waypoint: z.lazy(() => SortOrderSchema).optional(),
@@ -4020,7 +4034,8 @@ export const LocationCountOrderByAggregateInputSchema: z.ZodType<Prisma.Location
 
 export const LocationAvgOrderByAggregateInputSchema: z.ZodType<Prisma.LocationAvgOrderByAggregateInput> = z.object({
   lat: z.lazy(() => SortOrderSchema).optional(),
-  lng: z.lazy(() => SortOrderSchema).optional()
+  lng: z.lazy(() => SortOrderSchema).optional(),
+  route_order: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const LocationMaxOrderByAggregateInputSchema: z.ZodType<Prisma.LocationMaxOrderByAggregateInput> = z.object({
@@ -4033,6 +4048,7 @@ export const LocationMaxOrderByAggregateInputSchema: z.ZodType<Prisma.LocationMa
   formatted_address: z.lazy(() => SortOrderSchema).optional(),
   full_name: z.lazy(() => SortOrderSchema).optional(),
   place_id: z.lazy(() => SortOrderSchema).optional(),
+  route_order: z.lazy(() => SortOrderSchema).optional(),
   is_origin: z.lazy(() => SortOrderSchema).optional(),
   is_destination: z.lazy(() => SortOrderSchema).optional(),
   is_waypoint: z.lazy(() => SortOrderSchema).optional(),
@@ -4049,6 +4065,7 @@ export const LocationMinOrderByAggregateInputSchema: z.ZodType<Prisma.LocationMi
   formatted_address: z.lazy(() => SortOrderSchema).optional(),
   full_name: z.lazy(() => SortOrderSchema).optional(),
   place_id: z.lazy(() => SortOrderSchema).optional(),
+  route_order: z.lazy(() => SortOrderSchema).optional(),
   is_origin: z.lazy(() => SortOrderSchema).optional(),
   is_destination: z.lazy(() => SortOrderSchema).optional(),
   is_waypoint: z.lazy(() => SortOrderSchema).optional(),
@@ -4057,7 +4074,8 @@ export const LocationMinOrderByAggregateInputSchema: z.ZodType<Prisma.LocationMi
 
 export const LocationSumOrderByAggregateInputSchema: z.ZodType<Prisma.LocationSumOrderByAggregateInput> = z.object({
   lat: z.lazy(() => SortOrderSchema).optional(),
-  lng: z.lazy(() => SortOrderSchema).optional()
+  lng: z.lazy(() => SortOrderSchema).optional(),
+  route_order: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const JsonWithAggregatesFilterSchema: z.ZodType<Prisma.JsonWithAggregatesFilter> = z.object({
@@ -6276,6 +6294,7 @@ export const LocationCreateWithoutTripInputSchema: z.ZodType<Prisma.LocationCrea
   full_name: z.string().optional().nullable(),
   place_id: z.string(),
   types: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValue ]),
+  route_order: z.number().optional(),
   is_origin: z.boolean().optional(),
   is_destination: z.boolean().optional(),
   is_waypoint: z.boolean().optional()
@@ -6292,6 +6311,7 @@ export const LocationUncheckedCreateWithoutTripInputSchema: z.ZodType<Prisma.Loc
   full_name: z.string().optional().nullable(),
   place_id: z.string(),
   types: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValue ]),
+  route_order: z.number().optional(),
   is_origin: z.boolean().optional(),
   is_destination: z.boolean().optional(),
   is_waypoint: z.boolean().optional()
@@ -6449,6 +6469,7 @@ export const LocationScalarWhereInputSchema: z.ZodType<Prisma.LocationScalarWher
   full_name: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   place_id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   types: z.lazy(() => JsonFilterSchema).optional(),
+  route_order: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   is_origin: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   is_destination: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   is_waypoint: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
@@ -7494,6 +7515,7 @@ export const LocationCreateManyTripInputSchema: z.ZodType<Prisma.LocationCreateM
   full_name: z.string().optional().nullable(),
   place_id: z.string(),
   types: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValue ]),
+  route_order: z.number().int().optional(),
   is_origin: z.boolean().optional(),
   is_destination: z.boolean().optional(),
   is_waypoint: z.boolean().optional()
@@ -7510,6 +7532,7 @@ export const LocationUpdateWithoutTripInputSchema: z.ZodType<Prisma.LocationUpda
   full_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   place_id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   types: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValue ]).optional(),
+  route_order: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   is_origin: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_destination: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_waypoint: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7526,6 +7549,7 @@ export const LocationUncheckedUpdateWithoutTripInputSchema: z.ZodType<Prisma.Loc
   full_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   place_id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   types: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValue ]).optional(),
+  route_order: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   is_origin: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_destination: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_waypoint: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7542,6 +7566,7 @@ export const LocationUncheckedUpdateManyWithoutLocationsInputSchema: z.ZodType<P
   full_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   place_id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   types: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValue ]).optional(),
+  route_order: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   is_origin: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_destination: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_waypoint: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),

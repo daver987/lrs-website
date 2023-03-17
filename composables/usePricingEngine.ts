@@ -136,7 +136,7 @@ export function usePricingEngine(
       const calculatedBaseRate =
         selectedVehicleType.min_rate +
         distanceOverMin * selectedVehicleType.per_km
-      baseRate.value = +calculatedBaseRate.toFixed(2)
+      baseRate.value = parseFloat(calculatedBaseRate.toFixed(2))
     }
   }
 
@@ -149,17 +149,21 @@ export function usePricingEngine(
 
     const matchingTaxes = taxesList.value.filter((tax) => tax.is_active)
     const taxRate = matchingTaxes.length > 0 ? matchingTaxes[0].amount : 0
-    const baseRateAmount = +baseRate.value.toFixed(2)
-    const baseRateTax = +((baseRateAmount * taxRate) / 100).toFixed(2)
+    const baseRateAmount = parseFloat(baseRate.value.toFixed(2))
+    const baseRateTax = parseFloat(
+      ((baseRateAmount * taxRate) / 100).toFixed(2)
+    )
 
     const lineItemDetails = [
       { label: 'Base Rate', total: baseRateAmount, tax: baseRateTax },
       ...filteredLineItems.map((item) => {
         const amount = item.is_percentage
-          ? +(baseRate.value * (item.amount / 100)).toFixed(2)
-          : +item.amount.toFixed(2)
+          ? parseFloat((baseRate.value * (item.amount / 100)).toFixed(2))
+          : parseFloat(item.amount.toFixed(2))
 
-        const tax = item.is_taxable ? +((amount * taxRate) / 100).toFixed(2) : 0
+        const tax = item.is_taxable
+          ? parseFloat(((amount * taxRate) / 100).toFixed(2))
+          : 0
 
         item.total = amount
         item.label = item.label || ''
@@ -171,7 +175,7 @@ export function usePricingEngine(
 
     taxTotal.value = lineItemDetails.reduce((acc, item) => acc + item.tax, 0)
     subTotal.value = lineItemDetails.reduce((acc, item) => acc + item.total, 0)
-    totalAmount.value = +(taxTotal.value + subTotal.value).toFixed(2)
+    totalAmount.value = parseFloat((taxTotal.value + subTotal.value).toFixed(2))
 
     detailedLineItems.value = lineItemDetails
 

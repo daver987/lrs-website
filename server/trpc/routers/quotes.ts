@@ -19,7 +19,7 @@ export const quoteRouter = router({
             include: {
               locations: {
                 orderBy: {
-                  updated_at: 'asc',
+                  route_order: 'desc',
                 },
               },
             },

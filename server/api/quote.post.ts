@@ -7,6 +7,7 @@ import { useLinkShortener } from '~/composables/useLinkShortener'
 import { sendTwilioSms } from './services/sendTwilioSms'
 import { format } from 'date-fns'
 import { SummarySchema } from '~/schema/summarySchema'
+import type { Summary } from '~/schema/summarySchema'
 import _ from 'lodash'
 import {
   ConversionPartialSchema,
@@ -22,7 +23,10 @@ import { summaryUser } from '~/schema/summarySchema'
 const aircallSecret = useRuntimeConfig().AIRCALL_API_TOKEN
 const sendGridKey = useRuntimeConfig().SENDGRID_API_KEY
 
-async function createQuote(quotes: any, prisma: PrismaClient) {
+async function createQuote(
+  quotes: any,
+  prisma: PrismaClient
+): Promise<Summary> {
   try {
     const newQuote = await prisma.quote.create(quotes)
     return SummarySchema.parse(newQuote)
@@ -202,6 +206,7 @@ export default defineEventHandler(async (event) => {
                         place_id: origin.place_id,
                         types: origin.types,
                         is_origin: true,
+                        route_order: 0,
                       },
                       {
                         lat: routeData?.routes[0].legs[0].end_location.lat,
@@ -215,6 +220,7 @@ export default defineEventHandler(async (event) => {
                         place_id: destination.place_id,
                         types: destination.types,
                         is_destination: true,
+                        route_order: 1,
                       },
                     ],
                   },
@@ -235,22 +241,9 @@ export default defineEventHandler(async (event) => {
                   line_items_subtotal: returnSubTotal.value,
                   line_items_tax: returnTaxTotal.value,
                   line_items_total: returnTotalAmount.value,
-                  is_return: false,
+                  is_return: true,
                   locations: {
                     create: [
-                      {
-                        lat: routeData?.routes[0].legs[0].end_location.lat,
-                        lng: routeData?.routes[0].legs[0].end_location.lng,
-                        name: destination.name,
-                        formatted_address: destination.formatted_address,
-                        full_name: formatAddress(
-                          destination.name,
-                          destination.formatted_address
-                        ),
-                        place_id: destination.place_id,
-                        types: destination.types,
-                        is_origin: true,
-                      },
                       {
                         lat: routeData?.routes[0].legs[0].start_location.lat,
                         lng: routeData?.routes[0].legs[0].start_location.lng,
@@ -262,7 +255,22 @@ export default defineEventHandler(async (event) => {
                         ),
                         place_id: origin.place_id,
                         types: origin.types,
+                        is_origin: true,
+                        route_order: 1,
+                      },
+                      {
+                        lat: routeData?.routes[0].legs[0].end_location.lat,
+                        lng: routeData?.routes[0].legs[0].end_location.lng,
+                        name: destination.name,
+                        formatted_address: destination.formatted_address,
+                        full_name: formatAddress(
+                          destination.name,
+                          destination.formatted_address
+                        ),
+                        place_id: destination.place_id,
+                        types: destination.types,
                         is_destination: true,
+                        route_order: 0,
                       },
                     ],
                   },
@@ -302,6 +310,7 @@ export default defineEventHandler(async (event) => {
                         place_id: origin.place_id,
                         types: origin.types,
                         is_origin: true,
+                        route_order: 0,
                       },
                       {
                         lat: routeData?.routes[0].legs[0].end_location.lat,
@@ -315,6 +324,7 @@ export default defineEventHandler(async (event) => {
                         place_id: destination.place_id,
                         types: destination.types,
                         is_destination: true,
+                        route_order: 1,
                       },
                     ],
                   },
