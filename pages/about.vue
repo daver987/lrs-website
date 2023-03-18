@@ -3,6 +3,7 @@ definePageMeta({
   layout: 'default',
   title: 'High Park Livery | About Us',
 })
+
 const headerInfo = {
   aboveHeading: 'DISCOVER High Park Livery',
   heading: 'ABOUT US',
@@ -15,24 +16,22 @@ const qualities = [
     id: 1,
     image: 'crown',
     altText: 'Crown',
-    title: 'Quality',
-    body:
-      'High Park Livery has a quality fleet of vehicles in Toronto because our customers deserve the best' +
-      " possible experience. We only use the latest, most well-maintained cars, and our drivers are all professional and courteous. Our goal is to make your ride as comfortable and enjoyable as possible. Whether you're going to the airport or just need a ride around town, High Park Livery will get you where you need to go in style. Contact us today to book your ride!",
+    title: 'Exceptional Quality',
+    body: "High Park Livery is committed to providing a top-quality fleet of vehicles in Toronto because our customers deserve nothing less than the best. We exclusively utilize the latest, meticulously maintained vehicles, ensuring a comfortable and enjoyable ride. Our professional and courteous drivers guarantee your satisfaction, whether you're heading to the airport or simply require transportation around town. Contact us today to book your exceptional journey with High Park Livery!",
   },
   {
     id: 2,
     image: 'diamond',
     altText: 'Diamond',
-    title: 'Luxury',
-    body: 'High Park Livery offers the luxury that people deserve when they get driven around. Luxury cars are available for those who want to ride in style. The service is available for events such as weddings and business functions. High Park Livery provides a level of comfort and convenience unmatched by any other transportation service. The drivers are experienced and knowledgeable, and they will get you to your destination safely and on time. High Park Livery is the perfect way to make a special occasion even more special.',
+    title: 'Unparalleled Luxury',
+    body: 'Experience the luxury you deserve with High Park Livery. Our opulent vehicles cater to those seeking a stylish and sophisticated ride, perfect for weddings, business functions, or any special occasion. Our expert drivers offer unrivaled comfort and convenience, ensuring your safe and timely arrival at your destination. Choose High Park Livery to elevate your special occasion to extraordinary heights.',
   },
   {
     id: 3,
     image: 'armchair',
     altText: 'Comfort',
-    title: 'Comfort',
-    body: "Comfort is a top priority for High Park Livery. Our vehicles are chosen with your comfort in mind. We've thought of everything to make your ride as comfortable as possible, from the luxurious leather seats to the spacious legroom. And our drivers are hand-picked and rigorously trained to ensure that they provide the highest level of service. So you can rest assured that you'll be in good hands when you choose High Park Livery. We're dedicated to providing our clients with a comfortable ride every time.",
+    title: 'Ultimate Comfort',
+    body: "At High Park Livery, your comfort is our top priority. Our vehicles are carefully selected to provide the utmost relaxation, featuring luxurious leather seats and ample legroom. Our hand-picked, rigorously trained drivers are dedicated to delivering the highest level of service, ensuring you're in good hands when you choose High Park Livery. We are devoted to providing a consistently comfortable and enjoyable ride for our clients.",
   },
 ]
 </script>
@@ -55,25 +54,27 @@ const qualities = [
               <p
                 class="text-center font-brand-subheading uppercase tracking-[0.4em] text-brand"
               >
-                Behind The Wheel
+                At the Helm
               </p>
               <h2
                 class="mt-6 text-center font-brand-heading text-4xl uppercase text-neutral-900 dark:text-neutral-400 lg:text-5xl"
               >
-                The Driver
+                Our Chauffeurs
               </h2>
             </div>
             <div class="px-4 py-5 sm:p-6">
               <p class="font-brand-body text-neutral-500 dark:text-neutral-400">
-                Our team of chauffeurs is some of the most experienced in the
-                industry. All of our professional chauffeurs are safe,
-                courteous, and fully certified drivers by the city of Toronto.
-                We ensure that our clients arrive at their destination on time
-                and always provide a safe and comfortable ride.<br />Your
-                chauffeur is just a phone call away! High Park Livery will get
-                you to your destination on time and in style. When you require
-                something exceptional, don't hesitate to contact us or get an
-                online quote for rates and availability.
+                Our exceptional team of chauffeurs is among the industry's
+                finest, boasting extensive experience and expertise. Each of our
+                professional chauffeurs is certified by the city of Toronto,
+                ensuring your safety and comfort throughout your journey. Known
+                for their punctuality and courteous demeanor, our drivers are
+                dedicated to providing an unparalleled travel experience.<br />With
+                High Park Livery, exceptional service is just a phone call away.
+                Trust us to transport you to your destination on time and in
+                style. For a truly extraordinary experience, don't hesitate to
+                get in touch with us or request an online quote for rates and
+                availability.
               </p>
             </div>
             <div class="flex justify-center px-4 py-4 sm:px-6">
@@ -154,33 +155,33 @@ const qualities = [
               class="px-3 py-4 font-brand-body text-neutral-500 dark:text-neutral-400 sm:p-6"
             >
               <p>
-                High Park Livery is a Toronto-based car service company. We
-                provide luxury transportation to clients in the Greater Toronto
-                and southern Ontario area. In addition to offering a variety of
-                car models and levels of service. Luxury Ride Service caters to
-                corporate and non-corporate clients with highly personalized
-                services that aim to exceed all expectations.
+                High Park Livery is a distinguished car service company based in
+                Toronto, specializing in luxury transportation for clients
+                across the Greater Toronto and southern Ontario regions. Our
+                diverse fleet and exceptional service cater to both corporate
+                and non-corporate clients, delivering highly personalized
+                experiences that surpass all expectations.
               </p>
               <p>
-                When you choose to work with High Park Livery, you'll work with
-                highly trained professionals who know about the industry. We are
-                committed to customer satisfaction and punctuality in all that
-                we do. We offer suggestions on routes as well as excellent
-                amenities like refreshments and WiFi while en route. We aim to
-                create an atmosphere that ensures passengers feel comfortable
-                and relaxed throughout their journey.
+                Choosing High Park Livery means partnering with knowledgeable
+                professionals passionate about the industry. We are steadfast in
+                our commitment to customer satisfaction and punctuality,
+                offering valuable route suggestions and premium amenities such
+                as refreshments and Wi-Fi during your journey. Our goal is to
+                cultivate a comfortable and relaxing atmosphere for passengers
+                throughout their travel experience.
               </p>
               <p>
-                At High Park Livery, we don't cut corners or skimp on your
-                comfort to offer you a low price. We believe that all of our
-                luxury cars should be maintained to the highest industry
-                standards, ensuring a safe and unforgettable experience.
+                At High Park Livery, we refuse to compromise your comfort for
+                the sake of affordability. Our luxury vehicles are meticulously
+                maintained to meet the highest industry standards, ensuring a
+                safe and memorable ride every time.
               </p>
               <p>
-                Whether it's a night out on the town or a business meeting
-                across downtown Toronto, High Park Livery can provide a
-                luxurious ride that fits perfectly within your schedule and
-                budget.
+                Whether you're planning a night out on the town or attending a
+                business meeting in downtown Toronto, High Park Livery is
+                equipped to deliver a luxurious transportation experience
+                tailored to your schedule and budget.
               </p>
             </div>
             <div class="px-4 py-4 sm:px-6">

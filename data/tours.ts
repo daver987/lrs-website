@@ -8,29 +8,26 @@ export interface Tour {
 export const ourTours = [
   {
     title: 'Niagara Falls',
-    body: 'Niagara Falls is home to one of the most majestic and awe-inspiring sites in the world. The falls are a spectacle of beauty that shakes the earth with their roar. Anyone who visits Toronto should take the time to explore all that this fantastic site has to offer. We can help you get there.',
+    body: "Experience the breathtaking majesty of Niagara Falls, one of the world's most awe-inspiring natural wonders. A must-visit for anyone traveling to Toronto, let us transport you to this stunning site where the thunderous roar and vibrant beauty will create lasting memories.",
     image: 'niagara-falls',
     altText: 'Niagara-Falls',
   },
   {
     title: 'Niagara Winery Tour',
-    body:
-      'For those who are looking for an incredible day, we offer wine tours in Niagara. We have worked with some' +
-      ' of the best wineries in the region and provide exclusive tours that offer one-of-a-kind experiences and' +
-      ' memories.',
+    body: "Indulge in the exquisite flavors of Niagara's renowned wineries with our exclusive wine tours. Partnering with the region's finest vineyards, we provide unforgettable experiences and lasting memories, ensuring a delightful day for wine connoisseurs and casual enthusiasts alike.",
     image: 'Night-On-The-Town',
     altText: 'Niagara-Wine-Tour',
   },
   {
-    title: 'Toronto city tour',
-    body: 'For anyone who is looking for more than just the typical ride, we offer Toronto city tours. When you take a tour with us, you will be sure to see all the best attractions and landmarks that Toronto has to offer.',
+    title: 'Toronto City Tour',
+    body: "Discover the vibrant sights and sounds of Toronto with our immersive city tours. Our knowledgeable guides will take you to the city's most iconic attractions and landmarks, ensuring an enriching and memorable experience that goes beyond the ordinary.",
     image: 'toronto',
-    altText: 'Toronto=Tours',
+    altText: 'Toronto-Tours',
   },
   {
-    title: 'custom tours',
-    body: ' If you are looking for a more intimate experience, we can create a custom tour for your group or family. Whether it is a bachelor party, bachelorette party, or any other special occasion, we offer transportation for all of these occasions and more',
+    title: 'Custom Tours',
+    body: "For a personalized and intimate tour experience, let us create a tailor-made itinerary for your group or family. Whether it's a bachelor/bachelorette party, special celebration, or any other occasion, our custom tours provide the perfect transportation solution for a truly unforgettable experience.",
     image: 'intercity-travel-1',
     altText: 'Custom-Tour-Services',
   },
-] as Tour[]
+]

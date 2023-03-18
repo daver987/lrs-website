@@ -13,8 +13,8 @@ export interface Service {
 export const services = [
   {
     title: 'Airport Services',
-    aboveHeading: 'TRAVEL IN COMFORT',
-    body: "Spending hours at the airport can be a hassle, but with High Park Livery's limousine service, it doesn't haveto be. Our drivers are available 24/7 to pick you up at any terminal and drop you off for your departure flight. We also track your flight for arrivals, so you can be assured that we will be there for you no matter if your flight is delayed or early. This makes the process of flying internationally less daunting, as you wont have to worry about security checks and long wait times. Book with High Park Livery for a seamless airport experience.",
+    aboveHeading: 'EXPERIENCE LUXURY TRAVEL',
+    body: "Navigating the airport can be a stressful experience, but with High Park Livery's limousine service, it doesn't have to be. Our drivers are available around the clock to pick you up at any terminal and ensure a timely arrival for your departure flight. We also monitor your flight arrivals, guaranteeing our prompt presence regardless of flight delays or early arrivals. This attention to detail makes international travel less intimidating, as you can avoid concerns about security checks and lengthy wait times. Choose High Park Livery for a hassle-free airport experience.",
     image:
       'https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/11372c60-0fbb-4ed7-3984-b509397a4300/1920',
     altText: 'Airport-Service',
@@ -25,8 +25,8 @@ export const services = [
   },
   {
     title: 'POINT TO POINT',
-    aboveHeading: 'ALWAYS BE ON TIME',
-    body: 'Point-to-point transfers are an excellent choice for anyone who wants more convenience when it comes to transportation. Many people rely on our company, and we work hard to provide them with a solution that matches up with their needs at all times. We will take care of every one of your needs and make sure that you are happy with what you get.',
+    aboveHeading: 'ARRIVE IN STYLE AND ON TIME',
+    body: "Experience unmatched convenience with our point-to-point transfer services, designed to cater to your transportation needs seamlessly. High Park Livery takes pride in offering personalized services that address the specific requirements of our clients. Our professional drivers and well-maintained vehicles ensure you arrive at your destination in style and on time, every time. Whether you're traveling for business or leisure, trust High Park Livery to deliver a superior transportation experience, prioritizing your satisfaction and comfort.",
     image:
       'https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/6c03d826-c242-464c-3057-8328c95da100/1920',
     altText: 'Point-To-Point',
@@ -37,8 +37,8 @@ export const services = [
   },
   {
     title: 'NIGHT ON THE TOWN',
-    aboveHeading: 'ENJOY YOURSELF',
-    body: 'Whether it is a birthday, bachelor party, bachelorette party or any other special occasion, we offer transportation for all of these occasions and more. Our drivers have experience catering to those who are celebrating milestones in their lives. Not only will they go out of their way to make sure you have a great time, but they will also help to ensure that you are safe too!',
+    aboveHeading: 'ELEVATE YOUR NIGHT OUT',
+    body: "Make any occasion unforgettable with High Park Livery's exceptional night on the town transportation services. From birthdays and bachelor/bachelorette parties to anniversaries and other special milestones, our experienced drivers are dedicated to providing a memorable and enjoyable experience. With a keen focus on both fun and safety, you can count on High Park Livery to make your night out a truly elevated experience. Relax, celebrate, and leave the driving to us as you enjoy the luxury of our top-of-the-line vehicles.",
     image:
       'https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/a6797e57-e8cd-4bf3-3665-13c499f90100/1920',
     boxPosition:
@@ -50,8 +50,8 @@ export const services = [
   },
   {
     title: 'HOURLY SERVICE',
-    aboveHeading: 'HAVE THE DRIVER WAIT',
-    body: 'We offer hourly service with a minimum of two hours. Hourly car service is perfect for running errands, going to appointments, or even giving friends and family rides. Hourly service is also excellent for date nights and parties! Suppose you are unsure about what your transportation needs are. In that case, we offer packages that include everything you need to make it convenient.',
+    aboveHeading: 'CUSTOMIZED CHAUFFEUR SERVICES',
+    body: 'Discover the flexibility and convenience of our hourly service, available with a minimum booking of two hours. Ideal for running errands, attending appointments, or providing transportation for friends and family, our hourly service is also perfect for date nights and festive occasions. High Park Livery understands that transportation needs can vary, which is why we offer tailored packages designed to maximize convenience and meet the unique requirements of our clients.',
     image:
       'https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/0bbff0c6-4751-4b32-278b-ef551b6a7200/1920',
     altText: 'Hourly-Service',
@@ -63,9 +63,9 @@ export const services = [
       'bg-white shadow-xl px-4 py-6 md:px-6 lg:px-8 md:mx-2 md:pt-16 md:-mt-16 dark:bg-neutral-700',
   },
   {
-    title: 'CORPORATE TRAVEL',
-    aboveHeading: 'DONT WORRY ABOUT MEETINGS',
-    body: 'When you require a corporate car service, we offer the solution. We understand how crucial it is for those who work in the business world to be on time and prepared for meetings. Our drivers have years of experience and can adapt to any situation. They will also go out of their way to accommodate your needs, making the experience a great one!',
+    title: 'Business Transportation',
+    aboveHeading: 'IMPECCABLE CORPORATE TRAVEL',
+    body: 'High Park Livery is your go-to solution for all corporate car service needs. We recognize the crucial importance of punctuality and preparedness for business meetings and events. Our experienced drivers excel at adapting to any situation, going the extra mile to accommodate your needs and deliver a seamless, efficient travel experience. With High Park Livery, you can focus on your business while we take care of your transportation.',
     image:
       'https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/7dc32296-37c2-4bf2-e3f2-d2e2eae71900/1920',
     altText: 'Corporate-Travel',
@@ -75,9 +75,9 @@ export const services = [
     infoBoxPosition: 'bg-white shadow-xl self-center dark:bg-neutral-700',
   },
   {
-    title: 'INTERCITY TRAVEL',
-    aboveHeading: 'AVOID THE HASSLE',
-    body: 'Intercity travel is a service that we offer for customers looking to get from point A to point B in the shortest possible time. If you are looking for an alternative to trains, planes, and buses, this will be an excellent solution. We take care of every single detail so that you can enjoy your trip. You will get a professional driver, freshly stocked beverages, and you will enjoy our luxurious atmosphere',
+    title: 'Intercity Services',
+    aboveHeading: 'ENJOY STRESS-FREE INTERCITY TRAVEL',
+    body: "Choose High Park Livery's intercity travel service for a swift, comfortable journey between cities. Our service offers a premier alternative to trains, planes, and buses, ensuring that every aspect of your trip is taken care of. Sit back and enjoy the ride as our professional drivers navigate the roads, providing refreshing beverages and a luxurious atmosphere for your journey. With High Park Livery's intercity services, you can appreciate the difference that comes from prioritizing customer satisfaction and comfort.",
     image:
       'https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/35e04a19-30b8-4ae8-d5b1-dffa5a1cc200/1920',
     altText: 'Intercity-Travel',

@@ -107,13 +107,11 @@ async function submitHandler(): Promise<void> {
   }
 }
 
-//todo: add in proper html for order
 //todo: add in the creation of draft invoice in stripe
 //todo: add spot for flight information in the checkout flow
 //todo: add trip notes in the checkout flow
 //todo: add iCal to the confirmation email
 //todo: add region functionality for auto tax calculation for out of town trips
-//todo: figure out some type of pdf confirmation email
 //todo: add webhook for order notification
 //todo: make proper cancel page
 //todo: purge codebase of old components and unnecessary packages
