@@ -33,10 +33,18 @@ const dataStore = useDataStore()
 const { vehicleTypes, serviceTypes, lineItems, salesTaxes } =
   storeToRefs(dataStore)
 
-const serviceTypeOptions = await $client.service.get.query()
-const lineItemsRes = await $client.lineItem.get.query()
-const vehicleTypeOptions = await $client.vehicle.get.query()
-const salesTaxesRes = await $client.salesTax.get.query()
+// const serviceTypeOptions = await $client.service.get.query()
+// const lineItemsRes = await $client.lineItem.get.query()
+// const vehicleTypeOptions = await $client.vehicle.get.query()
+// const salesTaxesRes = await $client.salesTax.get.query()
+
+const [serviceTypeOptions, lineItemsRes, vehicleTypeOptions, salesTaxesRes] =
+  await Promise.all([
+    $client.service.get.query(),
+    $client.lineItem.get.query(),
+    $client.vehicle.get.query(),
+    $client.salesTax.get.query(),
+  ])
 
 //the validation of the data fetched from the database
 lineItems.value = LineItemSchema.array().parse(lineItemsRes)

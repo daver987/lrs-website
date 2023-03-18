@@ -23,10 +23,9 @@ export async function updateShortLink(
 export async function createQuote(
   quotes: any,
   prisma: PrismaClient
-): Promise<Summary> {
+): Promise<any> {
   try {
-    const newQuote = await prisma.quote.create(quotes)
-    return SummarySchema.parse(newQuote)
+    return await prisma.quote.create(quotes)
   } catch (e) {
     console.error('Error creating quote:', e)
     throw e
