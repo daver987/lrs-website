@@ -1,8 +1,10 @@
-// utils/generatePdf.js
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
 
-const generatePdf = async (element, fileName = 'order_summary.pdf') => {
+const generatePdf = async (
+  element: HTMLElement,
+  fileName = 'order_summary.pdf'
+) => {
   // Convert the HTML element to a canvas
   const canvas = await html2canvas(element, { scale: 2 })
 

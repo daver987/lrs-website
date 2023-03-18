@@ -96,16 +96,20 @@ export async function createSetupIntent({
     }
 
     for (const trip of quote.trips) {
-      await prisma.payment.create({
-        data: {
+      await prisma.payment.upsert({
+        where: {
+          trip_id: trip.id,
+        },
+        update: {
           setup_intent: JSON.stringify(setupIntent),
           trip: {
             connect: { id: trip.id },
           },
-          quote: {
-            connect: {
-              quote_number: quote.quote_number,
-            },
+        },
+        create: {
+          setup_intent: JSON.stringify(setupIntent),
+          trip: {
+            connect: { id: trip.id },
           },
         },
       })

@@ -78,13 +78,14 @@ model Quote {
   service_id          Int
   vehicle_id          Int
   sales_tax_id        Int
+  combined_line_items Json?
   service             Service    @relation(fields: [service_id], references: [value])
   vehicle             Vehicle    @relation(fields: [vehicle_id], references: [value])
   user                User       @relation(fields: [user_id], references: [id])
   sales_tax           SalesTax   @relation(fields: [sales_tax_id], references: [id])
   line_items          LineItem[]
   trips               Trip[]
-  payment             Payment?
+  payment             Payment[]
 
   @@index([user_id])
   @@index([sales_tax_id])
@@ -136,9 +137,11 @@ model Payment {
   payment_type     String?
   notes            String?
   trip_id          String   @unique
-  quote_number     Int      @unique
   trip             Trip     @relation(fields: [trip_id], references: [id])
-  quote            Quote    @relation(fields: [quote_number], references: [quote_number])
+  Quote            Quote?   @relation(fields: [quote_number], references: [quote_number])
+  quote_number     Int?
+
+  @@index([quote_number])
 }
 
 model Location {

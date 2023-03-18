@@ -15,8 +15,10 @@ export default defineNuxtConfig({
     '@nuxtjs/robots',
     '@nuxtjs/tailwindcss',
     '@nuxt/image-edge',
-    // '@nuxtjs/color-mode',
+    '@nuxtjs/color-mode',
     'nuxt-icon',
+    '@nuxt/devtools',
+    'nuxt-typed-router',
     'nuxt-vitest',
     '@huntersofbook/naive-ui-nuxt',
     [
@@ -26,9 +28,12 @@ export default defineNuxtConfig({
       },
     ],
   ],
-  // colorMode: {
-  //   classSuffix: '',
-  // },
+  colorMode: {
+    classSuffix: '',
+  },
+  devtools: {
+    enable: false,
+  },
   naiveUI: {
     themeOverrides: {
       DatePicker: {

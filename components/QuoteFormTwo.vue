@@ -21,10 +21,7 @@ import {
   buildHoursOptions,
   Option,
 } from '~/composables/useBuildOptions'
-import { Summary } from '~/schema/summarySchema'
-import { z } from 'zod'
 import { useNuxtApp } from '#app'
-import type { FormValue } from '~/schema/quoteFormValues'
 
 const { $client } = useNuxtApp()
 
@@ -81,6 +78,7 @@ function triggerEvent() {
   })
 }
 
+//@ts-ignore
 const formValue = ref({
   id: user_id.value,
   first_name: null,
@@ -108,7 +106,7 @@ const formValue = ref({
   service: serviceTypes.value,
   line_items: lineItems.value,
   sales_tax: salesTaxes.value,
-}) as unknown as Ref<FormValue>
+})
 
 const rules: FormRules = {
   pickup_date: {
@@ -250,37 +248,28 @@ const message = useMessage()
 const formRef = ref<FormInst | null>(null)
 const loading = ref(false)
 const loadingBar = useLoadingBar()
-const quoteNumberSchema = z.number()
 
 //submit function
 async function onSubmit() {
   try {
     loading.value = true
     console.log('Quote Values Before Submission', formValue.value)
-    const { data: response } = await useFetch('/api/quote', {
-      method: 'POST',
-      body: formValue.value,
-    })
-    const quoteData = await response.value
+    const quoteData = await $client.quote.postQuote.mutate(formValue.value)
     console.log('Returned Quote:', quoteData)
     quoteStore.setQuote(quoteData)
-    const { quote_number } = quoteData!.quote satisfies Summary
-
     setTimeout(async () => {
-      //validating the destructured quote number
-      const number = quoteNumberSchema.parse(quote_number)
-      loadingBar.finish()
       await navigateTo({
         path: '/cart',
-        query: { quote_number: number },
+        query: { quote_number: quoteData.quote_number },
       })
-      loading.value = false
-    }, 500)
+    }, 200)
   } catch (e) {
     setTimeout(() => {
-      loading.value = false
       console.log('error', e)
     }, 500)
+  } finally {
+    loading.value = false
+    loadingBar.finish()
   }
 }
 

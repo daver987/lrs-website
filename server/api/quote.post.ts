@@ -1,10 +1,10 @@
 import { usePricingEngine } from '~/composables/usePricingEngine'
-import { createAircallContact } from './services/createAircallContact'
-import { sendQuoteEmail } from './services/sendGridEmail'
+import { createAircallContact } from '~/server/trpc/services/createAircallContact'
+import { sendQuoteEmail } from '~/server/trpc/services/sendGridEmail'
 import { formatAddress } from '~/utils/formatAddress'
 import { computed, ref } from 'vue'
 import { useLinkShortener } from '~/composables/useLinkShortener'
-import { sendTwilioSms } from './services/sendTwilioSms'
+import { sendTwilioSms } from '~/server/trpc/services/sendTwilioSms'
 import { formatDate } from '~/utils/formatDate'
 import { SummarySchema } from '~/schema/summarySchema'
 import type { Summary } from '~/schema/summarySchema'
@@ -19,6 +19,7 @@ import {
   VehicleSchema,
 } from '~/prisma/generated/zod'
 import { PrismaClient } from '@prisma/client'
+import { combineLineItems } from '~/utils/combineLineItems'
 
 const aircallSecret = useRuntimeConfig().AIRCALL_API_TOKEN
 const sendGridKey = useRuntimeConfig().SENDGRID_API_KEY
@@ -37,7 +38,7 @@ async function createQuote(
   }
 }
 
-async function updateShortLink(
+export async function updateShortLink(
   prisma: PrismaClient,
   quote: any,
   shortLink: string
@@ -136,13 +137,17 @@ export default defineEventHandler(async (event) => {
     const returnLineItemsList = pricingEngine.updateLineItemsTotal(
       destination.place_id
     )
-
     const {
       lineItemDetails: returnLineItemsDetails,
       taxTotal: returnTaxTotal,
       subTotal: returnSubTotal,
       totalAmount: returnTotalAmount,
     } = returnLineItemsList
+
+    const updatedLineItemDetails = combineLineItems(lineItemDetails)
+    const updatedReturnLineItemDetails = combineLineItems(
+      returnLineItemsDetails
+    )
 
     //calculate trip values
     const isRoundTrip = ref(is_round_trip)
@@ -205,7 +210,7 @@ export default defineEventHandler(async (event) => {
                   distance_value: routeData?.routes[0].legs[0].duration.value,
                   service_label: pricingEngine.selectedService.value?.label,
                   vehicle_label: pricingEngine.selectedVehicle.value?.label,
-                  line_items_list: lineItemDetails,
+                  line_items_list: updatedLineItemDetails,
                   line_items_subtotal: parseFloat(subTotal.value.toFixed(2)),
                   line_items_tax: parseFloat(taxTotal.value.toFixed(2)),
                   line_items_total: parseFloat(totalAmount.value.toFixed(2)),
@@ -256,7 +261,7 @@ export default defineEventHandler(async (event) => {
                   distance_value: routeData?.routes[0].legs[0].duration.value,
                   service_label: returnServiceType,
                   vehicle_label: pricingEngine.selectedVehicle.value?.label,
-                  line_items_list: returnLineItemsDetails,
+                  line_items_list: updatedReturnLineItemDetails,
                   line_items_subtotal: parseFloat(subTotal.value.toFixed(2)),
                   line_items_tax: parseFloat(taxTotal.value.toFixed(2)),
                   line_items_total: parseFloat(totalAmount.value.toFixed(2)),
@@ -311,7 +316,7 @@ export default defineEventHandler(async (event) => {
                   distance_value: routeData?.routes[0].legs[0].duration.value,
                   service_label: pricingEngine.selectedService.value?.label,
                   vehicle_label: pricingEngine.selectedVehicle.value?.label,
-                  line_items_list: lineItemDetails,
+                  line_items_list: updatedLineItemDetails,
                   line_items_subtotal: parseFloat(subTotal.value.toFixed(2)),
                   line_items_tax: parseFloat(taxTotal.value.toFixed(2)),
                   line_items_total: parseFloat(totalAmount.value.toFixed(2)),

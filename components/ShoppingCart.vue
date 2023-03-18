@@ -8,7 +8,7 @@ import type { Summary } from '~/schema/summarySchema'
 import { ref } from '#imports'
 import { useNuxtApp } from '#app'
 import { z } from 'zod'
-import { combineLineItems } from '~/utils/combineLineItems'
+import { combineLineItemsTwo } from '~/utils/combineLineItems'
 
 const { $client } = useNuxtApp()
 const cartStore = useCartStore()
@@ -89,7 +89,7 @@ console.log('Assigned to quote:', quote.value)
 const { user } = quote.value
 
 const checkoutLoading = ref(false)
-const lineItemsCombined = combineLineItems(quote.value)
+const lineItemsCombined = combineLineItemsTwo(quote.value)
 console.log(lineItemsCombined)
 
 const createBooking = async () => {
@@ -99,8 +99,8 @@ const createBooking = async () => {
   try {
     const { setupIntent, stripeId, statusCode } =
       await $client.stripe.createCheckout.mutate({
-        userId: user.id,
-        quoteNumber,
+        userId: quote.value.user.id,
+        quoteNumber: quote.value.quote_number,
       })
 
     console.log('Stripe Response', setupIntent)
@@ -212,11 +212,11 @@ const createBooking = async () => {
                     </p>
                     <p class="text-neutral-500 dark:text-neutral-100">
                       <span class="text-brand-400">PU: </span
-                      >{{ trip.locations[1].full_name }}
+                      >{{ trip.locations[0].full_name }}
                     </p>
                     <p class="text-neutral-500 dark:text-neutral-100">
                       <span class="text-brand-400">DO: </span
-                      >{{ trip.locations[0].full_name }}
+                      >{{ trip.locations[1].full_name }}
                     </p>
                     <p class="text-neutral-500 dark:text-neutral-100">
                       <span class="text-brand-400">Vehicle Type: </span
@@ -295,7 +295,7 @@ const createBooking = async () => {
         <dl class="mt-6 space-y-4">
           <div
             class="flex items-center justify-between border-t border-neutral-200 pt-4"
-            v-for="item in lineItemsCombined"
+            v-for="item in quote.combined_line_items"
             :key="item.label"
           >
             <dt
@@ -322,48 +322,48 @@ const createBooking = async () => {
               $ {{ item.total.toFixed(2) }}
             </dd>
           </div>
-          <div
-            class="flex items-center justify-between border-t border-neutral-200 pt-4"
-          >
-            <dt class="flex text-sm text-neutral-600 dark:text-neutral-300">
-              <span>{{ quote.sales_tax.tax_name }}</span>
-              <a
-                href="#"
-                class="ml-2 flex-shrink-0 text-neutral-400 hover:text-neutral-500"
-              >
-                <span class="sr-only"
-                  >Learn more about how {{ quote.sales_tax.tax_name }} is
-                  calculated</span
-                >
-                <Icon
-                  name="heroicons:question-mark-circle-20-solid"
-                  class="h-5 w-5"
-                  aria-hidden="true"
-                />
-              </a>
-            </dt>
-            <dd
-              class="text-sm font-medium text-neutral-900 dark:text-neutral-100"
-            >
-              $
-              {{ quote.quote_tax_total }}
-            </dd>
-          </div>
-          <div
-            class="flex items-center justify-between border-t border-neutral-200 pt-4"
-          >
-            <dt
-              class="text-base font-medium text-neutral-900 dark:text-neutral-100"
-            >
-              {{ addedToCart ? 'Order' : 'Quote' }} total
-            </dt>
-            <dd
-              class="text-base font-medium text-neutral-900 dark:text-neutral-100"
-            >
-              $
-              {{ quote.quote_total.toFixed(2) }}
-            </dd>
-          </div>
+          <!--          <div-->
+          <!--            class="flex items-center justify-between border-t border-neutral-200 pt-4"-->
+          <!--          >-->
+          <!--            <dt class="flex text-sm text-neutral-600 dark:text-neutral-300">-->
+          <!--              <span>{{ quote.sales_tax.tax_name }}</span>-->
+          <!--              <a-->
+          <!--                href="#"-->
+          <!--                class="ml-2 flex-shrink-0 text-neutral-400 hover:text-neutral-500"-->
+          <!--              >-->
+          <!--                <span class="sr-only"-->
+          <!--                  >Learn more about how {{ quote.sales_tax.tax_name }} is-->
+          <!--                  calculated</span-->
+          <!--                >-->
+          <!--                <Icon-->
+          <!--                  name="heroicons:question-mark-circle-20-solid"-->
+          <!--                  class="h-5 w-5"-->
+          <!--                  aria-hidden="true"-->
+          <!--                />-->
+          <!--              </a>-->
+          <!--            </dt>-->
+          <!--            <dd-->
+          <!--              class="text-sm font-medium text-neutral-900 dark:text-neutral-100"-->
+          <!--            >-->
+          <!--              $-->
+          <!--              {{ quote.quote_tax_total }}-->
+          <!--            </dd>-->
+          <!--          </div>-->
+          <!--          <div-->
+          <!--            class="flex items-center justify-between border-t border-neutral-200 pt-4"-->
+          <!--          >-->
+          <!--            <dt-->
+          <!--              class="text-base font-medium text-neutral-900 dark:text-neutral-100"-->
+          <!--            >-->
+          <!--              {{ addedToCart ? 'Order' : 'Quote' }} total-->
+          <!--            </dt>-->
+          <!--            <dd-->
+          <!--              class="text-base font-medium text-neutral-900 dark:text-neutral-100"-->
+          <!--            >-->
+          <!--              $-->
+          <!--              {{ quote.quote_total.toFixed(2) }}-->
+          <!--            </dd>-->
+          <!--          </div>-->
         </dl>
 
         <div class="mt-6">

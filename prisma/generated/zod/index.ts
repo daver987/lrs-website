@@ -68,7 +68,7 @@ export const NullableJsonNullValueInputSchema = z.enum(['DbNull','JsonNull',]).t
 
 export const PaymentScalarFieldEnumSchema = z.enum(['id','created_at','updated_at','is_preauthorized','is_paid','setup_intent','payment_intent','payment_type','notes','trip_id','quote_number']);
 
-export const QuoteScalarFieldEnumSchema = z.enum(['quote_number','created_at','updated_at','selected_hours','selected_passengers','is_round_trip','is_booked','user_id','quote_total','quote_subtotal','quote_tax_total','short_link','service_id','vehicle_id','sales_tax_id']);
+export const QuoteScalarFieldEnumSchema = z.enum(['quote_number','created_at','updated_at','selected_hours','selected_passengers','is_round_trip','is_booked','user_id','quote_total','quote_subtotal','quote_tax_total','short_link','service_id','vehicle_id','sales_tax_id','combined_line_items']);
 
 export const SalesTaxScalarFieldEnumSchema = z.enum(['id','created_at','updated_at','tax_name','amount','region','is_active']);
 
@@ -188,6 +188,7 @@ export const QuoteSchema = z.object({
   service_id: z.number().int(),
   vehicle_id: z.number().int(),
   sales_tax_id: z.number().int(),
+  combined_line_items: NullableJsonValue.optional(),
 })
 
 export type Quote = z.infer<typeof QuoteSchema>
@@ -254,7 +255,7 @@ export const PaymentSchema = z.object({
   payment_type: z.string().nullable(),
   notes: z.string().nullable(),
   trip_id: z.string(),
-  quote_number: z.number().int(),
+  quote_number: z.number().int().nullable(),
 })
 
 export type Payment = z.infer<typeof PaymentSchema>
@@ -566,7 +567,7 @@ export const QuoteIncludeSchema: z.ZodType<Prisma.QuoteInclude> = z.object({
   sales_tax: z.union([z.boolean(),z.lazy(() => SalesTaxArgsSchema)]).optional(),
   line_items: z.union([z.boolean(),z.lazy(() => LineItemFindManyArgsSchema)]).optional(),
   trips: z.union([z.boolean(),z.lazy(() => TripFindManyArgsSchema)]).optional(),
-  payment: z.union([z.boolean(),z.lazy(() => PaymentArgsSchema)]).optional(),
+  payment: z.union([z.boolean(),z.lazy(() => PaymentFindManyArgsSchema)]).optional(),
   _count: z.union([z.boolean(),z.lazy(() => QuoteCountOutputTypeArgsSchema)]).optional(),
 }).strict()
 
@@ -582,6 +583,7 @@ export const QuoteCountOutputTypeArgsSchema: z.ZodType<Prisma.QuoteCountOutputTy
 export const QuoteCountOutputTypeSelectSchema: z.ZodType<Prisma.QuoteCountOutputTypeSelect> = z.object({
   line_items: z.boolean().optional(),
   trips: z.boolean().optional(),
+  payment: z.boolean().optional(),
 }).strict();
 
 export const QuoteSelectSchema: z.ZodType<Prisma.QuoteSelect> = z.object({
@@ -600,13 +602,14 @@ export const QuoteSelectSchema: z.ZodType<Prisma.QuoteSelect> = z.object({
   service_id: z.boolean().optional(),
   vehicle_id: z.boolean().optional(),
   sales_tax_id: z.boolean().optional(),
+  combined_line_items: z.boolean().optional(),
   service: z.union([z.boolean(),z.lazy(() => ServiceArgsSchema)]).optional(),
   vehicle: z.union([z.boolean(),z.lazy(() => VehicleArgsSchema)]).optional(),
   user: z.union([z.boolean(),z.lazy(() => UserArgsSchema)]).optional(),
   sales_tax: z.union([z.boolean(),z.lazy(() => SalesTaxArgsSchema)]).optional(),
   line_items: z.union([z.boolean(),z.lazy(() => LineItemFindManyArgsSchema)]).optional(),
   trips: z.union([z.boolean(),z.lazy(() => TripFindManyArgsSchema)]).optional(),
-  payment: z.union([z.boolean(),z.lazy(() => PaymentArgsSchema)]).optional(),
+  payment: z.union([z.boolean(),z.lazy(() => PaymentFindManyArgsSchema)]).optional(),
   _count: z.union([z.boolean(),z.lazy(() => QuoteCountOutputTypeArgsSchema)]).optional(),
 }).strict()
 
@@ -671,7 +674,7 @@ export const TripSelectSchema: z.ZodType<Prisma.TripSelect> = z.object({
 
 export const PaymentIncludeSchema: z.ZodType<Prisma.PaymentInclude> = z.object({
   trip: z.union([z.boolean(),z.lazy(() => TripArgsSchema)]).optional(),
-  quote: z.union([z.boolean(),z.lazy(() => QuoteArgsSchema)]).optional(),
+  Quote: z.union([z.boolean(),z.lazy(() => QuoteArgsSchema)]).optional(),
 }).strict()
 
 export const PaymentArgsSchema: z.ZodType<Prisma.PaymentArgs> = z.object({
@@ -692,7 +695,7 @@ export const PaymentSelectSchema: z.ZodType<Prisma.PaymentSelect> = z.object({
   trip_id: z.boolean().optional(),
   quote_number: z.boolean().optional(),
   trip: z.union([z.boolean(),z.lazy(() => TripArgsSchema)]).optional(),
-  quote: z.union([z.boolean(),z.lazy(() => QuoteArgsSchema)]).optional(),
+  Quote: z.union([z.boolean(),z.lazy(() => QuoteArgsSchema)]).optional(),
 }).strict()
 
 // LOCATION
@@ -1151,13 +1154,14 @@ export const QuoteWhereInputSchema: z.ZodType<Prisma.QuoteWhereInput> = z.object
   service_id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   vehicle_id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   sales_tax_id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  combined_line_items: z.lazy(() => JsonNullableFilterSchema).optional(),
   service: z.union([ z.lazy(() => ServiceRelationFilterSchema),z.lazy(() => ServiceWhereInputSchema) ]).optional(),
   vehicle: z.union([ z.lazy(() => VehicleRelationFilterSchema),z.lazy(() => VehicleWhereInputSchema) ]).optional(),
   user: z.union([ z.lazy(() => UserRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
   sales_tax: z.union([ z.lazy(() => SalesTaxRelationFilterSchema),z.lazy(() => SalesTaxWhereInputSchema) ]).optional(),
   line_items: z.lazy(() => LineItemListRelationFilterSchema).optional(),
   trips: z.lazy(() => TripListRelationFilterSchema).optional(),
-  payment: z.union([ z.lazy(() => PaymentRelationFilterSchema),z.lazy(() => PaymentWhereInputSchema) ]).optional().nullable(),
+  payment: z.lazy(() => PaymentListRelationFilterSchema).optional()
 }).strict();
 
 export const QuoteOrderByWithRelationInputSchema: z.ZodType<Prisma.QuoteOrderByWithRelationInput> = z.object({
@@ -1176,13 +1180,14 @@ export const QuoteOrderByWithRelationInputSchema: z.ZodType<Prisma.QuoteOrderByW
   service_id: z.lazy(() => SortOrderSchema).optional(),
   vehicle_id: z.lazy(() => SortOrderSchema).optional(),
   sales_tax_id: z.lazy(() => SortOrderSchema).optional(),
+  combined_line_items: z.lazy(() => SortOrderSchema).optional(),
   service: z.lazy(() => ServiceOrderByWithRelationInputSchema).optional(),
   vehicle: z.lazy(() => VehicleOrderByWithRelationInputSchema).optional(),
   user: z.lazy(() => UserOrderByWithRelationInputSchema).optional(),
   sales_tax: z.lazy(() => SalesTaxOrderByWithRelationInputSchema).optional(),
   line_items: z.lazy(() => LineItemOrderByRelationAggregateInputSchema).optional(),
   trips: z.lazy(() => TripOrderByRelationAggregateInputSchema).optional(),
-  payment: z.lazy(() => PaymentOrderByWithRelationInputSchema).optional()
+  payment: z.lazy(() => PaymentOrderByRelationAggregateInputSchema).optional()
 }).strict();
 
 export const QuoteWhereUniqueInputSchema: z.ZodType<Prisma.QuoteWhereUniqueInput> = z.object({
@@ -1205,6 +1210,7 @@ export const QuoteOrderByWithAggregationInputSchema: z.ZodType<Prisma.QuoteOrder
   service_id: z.lazy(() => SortOrderSchema).optional(),
   vehicle_id: z.lazy(() => SortOrderSchema).optional(),
   sales_tax_id: z.lazy(() => SortOrderSchema).optional(),
+  combined_line_items: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => QuoteCountOrderByAggregateInputSchema).optional(),
   _avg: z.lazy(() => QuoteAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => QuoteMaxOrderByAggregateInputSchema).optional(),
@@ -1231,6 +1237,7 @@ export const QuoteScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.QuoteSc
   service_id: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
   vehicle_id: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
   sales_tax_id: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  combined_line_items: z.lazy(() => JsonNullableWithAggregatesFilterSchema).optional()
 }).strict();
 
 export const TripWhereInputSchema: z.ZodType<Prisma.TripWhereInput> = z.object({
@@ -1378,9 +1385,9 @@ export const PaymentWhereInputSchema: z.ZodType<Prisma.PaymentWhereInput> = z.ob
   payment_type: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   notes: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   trip_id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  quote_number: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  quote_number: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
   trip: z.union([ z.lazy(() => TripRelationFilterSchema),z.lazy(() => TripWhereInputSchema) ]).optional(),
-  quote: z.union([ z.lazy(() => QuoteRelationFilterSchema),z.lazy(() => QuoteWhereInputSchema) ]).optional(),
+  Quote: z.union([ z.lazy(() => QuoteRelationFilterSchema),z.lazy(() => QuoteWhereInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const PaymentOrderByWithRelationInputSchema: z.ZodType<Prisma.PaymentOrderByWithRelationInput> = z.object({
@@ -1396,13 +1403,12 @@ export const PaymentOrderByWithRelationInputSchema: z.ZodType<Prisma.PaymentOrde
   trip_id: z.lazy(() => SortOrderSchema).optional(),
   quote_number: z.lazy(() => SortOrderSchema).optional(),
   trip: z.lazy(() => TripOrderByWithRelationInputSchema).optional(),
-  quote: z.lazy(() => QuoteOrderByWithRelationInputSchema).optional()
+  Quote: z.lazy(() => QuoteOrderByWithRelationInputSchema).optional()
 }).strict();
 
 export const PaymentWhereUniqueInputSchema: z.ZodType<Prisma.PaymentWhereUniqueInput> = z.object({
   id: z.string().uuid().optional(),
-  trip_id: z.string().optional(),
-  quote_number: z.number().int().optional()
+  trip_id: z.string().optional()
 }).strict();
 
 export const PaymentOrderByWithAggregationInputSchema: z.ZodType<Prisma.PaymentOrderByWithAggregationInput> = z.object({
@@ -1438,7 +1444,7 @@ export const PaymentScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Payme
   payment_type: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   notes: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   trip_id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
-  quote_number: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  quote_number: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
 }).strict();
 
 export const LocationWhereInputSchema: z.ZodType<Prisma.LocationWhereInput> = z.object({
@@ -2232,13 +2238,14 @@ export const QuoteCreateInputSchema: z.ZodType<Prisma.QuoteCreateInput> = z.obje
   quote_subtotal: z.number().optional().nullable(),
   quote_tax_total: z.number().optional().nullable(),
   short_link: z.string().optional().nullable(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   service: z.lazy(() => ServiceCreateNestedOneWithoutQuotesInputSchema),
   vehicle: z.lazy(() => VehicleCreateNestedOneWithoutQuotesInputSchema),
   user: z.lazy(() => UserCreateNestedOneWithoutQuotesInputSchema),
   sales_tax: z.lazy(() => SalesTaxCreateNestedOneWithoutQuotesInputSchema),
   line_items: z.lazy(() => LineItemCreateNestedManyWithoutQuotesInputSchema).optional(),
   trips: z.lazy(() => TripCreateNestedManyWithoutQuoteInputSchema).optional(),
-  payment: z.lazy(() => PaymentCreateNestedOneWithoutQuoteInputSchema).optional()
+  payment: z.lazy(() => PaymentCreateNestedManyWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedCreateInputSchema: z.ZodType<Prisma.QuoteUncheckedCreateInput> = z.object({
@@ -2257,9 +2264,10 @@ export const QuoteUncheckedCreateInputSchema: z.ZodType<Prisma.QuoteUncheckedCre
   service_id: z.number().int(),
   vehicle_id: z.number().int(),
   sales_tax_id: z.number().int(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   line_items: z.lazy(() => LineItemUncheckedCreateNestedManyWithoutQuotesInputSchema).optional(),
   trips: z.lazy(() => TripUncheckedCreateNestedManyWithoutQuoteInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutQuoteInputSchema).optional()
+  payment: z.lazy(() => PaymentUncheckedCreateNestedManyWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteUpdateInputSchema: z.ZodType<Prisma.QuoteUpdateInput> = z.object({
@@ -2273,13 +2281,14 @@ export const QuoteUpdateInputSchema: z.ZodType<Prisma.QuoteUpdateInput> = z.obje
   quote_subtotal: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   quote_tax_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   short_link: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   service: z.lazy(() => ServiceUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   vehicle: z.lazy(() => VehicleUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   user: z.lazy(() => UserUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   sales_tax: z.lazy(() => SalesTaxUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   line_items: z.lazy(() => LineItemUpdateManyWithoutQuotesNestedInputSchema).optional(),
   trips: z.lazy(() => TripUpdateManyWithoutQuoteNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUpdateOneWithoutQuoteNestedInputSchema).optional()
+  payment: z.lazy(() => PaymentUpdateManyWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedUpdateInputSchema: z.ZodType<Prisma.QuoteUncheckedUpdateInput> = z.object({
@@ -2298,9 +2307,10 @@ export const QuoteUncheckedUpdateInputSchema: z.ZodType<Prisma.QuoteUncheckedUpd
   service_id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   vehicle_id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   sales_tax_id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   line_items: z.lazy(() => LineItemUncheckedUpdateManyWithoutQuotesNestedInputSchema).optional(),
   trips: z.lazy(() => TripUncheckedUpdateManyWithoutQuoteNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutQuoteNestedInputSchema).optional()
+  payment: z.lazy(() => PaymentUncheckedUpdateManyWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const QuoteCreateManyInputSchema: z.ZodType<Prisma.QuoteCreateManyInput> = z.object({
@@ -2318,7 +2328,8 @@ export const QuoteCreateManyInputSchema: z.ZodType<Prisma.QuoteCreateManyInput> 
   short_link: z.string().optional().nullable(),
   service_id: z.number().int(),
   vehicle_id: z.number().int(),
-  sales_tax_id: z.number().int()
+  sales_tax_id: z.number().int(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
 }).strict();
 
 export const QuoteUpdateManyMutationInputSchema: z.ZodType<Prisma.QuoteUpdateManyMutationInput> = z.object({
@@ -2332,6 +2343,7 @@ export const QuoteUpdateManyMutationInputSchema: z.ZodType<Prisma.QuoteUpdateMan
   quote_subtotal: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   quote_tax_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   short_link: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
 }).strict();
 
 export const QuoteUncheckedUpdateManyInputSchema: z.ZodType<Prisma.QuoteUncheckedUpdateManyInput> = z.object({
@@ -2350,6 +2362,7 @@ export const QuoteUncheckedUpdateManyInputSchema: z.ZodType<Prisma.QuoteUnchecke
   service_id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   vehicle_id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   sales_tax_id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
 }).strict();
 
 export const TripCreateInputSchema: z.ZodType<Prisma.TripCreateInput> = z.object({
@@ -2563,7 +2576,7 @@ export const PaymentCreateInputSchema: z.ZodType<Prisma.PaymentCreateInput> = z.
   payment_type: z.string().optional().nullable(),
   notes: z.string().optional().nullable(),
   trip: z.lazy(() => TripCreateNestedOneWithoutPaymentInputSchema),
-  quote: z.lazy(() => QuoteCreateNestedOneWithoutPaymentInputSchema)
+  Quote: z.lazy(() => QuoteCreateNestedOneWithoutPaymentInputSchema).optional()
 }).strict();
 
 export const PaymentUncheckedCreateInputSchema: z.ZodType<Prisma.PaymentUncheckedCreateInput> = z.object({
@@ -2577,7 +2590,7 @@ export const PaymentUncheckedCreateInputSchema: z.ZodType<Prisma.PaymentUnchecke
   payment_type: z.string().optional().nullable(),
   notes: z.string().optional().nullable(),
   trip_id: z.string(),
-  quote_number: z.number().int()
+  quote_number: z.number().int().optional().nullable()
 }).strict();
 
 export const PaymentUpdateInputSchema: z.ZodType<Prisma.PaymentUpdateInput> = z.object({
@@ -2591,7 +2604,7 @@ export const PaymentUpdateInputSchema: z.ZodType<Prisma.PaymentUpdateInput> = z.
   payment_type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   trip: z.lazy(() => TripUpdateOneRequiredWithoutPaymentNestedInputSchema).optional(),
-  quote: z.lazy(() => QuoteUpdateOneRequiredWithoutPaymentNestedInputSchema).optional()
+  Quote: z.lazy(() => QuoteUpdateOneWithoutPaymentNestedInputSchema).optional()
 }).strict();
 
 export const PaymentUncheckedUpdateInputSchema: z.ZodType<Prisma.PaymentUncheckedUpdateInput> = z.object({
@@ -2605,7 +2618,7 @@ export const PaymentUncheckedUpdateInputSchema: z.ZodType<Prisma.PaymentUnchecke
   payment_type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   trip_id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  quote_number: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  quote_number: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const PaymentCreateManyInputSchema: z.ZodType<Prisma.PaymentCreateManyInput> = z.object({
@@ -2619,7 +2632,7 @@ export const PaymentCreateManyInputSchema: z.ZodType<Prisma.PaymentCreateManyInp
   payment_type: z.string().optional().nullable(),
   notes: z.string().optional().nullable(),
   trip_id: z.string(),
-  quote_number: z.number().int()
+  quote_number: z.number().int().optional().nullable()
 }).strict();
 
 export const PaymentUpdateManyMutationInputSchema: z.ZodType<Prisma.PaymentUpdateManyMutationInput> = z.object({
@@ -2645,7 +2658,7 @@ export const PaymentUncheckedUpdateManyInputSchema: z.ZodType<Prisma.PaymentUnch
   payment_type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   trip_id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  quote_number: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  quote_number: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const LocationCreateInputSchema: z.ZodType<Prisma.LocationCreateInput> = z.object({
@@ -3672,9 +3685,10 @@ export const TripListRelationFilterSchema: z.ZodType<Prisma.TripListRelationFilt
   none: z.lazy(() => TripWhereInputSchema).optional()
 }).strict();
 
-export const PaymentRelationFilterSchema: z.ZodType<Prisma.PaymentRelationFilter> = z.object({
-  is: z.lazy(() => PaymentWhereInputSchema).optional().nullable(),
-  isNot: z.lazy(() => PaymentWhereInputSchema).optional().nullable()
+export const PaymentListRelationFilterSchema: z.ZodType<Prisma.PaymentListRelationFilter> = z.object({
+  every: z.lazy(() => PaymentWhereInputSchema).optional(),
+  some: z.lazy(() => PaymentWhereInputSchema).optional(),
+  none: z.lazy(() => PaymentWhereInputSchema).optional()
 }).strict();
 
 export const LineItemOrderByRelationAggregateInputSchema: z.ZodType<Prisma.LineItemOrderByRelationAggregateInput> = z.object({
@@ -3682,6 +3696,10 @@ export const LineItemOrderByRelationAggregateInputSchema: z.ZodType<Prisma.LineI
 }).strict();
 
 export const TripOrderByRelationAggregateInputSchema: z.ZodType<Prisma.TripOrderByRelationAggregateInput> = z.object({
+  _count: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const PaymentOrderByRelationAggregateInputSchema: z.ZodType<Prisma.PaymentOrderByRelationAggregateInput> = z.object({
   _count: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
@@ -3700,7 +3718,8 @@ export const QuoteCountOrderByAggregateInputSchema: z.ZodType<Prisma.QuoteCountO
   short_link: z.lazy(() => SortOrderSchema).optional(),
   service_id: z.lazy(() => SortOrderSchema).optional(),
   vehicle_id: z.lazy(() => SortOrderSchema).optional(),
-  sales_tax_id: z.lazy(() => SortOrderSchema).optional()
+  sales_tax_id: z.lazy(() => SortOrderSchema).optional(),
+  combined_line_items: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const QuoteAvgOrderByAggregateInputSchema: z.ZodType<Prisma.QuoteAvgOrderByAggregateInput> = z.object({
@@ -3819,6 +3838,11 @@ export const BoolNullableFilterSchema: z.ZodType<Prisma.BoolNullableFilter> = z.
 export const QuoteRelationFilterSchema: z.ZodType<Prisma.QuoteRelationFilter> = z.object({
   is: z.lazy(() => QuoteWhereInputSchema).optional(),
   isNot: z.lazy(() => QuoteWhereInputSchema).optional()
+}).strict();
+
+export const PaymentRelationFilterSchema: z.ZodType<Prisma.PaymentRelationFilter> = z.object({
+  is: z.lazy(() => PaymentWhereInputSchema).optional().nullable(),
+  isNot: z.lazy(() => PaymentWhereInputSchema).optional().nullable()
 }).strict();
 
 export const LocationListRelationFilterSchema: z.ZodType<Prisma.LocationListRelationFilter> = z.object({
@@ -4614,10 +4638,11 @@ export const TripCreateNestedManyWithoutQuoteInputSchema: z.ZodType<Prisma.TripC
   connect: z.union([ z.lazy(() => TripWhereUniqueInputSchema),z.lazy(() => TripWhereUniqueInputSchema).array() ]).optional(),
 }).strict();
 
-export const PaymentCreateNestedOneWithoutQuoteInputSchema: z.ZodType<Prisma.PaymentCreateNestedOneWithoutQuoteInput> = z.object({
-  create: z.union([ z.lazy(() => PaymentCreateWithoutQuoteInputSchema),z.lazy(() => PaymentUncheckedCreateWithoutQuoteInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => PaymentCreateOrConnectWithoutQuoteInputSchema).optional(),
-  connect: z.lazy(() => PaymentWhereUniqueInputSchema).optional()
+export const PaymentCreateNestedManyWithoutQuoteInputSchema: z.ZodType<Prisma.PaymentCreateNestedManyWithoutQuoteInput> = z.object({
+  create: z.union([ z.lazy(() => PaymentCreateWithoutQuoteInputSchema),z.lazy(() => PaymentCreateWithoutQuoteInputSchema).array(),z.lazy(() => PaymentUncheckedCreateWithoutQuoteInputSchema),z.lazy(() => PaymentUncheckedCreateWithoutQuoteInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => PaymentCreateOrConnectWithoutQuoteInputSchema),z.lazy(() => PaymentCreateOrConnectWithoutQuoteInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => PaymentCreateManyQuoteInputEnvelopeSchema).optional(),
+  connect: z.union([ z.lazy(() => PaymentWhereUniqueInputSchema),z.lazy(() => PaymentWhereUniqueInputSchema).array() ]).optional(),
 }).strict();
 
 export const LineItemUncheckedCreateNestedManyWithoutQuotesInputSchema: z.ZodType<Prisma.LineItemUncheckedCreateNestedManyWithoutQuotesInput> = z.object({
@@ -4633,10 +4658,11 @@ export const TripUncheckedCreateNestedManyWithoutQuoteInputSchema: z.ZodType<Pri
   connect: z.union([ z.lazy(() => TripWhereUniqueInputSchema),z.lazy(() => TripWhereUniqueInputSchema).array() ]).optional(),
 }).strict();
 
-export const PaymentUncheckedCreateNestedOneWithoutQuoteInputSchema: z.ZodType<Prisma.PaymentUncheckedCreateNestedOneWithoutQuoteInput> = z.object({
-  create: z.union([ z.lazy(() => PaymentCreateWithoutQuoteInputSchema),z.lazy(() => PaymentUncheckedCreateWithoutQuoteInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => PaymentCreateOrConnectWithoutQuoteInputSchema).optional(),
-  connect: z.lazy(() => PaymentWhereUniqueInputSchema).optional()
+export const PaymentUncheckedCreateNestedManyWithoutQuoteInputSchema: z.ZodType<Prisma.PaymentUncheckedCreateNestedManyWithoutQuoteInput> = z.object({
+  create: z.union([ z.lazy(() => PaymentCreateWithoutQuoteInputSchema),z.lazy(() => PaymentCreateWithoutQuoteInputSchema).array(),z.lazy(() => PaymentUncheckedCreateWithoutQuoteInputSchema),z.lazy(() => PaymentUncheckedCreateWithoutQuoteInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => PaymentCreateOrConnectWithoutQuoteInputSchema),z.lazy(() => PaymentCreateOrConnectWithoutQuoteInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => PaymentCreateManyQuoteInputEnvelopeSchema).optional(),
+  connect: z.union([ z.lazy(() => PaymentWhereUniqueInputSchema),z.lazy(() => PaymentWhereUniqueInputSchema).array() ]).optional(),
 }).strict();
 
 export const NullableIntFieldUpdateOperationsInputSchema: z.ZodType<Prisma.NullableIntFieldUpdateOperationsInput> = z.object({
@@ -4722,14 +4748,18 @@ export const TripUpdateManyWithoutQuoteNestedInputSchema: z.ZodType<Prisma.TripU
   deleteMany: z.union([ z.lazy(() => TripScalarWhereInputSchema),z.lazy(() => TripScalarWhereInputSchema).array() ]).optional(),
 }).strict();
 
-export const PaymentUpdateOneWithoutQuoteNestedInputSchema: z.ZodType<Prisma.PaymentUpdateOneWithoutQuoteNestedInput> = z.object({
-  create: z.union([ z.lazy(() => PaymentCreateWithoutQuoteInputSchema),z.lazy(() => PaymentUncheckedCreateWithoutQuoteInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => PaymentCreateOrConnectWithoutQuoteInputSchema).optional(),
-  upsert: z.lazy(() => PaymentUpsertWithoutQuoteInputSchema).optional(),
-  disconnect: z.boolean().optional(),
-  delete: z.boolean().optional(),
-  connect: z.lazy(() => PaymentWhereUniqueInputSchema).optional(),
-  update: z.union([ z.lazy(() => PaymentUpdateWithoutQuoteInputSchema),z.lazy(() => PaymentUncheckedUpdateWithoutQuoteInputSchema) ]).optional(),
+export const PaymentUpdateManyWithoutQuoteNestedInputSchema: z.ZodType<Prisma.PaymentUpdateManyWithoutQuoteNestedInput> = z.object({
+  create: z.union([ z.lazy(() => PaymentCreateWithoutQuoteInputSchema),z.lazy(() => PaymentCreateWithoutQuoteInputSchema).array(),z.lazy(() => PaymentUncheckedCreateWithoutQuoteInputSchema),z.lazy(() => PaymentUncheckedCreateWithoutQuoteInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => PaymentCreateOrConnectWithoutQuoteInputSchema),z.lazy(() => PaymentCreateOrConnectWithoutQuoteInputSchema).array() ]).optional(),
+  upsert: z.union([ z.lazy(() => PaymentUpsertWithWhereUniqueWithoutQuoteInputSchema),z.lazy(() => PaymentUpsertWithWhereUniqueWithoutQuoteInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => PaymentCreateManyQuoteInputEnvelopeSchema).optional(),
+  set: z.union([ z.lazy(() => PaymentWhereUniqueInputSchema),z.lazy(() => PaymentWhereUniqueInputSchema).array() ]).optional(),
+  disconnect: z.union([ z.lazy(() => PaymentWhereUniqueInputSchema),z.lazy(() => PaymentWhereUniqueInputSchema).array() ]).optional(),
+  delete: z.union([ z.lazy(() => PaymentWhereUniqueInputSchema),z.lazy(() => PaymentWhereUniqueInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => PaymentWhereUniqueInputSchema),z.lazy(() => PaymentWhereUniqueInputSchema).array() ]).optional(),
+  update: z.union([ z.lazy(() => PaymentUpdateWithWhereUniqueWithoutQuoteInputSchema),z.lazy(() => PaymentUpdateWithWhereUniqueWithoutQuoteInputSchema).array() ]).optional(),
+  updateMany: z.union([ z.lazy(() => PaymentUpdateManyWithWhereWithoutQuoteInputSchema),z.lazy(() => PaymentUpdateManyWithWhereWithoutQuoteInputSchema).array() ]).optional(),
+  deleteMany: z.union([ z.lazy(() => PaymentScalarWhereInputSchema),z.lazy(() => PaymentScalarWhereInputSchema).array() ]).optional(),
 }).strict();
 
 export const LineItemUncheckedUpdateManyWithoutQuotesNestedInputSchema: z.ZodType<Prisma.LineItemUncheckedUpdateManyWithoutQuotesNestedInput> = z.object({
@@ -4759,14 +4789,18 @@ export const TripUncheckedUpdateManyWithoutQuoteNestedInputSchema: z.ZodType<Pri
   deleteMany: z.union([ z.lazy(() => TripScalarWhereInputSchema),z.lazy(() => TripScalarWhereInputSchema).array() ]).optional(),
 }).strict();
 
-export const PaymentUncheckedUpdateOneWithoutQuoteNestedInputSchema: z.ZodType<Prisma.PaymentUncheckedUpdateOneWithoutQuoteNestedInput> = z.object({
-  create: z.union([ z.lazy(() => PaymentCreateWithoutQuoteInputSchema),z.lazy(() => PaymentUncheckedCreateWithoutQuoteInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => PaymentCreateOrConnectWithoutQuoteInputSchema).optional(),
-  upsert: z.lazy(() => PaymentUpsertWithoutQuoteInputSchema).optional(),
-  disconnect: z.boolean().optional(),
-  delete: z.boolean().optional(),
-  connect: z.lazy(() => PaymentWhereUniqueInputSchema).optional(),
-  update: z.union([ z.lazy(() => PaymentUpdateWithoutQuoteInputSchema),z.lazy(() => PaymentUncheckedUpdateWithoutQuoteInputSchema) ]).optional(),
+export const PaymentUncheckedUpdateManyWithoutQuoteNestedInputSchema: z.ZodType<Prisma.PaymentUncheckedUpdateManyWithoutQuoteNestedInput> = z.object({
+  create: z.union([ z.lazy(() => PaymentCreateWithoutQuoteInputSchema),z.lazy(() => PaymentCreateWithoutQuoteInputSchema).array(),z.lazy(() => PaymentUncheckedCreateWithoutQuoteInputSchema),z.lazy(() => PaymentUncheckedCreateWithoutQuoteInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => PaymentCreateOrConnectWithoutQuoteInputSchema),z.lazy(() => PaymentCreateOrConnectWithoutQuoteInputSchema).array() ]).optional(),
+  upsert: z.union([ z.lazy(() => PaymentUpsertWithWhereUniqueWithoutQuoteInputSchema),z.lazy(() => PaymentUpsertWithWhereUniqueWithoutQuoteInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => PaymentCreateManyQuoteInputEnvelopeSchema).optional(),
+  set: z.union([ z.lazy(() => PaymentWhereUniqueInputSchema),z.lazy(() => PaymentWhereUniqueInputSchema).array() ]).optional(),
+  disconnect: z.union([ z.lazy(() => PaymentWhereUniqueInputSchema),z.lazy(() => PaymentWhereUniqueInputSchema).array() ]).optional(),
+  delete: z.union([ z.lazy(() => PaymentWhereUniqueInputSchema),z.lazy(() => PaymentWhereUniqueInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => PaymentWhereUniqueInputSchema),z.lazy(() => PaymentWhereUniqueInputSchema).array() ]).optional(),
+  update: z.union([ z.lazy(() => PaymentUpdateWithWhereUniqueWithoutQuoteInputSchema),z.lazy(() => PaymentUpdateWithWhereUniqueWithoutQuoteInputSchema).array() ]).optional(),
+  updateMany: z.union([ z.lazy(() => PaymentUpdateManyWithWhereWithoutQuoteInputSchema),z.lazy(() => PaymentUpdateManyWithWhereWithoutQuoteInputSchema).array() ]).optional(),
+  deleteMany: z.union([ z.lazy(() => PaymentScalarWhereInputSchema),z.lazy(() => PaymentScalarWhereInputSchema).array() ]).optional(),
 }).strict();
 
 export const QuoteCreateNestedOneWithoutTripsInputSchema: z.ZodType<Prisma.QuoteCreateNestedOneWithoutTripsInput> = z.object({
@@ -4913,10 +4947,12 @@ export const TripUpdateOneRequiredWithoutPaymentNestedInputSchema: z.ZodType<Pri
   update: z.union([ z.lazy(() => TripUpdateWithoutPaymentInputSchema),z.lazy(() => TripUncheckedUpdateWithoutPaymentInputSchema) ]).optional(),
 }).strict();
 
-export const QuoteUpdateOneRequiredWithoutPaymentNestedInputSchema: z.ZodType<Prisma.QuoteUpdateOneRequiredWithoutPaymentNestedInput> = z.object({
+export const QuoteUpdateOneWithoutPaymentNestedInputSchema: z.ZodType<Prisma.QuoteUpdateOneWithoutPaymentNestedInput> = z.object({
   create: z.union([ z.lazy(() => QuoteCreateWithoutPaymentInputSchema),z.lazy(() => QuoteUncheckedCreateWithoutPaymentInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => QuoteCreateOrConnectWithoutPaymentInputSchema).optional(),
   upsert: z.lazy(() => QuoteUpsertWithoutPaymentInputSchema).optional(),
+  disconnect: z.boolean().optional(),
+  delete: z.boolean().optional(),
   connect: z.lazy(() => QuoteWhereUniqueInputSchema).optional(),
   update: z.union([ z.lazy(() => QuoteUpdateWithoutPaymentInputSchema),z.lazy(() => QuoteUncheckedUpdateWithoutPaymentInputSchema) ]).optional(),
 }).strict();
@@ -5490,12 +5526,13 @@ export const QuoteCreateWithoutUserInputSchema: z.ZodType<Prisma.QuoteCreateWith
   quote_subtotal: z.number().optional().nullable(),
   quote_tax_total: z.number().optional().nullable(),
   short_link: z.string().optional().nullable(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   service: z.lazy(() => ServiceCreateNestedOneWithoutQuotesInputSchema),
   vehicle: z.lazy(() => VehicleCreateNestedOneWithoutQuotesInputSchema),
   sales_tax: z.lazy(() => SalesTaxCreateNestedOneWithoutQuotesInputSchema),
   line_items: z.lazy(() => LineItemCreateNestedManyWithoutQuotesInputSchema).optional(),
   trips: z.lazy(() => TripCreateNestedManyWithoutQuoteInputSchema).optional(),
-  payment: z.lazy(() => PaymentCreateNestedOneWithoutQuoteInputSchema).optional()
+  payment: z.lazy(() => PaymentCreateNestedManyWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedCreateWithoutUserInputSchema: z.ZodType<Prisma.QuoteUncheckedCreateWithoutUserInput> = z.object({
@@ -5513,9 +5550,10 @@ export const QuoteUncheckedCreateWithoutUserInputSchema: z.ZodType<Prisma.QuoteU
   service_id: z.number(),
   vehicle_id: z.number(),
   sales_tax_id: z.number(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   line_items: z.lazy(() => LineItemUncheckedCreateNestedManyWithoutQuotesInputSchema).optional(),
   trips: z.lazy(() => TripUncheckedCreateNestedManyWithoutQuoteInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutQuoteInputSchema).optional()
+  payment: z.lazy(() => PaymentUncheckedCreateNestedManyWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteCreateOrConnectWithoutUserInputSchema: z.ZodType<Prisma.QuoteCreateOrConnectWithoutUserInput> = z.object({
@@ -5621,6 +5659,7 @@ export const QuoteScalarWhereInputSchema: z.ZodType<Prisma.QuoteScalarWhereInput
   service_id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   vehicle_id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   sales_tax_id: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  combined_line_items: z.lazy(() => JsonNullableFilterSchema).optional()
 }).strict();
 
 export const AccountUpsertWithoutUsersInputSchema: z.ZodType<Prisma.AccountUpsertWithoutUsersInput> = z.object({
@@ -6020,6 +6059,11 @@ export const PaymentCreateOrConnectWithoutQuoteInputSchema: z.ZodType<Prisma.Pay
   create: z.union([ z.lazy(() => PaymentCreateWithoutQuoteInputSchema),z.lazy(() => PaymentUncheckedCreateWithoutQuoteInputSchema) ]),
 }).strict();
 
+export const PaymentCreateManyQuoteInputEnvelopeSchema: z.ZodType<Prisma.PaymentCreateManyQuoteInputEnvelope> = z.object({
+  data: z.union([ z.lazy(() => PaymentCreateManyQuoteInputSchema),z.lazy(() => PaymentCreateManyQuoteInputSchema).array() ]),
+  skipDuplicates: z.boolean().optional()
+}).strict();
+
 export const ServiceUpsertWithoutQuotesInputSchema: z.ZodType<Prisma.ServiceUpsertWithoutQuotesInput> = z.object({
   update: z.union([ z.lazy(() => ServiceUpdateWithoutQuotesInputSchema),z.lazy(() => ServiceUncheckedUpdateWithoutQuotesInputSchema) ]),
   create: z.union([ z.lazy(() => ServiceCreateWithoutQuotesInputSchema),z.lazy(() => ServiceUncheckedCreateWithoutQuotesInputSchema) ]),
@@ -6225,35 +6269,37 @@ export const TripScalarWhereInputSchema: z.ZodType<Prisma.TripScalarWhereInput> 
   notes: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
 }).strict();
 
-export const PaymentUpsertWithoutQuoteInputSchema: z.ZodType<Prisma.PaymentUpsertWithoutQuoteInput> = z.object({
+export const PaymentUpsertWithWhereUniqueWithoutQuoteInputSchema: z.ZodType<Prisma.PaymentUpsertWithWhereUniqueWithoutQuoteInput> = z.object({
+  where: z.lazy(() => PaymentWhereUniqueInputSchema),
   update: z.union([ z.lazy(() => PaymentUpdateWithoutQuoteInputSchema),z.lazy(() => PaymentUncheckedUpdateWithoutQuoteInputSchema) ]),
   create: z.union([ z.lazy(() => PaymentCreateWithoutQuoteInputSchema),z.lazy(() => PaymentUncheckedCreateWithoutQuoteInputSchema) ]),
 }).strict();
 
-export const PaymentUpdateWithoutQuoteInputSchema: z.ZodType<Prisma.PaymentUpdateWithoutQuoteInput> = z.object({
-  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  is_preauthorized: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  is_paid: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  setup_intent: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
-  payment_intent: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
-  payment_type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  trip: z.lazy(() => TripUpdateOneRequiredWithoutPaymentNestedInputSchema).optional()
+export const PaymentUpdateWithWhereUniqueWithoutQuoteInputSchema: z.ZodType<Prisma.PaymentUpdateWithWhereUniqueWithoutQuoteInput> = z.object({
+  where: z.lazy(() => PaymentWhereUniqueInputSchema),
+  data: z.union([ z.lazy(() => PaymentUpdateWithoutQuoteInputSchema),z.lazy(() => PaymentUncheckedUpdateWithoutQuoteInputSchema) ]),
 }).strict();
 
-export const PaymentUncheckedUpdateWithoutQuoteInputSchema: z.ZodType<Prisma.PaymentUncheckedUpdateWithoutQuoteInput> = z.object({
-  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  is_preauthorized: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  is_paid: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  setup_intent: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
-  payment_intent: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
-  payment_type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  trip_id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+export const PaymentUpdateManyWithWhereWithoutQuoteInputSchema: z.ZodType<Prisma.PaymentUpdateManyWithWhereWithoutQuoteInput> = z.object({
+  where: z.lazy(() => PaymentScalarWhereInputSchema),
+  data: z.union([ z.lazy(() => PaymentUpdateManyMutationInputSchema),z.lazy(() => PaymentUncheckedUpdateManyWithoutPaymentInputSchema) ]),
+}).strict();
+
+export const PaymentScalarWhereInputSchema: z.ZodType<Prisma.PaymentScalarWhereInput> = z.object({
+  AND: z.union([ z.lazy(() => PaymentScalarWhereInputSchema),z.lazy(() => PaymentScalarWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => PaymentScalarWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => PaymentScalarWhereInputSchema),z.lazy(() => PaymentScalarWhereInputSchema).array() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  created_at: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
+  updated_at: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
+  is_preauthorized: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
+  is_paid: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
+  setup_intent: z.lazy(() => JsonNullableFilterSchema).optional(),
+  payment_intent: z.lazy(() => JsonNullableFilterSchema).optional(),
+  payment_type: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  notes: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  trip_id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  quote_number: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
 }).strict();
 
 export const QuoteCreateWithoutTripsInputSchema: z.ZodType<Prisma.QuoteCreateWithoutTripsInput> = z.object({
@@ -6267,12 +6313,13 @@ export const QuoteCreateWithoutTripsInputSchema: z.ZodType<Prisma.QuoteCreateWit
   quote_subtotal: z.number().optional().nullable(),
   quote_tax_total: z.number().optional().nullable(),
   short_link: z.string().optional().nullable(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   service: z.lazy(() => ServiceCreateNestedOneWithoutQuotesInputSchema),
   vehicle: z.lazy(() => VehicleCreateNestedOneWithoutQuotesInputSchema),
   user: z.lazy(() => UserCreateNestedOneWithoutQuotesInputSchema),
   sales_tax: z.lazy(() => SalesTaxCreateNestedOneWithoutQuotesInputSchema),
   line_items: z.lazy(() => LineItemCreateNestedManyWithoutQuotesInputSchema).optional(),
-  payment: z.lazy(() => PaymentCreateNestedOneWithoutQuoteInputSchema).optional()
+  payment: z.lazy(() => PaymentCreateNestedManyWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedCreateWithoutTripsInputSchema: z.ZodType<Prisma.QuoteUncheckedCreateWithoutTripsInput> = z.object({
@@ -6291,8 +6338,9 @@ export const QuoteUncheckedCreateWithoutTripsInputSchema: z.ZodType<Prisma.Quote
   service_id: z.number(),
   vehicle_id: z.number(),
   sales_tax_id: z.number(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   line_items: z.lazy(() => LineItemUncheckedCreateNestedManyWithoutQuotesInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutQuoteInputSchema).optional()
+  payment: z.lazy(() => PaymentUncheckedCreateNestedManyWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteCreateOrConnectWithoutTripsInputSchema: z.ZodType<Prisma.QuoteCreateOrConnectWithoutTripsInput> = z.object({
@@ -6310,7 +6358,7 @@ export const PaymentCreateWithoutTripInputSchema: z.ZodType<Prisma.PaymentCreate
   payment_intent: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   payment_type: z.string().optional().nullable(),
   notes: z.string().optional().nullable(),
-  quote: z.lazy(() => QuoteCreateNestedOneWithoutPaymentInputSchema)
+  Quote: z.lazy(() => QuoteCreateNestedOneWithoutPaymentInputSchema).optional()
 }).strict();
 
 export const PaymentUncheckedCreateWithoutTripInputSchema: z.ZodType<Prisma.PaymentUncheckedCreateWithoutTripInput> = z.object({
@@ -6323,7 +6371,7 @@ export const PaymentUncheckedCreateWithoutTripInputSchema: z.ZodType<Prisma.Paym
   payment_intent: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   payment_type: z.string().optional().nullable(),
   notes: z.string().optional().nullable(),
-  quote_number: z.number()
+  quote_number: z.number().optional().nullable()
 }).strict();
 
 export const PaymentCreateOrConnectWithoutTripInputSchema: z.ZodType<Prisma.PaymentCreateOrConnectWithoutTripInput> = z.object({
@@ -6428,12 +6476,13 @@ export const QuoteUpdateWithoutTripsInputSchema: z.ZodType<Prisma.QuoteUpdateWit
   quote_subtotal: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   quote_tax_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   short_link: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   service: z.lazy(() => ServiceUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   vehicle: z.lazy(() => VehicleUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   user: z.lazy(() => UserUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   sales_tax: z.lazy(() => SalesTaxUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   line_items: z.lazy(() => LineItemUpdateManyWithoutQuotesNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUpdateOneWithoutQuoteNestedInputSchema).optional()
+  payment: z.lazy(() => PaymentUpdateManyWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedUpdateWithoutTripsInputSchema: z.ZodType<Prisma.QuoteUncheckedUpdateWithoutTripsInput> = z.object({
@@ -6452,8 +6501,9 @@ export const QuoteUncheckedUpdateWithoutTripsInputSchema: z.ZodType<Prisma.Quote
   service_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   vehicle_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   sales_tax_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   line_items: z.lazy(() => LineItemUncheckedUpdateManyWithoutQuotesNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutQuoteNestedInputSchema).optional()
+  payment: z.lazy(() => PaymentUncheckedUpdateManyWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const PaymentUpsertWithoutTripInputSchema: z.ZodType<Prisma.PaymentUpsertWithoutTripInput> = z.object({
@@ -6471,7 +6521,7 @@ export const PaymentUpdateWithoutTripInputSchema: z.ZodType<Prisma.PaymentUpdate
   payment_intent: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   payment_type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  quote: z.lazy(() => QuoteUpdateOneRequiredWithoutPaymentNestedInputSchema).optional()
+  Quote: z.lazy(() => QuoteUpdateOneWithoutPaymentNestedInputSchema).optional()
 }).strict();
 
 export const PaymentUncheckedUpdateWithoutTripInputSchema: z.ZodType<Prisma.PaymentUncheckedUpdateWithoutTripInput> = z.object({
@@ -6484,7 +6534,7 @@ export const PaymentUncheckedUpdateWithoutTripInputSchema: z.ZodType<Prisma.Paym
   payment_intent: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   payment_type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  quote_number: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  quote_number: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const LocationUpsertWithWhereUniqueWithoutTripInputSchema: z.ZodType<Prisma.LocationUpsertWithWhereUniqueWithoutTripInput> = z.object({
@@ -6635,6 +6685,7 @@ export const QuoteCreateWithoutPaymentInputSchema: z.ZodType<Prisma.QuoteCreateW
   quote_subtotal: z.number().optional().nullable(),
   quote_tax_total: z.number().optional().nullable(),
   short_link: z.string().optional().nullable(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   service: z.lazy(() => ServiceCreateNestedOneWithoutQuotesInputSchema),
   vehicle: z.lazy(() => VehicleCreateNestedOneWithoutQuotesInputSchema),
   user: z.lazy(() => UserCreateNestedOneWithoutQuotesInputSchema),
@@ -6659,6 +6710,7 @@ export const QuoteUncheckedCreateWithoutPaymentInputSchema: z.ZodType<Prisma.Quo
   service_id: z.number(),
   vehicle_id: z.number(),
   sales_tax_id: z.number(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   line_items: z.lazy(() => LineItemUncheckedCreateNestedManyWithoutQuotesInputSchema).optional(),
   trips: z.lazy(() => TripUncheckedCreateNestedManyWithoutQuoteInputSchema).optional()
 }).strict();
@@ -6747,6 +6799,7 @@ export const QuoteUpdateWithoutPaymentInputSchema: z.ZodType<Prisma.QuoteUpdateW
   quote_subtotal: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   quote_tax_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   short_link: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   service: z.lazy(() => ServiceUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   vehicle: z.lazy(() => VehicleUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   user: z.lazy(() => UserUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
@@ -6771,6 +6824,7 @@ export const QuoteUncheckedUpdateWithoutPaymentInputSchema: z.ZodType<Prisma.Quo
   service_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   vehicle_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   sales_tax_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   line_items: z.lazy(() => LineItemUncheckedUpdateManyWithoutQuotesNestedInputSchema).optional(),
   trips: z.lazy(() => TripUncheckedUpdateManyWithoutQuoteNestedInputSchema).optional()
 }).strict();
@@ -7038,12 +7092,13 @@ export const QuoteCreateWithoutServiceInputSchema: z.ZodType<Prisma.QuoteCreateW
   quote_subtotal: z.number().optional().nullable(),
   quote_tax_total: z.number().optional().nullable(),
   short_link: z.string().optional().nullable(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   vehicle: z.lazy(() => VehicleCreateNestedOneWithoutQuotesInputSchema),
   user: z.lazy(() => UserCreateNestedOneWithoutQuotesInputSchema),
   sales_tax: z.lazy(() => SalesTaxCreateNestedOneWithoutQuotesInputSchema),
   line_items: z.lazy(() => LineItemCreateNestedManyWithoutQuotesInputSchema).optional(),
   trips: z.lazy(() => TripCreateNestedManyWithoutQuoteInputSchema).optional(),
-  payment: z.lazy(() => PaymentCreateNestedOneWithoutQuoteInputSchema).optional()
+  payment: z.lazy(() => PaymentCreateNestedManyWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedCreateWithoutServiceInputSchema: z.ZodType<Prisma.QuoteUncheckedCreateWithoutServiceInput> = z.object({
@@ -7061,9 +7116,10 @@ export const QuoteUncheckedCreateWithoutServiceInputSchema: z.ZodType<Prisma.Quo
   short_link: z.string().optional().nullable(),
   vehicle_id: z.number(),
   sales_tax_id: z.number(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   line_items: z.lazy(() => LineItemUncheckedCreateNestedManyWithoutQuotesInputSchema).optional(),
   trips: z.lazy(() => TripUncheckedCreateNestedManyWithoutQuoteInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutQuoteInputSchema).optional()
+  payment: z.lazy(() => PaymentUncheckedCreateNestedManyWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteCreateOrConnectWithoutServiceInputSchema: z.ZodType<Prisma.QuoteCreateOrConnectWithoutServiceInput> = z.object({
@@ -7103,12 +7159,13 @@ export const QuoteCreateWithoutLine_itemsInputSchema: z.ZodType<Prisma.QuoteCrea
   quote_subtotal: z.number().optional().nullable(),
   quote_tax_total: z.number().optional().nullable(),
   short_link: z.string().optional().nullable(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   service: z.lazy(() => ServiceCreateNestedOneWithoutQuotesInputSchema),
   vehicle: z.lazy(() => VehicleCreateNestedOneWithoutQuotesInputSchema),
   user: z.lazy(() => UserCreateNestedOneWithoutQuotesInputSchema),
   sales_tax: z.lazy(() => SalesTaxCreateNestedOneWithoutQuotesInputSchema),
   trips: z.lazy(() => TripCreateNestedManyWithoutQuoteInputSchema).optional(),
-  payment: z.lazy(() => PaymentCreateNestedOneWithoutQuoteInputSchema).optional()
+  payment: z.lazy(() => PaymentCreateNestedManyWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedCreateWithoutLine_itemsInputSchema: z.ZodType<Prisma.QuoteUncheckedCreateWithoutLine_itemsInput> = z.object({
@@ -7127,8 +7184,9 @@ export const QuoteUncheckedCreateWithoutLine_itemsInputSchema: z.ZodType<Prisma.
   service_id: z.number(),
   vehicle_id: z.number(),
   sales_tax_id: z.number(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   trips: z.lazy(() => TripUncheckedCreateNestedManyWithoutQuoteInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutQuoteInputSchema).optional()
+  payment: z.lazy(() => PaymentUncheckedCreateNestedManyWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteCreateOrConnectWithoutLine_itemsInputSchema: z.ZodType<Prisma.QuoteCreateOrConnectWithoutLine_itemsInput> = z.object({
@@ -7163,12 +7221,13 @@ export const QuoteCreateWithoutSales_taxInputSchema: z.ZodType<Prisma.QuoteCreat
   quote_subtotal: z.number().optional().nullable(),
   quote_tax_total: z.number().optional().nullable(),
   short_link: z.string().optional().nullable(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   service: z.lazy(() => ServiceCreateNestedOneWithoutQuotesInputSchema),
   vehicle: z.lazy(() => VehicleCreateNestedOneWithoutQuotesInputSchema),
   user: z.lazy(() => UserCreateNestedOneWithoutQuotesInputSchema),
   line_items: z.lazy(() => LineItemCreateNestedManyWithoutQuotesInputSchema).optional(),
   trips: z.lazy(() => TripCreateNestedManyWithoutQuoteInputSchema).optional(),
-  payment: z.lazy(() => PaymentCreateNestedOneWithoutQuoteInputSchema).optional()
+  payment: z.lazy(() => PaymentCreateNestedManyWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedCreateWithoutSales_taxInputSchema: z.ZodType<Prisma.QuoteUncheckedCreateWithoutSales_taxInput> = z.object({
@@ -7186,9 +7245,10 @@ export const QuoteUncheckedCreateWithoutSales_taxInputSchema: z.ZodType<Prisma.Q
   short_link: z.string().optional().nullable(),
   service_id: z.number(),
   vehicle_id: z.number(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   line_items: z.lazy(() => LineItemUncheckedCreateNestedManyWithoutQuotesInputSchema).optional(),
   trips: z.lazy(() => TripUncheckedCreateNestedManyWithoutQuoteInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutQuoteInputSchema).optional()
+  payment: z.lazy(() => PaymentUncheckedCreateNestedManyWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteCreateOrConnectWithoutSales_taxInputSchema: z.ZodType<Prisma.QuoteCreateOrConnectWithoutSales_taxInput> = z.object({
@@ -7228,12 +7288,13 @@ export const QuoteCreateWithoutVehicleInputSchema: z.ZodType<Prisma.QuoteCreateW
   quote_subtotal: z.number().optional().nullable(),
   quote_tax_total: z.number().optional().nullable(),
   short_link: z.string().optional().nullable(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   service: z.lazy(() => ServiceCreateNestedOneWithoutQuotesInputSchema),
   user: z.lazy(() => UserCreateNestedOneWithoutQuotesInputSchema),
   sales_tax: z.lazy(() => SalesTaxCreateNestedOneWithoutQuotesInputSchema),
   line_items: z.lazy(() => LineItemCreateNestedManyWithoutQuotesInputSchema).optional(),
   trips: z.lazy(() => TripCreateNestedManyWithoutQuoteInputSchema).optional(),
-  payment: z.lazy(() => PaymentCreateNestedOneWithoutQuoteInputSchema).optional()
+  payment: z.lazy(() => PaymentCreateNestedManyWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedCreateWithoutVehicleInputSchema: z.ZodType<Prisma.QuoteUncheckedCreateWithoutVehicleInput> = z.object({
@@ -7251,9 +7312,10 @@ export const QuoteUncheckedCreateWithoutVehicleInputSchema: z.ZodType<Prisma.Quo
   short_link: z.string().optional().nullable(),
   service_id: z.number(),
   sales_tax_id: z.number(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   line_items: z.lazy(() => LineItemUncheckedCreateNestedManyWithoutQuotesInputSchema).optional(),
   trips: z.lazy(() => TripUncheckedCreateNestedManyWithoutQuoteInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutQuoteInputSchema).optional()
+  payment: z.lazy(() => PaymentUncheckedCreateNestedManyWithoutQuoteInputSchema).optional()
 }).strict();
 
 export const QuoteCreateOrConnectWithoutVehicleInputSchema: z.ZodType<Prisma.QuoteCreateOrConnectWithoutVehicleInput> = z.object({
@@ -7364,7 +7426,8 @@ export const QuoteCreateManyUserInputSchema: z.ZodType<Prisma.QuoteCreateManyUse
   short_link: z.string().optional().nullable(),
   service_id: z.number().int(),
   vehicle_id: z.number().int(),
-  sales_tax_id: z.number().int()
+  sales_tax_id: z.number().int(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
 }).strict();
 
 export const QuoteUpdateWithoutUserInputSchema: z.ZodType<Prisma.QuoteUpdateWithoutUserInput> = z.object({
@@ -7378,12 +7441,13 @@ export const QuoteUpdateWithoutUserInputSchema: z.ZodType<Prisma.QuoteUpdateWith
   quote_subtotal: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   quote_tax_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   short_link: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   service: z.lazy(() => ServiceUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   vehicle: z.lazy(() => VehicleUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   sales_tax: z.lazy(() => SalesTaxUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   line_items: z.lazy(() => LineItemUpdateManyWithoutQuotesNestedInputSchema).optional(),
   trips: z.lazy(() => TripUpdateManyWithoutQuoteNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUpdateOneWithoutQuoteNestedInputSchema).optional()
+  payment: z.lazy(() => PaymentUpdateManyWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedUpdateWithoutUserInputSchema: z.ZodType<Prisma.QuoteUncheckedUpdateWithoutUserInput> = z.object({
@@ -7401,9 +7465,10 @@ export const QuoteUncheckedUpdateWithoutUserInputSchema: z.ZodType<Prisma.QuoteU
   service_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   vehicle_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   sales_tax_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   line_items: z.lazy(() => LineItemUncheckedUpdateManyWithoutQuotesNestedInputSchema).optional(),
   trips: z.lazy(() => TripUncheckedUpdateManyWithoutQuoteNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutQuoteNestedInputSchema).optional()
+  payment: z.lazy(() => PaymentUncheckedUpdateManyWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedUpdateManyWithoutQuotesInputSchema: z.ZodType<Prisma.QuoteUncheckedUpdateManyWithoutQuotesInput> = z.object({
@@ -7421,6 +7486,7 @@ export const QuoteUncheckedUpdateManyWithoutQuotesInputSchema: z.ZodType<Prisma.
   service_id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   vehicle_id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   sales_tax_id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
 }).strict();
 
 export const TripCreateManyQuoteInputSchema: z.ZodType<Prisma.TripCreateManyQuoteInput> = z.object({
@@ -7447,6 +7513,19 @@ export const TripCreateManyQuoteInputSchema: z.ZodType<Prisma.TripCreateManyQuot
   is_farmed_out: z.boolean().optional().nullable(),
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable()
+}).strict();
+
+export const PaymentCreateManyQuoteInputSchema: z.ZodType<Prisma.PaymentCreateManyQuoteInput> = z.object({
+  id: z.string().uuid().optional(),
+  created_at: z.coerce.date().optional(),
+  updated_at: z.coerce.date().optional(),
+  is_preauthorized: z.boolean().optional(),
+  is_paid: z.boolean().optional(),
+  setup_intent: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
+  payment_intent: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
+  payment_type: z.string().optional().nullable(),
+  notes: z.string().optional().nullable(),
+  trip_id: z.string()
 }).strict();
 
 export const LineItemUpdateWithoutQuotesInputSchema: z.ZodType<Prisma.LineItemUpdateWithoutQuotesInput> = z.object({
@@ -7572,6 +7651,45 @@ export const TripUncheckedUpdateManyWithoutTripsInputSchema: z.ZodType<Prisma.Tr
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
+export const PaymentUpdateWithoutQuoteInputSchema: z.ZodType<Prisma.PaymentUpdateWithoutQuoteInput> = z.object({
+  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  is_preauthorized: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  is_paid: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  setup_intent: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
+  payment_intent: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
+  payment_type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  trip: z.lazy(() => TripUpdateOneRequiredWithoutPaymentNestedInputSchema).optional()
+}).strict();
+
+export const PaymentUncheckedUpdateWithoutQuoteInputSchema: z.ZodType<Prisma.PaymentUncheckedUpdateWithoutQuoteInput> = z.object({
+  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  is_preauthorized: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  is_paid: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  setup_intent: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
+  payment_intent: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
+  payment_type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  trip_id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict();
+
+export const PaymentUncheckedUpdateManyWithoutPaymentInputSchema: z.ZodType<Prisma.PaymentUncheckedUpdateManyWithoutPaymentInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  is_preauthorized: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  is_paid: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  setup_intent: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
+  payment_intent: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
+  payment_type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  trip_id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict();
+
 export const LocationCreateManyTripInputSchema: z.ZodType<Prisma.LocationCreateManyTripInput> = z.object({
   id: z.string().uuid().optional(),
   created_at: z.coerce.date().optional(),
@@ -7654,7 +7772,8 @@ export const QuoteCreateManyServiceInputSchema: z.ZodType<Prisma.QuoteCreateMany
   quote_tax_total: z.number().optional().nullable(),
   short_link: z.string().optional().nullable(),
   vehicle_id: z.number().int(),
-  sales_tax_id: z.number().int()
+  sales_tax_id: z.number().int(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
 }).strict();
 
 export const QuoteUpdateWithoutServiceInputSchema: z.ZodType<Prisma.QuoteUpdateWithoutServiceInput> = z.object({
@@ -7668,12 +7787,13 @@ export const QuoteUpdateWithoutServiceInputSchema: z.ZodType<Prisma.QuoteUpdateW
   quote_subtotal: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   quote_tax_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   short_link: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   vehicle: z.lazy(() => VehicleUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   user: z.lazy(() => UserUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   sales_tax: z.lazy(() => SalesTaxUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   line_items: z.lazy(() => LineItemUpdateManyWithoutQuotesNestedInputSchema).optional(),
   trips: z.lazy(() => TripUpdateManyWithoutQuoteNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUpdateOneWithoutQuoteNestedInputSchema).optional()
+  payment: z.lazy(() => PaymentUpdateManyWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedUpdateWithoutServiceInputSchema: z.ZodType<Prisma.QuoteUncheckedUpdateWithoutServiceInput> = z.object({
@@ -7691,9 +7811,10 @@ export const QuoteUncheckedUpdateWithoutServiceInputSchema: z.ZodType<Prisma.Quo
   short_link: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   vehicle_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   sales_tax_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   line_items: z.lazy(() => LineItemUncheckedUpdateManyWithoutQuotesNestedInputSchema).optional(),
   trips: z.lazy(() => TripUncheckedUpdateManyWithoutQuoteNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutQuoteNestedInputSchema).optional()
+  payment: z.lazy(() => PaymentUncheckedUpdateManyWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const QuoteUpdateWithoutLine_itemsInputSchema: z.ZodType<Prisma.QuoteUpdateWithoutLine_itemsInput> = z.object({
@@ -7707,12 +7828,13 @@ export const QuoteUpdateWithoutLine_itemsInputSchema: z.ZodType<Prisma.QuoteUpda
   quote_subtotal: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   quote_tax_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   short_link: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   service: z.lazy(() => ServiceUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   vehicle: z.lazy(() => VehicleUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   user: z.lazy(() => UserUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   sales_tax: z.lazy(() => SalesTaxUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   trips: z.lazy(() => TripUpdateManyWithoutQuoteNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUpdateOneWithoutQuoteNestedInputSchema).optional()
+  payment: z.lazy(() => PaymentUpdateManyWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedUpdateWithoutLine_itemsInputSchema: z.ZodType<Prisma.QuoteUncheckedUpdateWithoutLine_itemsInput> = z.object({
@@ -7731,8 +7853,9 @@ export const QuoteUncheckedUpdateWithoutLine_itemsInputSchema: z.ZodType<Prisma.
   service_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   vehicle_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   sales_tax_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   trips: z.lazy(() => TripUncheckedUpdateManyWithoutQuoteNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutQuoteNestedInputSchema).optional()
+  payment: z.lazy(() => PaymentUncheckedUpdateManyWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const QuoteCreateManySales_taxInputSchema: z.ZodType<Prisma.QuoteCreateManySales_taxInput> = z.object({
@@ -7749,7 +7872,8 @@ export const QuoteCreateManySales_taxInputSchema: z.ZodType<Prisma.QuoteCreateMa
   quote_tax_total: z.number().optional().nullable(),
   short_link: z.string().optional().nullable(),
   service_id: z.number().int(),
-  vehicle_id: z.number().int()
+  vehicle_id: z.number().int(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
 }).strict();
 
 export const QuoteUpdateWithoutSales_taxInputSchema: z.ZodType<Prisma.QuoteUpdateWithoutSales_taxInput> = z.object({
@@ -7763,12 +7887,13 @@ export const QuoteUpdateWithoutSales_taxInputSchema: z.ZodType<Prisma.QuoteUpdat
   quote_subtotal: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   quote_tax_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   short_link: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   service: z.lazy(() => ServiceUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   vehicle: z.lazy(() => VehicleUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   user: z.lazy(() => UserUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   line_items: z.lazy(() => LineItemUpdateManyWithoutQuotesNestedInputSchema).optional(),
   trips: z.lazy(() => TripUpdateManyWithoutQuoteNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUpdateOneWithoutQuoteNestedInputSchema).optional()
+  payment: z.lazy(() => PaymentUpdateManyWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedUpdateWithoutSales_taxInputSchema: z.ZodType<Prisma.QuoteUncheckedUpdateWithoutSales_taxInput> = z.object({
@@ -7786,9 +7911,10 @@ export const QuoteUncheckedUpdateWithoutSales_taxInputSchema: z.ZodType<Prisma.Q
   short_link: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   service_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   vehicle_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   line_items: z.lazy(() => LineItemUncheckedUpdateManyWithoutQuotesNestedInputSchema).optional(),
   trips: z.lazy(() => TripUncheckedUpdateManyWithoutQuoteNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutQuoteNestedInputSchema).optional()
+  payment: z.lazy(() => PaymentUncheckedUpdateManyWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const QuoteCreateManyVehicleInputSchema: z.ZodType<Prisma.QuoteCreateManyVehicleInput> = z.object({
@@ -7805,7 +7931,8 @@ export const QuoteCreateManyVehicleInputSchema: z.ZodType<Prisma.QuoteCreateMany
   quote_tax_total: z.number().optional().nullable(),
   short_link: z.string().optional().nullable(),
   service_id: z.number().int(),
-  sales_tax_id: z.number().int()
+  sales_tax_id: z.number().int(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
 }).strict();
 
 export const QuoteUpdateWithoutVehicleInputSchema: z.ZodType<Prisma.QuoteUpdateWithoutVehicleInput> = z.object({
@@ -7819,12 +7946,13 @@ export const QuoteUpdateWithoutVehicleInputSchema: z.ZodType<Prisma.QuoteUpdateW
   quote_subtotal: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   quote_tax_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   short_link: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   service: z.lazy(() => ServiceUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   user: z.lazy(() => UserUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   sales_tax: z.lazy(() => SalesTaxUpdateOneRequiredWithoutQuotesNestedInputSchema).optional(),
   line_items: z.lazy(() => LineItemUpdateManyWithoutQuotesNestedInputSchema).optional(),
   trips: z.lazy(() => TripUpdateManyWithoutQuoteNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUpdateOneWithoutQuoteNestedInputSchema).optional()
+  payment: z.lazy(() => PaymentUpdateManyWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 export const QuoteUncheckedUpdateWithoutVehicleInputSchema: z.ZodType<Prisma.QuoteUncheckedUpdateWithoutVehicleInput> = z.object({
@@ -7842,9 +7970,10 @@ export const QuoteUncheckedUpdateWithoutVehicleInputSchema: z.ZodType<Prisma.Quo
   short_link: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   service_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   sales_tax_id: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  combined_line_items: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   line_items: z.lazy(() => LineItemUncheckedUpdateManyWithoutQuotesNestedInputSchema).optional(),
   trips: z.lazy(() => TripUncheckedUpdateManyWithoutQuoteNestedInputSchema).optional(),
-  payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutQuoteNestedInputSchema).optional()
+  payment: z.lazy(() => PaymentUncheckedUpdateManyWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
 /////////////////////////////////////////

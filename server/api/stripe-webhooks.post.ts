@@ -1,5 +1,5 @@
-import { stripe } from '~/server/api/services/stripeInit'
-import { twilioClient } from '~/server/api/services/twilioInit'
+import { stripe } from '~/server/trpc/services/stripeInit'
+import { twilioClient } from '~/server/trpc/services/twilioInit'
 
 export default defineEventHandler(async (event) => {
   const endpointSecret = useRuntimeConfig().stripeWebhookSecret

@@ -3,7 +3,7 @@ import { z } from 'zod'
 import {
   getOrCreateStripCustomerId,
   createSetupIntent,
-} from '../../api/services/stripe'
+} from '~/server/trpc/services/stripe'
 export const stripeRouter = router({
   createCheckout: publicProcedure
     .input(

@@ -34,6 +34,7 @@ const {
   vehicle,
   sales_tax,
   trips,
+  combined_line_items,
 } = quote.value!
 
 const appearance = {
@@ -82,8 +83,9 @@ onMounted(() => {
 
 const url = useRuntimeConfig().public.WEBSITE_URL
 const websiteUrl = `${url}/success?quote_number=${quote_number}`
-
+const loading = ref(false)
 async function submitHandler(): Promise<void> {
+  loading.value = true
   if (!stripe || !elements.value) {
     console.error('Stripe is not initialized.')
     return
@@ -96,7 +98,7 @@ async function submitHandler(): Promise<void> {
         return_url: websiteUrl,
       },
     })
-
+    loading.value = false
     if (error) {
       console.error('Stripe error:', error)
       // Display the error to the user, consider using a UI component to show the error
@@ -106,7 +108,18 @@ async function submitHandler(): Promise<void> {
     // Handle any other errors during setup confirmation, consider using a UI component to show the error
   }
 }
+function removeLastObject(arr: any) {
+  if (arr.length === 0) {
+    return null
+  }
 
+  return arr.pop()
+}
+
+const totalPrice = removeLastObject(quote.value?.combined_line_items)
+const lineItems = quote.value?.combined_line_items
+console.log('Popped array', quote.value?.combined_line_items)
+console.log(totalPrice)
 //todo: add in the creation of draft invoice in stripe
 //todo: add spot for flight information in the checkout flow
 //todo: add trip notes in the checkout flow
@@ -162,7 +175,7 @@ async function submitHandler(): Promise<void> {
           <dl>
             <dt class="text-sm font-medium">Amount due</dt>
             <dd class="mt-1 text-3xl font-bold tracking-tight text-white">
-              $ {{ quote_total }}
+              $ {{ totalPrice.total }}
             </dd>
           </dl>
 
@@ -188,7 +201,7 @@ async function submitHandler(): Promise<void> {
                 <p class="text-brand-200">{{ vehicle.label }}</p>
               </div>
               <p class="flex-none text-base font-medium text-white">
-                {{ trip.line_items_total }}
+                <!--                {{ totalPrice.total }}-->
               </p>
             </li>
           </ul>
@@ -196,21 +209,20 @@ async function submitHandler(): Promise<void> {
           <dl
             class="space-y-6 border-t border-white border-opacity-10 pt-6 text-sm font-medium"
           >
-            <div class="flex items-center justify-between">
-              <dt>Subtotal</dt>
-              <dd>${{ quote_subtotal }}</dd>
-            </div>
-
-            <div class="flex items-center justify-between">
-              <dt>Taxes</dt>
-              <dd>${{ quote_tax_total }}</dd>
+            <div
+              v-for="item in lineItems"
+              :key="item.label"
+              class="flex items-center justify-between"
+            >
+              <dt>{{ item.label }}</dt>
+              <dd>${{ item.total }}</dd>
             </div>
 
             <div
               class="flex items-center justify-between border-t border-white border-opacity-10 pt-6 text-white"
             >
               <dt class="text-base">Total</dt>
-              <dd class="text-base">${{ quote_total }}</dd>
+              <dd class="text-base">${{ totalPrice.total }}</dd>
             </div>
           </dl>
         </div>
@@ -245,7 +257,8 @@ async function submitHandler(): Promise<void> {
                   class="w-full rounded-md border border-transparent bg-brand-600 px-4 py-2 text-sm font-medium uppercase text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-gray-50"
                 >
                   <div class="spinner hidden" id="spinner"></div>
-                  <span id="button-text">Complete Booking</span>
+                  <span v-if="loading" id="button-text">Processing......</span>
+                  <span v-else id="button-text">Complete Booking</span>
                 </button>
                 <div id="payment-message" class="hidden"></div>
               </div>
