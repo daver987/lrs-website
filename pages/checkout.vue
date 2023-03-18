@@ -57,11 +57,24 @@ onMounted(() => {
       clientSecret: client_secret.value,
       appearance,
     })
+
     const paymentElement: StripePaymentElement | undefined =
-      elements.value?.create('payment')
+      elements.value?.create('payment', {
+        defaultValues: {
+          billingDetails: {
+            name: quote.value?.user.full_name as string,
+            email: quote.value?.user.email_address as string,
+            phone: quote.value?.user.phone_number as string,
+          },
+        },
+      })
     const linkAuthenticationElement:
       | StripeLinkAuthenticationElement
-      | undefined = elements.value?.create('linkAuthentication')
+      | undefined = elements.value?.create('linkAuthentication', {
+      defaultValues: {
+        email: quote.value?.user.email_address as string,
+      },
+    })
     linkAuthenticationElement?.mount('#link-authentication-element')
     paymentElement?.mount('#payment-element')
   })
@@ -231,7 +244,7 @@ async function submitHandler(): Promise<void> {
                 <button
                   type="submit"
                   id="submit"
-                  class="w-full rounded-md border border-transparent bg-brand-600 py-2 px-4 text-sm font-medium uppercase text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-gray-50"
+                  class="w-full rounded-md border border-transparent bg-brand-600 px-4 py-2 text-sm font-medium uppercase text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-gray-50"
                 >
                   <div class="spinner hidden" id="spinner"></div>
                   <span id="button-text">Complete Booking</span>

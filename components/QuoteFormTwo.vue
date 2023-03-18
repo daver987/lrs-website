@@ -9,11 +9,7 @@ import {
 import { Ref, WatchCallback } from 'vue'
 import { ref, computed } from '#imports'
 import { VueTelInput } from 'vue-tel-input'
-import {
-  LineItemSchema,
-  SalesTaxSchema,
-  Conversion,
-} from '~/prisma/generated/zod'
+import { LineItemSchema, SalesTaxSchema } from '~/prisma/generated/zod'
 import { Place, placeSchema } from '~/schema/placeSchema'
 import { useGtm } from '@gtm-support/vue-gtm'
 import { useDataStore } from '~/stores/useDataStore'
@@ -41,17 +37,11 @@ const { vehicleTypes, serviceTypes, lineItems, salesTaxes } =
   storeToRefs(dataStore)
 
 const serviceTypeOptions = await $client.service.get.query()
-// console.log('client services', serviceTypesRes)
 const lineItemsRes = await $client.lineItem.get.query()
-console.log('client lineItems', lineItemsRes)
 const vehicleTypeOptions = await $client.vehicle.get.query()
-// console.log('client vehicles', vehicleTypesRes)
 const salesTaxesRes = await $client.salesTax.get.query()
-console.log('client Sales Tax', salesTaxesRes)
 
 //the validation of the data fetched from the database
-// vehicleTypes.value = VehicleSchema.array().parse(vehicleTypesRes)
-// serviceTypes.value = ServiceSchema.array().parse(serviceTypesRes)
 lineItems.value = LineItemSchema.array().parse(lineItemsRes)
 salesTaxes.value = SalesTaxSchema.array().parse(salesTaxesRes)
 
@@ -60,9 +50,6 @@ dataStore.setVehicleTypes(vehicleTypeOptions)
 dataStore.setServiceTypes(serviceTypeOptions)
 dataStore.setLineItems(lineItems.value)
 dataStore.setSalesTaxes(salesTaxes.value)
-
-// const serviceTypeOptions = serviceTypes
-// const vehicleTypeOptions = vehicleTypes
 
 const hoursOptions = buildHoursOptions()
 const maxPassengers = computed<number>(() => {
@@ -78,7 +65,7 @@ const passengerOptions = computed(() =>
 )
 
 const route = useRoute()
-const gtmValues: Conversion = route.query as any
+const gtmValues = route.query
 
 //tag manager
 const gtm = useGtm()

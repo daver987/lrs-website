@@ -57,7 +57,9 @@ const fleetImage = computed(() => {
                 </div>
               </div>
               <div class="mt-16 px-3 pb-8 sm:mt-24 lg:col-span-6 lg:mt-0">
-                <QuoteFormTwo />
+                <keep-alive>
+                  <QuoteFormTwo />
+                </keep-alive>
               </div>
             </div>
           </div>
