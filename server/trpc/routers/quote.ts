@@ -16,10 +16,13 @@ export const quoteRouter = router({
           user: true,
           sales_tax: true,
           trips: {
+            orderBy: {
+              trip_order: 'asc',
+            },
             include: {
               locations: {
                 orderBy: {
-                  route_order: 'desc',
+                  route_order: 'asc',
                 },
               },
             },

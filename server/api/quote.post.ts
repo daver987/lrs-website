@@ -150,10 +150,10 @@ export default defineEventHandler(async (event) => {
       ? totalAmount.value + returnTotalAmount.value
       : totalAmount.value
     const quoteSubtotal = isRoundTrip.value
-      ? totalAmount.value + returnSubTotal.value
+      ? subTotal.value + returnSubTotal.value
       : subTotal.value
     const quoteTaxTotal = isRoundTrip.value
-      ? totalAmount.value + returnTaxTotal.value
+      ? taxTotal.value + returnTaxTotal.value
       : taxTotal.value
 
     //format date times
@@ -210,6 +210,7 @@ export default defineEventHandler(async (event) => {
                   line_items_tax: parseFloat(taxTotal.value.toFixed(2)),
                   line_items_total: parseFloat(totalAmount.value.toFixed(2)),
                   is_return: false,
+                  trip_order: 0,
                   locations: {
                     create: [
                       {
@@ -260,6 +261,7 @@ export default defineEventHandler(async (event) => {
                   line_items_tax: parseFloat(taxTotal.value.toFixed(2)),
                   line_items_total: parseFloat(totalAmount.value.toFixed(2)),
                   is_return: true,
+                  trip_order: 1,
                   locations: {
                     create: [
                       {
@@ -314,6 +316,7 @@ export default defineEventHandler(async (event) => {
                   line_items_tax: parseFloat(taxTotal.value.toFixed(2)),
                   line_items_total: parseFloat(totalAmount.value.toFixed(2)),
                   is_return: false,
+                  trip_order: 0,
                   locations: {
                     create: [
                       {
@@ -393,8 +396,15 @@ export default defineEventHandler(async (event) => {
         vehicle: true,
         service: true,
         trips: {
+          orderBy: {
+            trip_order: 'asc',
+          },
           include: {
-            locations: true,
+            locations: {
+              orderBy: {
+                route_order: 'asc',
+              },
+            },
           },
         },
         user: {

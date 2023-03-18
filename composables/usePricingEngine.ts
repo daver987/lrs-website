@@ -112,10 +112,8 @@ export function usePricingEngine(
     const selectedServiceType = services.find(
       (s) => s.value === serviceTypeId.value
     )
-    selectedVehicle.value = selectedVehicleType as any
-    console.log('Selected vehicle type:', selectedVehicleType)
-    selectedService.value = selectedServiceType as any
-    console.log('Selected service type:', selectedServiceType)
+    selectedVehicle.value = selectedVehicleType
+    selectedService.value = selectedServiceType
 
     selectedServiceLabel.value = selectedServiceType?.label
 

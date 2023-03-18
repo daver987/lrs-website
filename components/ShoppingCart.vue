@@ -8,6 +8,7 @@ import type { Summary } from '~/schema/summarySchema'
 import { ref } from '#imports'
 import { useNuxtApp } from '#app'
 import { z } from 'zod'
+import { combineLineItems } from '~/utils/combineLineItems'
 
 const { $client } = useNuxtApp()
 const cartStore = useCartStore()
@@ -47,6 +48,7 @@ const quote = ref<Summary>({
   sales_tax: { tax_name: '' },
   trips: [
     {
+      trip_order: 0,
       locations: [
         {
           full_name: '',
@@ -87,6 +89,8 @@ console.log('Assigned to quote:', quote.value)
 const { user } = quote.value
 
 const checkoutLoading = ref(false)
+const lineItemsCombined = combineLineItems(quote.value)
+console.log(lineItemsCombined)
 
 const createBooking = async () => {
   const stripeStore = useStripeStore()
@@ -168,8 +172,11 @@ const createBooking = async () => {
           role="list"
           class="divide-y divide-neutral-200 border-t border-b border-neutral-200"
         >
-          <!--          One Way Trip-->
-          <li class="flex py-6 sm:py-8">
+          <li
+            v-for="(trip, index) in quote.trips"
+            :key="trip.trip_order"
+            class="flex py-6 sm:py-8"
+          >
             <div class="flex-shrink-0">
               <NuxtPicture
                 :src="quote.vehicle.vehicle_image!"
@@ -191,24 +198,25 @@ const createBooking = async () => {
                       <NuxtLink
                         to="#"
                         class="font-medium text-neutral-700 hover:text-neutral-800 dark:text-neutral-200 dark:hover:text-neutral-200"
-                        >{{ quote.trips[0].service_label }}
+                      >
+                        {{ trip.service_label }}
                       </NuxtLink>
                     </h3>
                   </div>
                   <div class="mt-2 flex flex-col space-y-1 text-sm">
                     <p class="text-neutral-500 dark:text-neutral-100">
                       <span class="text-brand-400">Date: </span
-                      >{{ quote.trips[0].formatted_pickup_date }}
-                      <span class="text-brand-400">Time: </span>
-                      {{ quote.trips[0].formatted_pickup_time }}
+                      >{{ trip.formatted_pickup_date }}
+                      <span class="text-brand-400">Time: </span
+                      >{{ trip.formatted_pickup_time }}
                     </p>
                     <p class="text-neutral-500 dark:text-neutral-100">
                       <span class="text-brand-400">PU: </span
-                      >{{ quote.trips[0].locations[0].full_name }}
+                      >{{ trip.locations[1].full_name }}
                     </p>
                     <p class="text-neutral-500 dark:text-neutral-100">
-                      <span class="text-brand-400">DO: </span>
-                      {{ quote.trips[0].locations[1].full_name }}
+                      <span class="text-brand-400">DO: </span
+                      >{{ trip.locations[0].full_name }}
                     </p>
                     <p class="text-neutral-500 dark:text-neutral-100">
                       <span class="text-brand-400">Vehicle Type: </span
@@ -221,105 +229,7 @@ const createBooking = async () => {
                   </div>
                   <p class="text-neutral-500 dark:text-neutral-100">
                     <span class="text-brand-400">Base Rate: </span>$
-                    {{ quote.trips[0].line_items_list[0].total.toFixed(2) }}
-                  </p>
-                </div>
-
-                <div class="mt-4 sm:mt-0 sm:pr-9">
-                  <div class="absolute top-0 right-0">
-                    <button
-                      v-if="false"
-                      type="button"
-                      class="-m-2 inline-flex p-2 text-neutral-400 hover:text-neutral-500"
-                    >
-                      <span class="sr-only">Remove</span>
-                      <Icon
-                        name="heroicons:x-mark-20-solid"
-                        class="h-5 w-5"
-                        aria-hidden="true"
-                      />
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <p
-                class="mt-4 flex space-x-2 text-sm text-neutral-700 dark:text-neutral-200"
-              >
-                <Icon
-                  name="heroicons:check-20-solid"
-                  v-if="quote.is_round_trip"
-                  class="h-5 w-5 flex-shrink-0 text-green-500"
-                  aria-hidden="true"
-                />
-                <Icon
-                  name="heroicons:clock-20-solid"
-                  v-else
-                  class="h-5 w-5 flex-shrink-0 text-neutral-300"
-                  aria-hidden="true"
-                />
-                <span>{{
-                  quote.is_round_trip ? 'Round Trip' : `One Way Trip`
-                }}</span>
-              </p>
-            </div>
-          </li>
-
-          <!--          Return Trip-->
-          <li v-if="quote.is_round_trip" class="flex py-6 sm:py-10">
-            <div class="flex-shrink-0">
-              <NuxtPicture
-                :src="quote.vehicle.vehicle_image!"
-                :alt="quote.vehicle.label"
-                :img-attrs="{
-                  class:
-                    'object-contain object-center w-24 h-24 rounded-md sm:h-48 sm:w-48',
-                }"
-                width="1920"
-              />
-            </div>
-
-            <div class="ml-4 flex flex-1 flex-col justify-between sm:ml-6">
-              <div
-                class="relative pr-9 sm:grid sm:grid-cols-1 sm:gap-x-6 sm:pr-0"
-              >
-                <div>
-                  <div class="mb-2 flex justify-between">
-                    <h3 class="text-base">
-                      <NuxtLink
-                        to="#"
-                        class="font-medium text-neutral-700 hover:text-neutral-800 dark:text-neutral-200 dark:hover:text-neutral-200"
-                        >{{ quote.trips[1].service_label }}
-                      </NuxtLink>
-                    </h3>
-                  </div>
-                  <div class="mt-2 flex flex-col space-y-1 text-sm">
-                    <p class="text-neutral-500 dark:text-neutral-100">
-                      <span class="text-brand-400">Date: </span
-                      >{{ quote.trips[1].formatted_pickup_date }}
-                      <span class="text-brand-400">Time: </span>
-                      {{ quote.trips[1].formatted_pickup_time }}
-                    </p>
-                    <p class="text-neutral-500 dark:text-neutral-100">
-                      <span class="text-brand-400">PU: </span
-                      >{{ quote.trips[0].locations[0].full_name }}
-                    </p>
-                    <p class="text-neutral-500 dark:text-neutral-100">
-                      <span class="text-brand-400">DO: </span>
-                      {{ quote.trips[0].locations[1].full_name }}
-                    </p>
-                    <p class="text-neutral-500 dark:text-neutral-100">
-                      <span class="text-brand-400">Vehicle Type: </span
-                      >{{ quote.vehicle.label }}
-                    </p>
-                    <p class="text-neutral-500 dark:text-neutral-100">
-                      <span class="text-brand-400">Passengers: </span
-                      >{{ quote.selected_passengers }}
-                    </p>
-                  </div>
-                  <p class="text-neutral-500 dark:text-neutral-100">
-                    <span class="text-brand-400">Base Rate: </span>$
-                    {{ quote.quote_subtotal }}
+                    {{ trip.line_items_list[0].total.toFixed(2) }}
                   </p>
                 </div>
 
@@ -355,9 +265,15 @@ const createBooking = async () => {
                   class="h-5 w-5 flex-shrink-0 text-neutral-300"
                   aria-hidden="true"
                 />
-                <span>{{
-                  quote.is_round_trip ? 'Round Trip' : `One Way Trip`
-                }}</span>
+                <span>
+                  {{
+                    quote.is_round_trip
+                      ? index === 0
+                        ? 'One Way Trip'
+                        : 'Return Trip'
+                      : 'One Way Trip'
+                  }}
+                </span>
               </p>
             </div>
           </li>
@@ -379,7 +295,7 @@ const createBooking = async () => {
         <dl class="mt-6 space-y-4">
           <div
             class="flex items-center justify-between border-t border-neutral-200 pt-4"
-            v-for="item in quote.trips[0].line_items_list"
+            v-for="item in lineItemsCombined"
             :key="item.label"
           >
             <dt

@@ -113,6 +113,7 @@ model Trip {
   line_items_tax        Float?
   line_items_total      Float?
   affiliate_payout      Float?
+  trip_order            Int?       @default(value: 0)
   is_farmed_out         Boolean?   @default(false)
   is_return             Boolean    @default(false)
   notes                 String?

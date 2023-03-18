@@ -78,7 +78,7 @@ export const SortOrderSchema = z.enum(['asc','desc']);
 
 export const TransactionIsolationLevelSchema = z.enum(['ReadUncommitted','ReadCommitted','RepeatableRead','Serializable']);
 
-export const TripScalarFieldEnumSchema = z.enum(['id','created_at','updated_at','pickup_date','pickup_time','formatted_pickup_date','formatted_pickup_time','distance_text','duration_text','duration_value','distance_value','calculated_distance','quote_number','service_label','vehicle_label','line_items_list','line_items_subtotal','line_items_tax','line_items_total','affiliate_payout','is_farmed_out','is_return','notes']);
+export const TripScalarFieldEnumSchema = z.enum(['id','created_at','updated_at','pickup_date','pickup_time','formatted_pickup_date','formatted_pickup_time','distance_text','duration_text','duration_value','distance_value','calculated_distance','quote_number','service_label','vehicle_label','line_items_list','line_items_subtotal','line_items_tax','line_items_total','affiliate_payout','trip_order','is_farmed_out','is_return','notes']);
 
 export const UserScalarFieldEnumSchema = z.enum(['id','created_at','updated_at','first_name','last_name','full_name','email_address','phone_number','phone_number_country','stripe_customer_id','is_customer','account_id','notes','meta_data']);
 
@@ -224,6 +224,7 @@ export const TripSchema = z.object({
   line_items_tax: z.number().nullable(),
   line_items_total: z.number().nullable(),
   affiliate_payout: z.number().nullable(),
+  trip_order: z.number().int().nullable(),
   is_farmed_out: z.boolean().nullable(),
   is_return: z.boolean(),
   notes: z.string().nullable(),
@@ -654,6 +655,7 @@ export const TripSelectSchema: z.ZodType<Prisma.TripSelect> = z.object({
   line_items_tax: z.boolean().optional(),
   line_items_total: z.boolean().optional(),
   affiliate_payout: z.boolean().optional(),
+  trip_order: z.boolean().optional(),
   is_farmed_out: z.boolean().optional(),
   is_return: z.boolean().optional(),
   notes: z.boolean().optional(),
@@ -1255,6 +1257,7 @@ export const TripWhereInputSchema: z.ZodType<Prisma.TripWhereInput> = z.object({
   line_items_tax: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   line_items_total: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   affiliate_payout: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  trip_order: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
   is_farmed_out: z.union([ z.lazy(() => BoolNullableFilterSchema),z.boolean() ]).optional().nullable(),
   is_return: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   notes: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
@@ -1285,6 +1288,7 @@ export const TripOrderByWithRelationInputSchema: z.ZodType<Prisma.TripOrderByWit
   line_items_tax: z.lazy(() => SortOrderSchema).optional(),
   line_items_total: z.lazy(() => SortOrderSchema).optional(),
   affiliate_payout: z.lazy(() => SortOrderSchema).optional(),
+  trip_order: z.lazy(() => SortOrderSchema).optional(),
   is_farmed_out: z.lazy(() => SortOrderSchema).optional(),
   is_return: z.lazy(() => SortOrderSchema).optional(),
   notes: z.lazy(() => SortOrderSchema).optional(),
@@ -1319,6 +1323,7 @@ export const TripOrderByWithAggregationInputSchema: z.ZodType<Prisma.TripOrderBy
   line_items_tax: z.lazy(() => SortOrderSchema).optional(),
   line_items_total: z.lazy(() => SortOrderSchema).optional(),
   affiliate_payout: z.lazy(() => SortOrderSchema).optional(),
+  trip_order: z.lazy(() => SortOrderSchema).optional(),
   is_farmed_out: z.lazy(() => SortOrderSchema).optional(),
   is_return: z.lazy(() => SortOrderSchema).optional(),
   notes: z.lazy(() => SortOrderSchema).optional(),
@@ -1353,6 +1358,7 @@ export const TripScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.TripScal
   line_items_tax: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
   line_items_total: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
   affiliate_payout: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  trip_order: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
   is_farmed_out: z.union([ z.lazy(() => BoolNullableWithAggregatesFilterSchema),z.boolean() ]).optional().nullable(),
   is_return: z.union([ z.lazy(() => BoolWithAggregatesFilterSchema),z.boolean() ]).optional(),
   notes: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
@@ -2366,6 +2372,7 @@ export const TripCreateInputSchema: z.ZodType<Prisma.TripCreateInput> = z.object
   line_items_tax: z.number().optional().nullable(),
   line_items_total: z.number().optional().nullable(),
   affiliate_payout: z.number().optional().nullable(),
+  trip_order: z.number().int().optional().nullable(),
   is_farmed_out: z.boolean().optional().nullable(),
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable(),
@@ -2396,6 +2403,7 @@ export const TripUncheckedCreateInputSchema: z.ZodType<Prisma.TripUncheckedCreat
   line_items_tax: z.number().optional().nullable(),
   line_items_total: z.number().optional().nullable(),
   affiliate_payout: z.number().optional().nullable(),
+  trip_order: z.number().int().optional().nullable(),
   is_farmed_out: z.boolean().optional().nullable(),
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable(),
@@ -2424,6 +2432,7 @@ export const TripUpdateInputSchema: z.ZodType<Prisma.TripUpdateInput> = z.object
   line_items_tax: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   line_items_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  trip_order: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_farmed_out: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -2454,6 +2463,7 @@ export const TripUncheckedUpdateInputSchema: z.ZodType<Prisma.TripUncheckedUpdat
   line_items_tax: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   line_items_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  trip_order: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_farmed_out: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -2483,6 +2493,7 @@ export const TripCreateManyInputSchema: z.ZodType<Prisma.TripCreateManyInput> = 
   line_items_tax: z.number().optional().nullable(),
   line_items_total: z.number().optional().nullable(),
   affiliate_payout: z.number().optional().nullable(),
+  trip_order: z.number().int().optional().nullable(),
   is_farmed_out: z.boolean().optional().nullable(),
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable()
@@ -2508,6 +2519,7 @@ export const TripUpdateManyMutationInputSchema: z.ZodType<Prisma.TripUpdateManyM
   line_items_tax: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   line_items_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  trip_order: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_farmed_out: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -2534,6 +2546,7 @@ export const TripUncheckedUpdateManyInputSchema: z.ZodType<Prisma.TripUncheckedU
   line_items_tax: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   line_items_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  trip_order: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_farmed_out: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -3844,6 +3857,7 @@ export const TripCountOrderByAggregateInputSchema: z.ZodType<Prisma.TripCountOrd
   line_items_tax: z.lazy(() => SortOrderSchema).optional(),
   line_items_total: z.lazy(() => SortOrderSchema).optional(),
   affiliate_payout: z.lazy(() => SortOrderSchema).optional(),
+  trip_order: z.lazy(() => SortOrderSchema).optional(),
   is_farmed_out: z.lazy(() => SortOrderSchema).optional(),
   is_return: z.lazy(() => SortOrderSchema).optional(),
   notes: z.lazy(() => SortOrderSchema).optional()
@@ -3859,7 +3873,8 @@ export const TripAvgOrderByAggregateInputSchema: z.ZodType<Prisma.TripAvgOrderBy
   line_items_subtotal: z.lazy(() => SortOrderSchema).optional(),
   line_items_tax: z.lazy(() => SortOrderSchema).optional(),
   line_items_total: z.lazy(() => SortOrderSchema).optional(),
-  affiliate_payout: z.lazy(() => SortOrderSchema).optional()
+  affiliate_payout: z.lazy(() => SortOrderSchema).optional(),
+  trip_order: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const TripMaxOrderByAggregateInputSchema: z.ZodType<Prisma.TripMaxOrderByAggregateInput> = z.object({
@@ -3882,6 +3897,7 @@ export const TripMaxOrderByAggregateInputSchema: z.ZodType<Prisma.TripMaxOrderBy
   line_items_tax: z.lazy(() => SortOrderSchema).optional(),
   line_items_total: z.lazy(() => SortOrderSchema).optional(),
   affiliate_payout: z.lazy(() => SortOrderSchema).optional(),
+  trip_order: z.lazy(() => SortOrderSchema).optional(),
   is_farmed_out: z.lazy(() => SortOrderSchema).optional(),
   is_return: z.lazy(() => SortOrderSchema).optional(),
   notes: z.lazy(() => SortOrderSchema).optional()
@@ -3907,6 +3923,7 @@ export const TripMinOrderByAggregateInputSchema: z.ZodType<Prisma.TripMinOrderBy
   line_items_tax: z.lazy(() => SortOrderSchema).optional(),
   line_items_total: z.lazy(() => SortOrderSchema).optional(),
   affiliate_payout: z.lazy(() => SortOrderSchema).optional(),
+  trip_order: z.lazy(() => SortOrderSchema).optional(),
   is_farmed_out: z.lazy(() => SortOrderSchema).optional(),
   is_return: z.lazy(() => SortOrderSchema).optional(),
   notes: z.lazy(() => SortOrderSchema).optional()
@@ -3922,7 +3939,8 @@ export const TripSumOrderByAggregateInputSchema: z.ZodType<Prisma.TripSumOrderBy
   line_items_subtotal: z.lazy(() => SortOrderSchema).optional(),
   line_items_tax: z.lazy(() => SortOrderSchema).optional(),
   line_items_total: z.lazy(() => SortOrderSchema).optional(),
-  affiliate_payout: z.lazy(() => SortOrderSchema).optional()
+  affiliate_payout: z.lazy(() => SortOrderSchema).optional(),
+  trip_order: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const BoolNullableWithAggregatesFilterSchema: z.ZodType<Prisma.BoolNullableWithAggregatesFilter> = z.object({
@@ -5923,6 +5941,7 @@ export const TripCreateWithoutQuoteInputSchema: z.ZodType<Prisma.TripCreateWitho
   line_items_tax: z.number().optional().nullable(),
   line_items_total: z.number().optional().nullable(),
   affiliate_payout: z.number().optional().nullable(),
+  trip_order: z.number().optional().nullable(),
   is_farmed_out: z.boolean().optional().nullable(),
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable(),
@@ -5951,6 +5970,7 @@ export const TripUncheckedCreateWithoutQuoteInputSchema: z.ZodType<Prisma.TripUn
   line_items_tax: z.number().optional().nullable(),
   line_items_total: z.number().optional().nullable(),
   affiliate_payout: z.number().optional().nullable(),
+  trip_order: z.number().optional().nullable(),
   is_farmed_out: z.boolean().optional().nullable(),
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable(),
@@ -6199,6 +6219,7 @@ export const TripScalarWhereInputSchema: z.ZodType<Prisma.TripScalarWhereInput> 
   line_items_tax: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   line_items_total: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   affiliate_payout: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  trip_order: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
   is_farmed_out: z.union([ z.lazy(() => BoolNullableFilterSchema),z.boolean() ]).optional().nullable(),
   is_return: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   notes: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
@@ -6560,6 +6581,7 @@ export const TripCreateWithoutPaymentInputSchema: z.ZodType<Prisma.TripCreateWit
   line_items_tax: z.number().optional().nullable(),
   line_items_total: z.number().optional().nullable(),
   affiliate_payout: z.number().optional().nullable(),
+  trip_order: z.number().optional().nullable(),
   is_farmed_out: z.boolean().optional().nullable(),
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable(),
@@ -6589,6 +6611,7 @@ export const TripUncheckedCreateWithoutPaymentInputSchema: z.ZodType<Prisma.Trip
   line_items_tax: z.number().optional().nullable(),
   line_items_total: z.number().optional().nullable(),
   affiliate_payout: z.number().optional().nullable(),
+  trip_order: z.number().optional().nullable(),
   is_farmed_out: z.boolean().optional().nullable(),
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable(),
@@ -6670,6 +6693,7 @@ export const TripUpdateWithoutPaymentInputSchema: z.ZodType<Prisma.TripUpdateWit
   line_items_tax: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   line_items_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  trip_order: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_farmed_out: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -6699,6 +6723,7 @@ export const TripUncheckedUpdateWithoutPaymentInputSchema: z.ZodType<Prisma.Trip
   line_items_tax: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   line_items_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  trip_order: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_farmed_out: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -6770,6 +6795,7 @@ export const TripCreateWithoutLocationsInputSchema: z.ZodType<Prisma.TripCreateW
   line_items_tax: z.number().optional().nullable(),
   line_items_total: z.number().optional().nullable(),
   affiliate_payout: z.number().optional().nullable(),
+  trip_order: z.number().optional().nullable(),
   is_farmed_out: z.boolean().optional().nullable(),
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable(),
@@ -6799,6 +6825,7 @@ export const TripUncheckedCreateWithoutLocationsInputSchema: z.ZodType<Prisma.Tr
   line_items_tax: z.number().optional().nullable(),
   line_items_total: z.number().optional().nullable(),
   affiliate_payout: z.number().optional().nullable(),
+  trip_order: z.number().optional().nullable(),
   is_farmed_out: z.boolean().optional().nullable(),
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable(),
@@ -6836,6 +6863,7 @@ export const TripUpdateWithoutLocationsInputSchema: z.ZodType<Prisma.TripUpdateW
   line_items_tax: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   line_items_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  trip_order: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_farmed_out: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -6865,6 +6893,7 @@ export const TripUncheckedUpdateWithoutLocationsInputSchema: z.ZodType<Prisma.Tr
   line_items_tax: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   line_items_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  trip_order: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_farmed_out: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -6892,6 +6921,7 @@ export const TripCreateWithoutFlightInputSchema: z.ZodType<Prisma.TripCreateWith
   line_items_tax: z.number().optional().nullable(),
   line_items_total: z.number().optional().nullable(),
   affiliate_payout: z.number().optional().nullable(),
+  trip_order: z.number().optional().nullable(),
   is_farmed_out: z.boolean().optional().nullable(),
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable(),
@@ -6921,6 +6951,7 @@ export const TripUncheckedCreateWithoutFlightInputSchema: z.ZodType<Prisma.TripU
   line_items_tax: z.number().optional().nullable(),
   line_items_total: z.number().optional().nullable(),
   affiliate_payout: z.number().optional().nullable(),
+  trip_order: z.number().optional().nullable(),
   is_farmed_out: z.boolean().optional().nullable(),
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable(),
@@ -6958,6 +6989,7 @@ export const TripUpdateWithoutFlightInputSchema: z.ZodType<Prisma.TripUpdateWith
   line_items_tax: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   line_items_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  trip_order: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_farmed_out: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -6987,6 +7019,7 @@ export const TripUncheckedUpdateWithoutFlightInputSchema: z.ZodType<Prisma.TripU
   line_items_tax: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   line_items_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  trip_order: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_farmed_out: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -7410,6 +7443,7 @@ export const TripCreateManyQuoteInputSchema: z.ZodType<Prisma.TripCreateManyQuot
   line_items_tax: z.number().optional().nullable(),
   line_items_total: z.number().optional().nullable(),
   affiliate_payout: z.number().optional().nullable(),
+  trip_order: z.number().int().optional().nullable(),
   is_farmed_out: z.boolean().optional().nullable(),
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable()
@@ -7474,6 +7508,7 @@ export const TripUpdateWithoutQuoteInputSchema: z.ZodType<Prisma.TripUpdateWitho
   line_items_tax: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   line_items_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  trip_order: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_farmed_out: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -7502,6 +7537,7 @@ export const TripUncheckedUpdateWithoutQuoteInputSchema: z.ZodType<Prisma.TripUn
   line_items_tax: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   line_items_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  trip_order: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_farmed_out: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -7530,6 +7566,7 @@ export const TripUncheckedUpdateManyWithoutTripsInputSchema: z.ZodType<Prisma.Tr
   line_items_tax: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   line_items_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  trip_order: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_farmed_out: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),

@@ -35,6 +35,7 @@ const summaryUserExtended = summaryUser.extend({
 })
 const summaryLocations = LocationSchema.pick({ full_name: true })
 const summaryTrips = TripSchema.pick({
+  trip_order: true,
   formatted_pickup_date: true,
   formatted_pickup_time: true,
   line_items_tax: true,
