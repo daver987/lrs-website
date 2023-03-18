@@ -61,7 +61,7 @@ export function combineLineItemsTwo(quote: Quote): LineItem[] {
 
   // Add the Tax and Total Amount objects to the array
   const result = Object.values(combinedItems)
-  result.push({ label: 'Tax', total: totalTax, tax: totalTax })
+  result.push({ label: 'HST', total: totalTax, tax: totalTax })
   result.push({ label: 'Total', total: totalAmount + totalTax, tax: 0 })
 
   return result
@@ -91,7 +91,7 @@ export function combineLineItems(lineItems: LineItem[]): LineItem[] {
   // Add the Tax and Total Amount objects to the array
   const result = Object.values(combinedItems)
   result.push({
-    label: 'Tax',
+    label: 'HST',
     total: parseFloat(totalTax.toFixed(2)),
     tax: parseFloat(totalTax.toFixed(2)),
   })

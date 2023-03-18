@@ -11,13 +11,10 @@ import { usePricingEngine } from '~/composables/usePricingEngine'
 import { combineLineItems, combineTwoLineItems } from '~/utils/combineLineItems'
 import { computed, ref } from 'vue'
 import { formatDate } from '~/utils/formatDate'
-import { sendQuoteEmail } from '~/server/trpc/services/sendGridEmail'
-import { createAircallContact } from '~/server/trpc/services/createAircallContact'
-import { sendTwilioSms } from '~/server/trpc/services/sendTwilioSms'
-import {
-  createQuote,
-  updateShortLink,
-} from '~/server/trpc/routers/utils/updateShortLink'
+import { sendQuoteEmail } from '~/server/trpc/routers/services/sendGridEmail'
+import { createAircallContact } from '~/server/trpc/routers/services/createAircallContact'
+import { sendTwilioSms } from '~/server/trpc/routers/services/sendTwilioSms'
+import { createQuote, trpcUtils } from '~/server/trpc/routers/utils/trpcUtils'
 import { useLinkShortener } from '~/composables/useLinkShortener'
 
 export const quoteRouter = router({
@@ -463,7 +460,7 @@ export const quoteRouter = router({
       await Promise.all([
         sendQuoteEmail(quote, sendGridKey, shortLink.value),
         createAircallContact(aircallSecret, quote),
-        updateShortLink(prisma, quote, shortLink.value),
+        trpcUtils(prisma, quote, shortLink.value),
         sendTwilioSms(twilioClient, first_name, phone_number, shortLink.value),
       ])
       return quote

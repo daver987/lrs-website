@@ -372,14 +372,17 @@ function disablePreviousDate(ts: number) {
                     :clearable="true"
                     use12-hours
                   />
-                  <n-switch v-model:value="formValue.is_round_trip">
+                  <n-switch
+                    v-if="false"
+                    v-model:value="formValue.is_round_trip"
+                  >
                     <template #checked> Round</template>
                     <template #unchecked> One Way</template>
                   </n-switch>
                 </n-space>
               </n-form-item-gi>
             </n-grid>
-            <n-collapse-transition :show="formValue.is_round_trip">
+            <n-collapse-transition v-if="false" :show="formValue.is_round_trip">
               <n-grid :cols="24" :x-gap="12">
                 <n-form-item-gi
                   :span="12"

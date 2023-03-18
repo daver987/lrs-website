@@ -5690,6 +5690,15 @@ nuxt-icon@^0.3.3:
     "@nuxt/kit" "^3.3.1"
     nuxt-config-schema "^0.4.5"
 
+nuxt-lodash@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/nuxt-lodash/-/nuxt-lodash-2.4.1.tgz#be34a5dd8fa3ae16a20b3b9c7e4ef75386ff9030"
+  integrity sha512-Z1c2eBApJsP4m3RMnZWGDYQ7GiNCrWuLH1PGpLe/7OihjOOtWUN+0sf6NQ9STvUbL4TpXisJ/4hKVns7+wkh4Q==
+  dependencies:
+    "@nuxt/kit" "^3.0.0"
+    "@types/lodash-es" "^4.17.6"
+    lodash-es "^4.17.21"
+
 nuxt-typed-router@^2.3.5:
   version "2.3.5"
   resolved "https://registry.yarnpkg.com/nuxt-typed-router/-/nuxt-typed-router-2.3.5.tgz#7517fcfdda8d5625fba80885b1f60b1bc4c8b3a9"

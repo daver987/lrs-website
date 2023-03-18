@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
-import { Summary, SummarySchema } from '~/schema/summarySchema'
+// import { Summary, SummarySchema } from '~/schema/summarySchema'
 
-export async function updateShortLink(
+export async function trpcUtils(
   prisma: PrismaClient,
   quote: any,
   shortLink: string

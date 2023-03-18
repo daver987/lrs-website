@@ -1,4 +1,4 @@
-// import '@total-typescript/ts-reset'
+import '@total-typescript/ts-reset'
 
 export default defineNuxtConfig({
   app: {
@@ -19,6 +19,7 @@ export default defineNuxtConfig({
     'nuxt-icon',
     '@nuxt/devtools',
     'nuxt-typed-router',
+    'nuxt-lodash',
     'nuxt-vitest',
     '@huntersofbook/naive-ui-nuxt',
     [
@@ -30,6 +31,9 @@ export default defineNuxtConfig({
   ],
   colorMode: {
     classSuffix: '',
+  },
+  lodash: {
+    prefix: '_',
   },
   devtools: {
     enable: false,
