@@ -1,17 +1,17 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { Summary } from '~/schema/summarySchema'
 
-interface LineItem {
+export interface LineItem {
   label: string
   total: number
   tax: number
 }
 
-interface ExtendedSummary extends Summary {
+export interface ExtendedSummary extends Summary {
   combined_line_items: LineItem[]
 }
 
-interface QuoteState {
+export interface QuoteState {
   quote: ExtendedSummary | null
 }
 
@@ -21,6 +21,7 @@ export const useQuoteStore = defineStore('quoteStore', {
   }),
   actions: {
     setQuote(quote: Summary) {
+      //@ts-ignore
       this.quote = quote
       console.log('Set Quote Fired')
     },

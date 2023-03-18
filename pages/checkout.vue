@@ -115,11 +115,8 @@ function removeLastObject(arr: any) {
 
   return arr.pop()
 }
-
 const totalPrice = removeLastObject(quote.value?.combined_line_items)
-const lineItems = quote.value?.combined_line_items
-console.log('Popped array', quote.value?.combined_line_items)
-console.log(totalPrice)
+const lineItems = quote.value?.combined_line_items!
 //todo: add in the creation of draft invoice in stripe
 //todo: add spot for flight information in the checkout flow
 //todo: add trip notes in the checkout flow
