@@ -46,6 +46,7 @@ const onSubmit = handleSubmit(async (values: ValidationSchema) => {
 
 <template>
   <div>
+    <FlightInformation />
     <main class="overflow-hidden">
       <section class="relative" aria-labelledby="contact-heading">
         <div class="mx-auto max-w-7xl px-6 lg:px-8">

@@ -46,7 +46,6 @@ const mapsApiKey = useRuntimeConfig().public.GOOGLE_MAPS_API_KEY
 const autocomplete = ref<google.maps.places.Autocomplete | null>(null)
 const place = ref<google.maps.places.PlaceResult | null>(null)
 
-
 const loader = new Loader({
   apiKey: mapsApiKey,
   version: 'weekly',

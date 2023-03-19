@@ -75,16 +75,6 @@ module.exports = {
           800: '#141414',
           900: '#0A0A0A',
         },
-        // heading: {
-        //   DEFAULT: '#2B2B2B',
-        // },
-        // icon: {
-        //   DEFAULT: '#C0C0C0',
-        // },
-        // background: {
-        //   DEFAULT: '#EBEBEB',
-        //   dark: '#262626',
-        // },
       },
       screens: {
         xs: '480px',

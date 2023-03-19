@@ -17,7 +17,6 @@ export default defineNuxtConfig({
     '@nuxt/image-edge',
     '@nuxtjs/color-mode',
     'nuxt-icon',
-    '@nuxt/devtools',
     'nuxt-typed-router',
     'nuxt-lodash',
     'nuxt-vitest',

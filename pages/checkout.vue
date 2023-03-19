@@ -10,16 +10,13 @@ import { stripeInit } from '~/services/stripeClientInit'
 import { useStripeStore } from '~/stores/useStripeStore'
 import { storeToRefs } from 'pinia'
 import { useQuoteStore } from '~/stores/useQuoteStore'
-
 definePageMeta({
   name: 'checkout',
   layout: 'store',
 })
-
 const stripeStore = useStripeStore()
 const { client_secret } = storeToRefs(stripeStore)
 const stripe: Stripe | null = await stripeInit()
-
 const quoteStore = useQuoteStore()
 const { quote } = storeToRefs(quoteStore)
 const {
@@ -36,7 +33,6 @@ const {
   trips,
   combined_line_items,
 } = quote.value!
-
 const appearance = {
   theme: 'stripe',
   variables: {
@@ -49,16 +45,13 @@ const appearance = {
     borderRadius: '4px',
   },
 } as const
-
 const elements: Ref<StripeElements | undefined> = ref()
-
 onMounted(() => {
   nextTick(() => {
     elements.value = stripe?.elements({
       clientSecret: client_secret.value,
       appearance,
     })
-
     const paymentElement: StripePaymentElement | undefined =
       elements.value?.create('payment', {
         defaultValues: {
@@ -80,7 +73,6 @@ onMounted(() => {
     paymentElement?.mount('#payment-element')
   })
 })
-
 const url = useRuntimeConfig().public.WEBSITE_URL
 const websiteUrl = `${url}/success?quote_number=${quote_number}`
 const loading = ref(false)
@@ -90,7 +82,6 @@ async function submitHandler(): Promise<void> {
     console.error('Stripe is not initialized.')
     return
   }
-
   try {
     const { error } = await stripe.confirmSetup({
       elements: elements.value,
@@ -112,7 +103,6 @@ function removeLastObject(arr: any) {
   if (arr.length === 0) {
     return null
   }
-
   return arr.pop()
 }
 const totalPrice = removeLastObject(quote.value?.combined_line_items)
@@ -128,7 +118,7 @@ const lineItems = quote.value?.combined_line_items!
 </script>
 
 <template>
-  <div class="max-h-screen bg-white">
+  <div class="h-screen w-full">
     <!-- Background color split screen for large screens -->
     <div
       class="fixed top-0 left-0 hidden h-full w-1/2 bg-white lg:block"
@@ -193,7 +183,7 @@ const lineItems = quote.value?.combined_line_items!
                     class:
                       'h-32 w-32 flex-none rounded-md object-contain object-center',
                   }"
-                  :src="vehicle.vehicle_image"
+                  :src="vehicle.vehicle_image as string"
                   :alt="vehicle.label"
                 />
                 <div class="flex-auto space-y-1">

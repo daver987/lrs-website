@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-// import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue'
-
 definePageMeta({
   layout: 'default',
   title: 'Cancel',
@@ -11,15 +9,11 @@ definePageMeta({
     },
   ],
 })
+const input = ref(null)
 </script>
 
 <template>
-  <n-grid :cols="1">
-    <n-grid-item :span="1">
-      <InputPlacesAutocomplete/>
-      <FlightInformation />
-    </n-grid-item>
-  </n-grid>
+  <FlightInformation />
 
   <!--  <section class="min-h-screen bg-primary">-->
   <!--    <AppNavigation />-->
@@ -45,5 +39,4 @@ definePageMeta({
   <!--  </section>-->
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

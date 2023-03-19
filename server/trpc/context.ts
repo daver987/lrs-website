@@ -1,6 +1,6 @@
 import { inferAsyncReturnType } from '@trpc/server'
 import type { H3Event } from 'h3'
-import { stripe } from '~/server/trpc/routers/services/stripeInit'
+import { stripe } from '~/server/services/stripeInit'
 
 /**
  * Creates context for an incoming request

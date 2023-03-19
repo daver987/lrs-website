@@ -3,7 +3,12 @@ import { z } from 'zod'
 import {
   getOrCreateStripCustomerId,
   createSetupIntent,
-} from '~/server/trpc/routers/services/stripe'
+} from '~/server/services/stripe'
+import { H3Event } from 'h3'
+import {
+  handleCustomerCreated,
+  handleSetupIntentSucceeded,
+} from '~/server/services/stripeHandlers'
 export const stripeRouter = router({
   createCheckout: publicProcedure
     .input(
@@ -26,4 +31,27 @@ export const stripeRouter = router({
       })
       return { setupIntent, stripeId, statusCode: 200 }
     }),
+  webhook: publicProcedure.mutation(async ({ ctx, input }) => {
+    const { stripe, twilioClient } = ctx
+    const endpointSecret = useRuntimeConfig().stripeWebhookSecret
+    const headers = getHeaders()
+    const sig = headers['stripe-signature'] as string
+    const stripeEvent = stripe.webhooks.constructEvent(
+      input,
+      sig,
+      endpointSecret
+    )
+    switch (stripeEvent.type) {
+      case 'setup_intent.succeeded':
+        await handleSetupIntentSucceeded(stripeEvent.data.object, twilioClient)
+        break
+      case 'customer.created':
+        await handleCustomerCreated(stripeEvent.data.object, twilioClient)
+        break
+      default:
+    }
+    return {
+      statusCode: 200,
+    }
+  }),
 })
