@@ -1,6 +1,7 @@
 <template>
-  <div class="flight-info-form">
+  <div class="flight-info-form bg-neutral-900 p-6">
     <form @submit.prevent="submitForm">
+      <h2 class="mb-2 rounded-md text-center text-3xl">Flight Information</h2>
       <div class="input-group">
         <label for="flight-number">Flight Number *</label>
         <input id="flight-number" :value="flightNumber" type="text" required />
@@ -52,7 +53,6 @@ const emit = defineEmits(['submit'])
   flex-direction: column;
   max-width: 400px;
   margin: 0 auto;
-  background-color: #2b2b2b;
   font-family: Arial, sans-serif;
 }
 

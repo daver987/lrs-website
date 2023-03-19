@@ -213,8 +213,10 @@ const lineItems = quote.value?.combined_line_items!
               </div>
             </dl>
           </div>
+          <FlightInformation />
         </div>
       </section>
+
       <section
         aria-labelledby="payment-and-shipping-heading"
         class="py-16 lg:col-start-1 lg:row-start-1 lg:mx-auto lg:w-full lg:max-w-lg lg:pt-0 lg:pb-24"
