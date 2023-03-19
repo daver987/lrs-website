@@ -28,7 +28,7 @@ export async function sendQuoteEmail(
             last_name: quote.user.last_name,
             email_address: quote.user.email_address,
             phone_number: quote.user.phone_number,
-            total_price: quote.quote_total.toFixed(2),
+            total_price: quote.quote_total,
             vehicle_label: quote.vehicle.label,
             service_label: quote.trips[0].service_label,
             return_service_label: quote.is_round_trip

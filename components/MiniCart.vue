@@ -2,13 +2,27 @@
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
 import { storeToRefs } from 'pinia'
 import { useCartStore } from '~/stores/useCartStore'
-import { useQuoteStore } from '~/stores/useQuoteStore'
+import { LineItem, useQuoteStore } from '~/stores/useQuoteStore'
 
 const cartStore = useCartStore()
 const { addedToCart } = storeToRefs(cartStore)
 
 const quoteStore = useQuoteStore()
 const { quote: quoteFromStore } = storeToRefs(quoteStore)
+
+function removeLastObject(arr: any) {
+  if (arr.length === 0) {
+    return null
+  }
+  return arr.pop()
+}
+//@ts-ignore
+// const totalPrice = removeLastObject(quoteFromStore.value?.combined_line_items)
+// interface CombinedLineItem {
+//   combined_line_items: LineItem[]
+// }
+// const { combined_line_items } =
+//   quoteFromStore.value as unknown as CombinedLineItem
 
 const quote = computed(() => (addedToCart.value ? quoteFromStore.value : null))
 
@@ -73,7 +87,7 @@ const serviceLabel = computed(() =>
             </li>
             <li v-else class="flex items-center py-6">
               <NuxtPicture
-                src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/8c7c6a8d-06ad-4278-1c70-9d497b1cb200/1024"
+                :src="quoteFromStore.vehicle.vehicle_image"
                 alt="Vehicle"
                 :img-attrs="{
                   class:
@@ -82,10 +96,10 @@ const serviceLabel = computed(() =>
               />
               <div class="ml-4 flex-auto">
                 <h3 class="font-brand-body font-medium text-neutral-900">
-                  <NuxtLink to="#">{{ trips }}</NuxtLink>
+                  <NuxtLink to="#">{{ quoteFromStore.vehicle.label }}</NuxtLink>
                 </h3>
                 <p class="font-brand-body text-neutral-500">
-                  {{ serviceLabel }}
+                  {{ quoteFromStore.service.label }}
                 </p>
               </div>
             </li>

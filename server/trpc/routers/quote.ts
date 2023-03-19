@@ -8,7 +8,11 @@ import {
 } from '~/prisma/generated/zod'
 import { formatAddress } from '~/utils/formatAddress'
 import { usePricingEngine } from '~/composables/usePricingEngine'
-import { combineLineItems, combineTwoLineItems } from '~/utils/combineLineItems'
+import {
+  combineLineItems,
+  combineTwoLineItems,
+  removeLastObject,
+} from '~/utils/combineLineItems'
 import { computed, ref } from 'vue'
 import { formatDate } from '~/utils/formatDate'
 import { sendQuoteEmail } from '~/server/services/sendGridEmail'
@@ -169,6 +173,7 @@ export const quoteRouter = router({
       const lineItemsList = pricingEngine.updateLineItemsTotal(origin.place_id)
       const { lineItemDetails, taxTotal, subTotal, totalAmount } = lineItemsList
       const updatedLineItemDetails = combineLineItems(lineItemDetails)
+      const updatedLineItemDetailsCopy = combineLineItems(lineItemDetails)
       //Calculate return pricing
       const returnLineItemsList = pricingEngine.updateLineItemsTotal(
         destination.place_id
@@ -187,7 +192,7 @@ export const quoteRouter = router({
         updatedLineItemDetails,
         updatedReturnLineItemDetails
       )
-      console.log(combinedLineItems, 'Combined Line Items;')
+      const totalPrice = removeLastObject(updatedLineItemDetailsCopy)
 
       const routeData = pricingEngine.routeData.value
       //calculate trip values
@@ -226,7 +231,7 @@ export const quoteRouter = router({
           selected_hours: selected_hours,
           selected_passengers: selected_passengers,
           is_round_trip: is_round_trip,
-          quote_total: 9,
+          quote_total: totalPrice.total,
           quote_subtotal: parseFloat(quoteSubtotal.toFixed(2)),
           quote_tax_total: parseFloat(quoteTaxTotal.toFixed(2)),
           combined_line_items: quoteTotal,
