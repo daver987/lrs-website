@@ -46,7 +46,6 @@ const onSubmit = handleSubmit(async (values: ValidationSchema) => {
 
 <template>
   <div>
-    <FlightInformation />
     <main class="overflow-hidden">
       <section class="relative" aria-labelledby="contact-heading">
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
@@ -314,6 +313,7 @@ const onSubmit = handleSubmit(async (values: ValidationSchema) => {
                           id="message"
                           name="message"
                           rows="4"
+                          placeholder="Send Us a Message...."
                           class="block w-full rounded-md border-neutral-300 py-3 px-4 shadow-sm focus:border-brand focus:ring-brand dark:bg-neutral-200"
                           aria-describedby="message-max"
                         />

@@ -52,6 +52,7 @@ const emit = defineEmits(['submit'])
   flex-direction: column;
   max-width: 400px;
   margin: 0 auto;
+  background-color: #2b2b2b;
   font-family: Arial, sans-serif;
 }
 
