@@ -1,94 +1,33 @@
 <script setup lang="ts">
 import { generatePdf } from '@/utils/generatePdf'
-import { useQuoteStore, LineItem } from '~/stores/useQuoteStore'
-import { useNuxtApp } from '#app'
+import { LineItem } from '~/stores/useQuoteStore'
 import { ref } from '#imports'
-import { Summary } from '~/schema/summarySchema'
 import { z } from 'zod'
+
 definePageMeta({
   name: 'checkout',
   layout: 'store',
 })
-const { $client } = useNuxtApp()
-const quote = ref<Summary>({
-  is_round_trip: false,
-  quote_number: 0,
-  selected_hours: 0,
-  selected_passengers: 1,
-  quote_tax_total: 0,
-  quote_subtotal: 0,
-  quote_total: 0,
-  user: {
-    first_name: '',
-    last_name: '',
-    phone_number: '',
-    email_address: '',
-    full_name: '',
-    id: '',
-    conversion: {
-      utm_medium: null,
-      utm_source: null,
-      utm_campaign: null,
-      utm_term: null,
-      gclid: null,
-    },
-  },
-  vehicle: {
-    label: '',
-    vehicle_image:
-      'https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/b4bf6461-ba55-48bd-e0ba-d613ae383000/1024',
-  },
-  sales_tax: { tax_name: '' },
-  trips: [
-    {
-      trip_order: 0,
-      locations: [
-        {
-          full_name: '',
-        },
-        {
-          full_name: '',
-        },
-      ],
-      formatted_pickup_date: '',
-      formatted_pickup_time: '',
-      service_label: '',
-      line_items_tax: 0,
-      line_items_subtotal: 0,
-      line_items_total: 0,
-      line_items_list: [
-        {
-          label: '',
-          tax: 0,
-          total: 0,
-        },
-      ],
-    },
-  ],
-})
-const route = useRoute()
-const { quote_number } = route.query
-const quoteNumberSchema = z.coerce.number()
-const quoteNumber = quoteNumberSchema.parse(quote_number)
-const { data } = await $client.quote.get.useQuery({
-  quote_number: quoteNumber,
-})
-Object.assign(quote.value, data.value)
-console.log('Assigned to quote:', quote.value)
-const { user } = quote.value
-function removeLastObject(arr: any) {
-  if (arr.length === 0) {
-    return null
-  }
-  return arr.pop()
-}
-//@ts-ignore
-const totalPrice = removeLastObject(data.value?.combined_line_items)
+
 interface CombinedLineItem {
   combined_line_items: LineItem[]
 }
-const { combined_line_items } = data.value as unknown as CombinedLineItem
+
+const quote = useDefaults().defaultQuote
+const route = useRoute()
 const orderSummary = ref(null)
+const { quote_number } = route.query
+const quoteNumberSchema = z.coerce.number()
+const quoteNumber = quoteNumberSchema.parse(quote_number)
+
+const { data } = await useTrpc().quote.get.useQuery({
+  quote_number: quoteNumber,
+})
+Object.assign(quote.value, data.value)
+
+const { combined_line_items } = data.value as unknown as CombinedLineItem
+const totalPrice = removeLastObject(combined_line_items)
+
 const saveOrderSummary = async () => {
   if (orderSummary.value) {
     await generatePdf(orderSummary.value)
@@ -97,21 +36,21 @@ const saveOrderSummary = async () => {
 </script>
 
 <template>
-  <div class="mx-auto max-w-6xl px-6">
-    <div class="flex w-full justify-end py-1 uppercase">
+  <div class="max-w-6xl px-6 mx-auto">
+    <div class="flex justify-end w-full py-1 uppercase">
       <button
         @click="saveOrderSummary"
         type="button"
-        class="hover:bg-brand-500 rounded-md bg-brand-600 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
+        class="px-3 py-2 text-sm font-semibold text-white rounded-md shadow-sm hover:bg-brand-500 bg-brand-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
       >
         Save Summary as PDF
       </button>
     </div>
-    <div class="bg-white p-4 md:p-8" id="order-summary" ref="orderSummary">
-      <div class="mx-auto w-full md:max-w-4xl">
-        <div class="mb-6 flex items-center justify-between">
+    <div class="p-4 bg-white md:p-8" id="order-summary" ref="orderSummary">
+      <div class="w-full mx-auto md:max-w-4xl">
+        <div class="flex items-center justify-between mb-6">
           <img
-            class="h-auto w-32"
+            class="w-32 h-auto"
             src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/6a0f4d3c-3f6a-4e4e-f86b-1face7a5e400/1920"
             alt="Logo"
           />
@@ -124,7 +63,7 @@ const saveOrderSummary = async () => {
           </div>
         </div>
         <div class="mb-6 border-b-2 border-gray-200"></div>
-        <div class="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div class="grid grid-cols-1 gap-6 mb-6 md:grid-cols-2">
           <div>
             <h2 class="text-lg font-bold">Customer Details</h2>
             <p>
@@ -147,7 +86,7 @@ const saveOrderSummary = async () => {
               {{ quote.vehicle.label }}
             </p>
             <img
-              class="mt-2 h-auto w-48"
+              class="w-48 h-auto mt-2"
               :src="quote.vehicle.vehicle_image!"
               alt="Vehicle Image"
             />
@@ -158,7 +97,7 @@ const saveOrderSummary = async () => {
           <div
             v-for="(trip, index) in quote.trips"
             :key="index"
-            class="mb-4 rounded-md border p-4"
+            class="p-4 mb-4 border rounded-md"
           >
             <p>
               <span class="font-semibold">Pick Up: </span>
@@ -208,7 +147,7 @@ const saveOrderSummary = async () => {
             <span> ${{ totalPrice.total.toFixed(2) }}</span>
           </p>
         </div>
-        <div class="mt-6 border-t-2 border-gray-200 pt-6">
+        <div class="pt-6 mt-6 border-t-2 border-gray-200">
           <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div class="flex flex-col">
               <p class="font-sans text-base font-bold text-black">

@@ -32,9 +32,7 @@ const LineItemExtendedSchema = LineItemSchema.extend({
 })
 
 type LineItemExtended = z.infer<typeof LineItemExtendedSchema>
-
 type DirectionsApiResponse = z.infer<typeof directionsSchema>
-
 const config = useRuntimeConfig().public.GOOGLE_MAPS_API_KEY
 
 // Distance Calculation function
@@ -49,7 +47,6 @@ export async function calculateDistance(
       `Failed to fetch directions: ${response.status} - ${response.statusText}`
     )
   }
-
   const data = await response.json()
   console.log(data)
   const validatedData = directionsSchema.parse(data)
@@ -112,11 +109,8 @@ export function usePricingEngine(
     const selectedServiceType = services.find(
       (s) => s.value === serviceTypeId.value
     )
-    selectedVehicle.value = selectedVehicleType as any
-    console.log('Selected vehicle type:', selectedVehicleType)
-    selectedService.value = selectedServiceType as any
-    console.log('Selected service type:', selectedServiceType)
-
+    selectedVehicle.value = selectedVehicleType
+    selectedService.value = selectedServiceType
     selectedServiceLabel.value = selectedServiceType?.label
 
     if (!selectedVehicleType || !selectedServiceType) {
@@ -176,13 +170,7 @@ export function usePricingEngine(
     taxTotal.value = lineItemDetails.reduce((acc, item) => acc + item.tax, 0)
     subTotal.value = lineItemDetails.reduce((acc, item) => acc + item.total, 0)
     totalAmount.value = parseFloat((taxTotal.value + subTotal.value).toFixed(2))
-
     detailedLineItems.value = lineItemDetails
-    console.log('Detailed Line Items', detailedLineItems.value)
-    console.log('Tax Total:', taxTotal.value)
-    console.log('Tax Total:', subTotal.value)
-    console.log('Tax Total:', totalAmount.value)
-
     return { lineItemDetails, taxTotal, subTotal, totalAmount }
   }
 

@@ -1,12 +1,4 @@
 <script setup lang="ts">
-import type {
-  Stripe,
-  StripeElements,
-  StripeLinkAuthenticationElement,
-  StripePaymentElement,
-} from '@stripe/stripe-js'
-import { Ref } from 'vue'
-import { stripeInit } from '~/services/stripeClientInit'
 import { useStripeStore } from '~/stores/useStripeStore'
 import { storeToRefs } from 'pinia'
 import { useQuoteStore } from '~/stores/useQuoteStore'
@@ -14,97 +6,41 @@ definePageMeta({
   name: 'checkout',
   layout: 'store',
 })
+const stripeClient = useStripe()
 const stripeStore = useStripeStore()
 const { client_secret } = storeToRefs(stripeStore)
-const stripe: Stripe | null = await stripeInit()
 const quoteStore = useQuoteStore()
 const { quote } = storeToRefs(quoteStore)
 const {
-  is_round_trip,
-  quote_number,
-  selected_hours,
-  selected_passengers,
-  quote_tax_total,
-  quote_subtotal,
-  quote_total,
-  user,
   vehicle,
-  sales_tax,
   trips,
-  combined_line_items,
 } = quote.value!
-const appearance = {
-  theme: 'stripe',
-  variables: {
-    colorPrimary: '#9f6c27',
-    colorBackground: '#ffffff',
-    colorText: '#222222',
-    colorDanger: '#df1b41',
-    fontFamily: 'Inter Var, system-ui, sans-serif',
-    spacingUnit: '2px',
-    borderRadius: '4px',
-  },
-} as const
-const elements: Ref<StripeElements | undefined> = ref()
+const {
+  fullName,
+  emailAddress,
+  paymentElement,
+  phoneNumber,
+  linkAuthenticationElement,
+  clientSecret,
+  isLoading,
+  websiteURL,
+  quoteNumber,
+  publicKey
+} = stripeClient
+
+fullName.value = quote.value?.user.full_name!
+emailAddress.value = quote.value?.user.email_address!
+phoneNumber.value = quote.value?.user.phone_number!
+clientSecret.value = client_secret.value
+quoteNumber.value = quote.value?.quote_number!
+websiteURL.value = useRuntimeConfig().public.WEBSITE_URL
+publicKey.value = useRuntimeConfig().public.STRIPE_PUBLISHABLE_KEY
+
 onMounted(() => {
-  nextTick(() => {
-    elements.value = stripe?.elements({
-      clientSecret: client_secret.value,
-      appearance,
-    })
-    const paymentElement: StripePaymentElement | undefined =
-      elements.value?.create('payment', {
-        defaultValues: {
-          billingDetails: {
-            name: quote.value?.user.full_name as string,
-            email: quote.value?.user.email_address as string,
-            phone: quote.value?.user.phone_number as string,
-          },
-        },
-      })
-    const linkAuthenticationElement:
-      | StripeLinkAuthenticationElement
-      | undefined = elements.value?.create('linkAuthentication', {
-      defaultValues: {
-        email: quote.value?.user.email_address as string,
-      },
-    })
-    linkAuthenticationElement?.mount('#link-authentication-element')
-    paymentElement?.mount('#payment-element')
+  nextTick(async () => {
+    await stripeClient.initStripeElements()
   })
 })
-const url = useRuntimeConfig().public.WEBSITE_URL
-const websiteUrl = `${url}/success?quote_number=${quote_number}`
-const loading = ref(false)
-async function submitHandler(): Promise<void> {
-  loading.value = true
-  if (!stripe || !elements.value) {
-    console.error('Stripe is not initialized.')
-    return
-  }
-  try {
-    const { error } = await stripe.confirmSetup({
-      elements: elements.value,
-      confirmParams: {
-        return_url: websiteUrl,
-      },
-    })
-    loading.value = false
-    if (error) {
-      console.error('Stripe error:', error)
-      // Display the error to the user, consider using a UI component to show the error
-    }
-  } catch (error) {
-    console.error('Error during setup confirmation:', error)
-    // Handle any other errors during setup confirmation, consider using a UI component to show the error
-  }
-}
-function removeLastObject(arr: any) {
-  if (arr.length === 0) {
-    return null
-  }
-  return arr.pop()
-}
 const totalPrice = removeLastObject(quote.value?.combined_line_items)
 const lineItems = quote.value?.combined_line_items!
 //todo: add in the creation of draft invoice in stripe
@@ -118,21 +54,21 @@ const lineItems = quote.value?.combined_line_items!
 </script>
 
 <template>
-  <div class="h-screen w-full">
+  <div class="w-full h-screen">
     <!-- Background color split screen for large screens -->
     <div
-      class="fixed top-0 left-0 hidden h-full w-1/2 bg-white lg:block"
+      class="fixed top-0 left-0 hidden w-1/2 h-full bg-white lg:block"
       aria-hidden="true"
     />
     <div
-      class="fixed top-0 right-0 hidden h-full w-1/2 bg-brand-900 lg:block"
+      class="fixed top-0 right-0 hidden w-1/2 h-full bg-brand-900 lg:block"
       aria-hidden="true"
     />
 
     <header
-      class="relative mx-auto max-w-7xl bg-brand-900 py-6 lg:grid lg:grid-cols-2 lg:gap-x-16 lg:bg-transparent lg:px-8 lg:pt-16 lg:pb-10"
+      class="relative py-6 mx-auto max-w-7xl bg-brand-900 lg:grid lg:grid-cols-2 lg:gap-x-16 lg:bg-transparent lg:px-8 lg:pt-16 lg:pb-10"
     >
-      <div class="mx-auto flex max-w-2xl px-4 lg:w-full lg:max-w-lg lg:px-0">
+      <div class="flex max-w-2xl px-4 mx-auto lg:w-full lg:max-w-lg lg:px-0">
         <NuxtLink to="/" class="self-center">
           <span class="sr-only">High Park Livery</span>
           <NuxtPicture
@@ -148,19 +84,19 @@ const lineItems = quote.value?.combined_line_items!
     </header>
 
     <main
-      class="relative mx-auto grid max-w-7xl grid-cols-1 gap-x-16 lg:grid-cols-2 lg:px-8"
+      class="relative grid grid-cols-1 mx-auto max-w-7xl gap-x-16 lg:grid-cols-2 lg:px-8"
     >
       <h1 class="sr-only">Checkout</h1>
 
       <section
         aria-labelledby="summary-heading"
-        class="bg-brand-900 pt-6 pb-12 text-brand-300 md:px-10 lg:col-start-2 lg:row-start-1 lg:mx-auto lg:w-full lg:max-w-lg lg:bg-transparent lg:px-0 lg:pt-0 lg:pb-24"
+        class="pt-6 pb-12 bg-brand-900 text-brand-300 md:px-10 lg:col-start-2 lg:row-start-1 lg:mx-auto lg:w-full lg:max-w-lg lg:bg-transparent lg:px-0 lg:pt-0 lg:pb-24"
       >
-        <div class="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0">
+        <div class="max-w-2xl px-4 mx-auto lg:max-w-none lg:px-0">
           <h2 id="summary-heading" class="sr-only">Order summary</h2>
 
           <div
-            class="rounded-lg bg-white p-6 text-brand-900 shadow-md dark:bg-neutral-400"
+            class="p-6 bg-white rounded-lg shadow-md text-brand-900 dark:bg-neutral-400"
           >
             <dl>
               <dt class="text-sm font-medium">Amount due</dt>
@@ -171,12 +107,12 @@ const lineItems = quote.value?.combined_line_items!
 
             <ul
               role="list"
-              class="divide-y divide-neutral-200 text-sm font-medium"
+              class="text-sm font-medium divide-y divide-neutral-200"
             >
               <li
                 v-for="trip in trips"
                 :key="trip.formatted_pickup_time"
-                class="flex items-start space-x-4 py-6"
+                class="flex items-start py-6 space-x-4"
               >
                 <NuxtPicture
                   :img-attrs="{
@@ -194,7 +130,7 @@ const lineItems = quote.value?.combined_line_items!
             </ul>
 
             <dl
-              class="space-y-6 border-t border-gray-200 pt-6 text-sm font-medium"
+              class="pt-6 space-y-6 text-sm font-medium border-t border-gray-200"
             >
               <div
                 v-for="item in lineItems"
@@ -206,14 +142,13 @@ const lineItems = quote.value?.combined_line_items!
               </div>
 
               <div
-                class="flex items-center justify-between border-t border-gray-200 pt-6 text-brand-900"
+                class="flex items-center justify-between pt-6 border-t border-gray-200 text-brand-900"
               >
                 <dt class="text-base">Total</dt>
                 <dd class="text-base">${{ totalPrice.total }}</dd>
               </div>
             </dl>
           </div>
-          <FlightInformation />
         </div>
       </section>
 
@@ -225,7 +160,7 @@ const lineItems = quote.value?.combined_line_items!
           Payment and shipping details
         </h2>
 
-        <div class="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0">
+        <div class="max-w-2xl px-4 mx-auto lg:max-w-none lg:px-0">
           <div class="mt-4">
             <h3
               id="payment-heading"
@@ -234,27 +169,27 @@ const lineItems = quote.value?.combined_line_items!
               Payment details
             </h3>
 
-            <form id="payment-form" class="p-6" @submit.prevent="submitHandler">
-              <div id="link-authentication-element"></div>
-              <div id="payment-element">
+            <form id="payment-form" class="p-6" @submit.prevent="stripeClient.submitHandler()">
+              <div id="link-authentication-element" ref="linkAuthenticationElement"></div>
+              <div id="payment-element" ref="paymentElement">
                 <!--Stripe.js injects the Payment Element-->
               </div>
               <div
-                class="mt-10 flex justify-end border-t border-neutral-200 pt-6"
+                class="flex justify-end pt-6 mt-10 border-t border-neutral-200"
               >
                 <button
                   type="submit"
                   id="submit"
-                  class="w-full rounded-md border border-transparent bg-brand-600 px-4 py-2 text-sm font-medium uppercase text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-neutral-50"
+                  class="w-full px-4 py-2 text-sm font-medium text-white uppercase border border-transparent rounded-md shadow-sm bg-brand-600 hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-neutral-50"
                 >
-                  <div class="spinner hidden" id="spinner"></div>
-                  <span v-if="loading" id="button-text">Processing......</span>
+                  <div class="hidden spinner" id="spinner"></div>
+                  <span v-if="isLoading" id="button-text">Processing......</span>
                   <span v-else id="button-text">Complete Booking</span>
                 </button>
                 <div id="payment-message" class="hidden"></div>
               </div>
             </form>
-            <div class="my-4 flex flex-col">
+            <div class="flex flex-col my-4">
               <p class="font-sans text-sm font-bold text-neutral-900">
                 We require a credit card to hold your reservation
               </p>
@@ -263,14 +198,14 @@ const lineItems = quote.value?.combined_line_items!
                 authorization hold will be placed on your credit card for the
                 full amount of your reservation.
               </p>
-              <div class="mt-2 flex flex-col">
+              <div class="flex flex-col mt-2">
                 <p class="font-sans text-sm font-bold text-neutral-900">
                   Card is not charged until the completion of your trip
                 </p>
-                <p class="font-brand-body text-xs text-red-700">
+                <p class="text-xs text-red-700 font-brand-body">
                   All prices include taxes, surcharges and gratuity
                 </p>
-                <p class="font-brand-body text-xs text-red-700">
+                <p class="text-xs text-red-700 font-brand-body">
                   **Does not include hwy tolls, parking fees, or any extra fees
                   incurred during the trip
                 </p>

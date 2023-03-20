@@ -6,7 +6,7 @@ import {
   darkTheme,
   useLoadingBar,
 } from 'naive-ui'
-import { Ref, WatchCallback } from 'vue'
+import { WatchCallback } from 'vue'
 import { ref, computed } from '#imports'
 import { VueTelInput } from 'vue-tel-input'
 import { LineItemSchema, SalesTaxSchema } from '~/prisma/generated/zod'
@@ -21,9 +21,6 @@ import {
   buildHoursOptions,
   Option,
 } from '~/composables/useBuildOptions'
-import { useNuxtApp } from '#app'
-
-const { $client } = useNuxtApp()
 
 const quoteStore = useQuoteStore()
 const userStore = useUserStore()
@@ -33,20 +30,15 @@ const dataStore = useDataStore()
 const { vehicleTypes, serviceTypes, lineItems, salesTaxes } =
   storeToRefs(dataStore)
 
-// const serviceTypeOptions = await $client.service.get.query()
-// const lineItemsRes = await $client.lineItem.get.query()
-// const vehicleTypeOptions = await $client.vehicle.get.query()
-// const salesTaxesRes = await $client.salesTax.get.query()
-
 const [serviceTypeOptions, lineItemsRes, vehicleTypeOptions, salesTaxesRes] =
   await Promise.all([
-    $client.service.get.query(),
-    $client.lineItem.get.query(),
-    $client.vehicle.get.query(),
-    $client.salesTax.get.query(),
+    useTrpc().service.get.query(),
+    useTrpc().lineItem.get.query(),
+    useTrpc().vehicle.get.query(),
+    useTrpc().salesTax.get.query(),
   ])
 
-//the validation of the data fetched from the database
+
 lineItems.value = LineItemSchema.array().parse(lineItemsRes)
 salesTaxes.value = SalesTaxSchema.array().parse(salesTaxesRes)
 
@@ -74,6 +66,7 @@ const gtmValues = route.query
 
 //tag manager
 const gtm = useGtm()
+
 //Todo enable tag manager
 function triggerEvent() {
   gtm?.trackEvent({
@@ -214,6 +207,7 @@ function isAirport(place?: Place): boolean {
     return false
   }
 }
+
 const handleFormValueChange: WatchCallback<
   [typeof formValue.value.origin, typeof formValue.value.destination]
 > = ([origin, destination]) => {
@@ -262,7 +256,7 @@ async function onSubmit() {
   try {
     loading.value = true
     console.log('Quote Values Before Submission', formValue.value)
-    const quoteData = await $client.quote.postQuote.mutate(formValue.value)
+    const quoteData = await useTrpc().quote.postQuote.mutate(formValue.value)
     console.log('Returned Quote:', quoteData)
     quoteStore.setQuote(quoteData)
     setTimeout(async () => {
@@ -297,6 +291,7 @@ function handleValidateButtonClick(e: MouseEvent) {
     }
   })
 }
+
 //calculating the start date on the calendar component
 function disablePreviousDate(ts: number) {
   return ts < new Date().getTime() - 24 * 60 * 60 * 1000
@@ -308,9 +303,9 @@ function disablePreviousDate(ts: number) {
     <n-grid :cols="1" responsive="self">
       <n-grid-item :span="1">
         <div
-          class="border-1 rounded border border-white bg-black p-4 sm:mx-auto sm:w-full sm:max-w-2xl sm:overflow-hidden sm:rounded-lg"
+          class="p-4 bg-black border border-white rounded border-1 sm:mx-auto sm:w-full sm:max-w-2xl sm:overflow-hidden sm:rounded-lg"
         >
-          <h2 class="mt-2 mb-4 text-center text-3xl uppercase text-white">
+          <h2 class="mt-2 mb-4 text-3xl text-center text-white uppercase">
             Instant Quote
           </h2>
           <n-form
@@ -319,7 +314,7 @@ function disablePreviousDate(ts: number) {
             :model="formValue"
             :rules="rules"
           >
-            <n-grid :cols="24" :x-gap="12" cols="2 400:4 600:6">
+            <n-grid :x-gap="12" :cols="24">
               <n-form-item-gi
                 :show-label="false"
                 label="Pickup Location"
@@ -521,11 +516,11 @@ function disablePreviousDate(ts: number) {
             </n-grid>
             <button
               id="submit_button"
-              class="inline-flex w-full items-center rounded border border-transparent bg-red-600 px-4 py-2 text-sm font-medium uppercase text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+              class="inline-flex items-center w-full px-4 py-2 text-sm font-medium text-white uppercase bg-red-600 border border-transparent rounded shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
               :loading="loading"
               @click="handleValidateButtonClick"
             >
-              <span class="mx-auto self-center">{{
+              <span class="self-center mx-auto">{{
                 loading ? 'Processing.....' : 'Get Prices & Availability'
               }}</span>
             </button>
