@@ -2,27 +2,13 @@
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
 import { storeToRefs } from 'pinia'
 import { useCartStore } from '~/stores/useCartStore'
-import { LineItem, useQuoteStore } from '~/stores/useQuoteStore'
+import { useQuoteStore } from '~/stores/useQuoteStore'
 
 const cartStore = useCartStore()
 const { addedToCart } = storeToRefs(cartStore)
 
 const quoteStore = useQuoteStore()
 const { quote: quoteFromStore } = storeToRefs(quoteStore)
-
-function removeLastObject(arr: any) {
-  if (arr.length === 0) {
-    return null
-  }
-  return arr.pop()
-}
-//@ts-ignore
-// const totalPrice = removeLastObject(quoteFromStore.value?.combined_line_items)
-// interface CombinedLineItem {
-//   combined_line_items: LineItem[]
-// }
-// const { combined_line_items } =
-//   quoteFromStore.value as unknown as CombinedLineItem
 
 const quote = computed(() => (addedToCart.value ? quoteFromStore.value : null))
 

@@ -11,7 +11,6 @@ export default defineNuxtConfig({
   css: ['vue-tel-input/dist/vue-tel-input.css'],
   modules: [
     '@vueuse/nuxt',
-    '@nuxtjs/fontaine',
     '@nuxtjs/robots',
     '@nuxtjs/tailwindcss',
     '@nuxt/image-edge',
@@ -78,7 +77,7 @@ export default defineNuxtConfig({
     },
   },
   typescript: {
-    shim: false,
+    shim: true,
   },
   vite: {
     resolve: {

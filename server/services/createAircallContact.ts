@@ -1,23 +1,4 @@
-import { Quote } from '@prisma/client'
 import { QuotesWithTripsAndUser } from '~/server/utils/trpcUtils'
-
-interface AircallPhoneNumber {
-  label: string
-  value: string
-}
-
-interface AircallEmail {
-  label: string
-  value: string
-}
-
-interface AircallContact {
-  first_name: string
-  last_name: string
-  information: string
-  phone_numbers: AircallPhoneNumber[]
-  emails: AircallEmail[]
-}
 
 export const createAircallContact = async (
   aircallSecret: string,

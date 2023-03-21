@@ -38,7 +38,7 @@ onMounted(() => {
     await stripeClient.initStripeElements()
   })
 })
-const totalPrice = removeLastObject(quote.value?.combined_line_items)
+const totalPrice = quote.value?.quote_total
 const lineItems = quote.value?.combined_line_items!
 //todo: add in the creation of draft invoice in stripe
 //todo: add spot for flight information in the checkout flow
@@ -98,7 +98,7 @@ const lineItems = quote.value?.combined_line_items!
             <dl>
               <dt class="text-lg font-medium">Amount Due</dt>
               <dd class="mt-1 text-3xl font-bold tracking-tight text-brand-900">
-                $ {{ totalPrice.total.toFixed(2) }}
+                $ {{ totalPrice.toFixed(2) }}
               </dd>
             </dl>
 

@@ -6,10 +6,6 @@ import { useQuoteStore } from '~/stores/useQuoteStore'
 import { format } from 'date-fns'
 import { ref } from '#imports'
 import { z } from 'zod'
-import {
-  LineItemsPartialSchema,
-  LineItemsPartial,
-} from '~/schema/lineItemSchema'
 
 const cartStore = useCartStore()
 const quoteStore = useQuoteStore()

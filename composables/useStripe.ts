@@ -23,6 +23,7 @@ const appearance = {
 export function useStripe() {
   const paymentElement: Ref<HTMLElement | null> = ref(null)
   const linkAuthenticationElement: Ref<HTMLElement | null> = ref(null)
+  const messageElement: Ref<HTMLElement | null> = ref(null)
   const fullName: Ref<string> = ref('')
   const emailAddress: Ref<string> = ref('')
   const phoneNumber: Ref<string> = ref('')
@@ -89,11 +90,67 @@ export function useStripe() {
       isLoading.value = false
     }
   }
+
+  const checkSetupIntent = async (): Promise<void> => {
+    if (!stripe) {
+      console.error('Stripe is not initialized.')
+      return
+    }
+    try {
+      const { setupIntent } = await stripe.retrieveSetupIntent(
+        clientSecret.value
+      )
+
+      if (!setupIntent) {
+        console.error('No setupIntent found.')
+        return
+      }
+
+      const message = messageElement.value
+
+      switch (setupIntent.status) {
+        case 'succeeded':
+          if (message) {
+            message.innerText = 'Success! Your payment method has been saved.'
+          }
+          break
+
+        case 'processing':
+          if (message) {
+            message.innerText =
+              "Processing payment details. We'll update you when processing is complete."
+          }
+          break
+
+        case 'requires_payment_method':
+          if (message) {
+            message.innerText =
+              'Failed to process payment details. Please try another payment method.'
+          }
+          // Redirect your user back to your payment page to attempt collecting
+          // payment again
+          break
+
+        default:
+          if (message) {
+            message.innerText =
+              'An unexpected error occurred. Please try again.'
+          }
+          break
+      }
+    } catch (error) {
+      console.error('Error during setup intent retrieval:', error)
+      // Handle any other errors during setup intent retrieval, consider using a UI component to show the error
+    }
+  }
+
   return {
     submitHandler,
     initStripeElements,
+    checkSetupIntent,
     paymentElement,
     linkAuthenticationElement,
+    messageElement,
     fullName,
     emailAddress,
     phoneNumber,

@@ -9,6 +9,7 @@ export const useDefaults = () => {
     quote_tax_total: 0,
     quote_subtotal: 0,
     quote_total: 0,
+    combined_quote_totals: [],
     user: {
       first_name: '',
       last_name: '',

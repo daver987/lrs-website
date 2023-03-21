@@ -4,11 +4,11 @@ import {
   getOrCreateStripCustomerId,
   createSetupIntent,
 } from '~/server/services/stripe'
-import { H3Event } from 'h3'
 import {
   handleCustomerCreated,
   handleSetupIntentSucceeded,
 } from '~/server/services/stripeHandlers'
+
 export const stripeRouter = router({
   createCheckout: publicProcedure
     .input(
