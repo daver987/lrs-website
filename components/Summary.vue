@@ -142,10 +142,6 @@ const saveOrderSummary = async () => {
             <span class="font-semibold">{{ item.label }}:</span>
             <span> ${{ item.total.toFixed(2) }}</span>
           </p>
-          <p>
-            <span class="font-semibold">Total:</span>
-            <span> ${{ totalPrice.toFixed(2) }}</span>
-          </p>
         </div>
         <div class="mt-6 border-t-2 border-gray-200 pt-6">
           <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
