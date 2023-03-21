@@ -1,27 +1,16 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import { Summary } from '~/schema/summarySchema'
+import { QuotesWithTripsAndUser } from '~/server/utils/trpcUtils'
 
-export interface LineItem {
-  label: string
-  total: number
-  tax: number
-}
-
-export interface ExtendedSummary extends Summary {
-  combined_line_items: LineItem[]
-}
-
-export interface QuoteState {
-  quote: ExtendedSummary | null
+interface State {
+  quote: QuotesWithTripsAndUser | null
 }
 
 export const useQuoteStore = defineStore('quoteStore', {
-  state: (): QuoteState => ({
+  state: (): State => ({
     quote: null,
   }),
   actions: {
-    setQuote(quote: Summary) {
-      //@ts-ignore
+    setQuote(quote: QuotesWithTripsAndUser) {
       this.quote = quote
       console.log('Set Quote Fired')
     },

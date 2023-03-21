@@ -68,40 +68,36 @@ export function combineLineItemsTwo(quote: Quote): LineItem[] {
 }
 
 export function combineLineItems(lineItems: LineItem[]): LineItem[] {
-  const combinedItems: { [label: string]: LineItem } = {}
+  const combinedItems = lineItems.reduce<{ [label: string]: LineItem }>(
+    (acc, item) => {
+      acc[item.label] = acc[item.label]
+        ? {
+            ...item,
+            total: acc[item.label].total + item.total,
+            tax: acc[item.label].tax + item.tax,
+          }
+        : { ...item }
+      return acc
+    },
+    {}
+  )
 
-  // Iterate through the line_items_list
-  for (const item of lineItems) {
-    if (!combinedItems[item.label]) {
-      combinedItems[item.label] = { ...item }
-    } else {
-      combinedItems[item.label].total += item.total
-      combinedItems[item.label].tax += item.tax
-    }
-  }
+  const totalAmount = lineItems.reduce((sum, item) => sum + item.total, 0)
+  const totalTax = lineItems.reduce((sum, item) => sum + item.tax, 0)
 
-  // Calculate the total amount and tax
-  let totalAmount = 0
-  let totalTax = 0
-  for (const item of Object.values(combinedItems)) {
-    totalAmount += item.total
-    totalTax += item.tax
-  }
-
-  // Add the Tax and Total Amount objects to the array
-  const result = Object.values(combinedItems)
-  result.push({
-    label: 'HST',
-    total: parseFloat(totalTax.toFixed(2)),
-    tax: parseFloat(totalTax.toFixed(2)),
-  })
-  result.push({
-    label: 'Total',
-    total: parseFloat((totalAmount + totalTax).toFixed(2)),
-    tax: 0,
-  })
-
-  return result
+  return [
+    ...Object.values(combinedItems),
+    {
+      label: 'Tax',
+      total: parseFloat(totalTax.toFixed(2)),
+      tax: parseFloat(totalTax.toFixed(2)),
+    },
+    {
+      label: 'Total',
+      total: parseFloat((totalAmount + totalTax).toFixed(2)),
+      tax: parseFloat(totalTax.toFixed(2)),
+    },
+  ]
 }
 
 export function combineTwoLineItems(

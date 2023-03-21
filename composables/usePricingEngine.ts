@@ -1,4 +1,4 @@
-import { computed, ref } from 'vue'
+import { computed, ref, Ref } from 'vue'
 import { z } from 'zod'
 import {
   Service,
@@ -6,36 +6,24 @@ import {
   Vehicle,
   SalesTax,
 } from '~/prisma/generated/zod'
-
-const directionsSchema = z.object({
-  routes: z.array(
-    z
-      .object({
-        legs: z.array(
-          z.object({
-            distance: z.object({ value: z.number(), text: z.string() }),
-            duration: z.object({ value: z.number(), text: z.string() }),
-            end_address: z.string(),
-            start_address: z.string(),
-            start_location: z.object({ lat: z.number(), lng: z.number() }),
-            end_location: z.object({ lat: z.number(), lng: z.number() }),
-          })
-        ),
-      })
-      .strip()
-  ),
-})
+import {
+  DirectionsSchema,
+  DirectionsApiResponse,
+} from '~/schema/directionsSchema'
 
 const LineItemExtendedSchema = LineItemSchema.extend({
   tax: z.number().optional(),
   total: z.number().optional(),
 })
-
+const LineItemsPartialSchema = LineItemExtendedSchema.pick({
+  label: true,
+  tax: true,
+  total: true,
+})
+type LineItemsPartial = z.infer<typeof LineItemsPartialSchema>
 type LineItemExtended = z.infer<typeof LineItemExtendedSchema>
-type DirectionsApiResponse = z.infer<typeof directionsSchema>
-const config = useRuntimeConfig().public.GOOGLE_MAPS_API_KEY
 
-// Distance Calculation function
+const config = useRuntimeConfig().public.GOOGLE_MAPS_API_KEY
 export async function calculateDistance(
   origin: string,
   destination: string
@@ -48,8 +36,7 @@ export async function calculateDistance(
     )
   }
   const data = await response.json()
-  console.log(data)
-  const validatedData = directionsSchema.parse(data)
+  const validatedData = DirectionsSchema.parse(data)
   const {
     distance: { value: distanceValue },
   } = validatedData.routes[0].legs[0]
@@ -60,14 +47,12 @@ export async function calculateDistance(
   }
 }
 
-// Pricing Engine function
 export function usePricingEngine(
   vehicles: Vehicle[],
   services: Service[],
   lineItems: LineItemExtended[],
   salesTaxes: SalesTax[]
 ) {
-  // state variables
   const origin = ref('')
   const destination = ref('')
   const routeData = ref<DirectionsApiResponse>()
@@ -76,21 +61,15 @@ export function usePricingEngine(
   const selectedHours = ref(0)
   const distance = ref(0)
   const baseRate = ref(0)
-  const lineItemsTotal = ref(0)
-  const taxableLineItemsTotal = ref(0)
   const taxTotal = ref(0)
   const subTotal = ref(0)
   const totalAmount = ref(0)
-  const taxAmount = ref(0)
-  const totalPrice = computed(
-    () => baseRate.value + lineItemsTotal.value + taxAmount.value
-  )
+  const detailedLineItems: Ref<LineItemsPartial[] | null> = ref(null)
+  const detailedLineItemsWithTotals: Ref<LineItemsPartial[] | null> = ref(null)
+  const selectedVehicle = ref<Vehicle>()
+  const selectedService = ref<Service>()
   const taxesList = ref(salesTaxes)
   const lineItemsList = ref(lineItems)
-  const detailedLineItems = ref()
-  const selectedServiceLabel = ref<string | undefined>('')
-  const selectedService = ref<Service>()
-  const selectedVehicle = ref<Vehicle>()
 
   // methods
   async function updateDistance() {
@@ -111,14 +90,13 @@ export function usePricingEngine(
     )
     selectedVehicle.value = selectedVehicleType
     selectedService.value = selectedServiceType
-    selectedServiceLabel.value = selectedServiceType?.label
 
     if (!selectedVehicleType || !selectedServiceType) {
       baseRate.value = 0
       return
     }
 
-    if (selectedServiceType.value === 4) {
+    if (selectedServiceType.is_hourly) {
       baseRate.value = +(
         selectedHours.value * selectedVehicleType.per_hour
       ).toFixed(2)
@@ -149,7 +127,7 @@ export function usePricingEngine(
     )
 
     const lineItemDetails = [
-      { label: 'Base Rate', total: baseRateAmount, tax: baseRateTax },
+      { label: 'Base Rate', tax: baseRateTax, total: baseRateAmount },
       ...filteredLineItems.map((item) => {
         const amount = item.is_percentage
           ? parseFloat((baseRate.value * (item.amount / 100)).toFixed(2))
@@ -159,19 +137,31 @@ export function usePricingEngine(
           ? parseFloat(((amount * taxRate) / 100).toFixed(2))
           : 0
 
-        item.total = amount
         item.label = item.label || ''
         item.tax = tax
+        item.total = amount
 
-        return { label: item.label, total: amount, tax: tax }
+        return { label: item.label, tax: tax, total: amount }
       }),
     ]
-
-    taxTotal.value = lineItemDetails.reduce((acc, item) => acc + item.tax, 0)
-    subTotal.value = lineItemDetails.reduce((acc, item) => acc + item.total, 0)
-    totalAmount.value = parseFloat((taxTotal.value + subTotal.value).toFixed(2))
     detailedLineItems.value = lineItemDetails
-    return { lineItemDetails, taxTotal, subTotal, totalAmount }
+    subTotal.value = lineItemDetails.reduce((acc, item) => acc + item.total, 0)
+    taxTotal.value = lineItemDetails.reduce((acc, item) => acc + item.tax, 0)
+    totalAmount.value = subTotal.value + taxTotal.value
+
+    detailedLineItemsWithTotals.value = [
+      ...Object.values(lineItemDetails),
+      {
+        label: matchingTaxes[0].tax_name,
+        tax: parseFloat(taxTotal.value.toFixed(2)),
+        total: parseFloat(taxTotal.value.toFixed(2)),
+      },
+      {
+        label: 'Total',
+        tax: parseFloat(taxTotal.value.toFixed(2)),
+        total: parseFloat(totalAmount.value.toFixed(2)),
+      },
+    ]
   }
 
   function reset() {
@@ -182,9 +172,6 @@ export function usePricingEngine(
     selectedHours.value = 0
     distance.value = 0
     baseRate.value = 0
-    lineItemsTotal.value = 0
-    taxableLineItemsTotal.value = 0
-    taxAmount.value = 0
     lineItemsList.value = []
   }
 
@@ -199,17 +186,16 @@ export function usePricingEngine(
     salesTaxes,
     vehicleTypeId,
     serviceTypeId,
-    selectedServiceLabel,
     selectedHours,
     selectedVehicle,
     selectedService,
     distance,
     baseRate,
+    subTotal,
+    taxTotal,
+    totalAmount,
     detailedLineItems,
-    lineItemsTotal,
-    taxableLineItemsTotal,
-    taxAmount,
-    totalPrice,
+    detailedLineItemsWithTotals,
     updateDistance,
     updateBaseRate,
     updateLineItemsTotal,

@@ -1,8 +1,8 @@
-import type { Summary } from '~/schema/summarySchema'
 import { SummarySchema } from '~/schema/summarySchema'
+import { QuotesWithTripsAndUser } from '~/server/utils/trpcUtils'
 
 export async function sendQuoteEmail(
-  newQuote: Summary,
+  newQuote: QuotesWithTripsAndUser,
   apiKey: string,
   shortLink: string
 ): Promise<void> {

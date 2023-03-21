@@ -1,4 +1,5 @@
-import { Summary } from '~/schema/summarySchema'
+import { Quote } from '@prisma/client'
+import { QuotesWithTripsAndUser } from '~/server/utils/trpcUtils'
 
 interface AircallPhoneNumber {
   label: string
@@ -20,7 +21,7 @@ interface AircallContact {
 
 export const createAircallContact = async (
   aircallSecret: string,
-  contact: Summary
+  contact: QuotesWithTripsAndUser
 ): Promise<void> => {
   try {
     const headers = new Headers({
@@ -28,7 +29,7 @@ export const createAircallContact = async (
       'Content-Type': 'application/json',
     })
 
-    const body: AircallContact = {
+    const body = {
       first_name: contact.user.first_name,
       last_name: contact.user.last_name,
       information: contact.user.id,

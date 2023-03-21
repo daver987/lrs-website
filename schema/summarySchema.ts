@@ -61,6 +61,7 @@ const summaryQuote = QuoteSchema.pick({
   quote_total: true,
   quote_subtotal: true,
   quote_tax_total: true,
+  combined_line_items: true,
 })
 
 const QuoteForStripe = QuoteSchema.pick({

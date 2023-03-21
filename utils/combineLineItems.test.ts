@@ -21,7 +21,8 @@ describe('combineLineItems', () => {
       { label: 'Base Rate', tax: 10, total: 100 },
       { label: 'Gratuity', tax: 0, total: 25 },
       { label: 'Fuel Surcharge', tax: 1, total: 10 },
-      { label: 'Total Amount', tax: 11, total: 135 },
+      { label: 'HST', tax: 11, total: 11 },
+      { label: 'Total', tax: 0, total: 146 },
     ]
 
     expect(combineLineItemsTwo(quote)).toEqual(expectedResult)
@@ -53,7 +54,8 @@ describe('combineLineItems', () => {
       { label: 'Gratuity', tax: 0, total: 50 },
       { label: 'Fuel Surcharge', tax: 2, total: 15 },
       { label: 'Pearson Airport Toll', tax: 1.73, total: 13.27 },
-      { label: 'Total Amount', tax: 23.73, total: 278.27 },
+      { label: 'HST', tax: 23.73, total: 23.73 },
+      { label: 'Total', tax: 0, total: 302 },
     ]
 
     expect(combineLineItemsTwo(quote)).toEqual(expectedResult)

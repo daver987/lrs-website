@@ -11,6 +11,7 @@ import { ref, computed } from '#imports'
 import { VueTelInput } from 'vue-tel-input'
 import { LineItemSchema, SalesTaxSchema } from '~/prisma/generated/zod'
 import { Place, placeSchema } from '~/schema/placeSchema'
+import type { QuoteForm } from '~/schema/QuoteFormSchema'
 import { useGtm } from '@gtm-support/vue-gtm'
 import { useDataStore } from '~/stores/useDataStore'
 import { useUserStore } from '~/stores/useUserStore'
@@ -37,7 +38,6 @@ const [serviceTypeOptions, lineItemsRes, vehicleTypeOptions, salesTaxesRes] =
     useTrpc().vehicle.get.query(),
     useTrpc().salesTax.get.query(),
   ])
-
 
 lineItems.value = LineItemSchema.array().parse(lineItemsRes)
 salesTaxes.value = SalesTaxSchema.array().parse(salesTaxesRes)
@@ -79,13 +79,12 @@ function triggerEvent() {
   })
 }
 
-//@ts-ignore
-const formValue = ref({
+const formValue: Ref<QuoteForm> = ref({
   id: user_id.value,
-  first_name: null,
-  last_name: null,
-  email_address: null,
-  phone_number: null,
+  first_name: '',
+  last_name: '',
+  email_address: '',
+  phone_number: '',
   conversion: {
     ...gtmValues,
   },
@@ -102,6 +101,9 @@ const formValue = ref({
   }),
   vehicle_id: null,
   service_id: null,
+  return_service_id: computed(() => {
+    return formValue.value.service_id === 2 ? 3 : formValue.value.service_id
+  }),
   is_round_trip: false,
   vehicle: vehicleTypes.value,
   service: serviceTypes.value,
@@ -303,9 +305,9 @@ function disablePreviousDate(ts: number) {
     <n-grid :cols="1" responsive="self">
       <n-grid-item :span="1">
         <div
-          class="p-4 bg-black border border-white rounded border-1 sm:mx-auto sm:w-full sm:max-w-2xl sm:overflow-hidden sm:rounded-lg"
+          class="border-1 rounded border border-white bg-black p-4 sm:mx-auto sm:w-full sm:max-w-2xl sm:overflow-hidden sm:rounded-lg"
         >
-          <h2 class="mt-2 mb-4 text-3xl text-center text-white uppercase">
+          <h2 class="mt-2 mb-4 text-center text-3xl uppercase text-white">
             Instant Quote
           </h2>
           <n-form
@@ -516,11 +518,11 @@ function disablePreviousDate(ts: number) {
             </n-grid>
             <button
               id="submit_button"
-              class="inline-flex items-center w-full px-4 py-2 text-sm font-medium text-white uppercase bg-red-600 border border-transparent rounded shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+              class="inline-flex w-full items-center rounded border border-transparent bg-red-600 px-4 py-2 text-sm font-medium uppercase text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
               :loading="loading"
               @click="handleValidateButtonClick"
             >
-              <span class="self-center mx-auto">{{
+              <span class="mx-auto self-center">{{
                 loading ? 'Processing.....' : 'Get Prices & Availability'
               }}</span>
             </button>
