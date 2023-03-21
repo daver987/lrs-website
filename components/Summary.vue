@@ -32,6 +32,17 @@ const saveOrderSummary = async () => {
     await generatePdf(orderSummary.value)
   }
 }
+
+const eventData = {
+  clientName: 'John Doe',
+  start: new Date('2023-04-01T10:00:00'),
+  end: new Date('2023-04-01T12:00:00'),
+  location: '123 Main St, Toronto, ON',
+}
+
+const toEmail = 'johndoe@example.com'
+
+// sendBookingConfirmationEmail(eventData, toEmail)
 </script>
 
 <template>

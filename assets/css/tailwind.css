@@ -55,15 +55,39 @@
     url('./assets/fonts/campton-thin.woff') format('woff');
 }
 
+.vue-tel-input {
+  border-radius: var(--n-border-radius) !important;
+  border: 1px solid transparent !important;
+  height: var(--n-height) !important;
+  width: 100%;
+}
+
+.vti__input {
+  border-radius: 0 3px 3px 0;
+  padding-left: 7px;
+  background-color: var(--n-color);
+  caret-color: var(--n-caret-color);
+  font-size: var(--n-font-size);
+  color: var(--n-text-color);
+}
+
+.vue-tel-input:hover {
+  border: var(--n-border-hover) !important;
+}
+
+.vti__dropdown {
+  z-index: 1000 !important;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  background-color: var(--n-count-text-color);
+}
+
 
 body {
   background-color: #fafafa;
   min-height: 100dvh;
 }
 
-body:dark {
-  background-color: #171717;
-}
 
 textarea:focus {
   outline: none;
@@ -125,32 +149,7 @@ textarea:focus {
     --n-suffix-text-color: rgba(255, 255, 255, 0.82);
   }
 
-  .vue-tel-input {
-    border-radius: var(--n-border-radius) !important;
-    border: 1px solid transparent !important;
-    height: var(--n-height) !important;
-    width: 100%;
-  }
 
-  .vti__input {
-    border-radius: 0 3px 3px 0;
-    padding-left: 7px;
-    background-color: var(--n-color);
-    caret-color: var(--n-caret-color);
-    font-size: var(--n-font-size);
-    color: var(--n-text-color);
-  }
-
-  .vue-tel-input:hover {
-    border: var(--n-border-hover) !important;
-  }
-
-  .vti__dropdown {
-    z-index: 1000 !important;
-    border-top-left-radius: 3px;
-    border-bottom-left-radius: 3px;
-    background-color: var(--n-count-text-color);
-  }
 
 
 
