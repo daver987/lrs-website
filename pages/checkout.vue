@@ -2,6 +2,7 @@
 import { useStripeStore } from '~/stores/useStripeStore'
 import { storeToRefs } from 'pinia'
 import { useQuoteStore } from '~/stores/useQuoteStore'
+
 definePageMeta({
   name: 'checkout',
   layout: 'store',
@@ -40,6 +41,8 @@ onMounted(() => {
 })
 const totalPrice = quote.value?.quote_total
 const lineItems = quote.value?.combined_line_items!
+const quoteNum = quote.value?.quote_number
+
 //todo: add in the creation of draft invoice in stripe
 //todo: add spot for flight information in the checkout flow
 //todo: add trip notes in the checkout flow
@@ -98,7 +101,7 @@ const lineItems = quote.value?.combined_line_items!
             <dl>
               <dt class="text-lg font-medium">Amount Due</dt>
               <dd class="mt-1 text-3xl font-bold tracking-tight text-brand-900">
-                $ {{ totalPrice.toFixed(2) }}
+                $ {{ totalPrice!.toFixed(2) }}
               </dd>
             </dl>
 
@@ -127,22 +130,26 @@ const lineItems = quote.value?.combined_line_items!
             </ul>
 
             <dl
-              class="space-y-6 border-t border-gray-200 pt-6 text-sm font-medium"
+              class="space-y-6 border-t border-gray-200 pt-8 text-sm font-medium"
             >
               <div
                 v-for="item in lineItems"
                 :key="item.label"
                 class="flex items-center justify-between"
               >
-                <dt>{{ item.label }}</dt>
-                <dd>${{ item.total.toFixed(2) }}</dd>
+                <dt v-if="item.label === 'Total' ? '' : item.label">
+                  {{ item.label }}
+                </dt>
+                <dd v-if="item.label === 'Total' ? '' : item.label">
+                  ${{ item.total!.toFixed(2) }}
+                </dd>
               </div>
 
               <div
                 class="flex items-center justify-between border-t border-gray-200 pt-6 text-brand-900"
               >
                 <dt class="text-base">Total</dt>
-                <dd class="text-base">${{ totalPrice.total.toFixed(2) }}</dd>
+                <dd class="text-base">${{ totalPrice!.toFixed(2) }}</dd>
               </div>
             </dl>
           </div>

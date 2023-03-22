@@ -12,6 +12,7 @@ const stripe = useStripe()
 const messageElement = stripe.messageElement
 const clientSecret = stripe.clientSecret
 const quote = useDefaults().defaultQuote
+
 const route = useRoute()
 const orderSummary = ref(null)
 const { quote_number, setup_intent_client_secret } = route.query
@@ -23,26 +24,16 @@ const quoteNumber = quoteNumberSchema.parse(quote_number)
 const { data } = await useTrpc().quote.get.useQuery({
   quote_number: quoteNumber,
 })
-Object.assign(quote.value, data.value)
 
-const totalPrice = quote.value.quote_total
+const sendConfirmation = async () => {
+  return useTrpc().book.bookOrder.useQuery({ quote_number: quoteNumber })
+}
 
 const saveOrderSummary = async () => {
   if (orderSummary.value) {
     await generatePdf(orderSummary.value)
   }
 }
-
-const eventData = {
-  clientName: 'John Doe',
-  start: new Date('2023-04-01T10:00:00'),
-  end: new Date('2023-04-01T12:00:00'),
-  location: '123 Main St, Toronto, ON',
-}
-
-const toEmail = 'johndoe@example.com'
-
-// sendBookingConfirmationEmail(eventData, toEmail)
 </script>
 
 <template>

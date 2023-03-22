@@ -5,6 +5,7 @@ import { lineItemsRouter } from '~/server/trpc/routers/lineitems'
 import { salesTaxRouter } from '~/server/trpc/routers/salesTax'
 import { vehicleRouter } from '~/server/trpc/routers/vehicle'
 import { stripeRouter } from '~/server/trpc/routers/stripe'
+import { bookingRouter } from '~/server/trpc/routers/booking'
 
 export const appRouter = router({
   lineItem: lineItemsRouter,
@@ -13,6 +14,7 @@ export const appRouter = router({
   salesTax: salesTaxRouter,
   vehicle: vehicleRouter,
   stripe: stripeRouter,
+  book: bookingRouter,
 })
 
 // export type definition of API

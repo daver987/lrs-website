@@ -33,7 +33,11 @@ export const summaryUser = UserSchema.pick({
 const summaryUserExtended = summaryUser.extend({
   conversion: summaryConversion,
 })
-const summaryLocations = LocationSchema.pick({ full_name: true })
+const summaryLocations = LocationSchema.pick({
+  full_name: true,
+  lat: true,
+  lng: true,
+}).required()
 const summaryTrips = TripSchema.pick({
   trip_order: true,
   formatted_pickup_date: true,
@@ -42,7 +46,10 @@ const summaryTrips = TripSchema.pick({
   line_items_subtotal: true,
   line_items_total: true,
   service_label: true,
-})
+  duration_value: true,
+  pickup_date: true,
+  pickup_time: true,
+}).required()
 
 const TripForStripeSchema = TripSchema.pick({
   id: true,

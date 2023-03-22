@@ -24,10 +24,11 @@ const quoteNumber = quoteNumberSchema.parse(quote_number)
 const { data } = await useTrpc().quote.get.useQuery({
   quote_number: quoteNumber,
 })
-const { combined_line_items } = data.value
+const combined_line_items = data.value?.combined_line_items
 
 Object.assign(quote.value, data.value)
-quoteStore.setQuote(data.value as any)
+//@ts-ignore
+quoteStore.setQuote(data.value)
 
 const createBooking = async () => {
   checkoutLoading.value = true

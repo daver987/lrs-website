@@ -34,6 +34,7 @@ export const stripeRouter = router({
   webhook: publicProcedure.mutation(async ({ ctx, input }) => {
     const { stripe, twilioClient } = ctx
     const endpointSecret = useRuntimeConfig().stripeWebhookSecret
+    //@ts-ignore
     const headers = getHeaders()
     const sig = headers['stripe-signature'] as string
     const stripeEvent = stripe.webhooks.constructEvent(
