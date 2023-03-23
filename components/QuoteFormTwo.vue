@@ -316,11 +316,11 @@ function disablePreviousDate(ts: number) {
             :model="formValue"
             :rules="rules"
           >
-            <n-grid :x-gap="12" :cols="24">
+            <n-grid :x-gap="12" :cols="4" item-responsive>
               <n-form-item-gi
                 :show-label="false"
                 label="Pickup Location"
-                :span="24"
+                :span="4"
                 path="origin"
               >
                 <InputPlacesAutocompleteDark
@@ -332,7 +332,7 @@ function disablePreviousDate(ts: number) {
 
               <n-form-item-gi
                 :show-label="false"
-                :span="24"
+                :span="4"
                 label="Drop-off Location"
                 path="destination"
               >
@@ -344,7 +344,7 @@ function disablePreviousDate(ts: number) {
               </n-form-item-gi>
               <n-form-item-gi
                 path="pickup_date"
-                :span="12"
+                :span="2"
                 :show-label="false"
                 label="Pickup Date"
               >
@@ -358,7 +358,7 @@ function disablePreviousDate(ts: number) {
               </n-form-item-gi>
               <n-form-item-gi
                 path="pickup_time"
-                :span="12"
+                :span="2"
                 :show-label="false"
                 label="Pickup Date and Time"
               >
@@ -380,9 +380,9 @@ function disablePreviousDate(ts: number) {
               </n-form-item-gi>
             </n-grid>
             <n-collapse-transition v-if="false" :show="formValue.is_round_trip">
-              <n-grid :cols="24" :x-gap="12">
+              <n-grid :cols="4" item-responsive :x-gap="12">
                 <n-form-item-gi
-                  :span="12"
+                  :span="2"
                   :show-label="false"
                   label="Return Date"
                   path="dateTime.return_date"
@@ -396,7 +396,7 @@ function disablePreviousDate(ts: number) {
                   />
                 </n-form-item-gi>
                 <n-form-item-gi
-                  :span="12"
+                  :span="2"
                   :show-label="false"
                   label="Return Time"
                   path="dateTime.return_time"
@@ -410,9 +410,9 @@ function disablePreviousDate(ts: number) {
                 </n-form-item-gi>
               </n-grid>
             </n-collapse-transition>
-            <n-grid :cols="24" :x-gap="12">
+            <n-grid :cols="4" item-responsive :x-gap="12">
               <n-form-item-gi
-                :span="12"
+                span="0:4 500:2"
                 :show-label="false"
                 label="Service Type"
                 path="service_id"
@@ -425,7 +425,7 @@ function disablePreviousDate(ts: number) {
               </n-form-item-gi>
 
               <n-form-item-gi
-                :span="12"
+                span="0:4 500:2"
                 :show-label="false"
                 label="Vehicle Type"
                 path="vehicle_id"
@@ -438,7 +438,7 @@ function disablePreviousDate(ts: number) {
               </n-form-item-gi>
 
               <n-form-item-gi
-                :span="12"
+                span="0:4 500:2"
                 :show-label="false"
                 label="Passengers"
                 path="selected_passengers"
@@ -451,7 +451,7 @@ function disablePreviousDate(ts: number) {
               </n-form-item-gi>
 
               <n-form-item-gi
-                :span="12"
+                span="0:4 500:2"
                 :show-label="false"
                 label="Hours"
                 path="selected_hours"
@@ -468,7 +468,7 @@ function disablePreviousDate(ts: number) {
                 :show-label="false"
                 label="First Name"
                 path="first_name"
-                :span="12"
+                span="0:4 500:2"
               >
                 <n-input
                   v-model:value="formValue.first_name"
@@ -479,7 +479,7 @@ function disablePreviousDate(ts: number) {
               </n-form-item-gi>
 
               <n-form-item-gi
-                :span="12"
+                span="0:4 500:2"
                 :show-label="false"
                 label="Last Name"
                 path="last_name"
@@ -491,7 +491,7 @@ function disablePreviousDate(ts: number) {
               </n-form-item-gi>
 
               <n-form-item-gi
-                :span="12"
+                span="0:4 500:2"
                 :show-label="false"
                 label="Email Address"
                 path="email_address"
@@ -503,7 +503,7 @@ function disablePreviousDate(ts: number) {
               </n-form-item-gi>
 
               <n-form-item-gi
-                :span="12"
+                span="0:4 500:2"
                 path="phone_number"
                 :show-label="false"
                 label="Phone Number"

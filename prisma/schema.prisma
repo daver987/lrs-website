@@ -163,6 +163,13 @@ model Flight {
   arrival_time_actual   DateTime?
   trip_id               String?   @unique
   trip                  Trip?     @relation(fields: [trip_id], references: [id])
+  airline               Airline?  @relation(fields: [airlineId], references: [id])
+  airport               Airport?  @relation(fields: [airportId], references: [id])
+  airlineId             Int?
+  airportId             Int?
+
+  @@index([airlineId])
+  @@index([airportId])
 }
 
 model Payment {
@@ -244,4 +251,28 @@ model LineItemToQuote {
   @@unique([A, B], map: "_LineItemToQuote_AB_unique")
   @@index([B], map: "_LineItemToQuote_B_index")
   @@map("_LineItemToQuote")
+}
+
+model Airline {
+  id       Int      @id @unique @default(autoincrement())
+  name     String?
+  iata     String?
+  icao     String?
+  callsign String?
+  country  String?
+  Flight   Flight[]
+}
+
+model Airport {
+  id       Int      @id @unique @default(autoincrement())
+  name     String
+  city     String?
+  country  String?
+  iata     String?
+  icao     String?
+  lat      Float
+  lng      Float
+  timezone String
+  type     String
+  Flight   Flight[]
 }

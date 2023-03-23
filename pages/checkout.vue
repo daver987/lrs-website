@@ -41,7 +41,7 @@ onMounted(() => {
 })
 const totalPrice = quote.value?.quote_total
 const lineItems = quote.value?.combined_line_items!
-const quoteNum = quote.value?.quote_number
+const quoteNum = quote.value?.quote_number!
 
 //todo: add in the creation of draft invoice in stripe
 //todo: add spot for flight information in the checkout flow
