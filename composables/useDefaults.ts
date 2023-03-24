@@ -15,6 +15,11 @@ export const useDefaults = () => {
         total: 99.99,
         tax: 10.99,
       },
+      {
+        label: 'Default',
+        total: 99.99,
+        tax: 10.99,
+      },
     ],
     user: {
       first_name: '',

@@ -2,32 +2,35 @@
 import { generatePdf } from '@/utils/generatePdf'
 import { ref } from '#imports'
 import { z } from 'zod'
+import { useTrpc } from '#imports'
 
-definePageMeta({
-  name: 'checkout',
-  layout: 'store',
-})
-
-const stripe = useStripe()
-const messageElement = stripe.messageElement
-const clientSecret = stripe.clientSecret
 const quote = useDefaults().defaultQuote
+// const stripe = useStripe()
+// const messageElement = stripe.messageElement
+// const clientSecret = stripe.clientSecret
+
+// const { $client } = useNuxtApp()
 
 const route = useRoute()
 const orderSummary = ref(null)
-const { quote_number, setup_intent_client_secret } = route.query
-clientSecret.value = setup_intent_client_secret as string
-await stripe.checkSetupIntent()
+const { quote_number } = route.query
+// clientSecret.value = setup_intent_client_secret as string
+// await stripe.checkSetupIntent()
 const quoteNumberSchema = z.coerce.number()
 const quoteNumber = quoteNumberSchema.parse(quote_number)
 
-const { data } = await useTrpc().quote.get.query({
+const { data } = await useTrpc().quote.get.useQuery({
   quote_number: quoteNumber,
 })
+quote.value = data.value
 
 const sendConfirmation = async () => {
-  return useTrpc().book.bookOrder.mutation({ quote_number: quoteNumber })
+  const { data: booked } = await useTrpc().book.bookOrder.useQuery({
+    quote_number: quoteNumber,
+  })
+  return booked
 }
+await sendConfirmation()
 
 const saveOrderSummary = async () => {
   if (orderSummary.value) {
@@ -39,7 +42,6 @@ const saveOrderSummary = async () => {
 <template>
   <div class="mx-auto max-w-6xl px-6 pb-6">
     <div class="flex w-full justify-end py-1 uppercase">
-      <div ref="messageElement"></div>
       <button
         @click="saveOrderSummary"
         type="button"
@@ -140,7 +142,7 @@ const saveOrderSummary = async () => {
           </div>
         </div>
         <div class="text-right">
-          <p v-for="item in data.combined_line_items" :key="item.label">
+          <p v-for="item in quote.combined_line_items" :key="item.label">
             <span class="font-semibold">{{ item.label }}:</span>
             <span> ${{ item.total.toFixed(2) }}</span>
           </p>
