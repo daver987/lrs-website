@@ -9,7 +9,13 @@ export const useDefaults = () => {
     quote_tax_total: 0,
     quote_subtotal: 0,
     quote_total: 0,
-    combined_quote_totals: [],
+    combined_line_items: [
+      {
+        label: 'Default',
+        total: 99.99,
+        tax: 10.99,
+      },
+    ],
     user: {
       first_name: '',
       last_name: '',
