@@ -21,12 +21,12 @@ await stripe.checkSetupIntent()
 const quoteNumberSchema = z.coerce.number()
 const quoteNumber = quoteNumberSchema.parse(quote_number)
 
-const { data } = await useTrpc().quote.get.useQuery({
+const { data } = await useTrpc().quote.get.query({
   quote_number: quoteNumber,
 })
 
 const sendConfirmation = async () => {
-  return useTrpc().book.bookOrder.useQuery({ quote_number: quoteNumber })
+  return useTrpc().book.bookOrder.mutation({ quote_number: quoteNumber })
 }
 
 const saveOrderSummary = async () => {

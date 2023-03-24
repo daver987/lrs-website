@@ -4,6 +4,7 @@ import { ourTours, Tour } from '~/data/tours'
 definePageMeta({
   layout: 'default',
   title: 'High Park Livery | Our Services',
+  colorMode: 'dark',
 })
 
 const tours = ourTours as Tour[]

@@ -1,26 +1,26 @@
-import { Stripe, StripeEvent } from 'stripe'
-import { getHeaders, readRawBody, defineEventHandler } from 'h3'
-import twilio, { Twilio } from 'twilio'
-
-const runtimeConfig = useRuntimeConfig()
-const stripe = new Stripe(runtimeConfig.STRIPE_SECRET_KEY, {
-  apiVersion: '2022-11-15',
-})
-const TWILIO_ACCOUNT_SID = runtimeConfig.TWILIO_ACCOUNT_SID
-const TWILIO_AUTH_TOKEN = runtimeConfig.TWILIO_AUTH_TOKEN
-const client = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+import { Stripe } from 'stripe'
+import { readRawBody, defineEventHandler } from 'h3'
+import { stripe } from '../services/stripeInit'
+import { z } from 'zod'
 
 interface StripeResponse {
   [key: string]: any
 }
-
+const messagingSID = useRuntimeConfig().TWILIO_STRIPE_RESPONSE_SERVICE
+const stripeWebhookSecret = useRuntimeConfig().STRIPE_WEBHOOK_SECRET
 export default defineEventHandler(async (event) => {
-  const endpointSecret = runtimeConfig.stripeWebhookSecret
-  const body = await readRawBody(event)
-  const headers = getHeaders(event)
+  const client = event.context.twilioClient
+  const endpointSecret = stripeWebhookSecret
+  const rawBody = await readRawBody(event)
+  const headers = getRequestHeaders(event)
   const sig = headers['stripe-signature'] as string
+  console.log('h3 event', headers)
 
-  let stripeEvent: StripeEvent
+  const bodySchema = z.string()
+  const body = bodySchema.parse(rawBody)
+  console.log('Request Body from stripe', body)
+
+  let stripeEvent
   try {
     stripeEvent = stripe.webhooks.constructEvent(body, sig, endpointSecret)
   } catch (error) {
@@ -30,17 +30,23 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  if (stripeEvent.type === 'checkout.session.completed') {
-    const checkoutSession = stripeEvent.data.object as Stripe.Checkout.Session
-    const { customer_email: email } = checkoutSession
+  if (stripeEvent.type === 'setup_intent.succeeded') {
+    const setupIntent = stripeEvent.data.object as Stripe.SetupIntent
+    const paymentMethod = setupIntent.payment_method
 
-    console.log(checkoutSession)
+    console.log(
+      'Setup Intent Created:',
+      setupIntent,
+      'Stripe payment Method',
+      paymentMethod
+    )
 
-    await client.messages.create({
-      body: `Order Booked For: ${email}`,
-      messagingServiceSid: 'MG9b5c0af877bac1ebc7504e98a8022456',
+    const twilioResponse = await client.messages.create({
+      body: `Order Booked For: ${paymentMethod}`,
+      messagingServiceSid: messagingSID,
       to: '+12894009408',
     })
+    console.log('Twilio Response:', twilioResponse)
   }
 
   if (stripeEvent.type === 'customer.created') {
@@ -49,12 +55,12 @@ export default defineEventHandler(async (event) => {
 
     await client.messages.create({
       body: `Customer: ${name} has been created`,
-      messagingServiceSid: 'MG9b5c0af877bac1ebc7504e98a8022456',
+      messagingServiceSid: messagingSID,
       to: '+12894009408',
     })
   }
 
   return {
-    statusCode: 200,
+    response: JSON.stringify({ response: true }),
   }
 })

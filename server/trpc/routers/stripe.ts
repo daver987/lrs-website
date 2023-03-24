@@ -31,28 +31,4 @@ export const stripeRouter = router({
       })
       return { setupIntent, stripeId, statusCode: 200 }
     }),
-  webhook: publicProcedure.mutation(async ({ ctx, input }) => {
-    const { stripe, twilioClient } = ctx
-    const endpointSecret = useRuntimeConfig().stripeWebhookSecret
-    //@ts-ignore
-    const headers = getHeaders()
-    const sig = headers['stripe-signature'] as string
-    const stripeEvent = stripe.webhooks.constructEvent(
-      input,
-      sig,
-      endpointSecret
-    )
-    switch (stripeEvent.type) {
-      case 'setup_intent.succeeded':
-        await handleSetupIntentSucceeded(stripeEvent.data.object, twilioClient)
-        break
-      case 'customer.created':
-        await handleCustomerCreated(stripeEvent.data.object, twilioClient)
-        break
-      default:
-    }
-    return {
-      statusCode: 200,
-    }
-  }),
 })

@@ -5,6 +5,7 @@ import { ref, resolveComponent } from '#imports'
 definePageMeta({
   layout: 'default',
   title: 'High Park Livery | Luxury Fleet',
+  colorMode: 'dark',
 })
 const headerInfo = {
   aboveHeading: 'Discover Our Luxury Vehicles',

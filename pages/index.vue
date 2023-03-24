@@ -5,7 +5,12 @@ import { features } from '~/data/features'
 definePageMeta({
   name: 'Home',
   layout: 'default',
+  colorMode: 'dark',
 })
+
+const color = useColorMode()
+console.log('color', color.value)
+const iconColor = color.value === 'light' ? '#fff' : '#737373'
 const $img = useImage()
 const backgroundImage = computed(() => {
   const imgUrl = $img(
@@ -57,9 +62,7 @@ const fleetImage = computed(() => {
                 </div>
               </div>
               <div class="mt-16 px-3 pb-8 sm:mt-24 lg:col-span-6 lg:mt-0">
-                <keep-alive>
-                  <QuoteFormTwo />
-                </keep-alive>
+                <QuoteFormTwo />
               </div>
             </div>
           </div>
@@ -139,9 +142,10 @@ const fleetImage = computed(() => {
           </p>
         </div>
         <div class="flex w-full place-items-center justify-center p-6">
-          <NuxtPicture
-            class="w-80 self-center"
-            src="/icons/24-hours.svg"
+          <SvgIcon
+            name="24-hours"
+            :color="iconColor"
+            :size="250"
             alt="24 hours icon"
           />
         </div>
@@ -204,7 +208,7 @@ const fleetImage = computed(() => {
           WHAT High Park Livery OFFERS YOU
         </p>
         <h2
-          class="mt-4 text-center font-brand-heading text-4xl uppercase dark:text-neutral-300 lg:text-5xl"
+          class="mt-4 text-center font-brand-heading text-4xl uppercase text-neutral-400 dark:text-neutral-300 lg:text-5xl"
         >
           We Offer
         </h2>

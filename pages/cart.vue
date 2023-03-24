@@ -2,6 +2,7 @@
 definePageMeta({
   title: 'Cart',
   layout: 'default',
+  colorMode: 'dark',
 })
 </script>
 

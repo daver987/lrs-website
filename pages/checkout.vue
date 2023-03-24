@@ -6,6 +6,7 @@ import { useQuoteStore } from '~/stores/useQuoteStore'
 definePageMeta({
   name: 'checkout',
   layout: 'store',
+  colorMode: 'dark',
 })
 const stripeClient = useStripe()
 const stripeStore = useStripeStore()

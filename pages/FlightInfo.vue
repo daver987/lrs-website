@@ -55,67 +55,74 @@ async function getFlightOptions(
 }
 
 const airlineOptions = await getFlightOptions('airlines')
-const airportOptions = await getFlightOptions('airports')
+// const airportOptions = await getFlightOptions('airports')
 const submitFlightInto = () => {
   console.log('Submit Flight')
 }
 </script>
 
 <template>
-  <n-card
-    class="flight-info-component flex max-w-2xl flex-col"
-    title="Flight Information"
-  >
-    <n-form class="dark:text-neutral">
-      <n-grid :cols="4" x-gap="8">
-        <n-form-item-gi :span="2" label="Airline:" path="flightInfo">
-          <n-select
-            :loading="loading"
-            v-model:value="flightInfo.airline"
-            filterable
-            placeholder="Search Airlines"
-            :options="airlineOptions!"
-            clearable
-          />
-        </n-form-item-gi>
-        <n-form-item-gi :span="2" label="Flight Number:" path="flightInfo">
-          <n-input
-            v-model:value="flightInfo.flightNumber"
-            placeholder="Enter Flight Number"
-          />
-        </n-form-item-gi>
-        <n-form-item-gi :span="2" label="Departure Airport:" path="flightInfo">
-          <n-select
-            :loading="loading"
-            v-model:value="flightInfo.departureAirport"
-            filterable
-            :options="airportOptions!"
-            placeholder="Select Departure Airport"
-            clearable
-          />
-        </n-form-item-gi>
-        <n-form-item-gi :span="2" label="Arrival Airport:" path="flightInfo">
-          <n-select
-            :loading="loading"
-            clearable
-            v-model:value="flightInfo.arrivalAirport"
-            filterable
-            :options="airportOptions!"
-            placeholder="Select Arriving Airport"
-          />
-        </n-form-item-gi>
-        <n-form-item-gi :span="2" label="Arrival Date/Time:" path="flightInfo">
-          <n-date-picker
-            v-model:value="flightInfo.arrivalDateTime"
-            type="datetime"
-          />
-        </n-form-item-gi>
-        <n-form-item-gi :span="4">
-          <n-button @click="submitFlightInto"> Flight Information</n-button>
-        </n-form-item-gi>
-      </n-grid>
-    </n-form>
-  </n-card>
+  <n-layout>
+    <n-layout-content content-style="padding: 24px;">
+      <n-card
+        class="flight-info-component flex max-w-2xl flex-col"
+        title="Flight Information"
+      >
+        <n-form class="dark:text-neutral">
+          <n-grid :cols="4" x-gap="8">
+            <n-form-item-gi
+              :span="2"
+              show-require-mark
+              label="Flight Number:"
+              path="flightInfo"
+            >
+              <n-space vertical size="large">
+                <n-input
+                  v-model:value="flightInfo.flightNumber"
+                  placeholder="Enter Flight Number"
+                  clearable
+                  autofocus
+                />
+                <n-button
+                  style="
+                    padding-left: 2rem;
+                    padding-right: 2rem;
+                    text-transform: uppercase;
+                    width: 100%;
+                  "
+                  @click="submitFlightInto"
+                >
+                  Done</n-button
+                >
+              </n-space>
+            </n-form-item-gi>
+            <n-form-item-gi :span="2" label="Airline:" path="flightInfo">
+              <n-select
+                :loading="loading"
+                v-model:value="flightInfo.airline"
+                filterable
+                placeholder="Search Airlines"
+                :options="airlineOptions!"
+                clearable
+              />
+            </n-form-item-gi>
+          </n-grid>
+        </n-form>
+      </n-card>
+      <n-card class="max-w-2xl">
+        <n-p>
+          To ensure your chauffeur is waiting for you when you arrive at the
+          airport, we kindly request your flight information. By providing your
+          flight details, you enable us to monitor your flight's status in
+          real-time, ensuring punctual pick-up regardless of any delays or
+          changes to your arrival time. Our commitment to exceptional service
+          and attention to detail guarantees peace of mind, knowing that a
+          professional, courteous chauffeur and a luxurious vehicle will be
+          awaiting your arrival.
+        </n-p>
+      </n-card>
+    </n-layout-content>
+  </n-layout>
 </template>
 
 <style scoped>

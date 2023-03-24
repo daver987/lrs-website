@@ -2,6 +2,7 @@
 definePageMeta({
   layout: 'default',
   title: 'High Park Livery | About Us',
+  colorMode: 'dark',
 })
 
 const headerInfo = {

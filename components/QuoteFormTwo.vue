@@ -301,7 +301,7 @@ function disablePreviousDate(ts: number) {
 </script>
 
 <template>
-  <NConfigProvider :theme="darkTheme">
+  <n-config-provider>
     <n-grid :cols="1" responsive="self">
       <n-grid-item :span="1">
         <div
@@ -380,9 +380,9 @@ function disablePreviousDate(ts: number) {
               </n-form-item-gi>
             </n-grid>
             <n-collapse-transition v-if="false" :show="formValue.is_round_trip">
-              <n-grid :cols="4" item-responsive :x-gap="12">
+              <n-grid :cols="2" item-responsive :x-gap="12">
                 <n-form-item-gi
-                  :span="2"
+                  :span="1"
                   :show-label="false"
                   label="Return Date"
                   path="dateTime.return_date"
@@ -396,7 +396,7 @@ function disablePreviousDate(ts: number) {
                   />
                 </n-form-item-gi>
                 <n-form-item-gi
-                  :span="2"
+                  :span="1"
                   :show-label="false"
                   label="Return Time"
                   path="dateTime.return_time"
@@ -410,9 +410,9 @@ function disablePreviousDate(ts: number) {
                 </n-form-item-gi>
               </n-grid>
             </n-collapse-transition>
-            <n-grid :cols="4" item-responsive :x-gap="12">
+            <n-grid :cols="2" item-responsive :x-gap="12">
               <n-form-item-gi
-                span="0:4 500:2"
+                span="0:2 500:1"
                 :show-label="false"
                 label="Service Type"
                 path="service_id"
@@ -425,7 +425,7 @@ function disablePreviousDate(ts: number) {
               </n-form-item-gi>
 
               <n-form-item-gi
-                span="0:4 500:2"
+                span="0:2 500:1"
                 :show-label="false"
                 label="Vehicle Type"
                 path="vehicle_id"
@@ -438,7 +438,7 @@ function disablePreviousDate(ts: number) {
               </n-form-item-gi>
 
               <n-form-item-gi
-                span="0:4 500:2"
+                span="0:2 500:1"
                 :show-label="false"
                 label="Passengers"
                 path="selected_passengers"
@@ -451,7 +451,7 @@ function disablePreviousDate(ts: number) {
               </n-form-item-gi>
 
               <n-form-item-gi
-                span="0:4 500:2"
+                span="0:2 500:1"
                 :show-label="false"
                 label="Hours"
                 path="selected_hours"
@@ -468,7 +468,7 @@ function disablePreviousDate(ts: number) {
                 :show-label="false"
                 label="First Name"
                 path="first_name"
-                span="0:4 500:2"
+                span="0:2 500:1"
               >
                 <n-input
                   v-model:value="formValue.first_name"
@@ -479,7 +479,7 @@ function disablePreviousDate(ts: number) {
               </n-form-item-gi>
 
               <n-form-item-gi
-                span="0:4 500:2"
+                span="0:2 500:1"
                 :show-label="false"
                 label="Last Name"
                 path="last_name"
@@ -491,7 +491,7 @@ function disablePreviousDate(ts: number) {
               </n-form-item-gi>
 
               <n-form-item-gi
-                span="0:4 500:2"
+                span="0:2 500:1"
                 :show-label="false"
                 label="Email Address"
                 path="email_address"
@@ -503,7 +503,7 @@ function disablePreviousDate(ts: number) {
               </n-form-item-gi>
 
               <n-form-item-gi
-                span="0:4 500:2"
+                span="0:2 500:1"
                 path="phone_number"
                 :show-label="false"
                 label="Phone Number"
@@ -516,19 +516,21 @@ function disablePreviousDate(ts: number) {
                 />
               </n-form-item-gi>
             </n-grid>
-            <button
-              id="submit_button"
-              class="inline-flex w-full items-center rounded border border-transparent bg-red-600 px-4 py-2 text-sm font-medium uppercase text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+            <n-button
+              style="
+                width: 100%;
+                text-transform: uppercase;
+                background-color: #b91c1c;
+              "
               :loading="loading"
               @click="handleValidateButtonClick"
+              size="large"
+              color="#b91c1c"
+              >Get Prices & Availability</n-button
             >
-              <span class="mx-auto self-center">{{
-                loading ? 'Processing.....' : 'Get Prices & Availability'
-              }}</span>
-            </button>
           </n-form>
         </div>
       </n-grid-item>
     </n-grid>
-  </NConfigProvider>
+  </n-config-provider>
 </template>

@@ -3,6 +3,7 @@ definePageMeta({
   title: 'Success',
   name: 'Success',
   layout: 'store',
+  colorMode: 'dark',
 })
 </script>
 

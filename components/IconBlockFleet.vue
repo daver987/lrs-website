@@ -22,7 +22,7 @@ defineProps({
         luxury vehicle
       </p>
       <h2
-        class="text-center font-brand-heading text-4xl uppercase dark:text-neutral-400 md:text-left xl:text-5xl"
+        class="text-center font-brand-heading text-4xl uppercase text-neutral-400 md:text-left xl:text-5xl"
       >
         {{ heading }}
       </h2>
