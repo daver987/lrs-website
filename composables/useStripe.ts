@@ -83,6 +83,7 @@ export function useStripe() {
         console.error('Stripe error:', error)
         // Display the error to the user, consider using a UI component to show the error
       }
+      return { success: 200 }
     } catch (error) {
       console.error('Error during setup confirmation:', error)
       // Handle any other errors during setup confirmation, consider using a UI component to show the error

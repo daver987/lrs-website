@@ -2,6 +2,7 @@
 import { useStripeStore } from '~/stores/useStripeStore'
 import { storeToRefs } from 'pinia'
 import { useQuoteStore } from '~/stores/useQuoteStore'
+import { useTrpc } from '~/composables/useTrpc'
 
 definePageMeta({
   name: 'checkout',
@@ -44,12 +45,19 @@ const totalPrice = quote.value?.quote_total
 const lineItems = quote.value?.combined_line_items!
 const quoteNum = quote.value?.quote_number!
 
+const bookingHandler = async () => {
+  const stripeResponse = await stripeClient.submitHandler()
+  if (stripeResponse?.success === 200) {
+    const { data: booked } = await useTrpc().book.bookOrder.useQuery({
+      quote_number: quoteNum,
+    })
+    return booked
+  }
+}
 //todo: add in the creation of draft invoice in stripe
 //todo: add spot for flight information in the checkout flow
 //todo: add trip notes in the checkout flow
-//todo: add iCal to the confirmation email
 //todo: add region functionality for auto tax calculation for out of town trips
-//todo: add webhook for order notification
 //todo: make proper cancel page
 //todo: purge codebase of old components and unnecessary packages
 </script>
@@ -177,7 +185,7 @@ const quoteNum = quote.value?.quote_number!
             <form
               id="payment-form"
               class="p-6"
-              @submit.prevent="stripeClient.submitHandler()"
+              @submit.prevent="bookingHandler"
             >
               <div
                 id="link-authentication-element"

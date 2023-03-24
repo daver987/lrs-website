@@ -46,7 +46,7 @@ const summaryTrips = TripSchema.pick({
   line_items_subtotal: true,
   line_items_total: true,
   service_label: true,
-  duration_value: true,
+  duration_text: true,
   pickup_date: true,
   pickup_time: true,
 }).required()
@@ -62,6 +62,7 @@ const summaryTripsExtended = summaryTrips.extend({
 const summarySalesTax = SalesTaxSchema.pick({ tax_name: true })
 const summaryQuote = QuoteSchema.pick({
   is_round_trip: true,
+  is_booked: true,
   quote_number: true,
   selected_hours: true,
   selected_passengers: true,

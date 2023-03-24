@@ -6,6 +6,7 @@ import {
   convertDurationToHoursAndMinutes,
 } from '~/utils/convertDurationToHoursAndMinutes'
 import sgMail from '@sendgrid/mail'
+import { parseTimeString, parseDateTime } from '~/utils/parseTimeString'
 
 export async function sendQuoteEmail(
   newQuote: QuotesWithTripsAndUser,
@@ -97,7 +98,6 @@ export async function createConfirmationEmail(
   quoteForConfirmation: QuotesWithTripsAndUser,
   key: string
 ): Promise<void> {
-  const url = 'https://api.sendgrid.com/v3/mail/send'
   try {
     const quote = SummarySchema.parse(quoteForConfirmation)
     console.log('Parsed Quote in Send Email:', quote)
@@ -105,13 +105,16 @@ export async function createConfirmationEmail(
       throw new Error('SendGrid API key not provided')
     }
     sgMail.setApiKey(key)
-    const tripDuration = convertDurationToHoursAndMinutes(
-      quote.trips[0].duration_value
+
+    const tripDuration = parseTimeString(quote.trips[0].duration_text!)
+    console.log('Trip Duration:', tripDuration)
+
+    const startTime = parseDateTime(
+      quote.trips[0].formatted_pickup_date!,
+      quote.trips[0].formatted_pickup_time!
     )
-    const startTime = combineDateAndTime(
-      quote.trips[0].pickup_date!,
-      quote.trips[0].pickup_time!
-    )
+    console.log('Combine Date and Time', startTime)
+
     const eventData = {
       start: startTime,
       duration: tripDuration,
