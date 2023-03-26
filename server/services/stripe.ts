@@ -114,7 +114,6 @@ export async function createSetupIntent({
         },
       })
     }
-
     return setupIntent
   } catch (error) {
     console.error('Error creating setup intent:', error)

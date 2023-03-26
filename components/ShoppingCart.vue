@@ -2,50 +2,46 @@
 import { useCartStore } from '~/stores/useCartStore'
 import { storeToRefs } from 'pinia'
 import { useStripeStore } from '~/stores/useStripeStore'
-import { useQuoteStore } from '~/stores/useQuoteStore'
 import { format } from 'date-fns'
 import { ref } from '#imports'
 import { z } from 'zod'
+import { useQuery } from '@tanstack/vue-query'
 
+const quoteNumberAsString = useRoute().query.quote_number
+const quoteNumberSchema = z.coerce.number()
+const quoteNumber = quoteNumberSchema.parse(quoteNumberAsString)
+const getQuote = () =>
+  useTrpc().quote.get.query({
+    quote_number: quoteNumber,
+  })
+const { data: quoteData, suspense: quoteSuspense } = await useQuery({
+  queryKey: ['quote'],
+  queryFn: getQuote,
+})
+await quoteSuspense()
+
+const quote = quoteData.value!
 const cartStore = useCartStore()
-const quoteStore = useQuoteStore()
 const stripeStore = useStripeStore()
 const { addedToCart, loading } = storeToRefs(cartStore)
-
 const currentDate = format(new Date(), 'PPPP')
 const checkoutLoading = ref(false)
-const quote = useDefaults().defaultQuote
-const route = useRoute()
-
-const { quote_number } = route.query
-const quoteNumberSchema = z.coerce.number()
-const quoteNumber = quoteNumberSchema.parse(quote_number)
-
-const { data } = await useTrpc().quote.get.useQuery({
-  quote_number: quoteNumber,
-})
-const combined_line_items = data.value?.combined_line_items
-
-Object.assign(quote.value, data.value)
-//@ts-ignore
-quoteStore.setQuote(data.value)
 
 const createBooking = async () => {
   checkoutLoading.value = true
   try {
     const { setupIntent, stripeId, statusCode } =
       await useTrpc().stripe.createCheckout.mutate({
-        userId: quote.value.user.id,
-        quoteNumber: quote.value.quote_number,
+        userId: quote!.user.id,
+        quoteNumber: quote!.quote_number,
       })
 
     if (statusCode === 200) {
       stripeStore.setCustomer(stripeId)
       stripeStore.setClientSecret(setupIntent)
-
-      await navigateTo('/checkout', {
-        redirectCode: 303,
-        external: false,
+      await navigateTo({
+        path: '/checkout',
+        query: { quote_number: quoteNumber },
       })
     } else {
       console.error('Failed to create booking. Status code:', statusCode)
@@ -76,7 +72,7 @@ const createBooking = async () => {
           >
         </dt>
         <dd class="font-medium text-red-600">
-          <span>HPL-{{ quote.quote_number }}</span>
+          <span>HPL-{{ quote!.quote_number }}</span>
         </dd>
         <dt>
           <span class="sr-only">Date</span>
@@ -107,14 +103,14 @@ const createBooking = async () => {
           class="divide-y divide-neutral-200 border-t border-b border-neutral-200"
         >
           <li
-            v-for="(trip, index) in quote.trips"
+            v-for="(trip, index) in quote!.trips"
             :key="trip.trip_order!"
             class="flex py-6 sm:py-8"
           >
             <div class="flex-shrink-0">
               <NuxtPicture
-                :src="quote.vehicle.vehicle_image!"
-                :alt="quote.vehicle.label"
+                :src="quote!.vehicle.vehicle_image!"
+                :alt="quote!.vehicle.label"
                 :img-attrs="{
                   class:
                     'object-contain object-center w-24 h-24 rounded-md sm:h-48 sm:w-48',
@@ -130,10 +126,10 @@ const createBooking = async () => {
                   <div class="mb-2 flex justify-between">
                     <h3 class="text-base">
                       <NuxtLink
-                        to="#"
+                        to="/"
                         class="font-medium text-neutral-700 hover:text-neutral-800 dark:text-neutral-200 dark:hover:text-neutral-200"
                       >
-                        {{ trip.service_label }}
+                        {{ quote!.service.label }}
                       </NuxtLink>
                     </h3>
                   </div>
@@ -154,16 +150,16 @@ const createBooking = async () => {
                     </p>
                     <p class="text-neutral-500 dark:text-neutral-100">
                       <span class="text-brand-400">Vehicle Type: </span
-                      >{{ quote.vehicle.label }}
+                      >{{ quote!.vehicle.label }}
                     </p>
                     <p class="text-neutral-500 dark:text-neutral-100">
                       <span class="text-brand-400">Passengers: </span
-                      >{{ quote.selected_passengers }}
+                      >{{ quote!.selected_passengers }}
                     </p>
                   </div>
                   <p class="text-neutral-500 dark:text-neutral-100">
                     <span class="text-brand-400">Base Rate: </span>$
-                    {{ trip.line_items_list[0].total.toFixed(2) }}
+                    {{ quote!.quote_total }}
                   </p>
                 </div>
 
@@ -189,7 +185,7 @@ const createBooking = async () => {
               >
                 <Icon
                   name="heroicons:check-20-solid"
-                  v-if="quote.is_round_trip"
+                  v-if="quote!.is_round_trip"
                   class="h-5 w-5 flex-shrink-0 text-green-500"
                   aria-hidden="true"
                 />
@@ -201,7 +197,7 @@ const createBooking = async () => {
                 />
                 <span>
                   {{
-                    quote.is_round_trip
+                    quote!.is_round_trip
                       ? index === 0
                         ? 'One Way Trip'
                         : 'Return Trip'
@@ -229,7 +225,7 @@ const createBooking = async () => {
         <dl class="mt-6 space-y-4">
           <div
             class="flex items-center justify-between border-t border-neutral-200 pt-4"
-            v-for="item in combined_line_items"
+            v-for="item in quote!.combined_line_items"
             :key="item.label"
           >
             <dt

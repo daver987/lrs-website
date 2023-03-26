@@ -4,6 +4,7 @@ definePageMeta({
   name: 'Success',
   layout: 'store',
   colorMode: 'dark',
+  middleware: ['quote-check'],
 })
 </script>
 

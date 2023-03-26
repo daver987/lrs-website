@@ -1,8 +1,8 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import { QuotesWithTripsAndUser } from '~/server/utils/trpcUtils'
+import { QuoteFormReturn } from '~~/schema/QuoteFormSchema'
 
 interface State {
-  quote: QuotesWithTripsAndUser | null
+  quote: QuoteFormReturn | null
 }
 
 export const useQuoteStore = defineStore('quoteStore', {
@@ -10,7 +10,7 @@ export const useQuoteStore = defineStore('quoteStore', {
     quote: null,
   }),
   actions: {
-    setQuote(quote: QuotesWithTripsAndUser) {
+    setQuote(quote: QuoteFormReturn) {
       this.quote = quote
       console.log('Set Quote Fired')
     },

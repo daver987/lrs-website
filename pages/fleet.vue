@@ -15,20 +15,13 @@ const headerInfo = {
     'background-image: url("https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/8027755f-611b-4470-96bf-4b845c9f5600/4200")',
 }
 
-type Vehicle = {
-  icon: string
-  title: string
-  id: string
-  tag: string
-  to: string
-}
 const selectedTab = ref(0)
 
 const changeTab = (index: number) => {
   selectedTab.value = index
 }
 
-const tabs = <Vehicle[]>[
+const tabs = [
   {
     icon: 'Fleet-XTS-Continental',
     title: 'Cadillac XTS',

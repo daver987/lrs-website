@@ -1,8 +1,8 @@
-import { QuotesWithTripsAndUser } from '~/server/utils/trpcUtils'
+import type { QuoteFormReturn } from '~~/schema/QuoteFormSchema'
 
 export const createAircallContact = async (
   aircallSecret: string,
-  contact: QuotesWithTripsAndUser
+  contact: QuoteFormReturn
 ): Promise<void> => {
   try {
     const headers = new Headers({

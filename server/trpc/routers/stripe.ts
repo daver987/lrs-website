@@ -4,10 +4,6 @@ import {
   getOrCreateStripCustomerId,
   createSetupIntent,
 } from '~/server/services/stripe'
-import {
-  handleCustomerCreated,
-  handleSetupIntentSucceeded,
-} from '~/server/services/stripeHandlers'
 
 export const stripeRouter = router({
   createCheckout: publicProcedure

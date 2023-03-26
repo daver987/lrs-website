@@ -1,21 +1,15 @@
-import { SummarySchema } from '~/schema/summarySchema'
-import { QuotesWithTripsAndUser } from '~/server/utils/trpcUtils'
 import { useIcsCal } from '~/server/services/icsHelper'
-import {
-  combineDateAndTime,
-  convertDurationToHoursAndMinutes,
-} from '~/utils/convertDurationToHoursAndMinutes'
+import type { QuoteFormReturn } from '~~/schema/QuoteFormSchema'
 import sgMail from '@sendgrid/mail'
 import { parseTimeString, parseDateTime } from '~/utils/parseTimeString'
 
 export async function sendQuoteEmail(
-  newQuote: QuotesWithTripsAndUser,
+  newQuote: QuoteFormReturn,
   apiKey: string,
   shortLink: string
 ): Promise<void> {
-  const url = 'https://api.sendgrid.com/v3/mail/send'
   try {
-    const quote = SummarySchema.parse(newQuote)
+    const quote = newQuote
     console.log('Parsed Quote in Send Email:', quote)
     console.log('Email Short link:', shortLink)
     if (!apiKey) {
@@ -38,9 +32,9 @@ export async function sendQuoteEmail(
             phone_number: quote.user.phone_number,
             total_price: quote.quote_total,
             vehicle_label: quote.vehicle.label,
-            service_label: quote.trips[0].service_label,
+            service_label: quote.service.label,
             return_service_label: quote.is_round_trip
-              ? quote.trips[1].service_label
+              ? quote.service.label
               : '',
             is_round_trip: quote.is_round_trip,
             pickup_date: quote.trips[0].formatted_pickup_date,
@@ -95,11 +89,11 @@ export async function sendQuoteEmail(
 }
 
 export async function createConfirmationEmail(
-  quoteForConfirmation: QuotesWithTripsAndUser,
+  quoteForConfirmation: QuoteFormReturn,
   key: string
 ): Promise<void> {
   try {
-    const quote = SummarySchema.parse(quoteForConfirmation)
+    const quote = quoteForConfirmation
     console.log('Parsed Quote in Send Email:', quote)
     if (!key) {
       throw new Error('SendGrid API key not provided')
@@ -148,9 +142,9 @@ export async function createConfirmationEmail(
             phone_number: quote.user.phone_number,
             total_price: quote.quote_total,
             vehicle_label: quote.vehicle.label,
-            service_label: quote.trips[0].service_label,
+            service_label: quote.service.label,
             return_service_label: quote.is_round_trip
-              ? quote.trips[1].service_label
+              ? quote.service.label
               : '',
             is_round_trip: quote.is_round_trip,
             pickup_date: quote.trips[0].formatted_pickup_date,

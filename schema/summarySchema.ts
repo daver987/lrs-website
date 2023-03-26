@@ -39,6 +39,7 @@ const summaryLocations = LocationSchema.pick({
   lng: true,
 }).required()
 const summaryTrips = TripSchema.pick({
+  id: true,
   trip_order: true,
   formatted_pickup_date: true,
   formatted_pickup_time: true,

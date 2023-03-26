@@ -1,34 +1,132 @@
-import { router, publicProcedure } from '../trpc'
+import { publicProcedure, router } from '../trpc'
 import { z } from 'zod'
-import { QuoteFormSchema } from '~/schema/QuoteFormSchema'
 import { formatAddress } from '~/utils/formatAddress'
 import { usePricingEngine } from '~/composables/usePricingEngine'
 import { useFormatDateTime } from '~/composables/useFormatDateTime'
 import { sendQuoteEmail } from '~/server/services/sendGridEmail'
 import { createAircallContact } from '~/server/services/createAircallContact'
 import { sendTwilioSms } from '~/server/services/sendTwilioSms'
-import {
-  createQuoteFromForm,
-  QuotesWithTripsAndUser,
-  updateShortLink,
-} from '~/server/utils/trpcUtils'
+import { createQuoteFromForm, updateShortLink } from '~/server/utils/trpcUtils'
 import { useLinkShortener } from '~/composables/useLinkShortener'
+import {
+  quoteFormReturnSchema,
+  QuoteFormSchema,
+} from '~/schema/QuoteFormSchema'
 
 export const quoteRouter = router({
+  getFiltered: publicProcedure
+    .input(
+      z.object({
+        quote_number: z.number(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const quoteReturn = await ctx.prisma.quote.findMany({
+        where: {
+          AND: [
+            {
+              quote_number: {
+                equals: input.quote_number,
+              },
+            },
+            {
+              created_at: {
+                gte: new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000),
+              },
+            },
+            {
+              is_booked: {
+                equals: false,
+              },
+            },
+          ],
+        },
+        select: {
+          quote_number: true,
+          selected_hours: true,
+          selected_passengers: true,
+          is_round_trip: true,
+          quote_total: true,
+          quote_subtotal: true,
+          quote_tax_total: true,
+          user: {
+            select: {
+              id: true,
+              first_name: true,
+              last_name: true,
+              phone_number: true,
+              email_address: true,
+              full_name: true,
+            },
+          },
+          vehicle: {
+            select: {
+              label: true,
+              vehicle_image: true,
+            },
+          },
+          service: {
+            select: {
+              label: true,
+            },
+          },
+          trips: {
+            orderBy: {
+              trip_order: 'asc',
+            },
+            include: {
+              locations: {
+                orderBy: {
+                  route_order: 'asc',
+                },
+              },
+            },
+          },
+        },
+      })
+      console.log(quoteReturn)
+      return quoteReturn[0]
+    }),
+
   get: publicProcedure
     .input(
       z.object({
         quote_number: z.number(),
       })
     )
-    .query(({ ctx, input }) => {
-      return ctx.prisma.quote.findUnique({
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.quote.findUnique({
         where: { quote_number: input.quote_number },
-        include: {
-          service: true,
-          vehicle: true,
-          user: true,
-          sales_tax: true,
+        select: {
+          quote_number: true,
+          selected_hours: true,
+          selected_passengers: true,
+          is_round_trip: true,
+          combined_line_items: true,
+          quote_total: true,
+          quote_subtotal: true,
+          quote_tax_total: true,
+          user: {
+            select: {
+              id: true,
+              first_name: true,
+              last_name: true,
+              phone_number: true,
+              email_address: true,
+              full_name: true,
+            },
+          },
+          vehicle: {
+            select: {
+              label: true,
+              vehicle_image: true,
+            },
+          },
+          service: {
+            select: {
+              label: true,
+            },
+          },
           trips: {
             orderBy: {
               trip_order: 'asc',
@@ -52,8 +150,8 @@ export const quoteRouter = router({
         short_link: z.string(),
       })
     )
-    .mutation(({ ctx, input }) => {
-      return ctx.prisma.quote.update({
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.quote.update({
         where: { quote_number: input.quote_number },
         data: {
           short_link: input.short_link,
@@ -180,7 +278,7 @@ export const quoteRouter = router({
         lineItemsIdThree: pricingEngine.lineItems[2].id,
       }
       const { shortLink, createShortLink } = useLinkShortener(domain)
-      const quote: QuotesWithTripsAndUser = await prisma.quote.create({
+      const data = await prisma.quote.create({
         data: createQuoteFromForm(quotes),
         include: {
           user: {
@@ -193,12 +291,20 @@ export const quoteRouter = router({
           line_items: true,
           sales_tax: true,
           trips: {
+            orderBy: {
+              trip_order: 'asc',
+            },
             include: {
-              locations: true,
+              locations: {
+                orderBy: {
+                  route_order: 'asc',
+                },
+              },
             },
           },
         },
       })
+      const quote = quoteFormReturnSchema.parse(data)
       shortLink.value = createShortLink(quote.quote_number)
       await Promise.all([
         sendQuoteEmail(quote, sendGridKey, shortLink.value),

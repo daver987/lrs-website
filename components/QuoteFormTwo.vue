@@ -1,15 +1,8 @@
 <script setup lang="ts">
-import {
-  FormInst,
-  useMessage,
-  FormRules,
-  darkTheme,
-  useLoadingBar,
-} from 'naive-ui'
+import { FormInst, useMessage, FormRules, useLoadingBar } from 'naive-ui'
 import { WatchCallback } from 'vue'
 import { ref, computed } from '#imports'
 import { VueTelInput } from 'vue-tel-input'
-import { LineItemSchema, SalesTaxSchema } from '~/prisma/generated/zod'
 import { Place, placeSchema } from '~/schema/placeSchema'
 import type { QuoteForm } from '~/schema/QuoteFormSchema'
 import { useGtm } from '@gtm-support/vue-gtm'
@@ -22,35 +15,53 @@ import {
   buildHoursOptions,
   Option,
 } from '~/composables/useBuildOptions'
+import { useQuery } from '@tanstack/vue-query'
 
+const formRef = ref<FormInst | null>(null)
+const loading = ref(false)
 const quoteStore = useQuoteStore()
 const userStore = useUserStore()
-const { user_id } = storeToRefs(userStore)
-
 const dataStore = useDataStore()
+const { user_id } = storeToRefs(userStore)
 const { vehicleTypes, serviceTypes, lineItems, salesTaxes } =
   storeToRefs(dataStore)
+const message = useMessage()
+const loadingBar = useLoadingBar()
 
-const [serviceTypeOptions, lineItemsRes, vehicleTypeOptions, salesTaxesRes] =
-  await Promise.all([
-    useTrpc().service.get.query(),
-    useTrpc().lineItem.get.query(),
-    useTrpc().vehicle.get.query(),
-    useTrpc().salesTax.get.query(),
-  ])
+const serviceTypeFetch = () => useTrpc().service.get.query()
+const vehicleTypeFetch = () => useTrpc().vehicle.get.query()
+const lineItemsFetch = () => useTrpc().lineItem.get.query()
+const salesTaxesFetch = () => useTrpc().salesTax.get.query()
 
-lineItems.value = LineItemSchema.array().parse(lineItemsRes)
-salesTaxes.value = SalesTaxSchema.array().parse(salesTaxesRes)
+const { data: service, suspense: serviceSuspense } = await useQuery({
+  queryKey: ['services'],
+  queryFn: serviceTypeFetch,
+})
+await serviceSuspense()
+const { data: vehicle, suspense: vehicleSuspense } = await useQuery({
+  queryKey: ['vehicles'],
+  queryFn: vehicleTypeFetch,
+})
+await vehicleSuspense()
+const { data: lineItem, suspense: salesTaxSuspense } = await useQuery({
+  queryKey: ['lineItems'],
+  queryFn: lineItemsFetch,
+})
+await salesTaxSuspense()
+const { data: salesTax, suspense: lineItemsSuspense } = await useQuery({
+  queryKey: ['taxes'],
+  queryFn: salesTaxesFetch,
+})
+await lineItemsSuspense()
 
-//setting the data to the Pinia Store
-dataStore.setVehicleTypes(vehicleTypeOptions)
-dataStore.setServiceTypes(serviceTypeOptions)
-dataStore.setLineItems(lineItems.value)
-dataStore.setSalesTaxes(salesTaxes.value)
+dataStore.setVehicleTypes(vehicle.value!)
+dataStore.setServiceTypes(service.value!)
+dataStore.setLineItems(lineItem.value!)
+dataStore.setSalesTaxes(salesTax.value!)
 
 const hoursOptions = buildHoursOptions()
 const maxPassengers = computed<number>(() => {
-  const vehicleType = vehicleTypeOptions.find(
+  const vehicleType = vehicle.value!.find(
     (type: Option) => type.value === formValue.value.vehicle_id
   )
   formValue.value.selected_passengers = null
@@ -63,8 +74,6 @@ const passengerOptions = computed(() =>
 
 const route = useRoute()
 const gtmValues = route.query
-
-//tag manager
 const gtm = useGtm()
 
 //Todo enable tag manager
@@ -182,7 +191,6 @@ const rules: FormRules = {
   },
 }
 
-//the input options for vue-tel-input
 const inputOptions = ref({
   id: 'phone_number',
   showDialCode: true,
@@ -247,13 +255,6 @@ const handleChangeDestination = (evt: Place) => {
   formValue.value.destination = evt
 }
 
-//setting initial state
-const message = useMessage()
-const formRef = ref<FormInst | null>(null)
-const loading = ref(false)
-const loadingBar = useLoadingBar()
-
-//submit function
 async function onSubmit() {
   try {
     loading.value = true
@@ -277,7 +278,6 @@ async function onSubmit() {
   }
 }
 
-//validation of the form before it is submitted
 function handleValidateButtonClick(e: MouseEvent) {
   e.preventDefault()
   formRef.value?.validate(async (errors) => {
@@ -419,7 +419,7 @@ function disablePreviousDate(ts: number) {
               >
                 <n-select
                   v-model:value="formValue.service_id"
-                  :options="serviceTypeOptions"
+                  :options="service"
                   placeholder="Select Service Type..."
                 />
               </n-form-item-gi>
@@ -432,7 +432,7 @@ function disablePreviousDate(ts: number) {
               >
                 <n-select
                   v-model:value="formValue.vehicle_id"
-                  :options="vehicleTypeOptions"
+                  :options="vehicle"
                   placeholder="Select Vehicle Type..."
                 />
               </n-form-item-gi>

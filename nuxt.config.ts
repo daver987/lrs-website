@@ -37,9 +37,7 @@ export default defineNuxtConfig({
   lodash: {
     prefix: '_',
   },
-  devtools: {
-    enable: false,
-  },
+
   naiveUI: {
     themeOverrides: {
       common: {

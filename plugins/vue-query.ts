@@ -4,13 +4,13 @@
 
 import type {
   DehydratedState,
-  VueQueryPluginOptions
+  VueQueryPluginOptions,
 } from '@tanstack/vue-query'
 import {
   VueQueryPlugin,
   QueryClient,
   hydrate,
-  dehydrate
+  dehydrate,
 } from '@tanstack/vue-query'
 import { useState } from '#app'
 
@@ -20,9 +20,10 @@ export default defineNuxtPlugin((nuxt) => {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
+        staleTime: 5000,
         // Add your query client options here
-      }
-    }
+      },
+    },
   })
   const options: VueQueryPluginOptions = { queryClient }
 

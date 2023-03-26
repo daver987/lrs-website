@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { useStripeStore } from '~/stores/useStripeStore'
 import { storeToRefs } from 'pinia'
-import { useQuoteStore } from '~/stores/useQuoteStore'
+import type { QuoteFormReturn } from '~~/schema/QuoteFormSchema'
+import { z } from 'zod'
+import { useMutation, useQuery } from '@tanstack/vue-query'
 import { useTrpc } from '~/composables/useTrpc'
 
 definePageMeta({
@@ -9,12 +11,37 @@ definePageMeta({
   layout: 'store',
   colorMode: 'dark',
 })
+
 const stripeClient = useStripe()
 const stripeStore = useStripeStore()
 const { client_secret } = storeToRefs(stripeStore)
-const quoteStore = useQuoteStore()
-const { quote } = storeToRefs(quoteStore)
-const { vehicle, trips } = quote.value!
+const quoteNumberAsString = useRoute().query.quote_number
+const quoteNumberSchema = z.coerce.number()
+const routeQuoteNumber = quoteNumberSchema.parse(quoteNumberAsString)
+const loading = ref(false)
+const tripNotes = ref('')
+
+const getQuote = () =>
+  useTrpc().quote.get.query({
+    quote_number: routeQuoteNumber,
+  })
+
+const { data: quoteData, suspense: quoteSuspense } = await useQuery({
+  queryKey: ['quote'],
+  queryFn: getQuote,
+})
+await quoteSuspense()
+const quote = quoteData.value! as unknown as QuoteFormReturn
+
+const {
+  vehicle,
+  service,
+  trips,
+  user,
+  quote_number,
+  quote_total,
+  combined_line_items,
+} = quote
 const {
   fullName,
   emailAddress,
@@ -22,17 +49,16 @@ const {
   phoneNumber,
   linkAuthenticationElement,
   clientSecret,
-  isLoading,
   websiteURL,
   quoteNumber,
   publicKey,
 } = stripeClient
 
-fullName.value = quote.value?.user.full_name!
-emailAddress.value = quote.value?.user.email_address!
-phoneNumber.value = quote.value?.user.phone_number!
+fullName.value = user.full_name!
+emailAddress.value = user.email_address!
+phoneNumber.value = user.phone_number!
 clientSecret.value = client_secret.value
-quoteNumber.value = quote.value?.quote_number!
+quoteNumber.value = quote_number!
 websiteURL.value = useRuntimeConfig().public.WEBSITE_URL
 publicKey.value = useRuntimeConfig().public.STRIPE_PUBLISHABLE_KEY
 
@@ -41,19 +67,32 @@ onMounted(() => {
     await stripeClient.initStripeElements()
   })
 })
-const totalPrice = quote.value?.quote_total
-const lineItems = quote.value?.combined_line_items!
-const quoteNum = quote.value?.quote_number!
+const totalPrice = quote_total
+console.log('Trip Notes', tripNotes)
+
+const bookOrder = async () =>
+  await useTrpc().book.booking.mutate({
+    quote_number: routeQuoteNumber,
+    notes: tripNotes.value,
+    id: trips[0].id,
+  })
 
 const bookingHandler = async () => {
-  const stripeResponse = await stripeClient.submitHandler()
-  if (stripeResponse?.success === 200) {
-    const { data: booked } = await useTrpc().book.bookOrder.useQuery({
-      quote_number: quoteNum,
-    })
-    return booked
+  try {
+    const stripeResponse = await stripeClient.submitHandler()
+    console.log('Stripe Response', stripeResponse)
+    if (typeof stripeResponse?.success === 'number') {
+      const { isLoading } = useMutation(['book'], bookOrder)
+      loading.value = isLoading.value
+    } else {
+      throw new Error('Stripe submission failed.')
+    }
+  } catch (error) {
+    console.error('An error occurred while processing the booking:', error)
+    throw new Error('Booking failed.')
   }
 }
+
 //todo: add in the creation of draft invoice in stripe
 //todo: add spot for flight information in the checkout flow
 //todo: add trip notes in the checkout flow
@@ -99,7 +138,7 @@ const bookingHandler = async () => {
 
       <section
         aria-labelledby="summary-heading"
-        class="bg-brand-900 pt-6 pb-12 text-brand-300 md:px-10 lg:col-start-2 lg:row-start-1 lg:mx-auto lg:w-full lg:max-w-lg lg:bg-transparent lg:px-0 lg:pt-0 lg:pb-24"
+        class="bg-brand-900 pt-2 pb-12 text-brand-300 md:px-10 lg:col-start-2 lg:row-start-1 lg:mx-auto lg:w-full lg:max-w-lg lg:bg-transparent lg:px-0 lg:pt-0 lg:pb-24"
       >
         <div class="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0">
           <h2 id="summary-heading" class="sr-only">Order summary</h2>
@@ -128,11 +167,11 @@ const bookingHandler = async () => {
                     class:
                       'h-32 w-32 flex-none rounded-md object-contain object-center',
                   }"
-                  :src="vehicle.vehicle_image"
+                  :src="vehicle.vehicle_image!"
                   :alt="vehicle.label"
                 />
                 <div class="flex-auto space-y-1">
-                  <h3 class="text-brand-900">{{ trip.service_label }}</h3>
+                  <h3 class="text-brand-900">{{ service.label }}</h3>
                   <p class="text-brand-700">{{ vehicle.label }}</p>
                 </div>
               </li>
@@ -142,7 +181,7 @@ const bookingHandler = async () => {
               class="space-y-6 border-t border-gray-200 pt-8 text-sm font-medium"
             >
               <div
-                v-for="item in lineItems"
+                v-for="item in combined_line_items"
                 :key="item.label"
                 class="flex items-center justify-between"
               >
@@ -167,17 +206,17 @@ const bookingHandler = async () => {
 
       <section
         aria-labelledby="payment-and-shipping-heading"
-        class="py-16 lg:col-start-1 lg:row-start-1 lg:mx-auto lg:w-full lg:max-w-lg lg:pt-0 lg:pb-24"
+        class="py-8 lg:col-start-1 lg:row-start-1 lg:mx-auto lg:w-full lg:max-w-lg lg:pt-0 lg:pb-24"
       >
         <h2 id="payment-and-shipping-heading" class="sr-only">
           Payment and shipping details
         </h2>
 
         <div class="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0">
-          <div class="mt-4">
+          <div>
             <h3
               id="payment-heading"
-              class="mb-4 text-lg font-medium text-neutral-900"
+              class="text-lg font-medium text-neutral-900"
             >
               Payment details
             </h3>
@@ -185,7 +224,7 @@ const bookingHandler = async () => {
             <form
               id="payment-form"
               class="p-6"
-              @submit.prevent="bookingHandler"
+              @submit.prevent="bookingHandler()"
             >
               <div
                 id="link-authentication-element"
@@ -194,8 +233,31 @@ const bookingHandler = async () => {
               <div id="payment-element" ref="paymentElement">
                 <!--Stripe.js injects the Payment Element-->
               </div>
+              <div class="col-span-full">
+                <label
+                  for="notes"
+                  class="block text-sm font-medium leading-6 text-neutral-900"
+                  >Trip Notes</label
+                >
+                <div class="mt-2">
+                  <textarea
+                    v-model="tripNotes"
+                    id="notes"
+                    name="notes"
+                    rows="3"
+                    class="block w-full rounded-md border-0 text-neutral-900 shadow-sm ring-1 ring-inset ring-neutral-300 placeholder:text-neutral-400 focus:ring-2 focus:ring-inset focus:ring-brand-600 sm:py-1.5 sm:text-sm sm:leading-6"
+                  />
+                </div>
+                {{ tripNotes }}
+                <p class="mt-3 text-sm leading-6 text-gray-600">
+                  <strong
+                    >*Please provide any applicable flight details or additional
+                    notes pertaining to your trip.</strong
+                  >
+                </p>
+              </div>
               <div
-                class="mt-10 flex justify-end border-t border-neutral-200 pt-6"
+                class="mt-2 flex justify-end border-t border-neutral-200 pt-6"
               >
                 <button
                   type="submit"
@@ -203,9 +265,7 @@ const bookingHandler = async () => {
                   class="w-full rounded-md border border-transparent bg-brand-600 px-4 py-2 text-sm font-medium uppercase text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-neutral-50"
                 >
                   <div class="spinner hidden" id="spinner"></div>
-                  <span v-if="isLoading" id="button-text"
-                    >Processing......</span
-                  >
+                  <span v-if="loading" id="button-text">Processing......</span>
                   <span v-else id="button-text">Complete Booking</span>
                 </button>
                 <div id="payment-message" class="hidden"></div>
