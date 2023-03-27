@@ -13,5 +13,5 @@ export async function sendTwilioSms(
       messagingServiceSid: 'MG211e359fc267bbde46acacf4a428a03f',
       to: phoneNumber,
     })
-  }, 20000)
+  }, 10000)
 }
