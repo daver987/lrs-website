@@ -11,7 +11,7 @@ export async function getQuote(quoteNumber: string) {
       quote_number: routeQuoteNumber,
     })
 
-  const { data: quoteData, suspense: quoteSuspense } = await useQuery({
+  const { data: quoteData, suspense: quoteSuspense } = useQuery({
     queryKey: ['quote'],
     queryFn: getQuote,
   })

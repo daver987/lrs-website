@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import { ref, computed, useTrpc } from '#imports'
-import { buildLuggageOptions, Option } from '~/composables/useBuildOptions'
+import { buildLuggageOptions } from '~/composables/useBuildOptions'
 import { getQuote } from '~/utils/getQuote'
 import { FormRules } from 'naive-ui'
 import { Ref } from 'vue'
 
-//get quote
+
 const quoteNumberAsString = useRoute().query.quote_number as unknown as string
 const quote = await getQuote(quoteNumberAsString)
-//@ts-ignore
 const maxLuggage = ref(quote.vehicle.max_luggage as number)
 const formRef = ref(null)
 const luggageOptions = computed(() => buildLuggageOptions(maxLuggage.value))

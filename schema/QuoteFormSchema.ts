@@ -53,6 +53,7 @@ const UserSchemaPicked = UserSchema.pick({
 const VehicleSchemaPicked = VehicleSchema.pick({
   label: true,
   vehicle_image: true,
+  max_luggage: true,
 })
 const ServiceSchemaPicked = ServiceSchema.pick({
   label: true,

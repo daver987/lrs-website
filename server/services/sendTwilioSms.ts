@@ -1,5 +1,5 @@
 import { Twilio } from 'twilio'
-
+const messagingSid = useRuntimeConfig().TWILIO_STRIPE_RESPONSE_SERVICE
 export async function sendTwilioSms(
   twilioClient: Twilio,
   firstName: string,
@@ -10,7 +10,7 @@ export async function sendTwilioSms(
   setTimeout(async () => {
     await twilioClient.messages.create({
       body: message,
-      messagingServiceSid: 'MG211e359fc267bbde46acacf4a428a03f',
+      messagingServiceSid: messagingSid,
       to: phoneNumber,
     })
   }, 10000)
