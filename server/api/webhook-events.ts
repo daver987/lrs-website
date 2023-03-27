@@ -6,7 +6,7 @@ import {
 
 export default defineEventHandler(async (event) => {
   const twilioClient = event.context.twilioClient
-  const endpointSecret = useRuntimeConfig().stripeWebhookSecret
+  const endpointSecret = useRuntimeConfig().STRIPE_WEBHOOK_SECRET
   const body = await readRawBody(event)
   const headers = getHeaders(event)
   const sig = headers['stripe-signature'] as string
