@@ -21,13 +21,33 @@ const saveOrderSummary = async () => {
 
 <template>
   <div class="mx-auto max-w-6xl px-6 pb-6">
-    <div class="flex w-full justify-end py-1 uppercase">
+    <div class="flex w-full justify-between py-1 uppercase">
+      <NuxtLink
+        to="/"
+        type="button"
+        class="flex items-center px-3 py-2 text-sm text-brand shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="mr-1 h-4 w-4"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        DONE
+      </NuxtLink>
+
       <button
         @click="saveOrderSummary"
         type="button"
         class="hover:bg-brand-500 rounded-md bg-brand-600 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
       >
-        Save Summary as PDF
+        Save as PDF
       </button>
     </div>
     <div class="bg-white p-4 md:p-8" id="order-summary" ref="orderSummary">
