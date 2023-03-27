@@ -13,7 +13,6 @@
     "postinstall": "npx nuxi prepare"
   },
   "devDependencies": {
-    "@anatine/zod-mock": "^3.10.0",
     "@faker-js/faker": "^7.6.0",
     "@googlemaps/js-api-loader": "^1.15.1",
     "@gtm-support/vue-gtm": "^2.0.0",
@@ -35,7 +34,6 @@
     "@tanstack/vue-query": "^4.27.0",
     "@total-typescript/ts-reset": "0.4.2",
     "@types/google.maps": "^3.52.3",
-    "@types/html2canvas": "^1.0.0",
     "@types/luxon": "^3.2.0",
     "@types/node": "^18.15.7",
     "@types/uuid": "^9.0.1",
@@ -45,13 +43,9 @@
     "@vueuse/nuxt": "^9.13.0",
     "chalk": "5.2.0",
     "date-fns": "^2.29.3",
-    "dayjs": "^1.11.7",
     "html2canvas": "^1.4.1",
     "html2pdf.js": "^0.10.1",
     "ics": "^3.1.0",
-    "lodash-es": "^4.17.21",
-    "moment": "^2.29.4",
-    "moment-timezone": "^0.5.42",
     "nanoid": "^4.0.1",
     "nock": "^13.3.0",
     "nuxt": "^3.3.2",
@@ -77,6 +71,7 @@
     "zod-prisma-types": "^2.5.1"
   },
   "dependencies": {
+    "@formkit/auto-animate": "^1.0.0-beta.6",
     "@prisma/client": "4.11.0",
     "@trpc/client": "^10.18.0",
     "@trpc/server": "^10.18.0",

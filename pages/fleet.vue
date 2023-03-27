@@ -110,7 +110,7 @@ const tabs = [
           </button>
         </Tab>
       </TabList>
-      <TabPanels>
+      <TabPanels v-auto-animate="{ duration: 300 }">
         <TabPanel>
           <FleetCadillacXts />
         </TabPanel>

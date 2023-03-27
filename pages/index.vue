@@ -50,15 +50,16 @@ const fleetImage = computed(() => {
                   >
                     High Park Livery
                   </p>
-                  <NuxtPicture
-                    :img-attrs="{
-                      class:
-                        'self-center object-cover object-center max-w-sm mt-8 md:max-w-lg md:self-start',
-                    }"
-                    alt="Lincoln Continental"
-                    src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/58d16f60-282e-4e29-1805-ebfee9794f00/1920"
-                    width="1920"
-                  />
+                  <ImageSwitcher />
+                  <!--                  <NuxtPicture-->
+                  <!--                    :img-attrs="{-->
+                  <!--                      class:-->
+                  <!--                        'self-center object-cover object-center max-w-sm mt-8 md:max-w-lg md:self-start',-->
+                  <!--                    }"-->
+                  <!--                    alt="Lincoln Continental"-->
+                  <!--                    src="/images/premium_sedan-3.png"-->
+                  <!--                    width="1011"-->
+                  <!--                  />-->
                 </div>
               </div>
               <div class="mt-16 px-3 pb-8 sm:mt-24 lg:col-span-6 lg:mt-0">
