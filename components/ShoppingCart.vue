@@ -4,23 +4,11 @@ import { storeToRefs } from 'pinia'
 import { useStripeStore } from '~/stores/useStripeStore'
 import { format } from 'date-fns'
 import { ref } from '#imports'
-import { z } from 'zod'
-import { useQuery } from '@tanstack/vue-query'
+import { getQuote } from '~/utils/getQuote'
 
-const quoteNumberAsString = useRoute().query.quote_number
-const quoteNumberSchema = z.coerce.number()
-const quoteNumber = quoteNumberSchema.parse(quoteNumberAsString)
-const getQuote = () =>
-  useTrpc().quote.get.query({
-    quote_number: quoteNumber,
-  })
-const { data: quoteData, suspense: quoteSuspense } = await useQuery({
-  queryKey: ['quote'],
-  queryFn: getQuote,
-})
-await quoteSuspense()
-
-const quote = quoteData.value!
+const quoteNumberAsString = useRoute().query.quote_number as unknown as string
+const quote = await getQuote(quoteNumberAsString)
+const quoteNumber = ref(quote.quote_number)
 const cartStore = useCartStore()
 const stripeStore = useStripeStore()
 const { addedToCart, loading } = storeToRefs(cartStore)
@@ -33,15 +21,15 @@ const createBooking = async () => {
     const { setupIntent, stripeId, statusCode } =
       await useTrpc().stripe.createCheckout.mutate({
         userId: quote!.user.id,
-        quoteNumber: quote!.quote_number,
+        quoteNumber: quoteNumber.value,
       })
 
     if (statusCode === 200) {
       stripeStore.setCustomer(stripeId)
       stripeStore.setClientSecret(setupIntent)
       await navigateTo({
-        path: '/checkout',
-        query: { quote_number: quoteNumber },
+        path: '/FlightInfo',
+        query: { quote_number: quoteNumber.value },
       })
     } else {
       console.error('Failed to create booking. Status code:', statusCode)
@@ -83,7 +71,7 @@ const createBooking = async () => {
           >
         </dt>
         <dd class="font-medium text-neutral-900 dark:text-neutral-100">
-          <time :datetime="currentDate">{{ currentDate }} </time>
+          <time :datetime="currentDate">{{ currentDate }}</time>
         </dd>
       </dl>
       <div class="mt-4 sm:mt-0">

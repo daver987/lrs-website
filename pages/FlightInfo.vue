@@ -1,46 +1,94 @@
 <script setup lang="ts">
-import { ref, computed } from '#imports'
+import { ref, computed, useTrpc } from '#imports'
 import { buildLuggageOptions, Option } from '~/composables/useBuildOptions'
-import { useQuery } from '@tanstack/vue-query'
+import { getQuote } from '~/utils/getQuote'
+import { FormRules } from 'naive-ui'
+import { Ref } from 'vue'
 
-const router = useRouter()
-const flightNumber = ref('')
-const arrivalTime = ref('')
-const carryOnLuggage = ref(0)
-const fullSizeLuggage = ref(0)
-
-const loading = ref(false)
-
-const vehicleTypeFetch = () => useTrpc().vehicle.get.query()
-const { data: vehicleTypes, suspense: vehicleSuspense } = await useQuery({
-  queryKey: ['vehicles'],
-  queryFn: vehicleTypeFetch,
-})
-await vehicleSuspense()
-const maxLuggage = computed<number>(() => {
-  const vehicleType = vehicleTypes.value!.find(
-    (type: Option) => type.value === formValue.value.vehicle_id
-  )
-  formValue.value.luggage_count = null
-  return vehicleType ? vehicleType.max_luggage : 2
-})
-
+//get quote
+const quoteNumberAsString = useRoute().query.quote_number as unknown as string
+const quote = await getQuote(quoteNumberAsString)
+//@ts-ignore
+const maxLuggage = ref(quote.vehicle.max_luggage as number)
+const formRef = ref(null)
 const luggageOptions = computed(() => buildLuggageOptions(maxLuggage.value))
-const formValue: any = ref({
-  luggage_count: null,
-  carry_on_luggage_count: null,
-  large_luggage_count: null,
+
+interface AirportInfoForm {
+  id: string
+  carry_on_luggage: number | null
+  large_luggage: number | null
+  flight_number: string | null
+  arrival_time: number | null
+  trip_notes: string | null
+  quote_number: number
+}
+
+const formValue: Ref<AirportInfoForm> = ref({
+  id: quote.trips[0].id,
+  carry_on_luggage: null,
+  large_luggage: null,
   flight_number: null,
   arrival_time: null,
-  trip_notes: '',
-  vehicle_id: null,
-  return_service_id: computed(() => {
-    return formValue.value.service_id === 2 ? 3 : formValue.value.service_id
-  }),
-  vehicle: vehicleTypes.value,
+  trip_notes: null,
+  quote_number: quote.quote_number,
 })
-const submitHandler = () => {
-  console.log('Submitted')
+
+const rules = {
+  arrival_time: {
+    type: 'number',
+    required: false,
+    message: 'Please enter a pickup date',
+    trigger: ['blur'],
+  },
+
+  carry_on_luggage: {
+    type: 'number',
+    required: false,
+    message: 'Please enter in the amount of carry on luggage',
+    trigger: ['blur', 'change'],
+  },
+  large_luggage: {
+    type: 'number',
+    message: 'Please Enter in The Amount of Large Luggage',
+    trigger: ['blur', 'change'],
+    required: false,
+  },
+
+  flight_number: {
+    required: true,
+    message: 'A Flight Number is Required',
+    trigger: 'blur',
+  },
+  trip_notes: {
+    required: true,
+    message: 'Enter In Trip Notes',
+    trigger: 'blur',
+  },
+  quote_number: {
+    required: true,
+    message: 'Add Quote',
+    trigger: 'blur',
+  },
+} as FormRules
+
+const isLoading = ref(false)
+const submitHandler = async () => {
+  isLoading.value = true
+  try {
+    //@ts-ignore
+    const booking = await useTrpc().book.booking.mutate({ ...formValue.value })
+    console.log('Booking Object', booking)
+    setTimeout(async () => {
+      await navigateTo({
+        path: '/checkout',
+        query: { quote_number: quote.quote_number },
+      })
+      isLoading.value = false
+    }, 2500)
+  } catch (error) {
+    console.error('Error during booking:', error)
+    isLoading.value = false
+  }
 }
 </script>
 
@@ -97,18 +145,27 @@ const submitHandler = () => {
                 </n-collapse-item>
               </n-collapse>
             </n-card>
+            <n-card>
+              <pre>{{ formValue }}</pre>
+            </n-card>
           </n-space>
         </n-grid-item>
 
         <n-grid-item :span="1">
           <n-space justify="center">
-            <n-form>
+            <n-form
+              ref="formRef"
+              :label-width="80"
+              :model="formValue"
+              :rules="rules"
+            >
               <n-grid :cols="1" style="max-width: 500px" :y-gap="24">
                 <n-grid-item :span="1">
                   <n-card title="Flight Information:">
                     <n-grid :cols="2" :x-gap="16">
                       <n-grid-item :span="1">
                         <n-form-item-gi
+                          path="flight_number"
                           feedback="Enter flight number, e.g. AC116"
                           :span="1"
                           class="flight-info"
@@ -117,22 +174,27 @@ const submitHandler = () => {
                           <n-input
                             type="text"
                             id="flight-number"
-                            v-model="flightNumber"
+                            v-model:value="formValue.flight_number"
                             required
+                            placeholder="Enter Flight Number.."
                           />
                         </n-form-item-gi>
                       </n-grid-item>
                       <n-grid-item>
                         <n-form-item-gi
+                          path="arrival_time"
                           feedback="Enter Scheduled Arrival Time"
                           :span="1"
                           label="Arrival Time:"
                         >
-                          <n-date-picker
+                          <n-time-picker
                             id="arrival-time"
-                            v-model="arrivalTime"
+                            v-model:value="formValue.arrival_time"
                             required
-                            type="datetime"
+                            format="h:mm a"
+                            :clearable="true"
+                            use12-hours
+                            placeholder="Enter Arrival Time.."
                           />
                         </n-form-item-gi>
                       </n-grid-item>
@@ -143,21 +205,31 @@ const submitHandler = () => {
                 <n-grid-item :span="1">
                   <n-card title="Luggage Information:">
                     <n-grid :cols="2" :x-gap="12">
-                      <n-form-item-gi :span="1" label="Carry-On Luggage:">
+                      <n-form-item-gi
+                        path="carry_on_luggage"
+                        :span="1"
+                        label="Carry-On Luggage:"
+                      >
                         <n-select
                           id="carry-on"
-                          v-model="carryOnLuggage"
+                          v-model:value="formValue.carry_on_luggage"
                           min="0"
                           required
+                          placeholder="Select Carry On"
                           :options="luggageOptions"
                         />
                       </n-form-item-gi>
-                      <n-form-item-gi :span="1" label="Full-Size Luggage:">
+                      <n-form-item-gi
+                        path="large_luggage"
+                        :span="1"
+                        label="Full-Size Luggage:"
+                      >
                         <n-select
                           id="full-size"
-                          v-model="fullSizeLuggage"
+                          v-model:value="formValue.large_luggage"
                           min="0"
                           required
+                          placeholder="Select Large Luggage"
                           :options="luggageOptions"
                         />
                       </n-form-item-gi>
@@ -167,15 +239,21 @@ const submitHandler = () => {
                 <n-grid-item :span="2">
                   <n-card title="Trip Notes">
                     <n-form-item
+                      path="trip_notes"
                       label="Trip Notes"
                       :show-label="false"
                       feedback="Add any notes or special instructions your trip."
                     >
-                      <n-input type="textarea" rows="4" />
+                      <n-input
+                        v-model:value="formValue.trip_notes"
+                        type="textarea"
+                        rows="4"
+                        placeholder="Enter Trip Notes"
+                      />
                     </n-form-item>
                     <template #footer>
                       <n-button
-                        :loading="loading"
+                        :loading="isLoading"
                         @click="submitHandler"
                         text-color="#fff"
                         style="

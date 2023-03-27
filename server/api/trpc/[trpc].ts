@@ -1,9 +1,12 @@
 import { createNuxtApiHandler } from 'trpc-nuxt'
 import { appRouter } from '~/server/trpc/routers'
 import { createContext } from '~/server/trpc/context'
+import chalk from 'chalk'
 
-// export API handler
 export default createNuxtApiHandler({
   router: appRouter,
-  createContext
+  createContext,
+  onError({ error, path }) {
+    console.log(chalk.red('[ ERROR ]'), `- ${path} - ${error.message}`)
+  },
 })

@@ -8,6 +8,7 @@ import { stripeRouter } from '~/server/trpc/routers/stripe'
 import { bookingRouter } from '~/server/trpc/routers/booking'
 import { airlineRouter } from '~/server/trpc/routers/airlines'
 import { airportRouter } from '~/server/trpc/routers/airports'
+import { openaiRouter } from '~/server/trpc/routers/openai'
 
 export const appRouter = router({
   lineItem: lineItemsRouter,
@@ -19,6 +20,7 @@ export const appRouter = router({
   book: bookingRouter,
   airline: airlineRouter,
   airport: airportRouter,
+  openai: openaiRouter,
 })
 
 // export type definition of API

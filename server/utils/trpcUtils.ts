@@ -95,10 +95,6 @@ export const createQuoteFromForm = (quotes: {
           distance_value: quotes.distance_value,
           service_label: quotes.service_label,
           vehicle_label: quotes.vehicle_label,
-          line_items_list: quotes.line_items_list,
-          line_items_subtotal: quotes.line_items_subtotal,
-          line_items_tax: quotes.line_items_tax,
-          line_items_total: quotes.line_items_total,
           is_return: false,
           trip_order: 0,
           locations: {
@@ -126,6 +122,14 @@ export const createQuoteFromForm = (quotes: {
                 route_order: 1,
               },
             ],
+          },
+          price: {
+            create: {
+              line_items_list: quotes.line_items_list,
+              line_items_subtotal: quotes.line_items_subtotal,
+              line_items_tax: quotes.line_items_tax,
+              line_items_total: quotes.line_items_total,
+            },
           },
         },
       ],

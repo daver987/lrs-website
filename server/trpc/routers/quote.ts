@@ -120,6 +120,7 @@ export const quoteRouter = router({
             select: {
               label: true,
               vehicle_image: true,
+              max_luggage: true,
             },
           },
           service: {

@@ -72,7 +72,7 @@ export const NullableJsonNullValueInputSchema = z.enum(['DbNull','JsonNull',]).t
 
 export const PaymentScalarFieldEnumSchema = z.enum(['id','created_at','updated_at','is_preauthorized','is_paid','setup_intent','payment_intent','payment_type','notes','trip_id','quote_number']);
 
-export const PriceScalarFieldEnumSchema = z.enum(['id','created_at','updated_at','line_items_list','line_items_subtotal','line_items_tax','line_items_total','quote_number']);
+export const PriceScalarFieldEnumSchema = z.enum(['id','created_at','updated_at','line_items_list','line_items_subtotal','line_items_tax','line_items_total','quote_number','trip_id']);
 
 export const QuoteScalarFieldEnumSchema = z.enum(['quote_number','created_at','updated_at','selected_hours','selected_passengers','is_round_trip','is_booked','user_id','quote_total','quote_subtotal','quote_tax_total','short_link','service_id','vehicle_id','sales_tax_id','combined_line_items']);
 
@@ -84,7 +84,7 @@ export const SortOrderSchema = z.enum(['asc','desc']);
 
 export const TransactionIsolationLevelSchema = z.enum(['ReadUncommitted','ReadCommitted','RepeatableRead','Serializable']);
 
-export const TripScalarFieldEnumSchema = z.enum(['id','created_at','updated_at','pickup_date','pickup_time','formatted_pickup_date','formatted_pickup_time','distance_text','duration_text','duration_value','distance_value','calculated_distance','quote_number','service_label','vehicle_label','affiliate_payout','trip_order','is_farmed_out','is_return','notes','price_id']);
+export const TripScalarFieldEnumSchema = z.enum(['id','created_at','updated_at','pickup_date','pickup_time','formatted_pickup_date','formatted_pickup_time','distance_text','duration_text','duration_value','distance_value','calculated_distance','quote_number','carry_on_luggage','large_luggage','service_label','vehicle_label','affiliate_payout','trip_order','is_farmed_out','is_return','notes','price_id']);
 
 export const UserScalarFieldEnumSchema = z.enum(['id','created_at','updated_at','first_name','last_name','full_name','email_address','phone_number','phone_number_country','stripe_customer_id','is_customer','account_id','notes','meta_data']);
 
@@ -224,6 +224,8 @@ export const TripSchema = z.object({
   distance_value: z.number().int().nullable(),
   calculated_distance: z.number().nullable(),
   quote_number: z.number().int(),
+  carry_on_luggage: z.number().int(),
+  large_luggage: z.number().int(),
   service_label: z.string().nullable(),
   vehicle_label: z.string().nullable(),
   affiliate_payout: z.number().nullable(),
@@ -256,6 +258,7 @@ export const PriceSchema = z.object({
   line_items_tax: z.number().nullable(),
   line_items_total: z.number().nullable(),
   quote_number: z.number().int().nullable(),
+  trip_id: z.string(),
 })
 
 export type Price = z.infer<typeof PriceSchema>
@@ -306,16 +309,16 @@ export const FlightSchema = z.object({
   id: z.string().uuid(),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date(),
-  airline_code: z.string(),
+  airline_code: z.string().nullable(),
   airline_name: z.string().nullable(),
   flight_number: z.string(),
   is_active: z.boolean(),
   is_landed: z.boolean(),
   is_arrived: z.boolean(),
-  departure_time: z.coerce.date().nullable(),
-  arrival_time: z.coerce.date().nullable(),
-  departure_time_actual: z.coerce.date().nullable(),
-  arrival_time_actual: z.coerce.date().nullable(),
+  departure_time: z.string().nullable(),
+  arrival_time: z.string().nullable(),
+  departure_time_actual: z.string().nullable(),
+  arrival_time_actual: z.string().nullable(),
   trip_id: z.string().nullable(),
   airlineId: z.number().int().nullable(),
   airportId: z.number().int().nullable(),
@@ -732,6 +735,8 @@ export const TripSelectSchema: z.ZodType<Prisma.TripSelect> = z.object({
   distance_value: z.boolean().optional(),
   calculated_distance: z.boolean().optional(),
   quote_number: z.boolean().optional(),
+  carry_on_luggage: z.boolean().optional(),
+  large_luggage: z.boolean().optional(),
   service_label: z.boolean().optional(),
   vehicle_label: z.boolean().optional(),
   affiliate_payout: z.boolean().optional(),
@@ -753,21 +758,12 @@ export const TripSelectSchema: z.ZodType<Prisma.TripSelect> = z.object({
 
 export const PriceIncludeSchema: z.ZodType<Prisma.PriceInclude> = z.object({
   quote: z.union([z.boolean(),z.lazy(() => QuoteArgsSchema)]).optional(),
-  trip: z.union([z.boolean(),z.lazy(() => TripFindManyArgsSchema)]).optional(),
-  _count: z.union([z.boolean(),z.lazy(() => PriceCountOutputTypeArgsSchema)]).optional(),
+  trip: z.union([z.boolean(),z.lazy(() => TripArgsSchema)]).optional(),
 }).strict()
 
 export const PriceArgsSchema: z.ZodType<Prisma.PriceArgs> = z.object({
   select: z.lazy(() => PriceSelectSchema).optional(),
   include: z.lazy(() => PriceIncludeSchema).optional(),
-}).strict();
-
-export const PriceCountOutputTypeArgsSchema: z.ZodType<Prisma.PriceCountOutputTypeArgs> = z.object({
-  select: z.lazy(() => PriceCountOutputTypeSelectSchema).nullish(),
-}).strict();
-
-export const PriceCountOutputTypeSelectSchema: z.ZodType<Prisma.PriceCountOutputTypeSelect> = z.object({
-  trip: z.boolean().optional(),
 }).strict();
 
 export const PriceSelectSchema: z.ZodType<Prisma.PriceSelect> = z.object({
@@ -779,9 +775,9 @@ export const PriceSelectSchema: z.ZodType<Prisma.PriceSelect> = z.object({
   line_items_tax: z.boolean().optional(),
   line_items_total: z.boolean().optional(),
   quote_number: z.boolean().optional(),
+  trip_id: z.boolean().optional(),
   quote: z.union([z.boolean(),z.lazy(() => QuoteArgsSchema)]).optional(),
-  trip: z.union([z.boolean(),z.lazy(() => TripFindManyArgsSchema)]).optional(),
-  _count: z.union([z.boolean(),z.lazy(() => PriceCountOutputTypeArgsSchema)]).optional(),
+  trip: z.union([z.boolean(),z.lazy(() => TripArgsSchema)]).optional(),
 }).strict()
 
 // LOCATION
@@ -1448,6 +1444,8 @@ export const TripWhereInputSchema: z.ZodType<Prisma.TripWhereInput> = z.object({
   distance_value: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
   calculated_distance: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   quote_number: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  carry_on_luggage: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  large_luggage: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   service_label: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   vehicle_label: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   affiliate_payout: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
@@ -1477,6 +1475,8 @@ export const TripOrderByWithRelationInputSchema: z.ZodType<Prisma.TripOrderByWit
   distance_value: z.lazy(() => SortOrderSchema).optional(),
   calculated_distance: z.lazy(() => SortOrderSchema).optional(),
   quote_number: z.lazy(() => SortOrderSchema).optional(),
+  carry_on_luggage: z.lazy(() => SortOrderSchema).optional(),
+  large_luggage: z.lazy(() => SortOrderSchema).optional(),
   service_label: z.lazy(() => SortOrderSchema).optional(),
   vehicle_label: z.lazy(() => SortOrderSchema).optional(),
   affiliate_payout: z.lazy(() => SortOrderSchema).optional(),
@@ -1510,6 +1510,8 @@ export const TripOrderByWithAggregationInputSchema: z.ZodType<Prisma.TripOrderBy
   distance_value: z.lazy(() => SortOrderSchema).optional(),
   calculated_distance: z.lazy(() => SortOrderSchema).optional(),
   quote_number: z.lazy(() => SortOrderSchema).optional(),
+  carry_on_luggage: z.lazy(() => SortOrderSchema).optional(),
+  large_luggage: z.lazy(() => SortOrderSchema).optional(),
   service_label: z.lazy(() => SortOrderSchema).optional(),
   vehicle_label: z.lazy(() => SortOrderSchema).optional(),
   affiliate_payout: z.lazy(() => SortOrderSchema).optional(),
@@ -1542,6 +1544,8 @@ export const TripScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.TripScal
   distance_value: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
   calculated_distance: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
   quote_number: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  carry_on_luggage: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  large_luggage: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
   service_label: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   vehicle_label: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   affiliate_payout: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
@@ -1564,8 +1568,9 @@ export const PriceWhereInputSchema: z.ZodType<Prisma.PriceWhereInput> = z.object
   line_items_tax: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   line_items_total: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   quote_number: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
+  trip_id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   quote: z.union([ z.lazy(() => QuoteRelationFilterSchema),z.lazy(() => QuoteWhereInputSchema) ]).optional().nullable(),
-  trip: z.lazy(() => TripListRelationFilterSchema).optional()
+  trip: z.union([ z.lazy(() => TripRelationFilterSchema),z.lazy(() => TripWhereInputSchema) ]).optional(),
 }).strict();
 
 export const PriceOrderByWithRelationInputSchema: z.ZodType<Prisma.PriceOrderByWithRelationInput> = z.object({
@@ -1577,12 +1582,14 @@ export const PriceOrderByWithRelationInputSchema: z.ZodType<Prisma.PriceOrderByW
   line_items_tax: z.lazy(() => SortOrderSchema).optional(),
   line_items_total: z.lazy(() => SortOrderSchema).optional(),
   quote_number: z.lazy(() => SortOrderSchema).optional(),
+  trip_id: z.lazy(() => SortOrderSchema).optional(),
   quote: z.lazy(() => QuoteOrderByWithRelationInputSchema).optional(),
-  trip: z.lazy(() => TripOrderByRelationAggregateInputSchema).optional()
+  trip: z.lazy(() => TripOrderByWithRelationInputSchema).optional()
 }).strict();
 
 export const PriceWhereUniqueInputSchema: z.ZodType<Prisma.PriceWhereUniqueInput> = z.object({
-  id: z.string().uuid().optional()
+  id: z.string().uuid().optional(),
+  trip_id: z.string().optional()
 }).strict();
 
 export const PriceOrderByWithAggregationInputSchema: z.ZodType<Prisma.PriceOrderByWithAggregationInput> = z.object({
@@ -1594,6 +1601,7 @@ export const PriceOrderByWithAggregationInputSchema: z.ZodType<Prisma.PriceOrder
   line_items_tax: z.lazy(() => SortOrderSchema).optional(),
   line_items_total: z.lazy(() => SortOrderSchema).optional(),
   quote_number: z.lazy(() => SortOrderSchema).optional(),
+  trip_id: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => PriceCountOrderByAggregateInputSchema).optional(),
   _avg: z.lazy(() => PriceAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => PriceMaxOrderByAggregateInputSchema).optional(),
@@ -1613,6 +1621,7 @@ export const PriceScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.PriceSc
   line_items_tax: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
   line_items_total: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
   quote_number: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  trip_id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
 }).strict();
 
 export const LocationWhereInputSchema: z.ZodType<Prisma.LocationWhereInput> = z.object({
@@ -1711,16 +1720,16 @@ export const FlightWhereInputSchema: z.ZodType<Prisma.FlightWhereInput> = z.obje
   id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   created_at: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updated_at: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  airline_code: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  airline_code: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   airline_name: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   flight_number: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   is_active: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   is_landed: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   is_arrived: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
-  departure_time: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
-  arrival_time: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
-  departure_time_actual: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
-  arrival_time_actual: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
+  departure_time: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  arrival_time: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  departure_time_actual: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  arrival_time_actual: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   trip_id: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   airlineId: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
   airportId: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
@@ -1787,16 +1796,16 @@ export const FlightScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Flight
   id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   created_at: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
   updated_at: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
-  airline_code: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  airline_code: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   airline_name: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   flight_number: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   is_active: z.union([ z.lazy(() => BoolWithAggregatesFilterSchema),z.boolean() ]).optional(),
   is_landed: z.union([ z.lazy(() => BoolWithAggregatesFilterSchema),z.boolean() ]).optional(),
   is_arrived: z.union([ z.lazy(() => BoolWithAggregatesFilterSchema),z.boolean() ]).optional(),
-  departure_time: z.union([ z.lazy(() => DateTimeNullableWithAggregatesFilterSchema),z.coerce.date() ]).optional().nullable(),
-  arrival_time: z.union([ z.lazy(() => DateTimeNullableWithAggregatesFilterSchema),z.coerce.date() ]).optional().nullable(),
-  departure_time_actual: z.union([ z.lazy(() => DateTimeNullableWithAggregatesFilterSchema),z.coerce.date() ]).optional().nullable(),
-  arrival_time_actual: z.union([ z.lazy(() => DateTimeNullableWithAggregatesFilterSchema),z.coerce.date() ]).optional().nullable(),
+  departure_time: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  arrival_time: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  departure_time_actual: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  arrival_time_actual: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   trip_id: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   airlineId: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
   airportId: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
@@ -2762,6 +2771,8 @@ export const TripCreateInputSchema: z.ZodType<Prisma.TripCreateInput> = z.object
   duration_value: z.number().int().optional().nullable(),
   distance_value: z.number().int().optional().nullable(),
   calculated_distance: z.number().optional().nullable(),
+  carry_on_luggage: z.number().int().optional(),
+  large_luggage: z.number().int().optional(),
   service_label: z.string().optional().nullable(),
   vehicle_label: z.string().optional().nullable(),
   affiliate_payout: z.number().optional().nullable(),
@@ -2769,6 +2780,7 @@ export const TripCreateInputSchema: z.ZodType<Prisma.TripCreateInput> = z.object
   is_farmed_out: z.boolean().optional().nullable(),
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable(),
+  price_id: z.string().optional().nullable(),
   price: z.lazy(() => PriceCreateNestedOneWithoutTripInputSchema).optional(),
   quote: z.lazy(() => QuoteCreateNestedOneWithoutTripsInputSchema),
   Payment: z.lazy(() => PaymentCreateNestedOneWithoutTripInputSchema).optional(),
@@ -2790,6 +2802,8 @@ export const TripUncheckedCreateInputSchema: z.ZodType<Prisma.TripUncheckedCreat
   distance_value: z.number().int().optional().nullable(),
   calculated_distance: z.number().optional().nullable(),
   quote_number: z.number().int(),
+  carry_on_luggage: z.number().int().optional(),
+  large_luggage: z.number().int().optional(),
   service_label: z.string().optional().nullable(),
   vehicle_label: z.string().optional().nullable(),
   affiliate_payout: z.number().optional().nullable(),
@@ -2798,6 +2812,7 @@ export const TripUncheckedCreateInputSchema: z.ZodType<Prisma.TripUncheckedCreat
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable(),
   price_id: z.string().optional().nullable(),
+  price: z.lazy(() => PriceUncheckedCreateNestedOneWithoutTripInputSchema).optional(),
   Payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutTripInputSchema).optional(),
   locations: z.lazy(() => LocationUncheckedCreateNestedManyWithoutTripInputSchema).optional(),
   flight: z.lazy(() => FlightUncheckedCreateNestedOneWithoutTripInputSchema).optional()
@@ -2816,6 +2831,8 @@ export const TripUpdateInputSchema: z.ZodType<Prisma.TripUpdateInput> = z.object
   duration_value: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   distance_value: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   calculated_distance: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  carry_on_luggage: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  large_luggage: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   service_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   vehicle_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -2823,6 +2840,7 @@ export const TripUpdateInputSchema: z.ZodType<Prisma.TripUpdateInput> = z.object
   is_farmed_out: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  price_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   price: z.lazy(() => PriceUpdateOneWithoutTripNestedInputSchema).optional(),
   quote: z.lazy(() => QuoteUpdateOneRequiredWithoutTripsNestedInputSchema).optional(),
   Payment: z.lazy(() => PaymentUpdateOneWithoutTripNestedInputSchema).optional(),
@@ -2844,6 +2862,8 @@ export const TripUncheckedUpdateInputSchema: z.ZodType<Prisma.TripUncheckedUpdat
   distance_value: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   calculated_distance: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   quote_number: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  carry_on_luggage: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  large_luggage: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   service_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   vehicle_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -2852,6 +2872,7 @@ export const TripUncheckedUpdateInputSchema: z.ZodType<Prisma.TripUncheckedUpdat
   is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   price_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  price: z.lazy(() => PriceUncheckedUpdateOneWithoutTripNestedInputSchema).optional(),
   Payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutTripNestedInputSchema).optional(),
   locations: z.lazy(() => LocationUncheckedUpdateManyWithoutTripNestedInputSchema).optional(),
   flight: z.lazy(() => FlightUncheckedUpdateOneWithoutTripNestedInputSchema).optional()
@@ -2871,6 +2892,8 @@ export const TripCreateManyInputSchema: z.ZodType<Prisma.TripCreateManyInput> = 
   distance_value: z.number().int().optional().nullable(),
   calculated_distance: z.number().optional().nullable(),
   quote_number: z.number().int(),
+  carry_on_luggage: z.number().int().optional(),
+  large_luggage: z.number().int().optional(),
   service_label: z.string().optional().nullable(),
   vehicle_label: z.string().optional().nullable(),
   affiliate_payout: z.number().optional().nullable(),
@@ -2894,6 +2917,8 @@ export const TripUpdateManyMutationInputSchema: z.ZodType<Prisma.TripUpdateManyM
   duration_value: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   distance_value: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   calculated_distance: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  carry_on_luggage: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  large_luggage: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   service_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   vehicle_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -2901,6 +2926,7 @@ export const TripUpdateManyMutationInputSchema: z.ZodType<Prisma.TripUpdateManyM
   is_farmed_out: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  price_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const TripUncheckedUpdateManyInputSchema: z.ZodType<Prisma.TripUncheckedUpdateManyInput> = z.object({
@@ -2917,6 +2943,8 @@ export const TripUncheckedUpdateManyInputSchema: z.ZodType<Prisma.TripUncheckedU
   distance_value: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   calculated_distance: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   quote_number: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  carry_on_luggage: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  large_luggage: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   service_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   vehicle_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -2930,25 +2958,25 @@ export const TripUncheckedUpdateManyInputSchema: z.ZodType<Prisma.TripUncheckedU
 export const PriceCreateInputSchema: z.ZodType<Prisma.PriceCreateInput> = z.object({
   id: z.string().uuid().optional(),
   created_at: z.coerce.date().optional(),
-  updated_at: z.coerce.date(),
+  updated_at: z.coerce.date().optional(),
   line_items_list: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   line_items_subtotal: z.number().optional().nullable(),
   line_items_tax: z.number().optional().nullable(),
   line_items_total: z.number().optional().nullable(),
   quote: z.lazy(() => QuoteCreateNestedOneWithoutPricingInputSchema).optional(),
-  trip: z.lazy(() => TripCreateNestedManyWithoutPriceInputSchema).optional()
+  trip: z.lazy(() => TripCreateNestedOneWithoutPriceInputSchema)
 }).strict();
 
 export const PriceUncheckedCreateInputSchema: z.ZodType<Prisma.PriceUncheckedCreateInput> = z.object({
   id: z.string().uuid().optional(),
   created_at: z.coerce.date().optional(),
-  updated_at: z.coerce.date(),
+  updated_at: z.coerce.date().optional(),
   line_items_list: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   line_items_subtotal: z.number().optional().nullable(),
   line_items_tax: z.number().optional().nullable(),
   line_items_total: z.number().optional().nullable(),
   quote_number: z.number().int().optional().nullable(),
-  trip: z.lazy(() => TripUncheckedCreateNestedManyWithoutPriceInputSchema).optional()
+  trip_id: z.string()
 }).strict();
 
 export const PriceUpdateInputSchema: z.ZodType<Prisma.PriceUpdateInput> = z.object({
@@ -2960,7 +2988,7 @@ export const PriceUpdateInputSchema: z.ZodType<Prisma.PriceUpdateInput> = z.obje
   line_items_tax: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   line_items_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   quote: z.lazy(() => QuoteUpdateOneWithoutPricingNestedInputSchema).optional(),
-  trip: z.lazy(() => TripUpdateManyWithoutPriceNestedInputSchema).optional()
+  trip: z.lazy(() => TripUpdateOneRequiredWithoutPriceNestedInputSchema).optional()
 }).strict();
 
 export const PriceUncheckedUpdateInputSchema: z.ZodType<Prisma.PriceUncheckedUpdateInput> = z.object({
@@ -2972,18 +3000,19 @@ export const PriceUncheckedUpdateInputSchema: z.ZodType<Prisma.PriceUncheckedUpd
   line_items_tax: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   line_items_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   quote_number: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  trip: z.lazy(() => TripUncheckedUpdateManyWithoutPriceNestedInputSchema).optional()
+  trip_id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const PriceCreateManyInputSchema: z.ZodType<Prisma.PriceCreateManyInput> = z.object({
   id: z.string().uuid().optional(),
   created_at: z.coerce.date().optional(),
-  updated_at: z.coerce.date(),
+  updated_at: z.coerce.date().optional(),
   line_items_list: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   line_items_subtotal: z.number().optional().nullable(),
   line_items_tax: z.number().optional().nullable(),
   line_items_total: z.number().optional().nullable(),
-  quote_number: z.number().int().optional().nullable()
+  quote_number: z.number().int().optional().nullable(),
+  trip_id: z.string()
 }).strict();
 
 export const PriceUpdateManyMutationInputSchema: z.ZodType<Prisma.PriceUpdateManyMutationInput> = z.object({
@@ -3005,6 +3034,7 @@ export const PriceUncheckedUpdateManyInputSchema: z.ZodType<Prisma.PriceUnchecke
   line_items_tax: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   line_items_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   quote_number: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  trip_id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const LocationCreateInputSchema: z.ZodType<Prisma.LocationCreateInput> = z.object({
@@ -3136,16 +3166,16 @@ export const FlightCreateInputSchema: z.ZodType<Prisma.FlightCreateInput> = z.ob
   id: z.string().uuid().optional(),
   created_at: z.coerce.date().optional(),
   updated_at: z.coerce.date().optional(),
-  airline_code: z.string(),
+  airline_code: z.string().optional().nullable(),
   airline_name: z.string().optional().nullable(),
   flight_number: z.string(),
   is_active: z.boolean().optional(),
   is_landed: z.boolean().optional(),
   is_arrived: z.boolean().optional(),
-  departure_time: z.coerce.date().optional().nullable(),
-  arrival_time: z.coerce.date().optional().nullable(),
-  departure_time_actual: z.coerce.date().optional().nullable(),
-  arrival_time_actual: z.coerce.date().optional().nullable(),
+  departure_time: z.string().optional().nullable(),
+  arrival_time: z.string().optional().nullable(),
+  departure_time_actual: z.string().optional().nullable(),
+  arrival_time_actual: z.string().optional().nullable(),
   trip: z.lazy(() => TripCreateNestedOneWithoutFlightInputSchema).optional(),
   airline: z.lazy(() => AirlineCreateNestedOneWithoutFlightInputSchema).optional(),
   airport: z.lazy(() => AirportCreateNestedOneWithoutFlightInputSchema).optional()
@@ -3155,16 +3185,16 @@ export const FlightUncheckedCreateInputSchema: z.ZodType<Prisma.FlightUncheckedC
   id: z.string().uuid().optional(),
   created_at: z.coerce.date().optional(),
   updated_at: z.coerce.date().optional(),
-  airline_code: z.string(),
+  airline_code: z.string().optional().nullable(),
   airline_name: z.string().optional().nullable(),
   flight_number: z.string(),
   is_active: z.boolean().optional(),
   is_landed: z.boolean().optional(),
   is_arrived: z.boolean().optional(),
-  departure_time: z.coerce.date().optional().nullable(),
-  arrival_time: z.coerce.date().optional().nullable(),
-  departure_time_actual: z.coerce.date().optional().nullable(),
-  arrival_time_actual: z.coerce.date().optional().nullable(),
+  departure_time: z.string().optional().nullable(),
+  arrival_time: z.string().optional().nullable(),
+  departure_time_actual: z.string().optional().nullable(),
+  arrival_time_actual: z.string().optional().nullable(),
   trip_id: z.string().optional().nullable(),
   airlineId: z.number().int().optional().nullable(),
   airportId: z.number().int().optional().nullable()
@@ -3174,16 +3204,16 @@ export const FlightUpdateInputSchema: z.ZodType<Prisma.FlightUpdateInput> = z.ob
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  airline_code: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  airline_code: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   airline_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   flight_number: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   is_active: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_landed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_arrived: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  departure_time: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  arrival_time: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  departure_time_actual: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  arrival_time_actual: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  departure_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  arrival_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  departure_time_actual: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  arrival_time_actual: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   trip: z.lazy(() => TripUpdateOneWithoutFlightNestedInputSchema).optional(),
   airline: z.lazy(() => AirlineUpdateOneWithoutFlightNestedInputSchema).optional(),
   airport: z.lazy(() => AirportUpdateOneWithoutFlightNestedInputSchema).optional()
@@ -3193,16 +3223,16 @@ export const FlightUncheckedUpdateInputSchema: z.ZodType<Prisma.FlightUncheckedU
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  airline_code: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  airline_code: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   airline_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   flight_number: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   is_active: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_landed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_arrived: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  departure_time: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  arrival_time: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  departure_time_actual: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  arrival_time_actual: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  departure_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  arrival_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  departure_time_actual: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  arrival_time_actual: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   trip_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   airlineId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   airportId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -3212,16 +3242,16 @@ export const FlightCreateManyInputSchema: z.ZodType<Prisma.FlightCreateManyInput
   id: z.string().uuid().optional(),
   created_at: z.coerce.date().optional(),
   updated_at: z.coerce.date().optional(),
-  airline_code: z.string(),
+  airline_code: z.string().optional().nullable(),
   airline_name: z.string().optional().nullable(),
   flight_number: z.string(),
   is_active: z.boolean().optional(),
   is_landed: z.boolean().optional(),
   is_arrived: z.boolean().optional(),
-  departure_time: z.coerce.date().optional().nullable(),
-  arrival_time: z.coerce.date().optional().nullable(),
-  departure_time_actual: z.coerce.date().optional().nullable(),
-  arrival_time_actual: z.coerce.date().optional().nullable(),
+  departure_time: z.string().optional().nullable(),
+  arrival_time: z.string().optional().nullable(),
+  departure_time_actual: z.string().optional().nullable(),
+  arrival_time_actual: z.string().optional().nullable(),
   trip_id: z.string().optional().nullable(),
   airlineId: z.number().int().optional().nullable(),
   airportId: z.number().int().optional().nullable()
@@ -3231,32 +3261,32 @@ export const FlightUpdateManyMutationInputSchema: z.ZodType<Prisma.FlightUpdateM
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  airline_code: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  airline_code: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   airline_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   flight_number: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   is_active: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_landed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_arrived: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  departure_time: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  arrival_time: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  departure_time_actual: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  arrival_time_actual: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  departure_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  arrival_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  departure_time_actual: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  arrival_time_actual: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const FlightUncheckedUpdateManyInputSchema: z.ZodType<Prisma.FlightUncheckedUpdateManyInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  airline_code: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  airline_code: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   airline_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   flight_number: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   is_active: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_landed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_arrived: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  departure_time: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  arrival_time: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  departure_time_actual: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  arrival_time_actual: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  departure_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  arrival_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  departure_time_actual: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  arrival_time_actual: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   trip_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   airlineId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   airportId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -4499,6 +4529,8 @@ export const TripCountOrderByAggregateInputSchema: z.ZodType<Prisma.TripCountOrd
   distance_value: z.lazy(() => SortOrderSchema).optional(),
   calculated_distance: z.lazy(() => SortOrderSchema).optional(),
   quote_number: z.lazy(() => SortOrderSchema).optional(),
+  carry_on_luggage: z.lazy(() => SortOrderSchema).optional(),
+  large_luggage: z.lazy(() => SortOrderSchema).optional(),
   service_label: z.lazy(() => SortOrderSchema).optional(),
   vehicle_label: z.lazy(() => SortOrderSchema).optional(),
   affiliate_payout: z.lazy(() => SortOrderSchema).optional(),
@@ -4516,6 +4548,8 @@ export const TripAvgOrderByAggregateInputSchema: z.ZodType<Prisma.TripAvgOrderBy
   distance_value: z.lazy(() => SortOrderSchema).optional(),
   calculated_distance: z.lazy(() => SortOrderSchema).optional(),
   quote_number: z.lazy(() => SortOrderSchema).optional(),
+  carry_on_luggage: z.lazy(() => SortOrderSchema).optional(),
+  large_luggage: z.lazy(() => SortOrderSchema).optional(),
   affiliate_payout: z.lazy(() => SortOrderSchema).optional(),
   trip_order: z.lazy(() => SortOrderSchema).optional()
 }).strict();
@@ -4534,6 +4568,8 @@ export const TripMaxOrderByAggregateInputSchema: z.ZodType<Prisma.TripMaxOrderBy
   distance_value: z.lazy(() => SortOrderSchema).optional(),
   calculated_distance: z.lazy(() => SortOrderSchema).optional(),
   quote_number: z.lazy(() => SortOrderSchema).optional(),
+  carry_on_luggage: z.lazy(() => SortOrderSchema).optional(),
+  large_luggage: z.lazy(() => SortOrderSchema).optional(),
   service_label: z.lazy(() => SortOrderSchema).optional(),
   vehicle_label: z.lazy(() => SortOrderSchema).optional(),
   affiliate_payout: z.lazy(() => SortOrderSchema).optional(),
@@ -4558,6 +4594,8 @@ export const TripMinOrderByAggregateInputSchema: z.ZodType<Prisma.TripMinOrderBy
   distance_value: z.lazy(() => SortOrderSchema).optional(),
   calculated_distance: z.lazy(() => SortOrderSchema).optional(),
   quote_number: z.lazy(() => SortOrderSchema).optional(),
+  carry_on_luggage: z.lazy(() => SortOrderSchema).optional(),
+  large_luggage: z.lazy(() => SortOrderSchema).optional(),
   service_label: z.lazy(() => SortOrderSchema).optional(),
   vehicle_label: z.lazy(() => SortOrderSchema).optional(),
   affiliate_payout: z.lazy(() => SortOrderSchema).optional(),
@@ -4575,6 +4613,8 @@ export const TripSumOrderByAggregateInputSchema: z.ZodType<Prisma.TripSumOrderBy
   distance_value: z.lazy(() => SortOrderSchema).optional(),
   calculated_distance: z.lazy(() => SortOrderSchema).optional(),
   quote_number: z.lazy(() => SortOrderSchema).optional(),
+  carry_on_luggage: z.lazy(() => SortOrderSchema).optional(),
+  large_luggage: z.lazy(() => SortOrderSchema).optional(),
   affiliate_payout: z.lazy(() => SortOrderSchema).optional(),
   trip_order: z.lazy(() => SortOrderSchema).optional()
 }).strict();
@@ -4587,6 +4627,11 @@ export const BoolNullableWithAggregatesFilterSchema: z.ZodType<Prisma.BoolNullab
   _max: z.lazy(() => NestedBoolNullableFilterSchema).optional()
 }).strict();
 
+export const TripRelationFilterSchema: z.ZodType<Prisma.TripRelationFilter> = z.object({
+  is: z.lazy(() => TripWhereInputSchema).optional(),
+  isNot: z.lazy(() => TripWhereInputSchema).optional()
+}).strict();
+
 export const PriceCountOrderByAggregateInputSchema: z.ZodType<Prisma.PriceCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   created_at: z.lazy(() => SortOrderSchema).optional(),
@@ -4595,7 +4640,8 @@ export const PriceCountOrderByAggregateInputSchema: z.ZodType<Prisma.PriceCountO
   line_items_subtotal: z.lazy(() => SortOrderSchema).optional(),
   line_items_tax: z.lazy(() => SortOrderSchema).optional(),
   line_items_total: z.lazy(() => SortOrderSchema).optional(),
-  quote_number: z.lazy(() => SortOrderSchema).optional()
+  quote_number: z.lazy(() => SortOrderSchema).optional(),
+  trip_id: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const PriceAvgOrderByAggregateInputSchema: z.ZodType<Prisma.PriceAvgOrderByAggregateInput> = z.object({
@@ -4612,7 +4658,8 @@ export const PriceMaxOrderByAggregateInputSchema: z.ZodType<Prisma.PriceMaxOrder
   line_items_subtotal: z.lazy(() => SortOrderSchema).optional(),
   line_items_tax: z.lazy(() => SortOrderSchema).optional(),
   line_items_total: z.lazy(() => SortOrderSchema).optional(),
-  quote_number: z.lazy(() => SortOrderSchema).optional()
+  quote_number: z.lazy(() => SortOrderSchema).optional(),
+  trip_id: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const PriceMinOrderByAggregateInputSchema: z.ZodType<Prisma.PriceMinOrderByAggregateInput> = z.object({
@@ -4622,7 +4669,8 @@ export const PriceMinOrderByAggregateInputSchema: z.ZodType<Prisma.PriceMinOrder
   line_items_subtotal: z.lazy(() => SortOrderSchema).optional(),
   line_items_tax: z.lazy(() => SortOrderSchema).optional(),
   line_items_total: z.lazy(() => SortOrderSchema).optional(),
-  quote_number: z.lazy(() => SortOrderSchema).optional()
+  quote_number: z.lazy(() => SortOrderSchema).optional(),
+  trip_id: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const PriceSumOrderByAggregateInputSchema: z.ZodType<Prisma.PriceSumOrderByAggregateInput> = z.object({
@@ -4646,11 +4694,6 @@ export const JsonFilterSchema: z.ZodType<Prisma.JsonFilter> = z.object({
   gt: InputJsonValue.optional(),
   gte: InputJsonValue.optional(),
   not: z.union([ InputJsonValue,z.lazy(() => JsonFieldRefInputSchema),z.lazy(() => JsonNullValueFilterSchema) ]).optional(),
-}).strict();
-
-export const TripRelationFilterSchema: z.ZodType<Prisma.TripRelationFilter> = z.object({
-  is: z.lazy(() => TripWhereInputSchema).optional(),
-  isNot: z.lazy(() => TripWhereInputSchema).optional()
 }).strict();
 
 export const LocationCountOrderByAggregateInputSchema: z.ZodType<Prisma.LocationCountOrderByAggregateInput> = z.object({
@@ -4736,17 +4779,6 @@ export const JsonWithAggregatesFilterSchema: z.ZodType<Prisma.JsonWithAggregates
   _max: z.lazy(() => NestedJsonFilterSchema).optional()
 }).strict();
 
-export const DateTimeNullableFilterSchema: z.ZodType<Prisma.DateTimeNullableFilter> = z.object({
-  equals: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldRefInputSchema) ]).optional().nullable(),
-  in: z.coerce.date().array().optional().nullable(),
-  notIn: z.coerce.date().array().optional().nullable(),
-  lt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldRefInputSchema) ]).optional(),
-  lte: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldRefInputSchema) ]).optional(),
-  gt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldRefInputSchema) ]).optional(),
-  gte: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldRefInputSchema) ]).optional(),
-  not: z.union([ z.coerce.date(),z.lazy(() => NestedDateTimeNullableFilterSchema) ]).optional().nullable(),
-}).strict();
-
 export const AirlineRelationFilterSchema: z.ZodType<Prisma.AirlineRelationFilter> = z.object({
   is: z.lazy(() => AirlineWhereInputSchema).optional().nullable(),
   isNot: z.lazy(() => AirlineWhereInputSchema).optional().nullable()
@@ -4822,20 +4854,6 @@ export const FlightMinOrderByAggregateInputSchema: z.ZodType<Prisma.FlightMinOrd
 export const FlightSumOrderByAggregateInputSchema: z.ZodType<Prisma.FlightSumOrderByAggregateInput> = z.object({
   airlineId: z.lazy(() => SortOrderSchema).optional(),
   airportId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const DateTimeNullableWithAggregatesFilterSchema: z.ZodType<Prisma.DateTimeNullableWithAggregatesFilter> = z.object({
-  equals: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldRefInputSchema) ]).optional().nullable(),
-  in: z.coerce.date().array().optional().nullable(),
-  notIn: z.coerce.date().array().optional().nullable(),
-  lt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldRefInputSchema) ]).optional(),
-  lte: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldRefInputSchema) ]).optional(),
-  gt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldRefInputSchema) ]).optional(),
-  gte: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldRefInputSchema) ]).optional(),
-  not: z.union([ z.coerce.date(),z.lazy(() => NestedDateTimeNullableWithAggregatesFilterSchema) ]).optional().nullable(),
-  _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
-  _min: z.lazy(() => NestedDateTimeNullableFilterSchema).optional(),
-  _max: z.lazy(() => NestedDateTimeNullableFilterSchema).optional()
 }).strict();
 
 export const PaymentCountOrderByAggregateInputSchema: z.ZodType<Prisma.PaymentCountOrderByAggregateInput> = z.object({
@@ -5655,6 +5673,12 @@ export const FlightCreateNestedOneWithoutTripInputSchema: z.ZodType<Prisma.Fligh
   connect: z.lazy(() => FlightWhereUniqueInputSchema).optional()
 }).strict();
 
+export const PriceUncheckedCreateNestedOneWithoutTripInputSchema: z.ZodType<Prisma.PriceUncheckedCreateNestedOneWithoutTripInput> = z.object({
+  create: z.union([ z.lazy(() => PriceCreateWithoutTripInputSchema),z.lazy(() => PriceUncheckedCreateWithoutTripInputSchema) ]).optional(),
+  connectOrCreate: z.lazy(() => PriceCreateOrConnectWithoutTripInputSchema).optional(),
+  connect: z.lazy(() => PriceWhereUniqueInputSchema).optional()
+}).strict();
+
 export const PaymentUncheckedCreateNestedOneWithoutTripInputSchema: z.ZodType<Prisma.PaymentUncheckedCreateNestedOneWithoutTripInput> = z.object({
   create: z.union([ z.lazy(() => PaymentCreateWithoutTripInputSchema),z.lazy(() => PaymentUncheckedCreateWithoutTripInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => PaymentCreateOrConnectWithoutTripInputSchema).optional(),
@@ -5730,6 +5754,16 @@ export const FlightUpdateOneWithoutTripNestedInputSchema: z.ZodType<Prisma.Fligh
   update: z.union([ z.lazy(() => FlightUpdateWithoutTripInputSchema),z.lazy(() => FlightUncheckedUpdateWithoutTripInputSchema) ]).optional(),
 }).strict();
 
+export const PriceUncheckedUpdateOneWithoutTripNestedInputSchema: z.ZodType<Prisma.PriceUncheckedUpdateOneWithoutTripNestedInput> = z.object({
+  create: z.union([ z.lazy(() => PriceCreateWithoutTripInputSchema),z.lazy(() => PriceUncheckedCreateWithoutTripInputSchema) ]).optional(),
+  connectOrCreate: z.lazy(() => PriceCreateOrConnectWithoutTripInputSchema).optional(),
+  upsert: z.lazy(() => PriceUpsertWithoutTripInputSchema).optional(),
+  disconnect: z.boolean().optional(),
+  delete: z.boolean().optional(),
+  connect: z.lazy(() => PriceWhereUniqueInputSchema).optional(),
+  update: z.union([ z.lazy(() => PriceUpdateWithoutTripInputSchema),z.lazy(() => PriceUncheckedUpdateWithoutTripInputSchema) ]).optional(),
+}).strict();
+
 export const PaymentUncheckedUpdateOneWithoutTripNestedInputSchema: z.ZodType<Prisma.PaymentUncheckedUpdateOneWithoutTripNestedInput> = z.object({
   create: z.union([ z.lazy(() => PaymentCreateWithoutTripInputSchema),z.lazy(() => PaymentUncheckedCreateWithoutTripInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => PaymentCreateOrConnectWithoutTripInputSchema).optional(),
@@ -5770,18 +5804,10 @@ export const QuoteCreateNestedOneWithoutPricingInputSchema: z.ZodType<Prisma.Quo
   connect: z.lazy(() => QuoteWhereUniqueInputSchema).optional()
 }).strict();
 
-export const TripCreateNestedManyWithoutPriceInputSchema: z.ZodType<Prisma.TripCreateNestedManyWithoutPriceInput> = z.object({
-  create: z.union([ z.lazy(() => TripCreateWithoutPriceInputSchema),z.lazy(() => TripCreateWithoutPriceInputSchema).array(),z.lazy(() => TripUncheckedCreateWithoutPriceInputSchema),z.lazy(() => TripUncheckedCreateWithoutPriceInputSchema).array() ]).optional(),
-  connectOrCreate: z.union([ z.lazy(() => TripCreateOrConnectWithoutPriceInputSchema),z.lazy(() => TripCreateOrConnectWithoutPriceInputSchema).array() ]).optional(),
-  createMany: z.lazy(() => TripCreateManyPriceInputEnvelopeSchema).optional(),
-  connect: z.union([ z.lazy(() => TripWhereUniqueInputSchema),z.lazy(() => TripWhereUniqueInputSchema).array() ]).optional(),
-}).strict();
-
-export const TripUncheckedCreateNestedManyWithoutPriceInputSchema: z.ZodType<Prisma.TripUncheckedCreateNestedManyWithoutPriceInput> = z.object({
-  create: z.union([ z.lazy(() => TripCreateWithoutPriceInputSchema),z.lazy(() => TripCreateWithoutPriceInputSchema).array(),z.lazy(() => TripUncheckedCreateWithoutPriceInputSchema),z.lazy(() => TripUncheckedCreateWithoutPriceInputSchema).array() ]).optional(),
-  connectOrCreate: z.union([ z.lazy(() => TripCreateOrConnectWithoutPriceInputSchema),z.lazy(() => TripCreateOrConnectWithoutPriceInputSchema).array() ]).optional(),
-  createMany: z.lazy(() => TripCreateManyPriceInputEnvelopeSchema).optional(),
-  connect: z.union([ z.lazy(() => TripWhereUniqueInputSchema),z.lazy(() => TripWhereUniqueInputSchema).array() ]).optional(),
+export const TripCreateNestedOneWithoutPriceInputSchema: z.ZodType<Prisma.TripCreateNestedOneWithoutPriceInput> = z.object({
+  create: z.union([ z.lazy(() => TripCreateWithoutPriceInputSchema),z.lazy(() => TripUncheckedCreateWithoutPriceInputSchema) ]).optional(),
+  connectOrCreate: z.lazy(() => TripCreateOrConnectWithoutPriceInputSchema).optional(),
+  connect: z.lazy(() => TripWhereUniqueInputSchema).optional()
 }).strict();
 
 export const QuoteUpdateOneWithoutPricingNestedInputSchema: z.ZodType<Prisma.QuoteUpdateOneWithoutPricingNestedInput> = z.object({
@@ -5794,32 +5820,12 @@ export const QuoteUpdateOneWithoutPricingNestedInputSchema: z.ZodType<Prisma.Quo
   update: z.union([ z.lazy(() => QuoteUpdateWithoutPricingInputSchema),z.lazy(() => QuoteUncheckedUpdateWithoutPricingInputSchema) ]).optional(),
 }).strict();
 
-export const TripUpdateManyWithoutPriceNestedInputSchema: z.ZodType<Prisma.TripUpdateManyWithoutPriceNestedInput> = z.object({
-  create: z.union([ z.lazy(() => TripCreateWithoutPriceInputSchema),z.lazy(() => TripCreateWithoutPriceInputSchema).array(),z.lazy(() => TripUncheckedCreateWithoutPriceInputSchema),z.lazy(() => TripUncheckedCreateWithoutPriceInputSchema).array() ]).optional(),
-  connectOrCreate: z.union([ z.lazy(() => TripCreateOrConnectWithoutPriceInputSchema),z.lazy(() => TripCreateOrConnectWithoutPriceInputSchema).array() ]).optional(),
-  upsert: z.union([ z.lazy(() => TripUpsertWithWhereUniqueWithoutPriceInputSchema),z.lazy(() => TripUpsertWithWhereUniqueWithoutPriceInputSchema).array() ]).optional(),
-  createMany: z.lazy(() => TripCreateManyPriceInputEnvelopeSchema).optional(),
-  set: z.union([ z.lazy(() => TripWhereUniqueInputSchema),z.lazy(() => TripWhereUniqueInputSchema).array() ]).optional(),
-  disconnect: z.union([ z.lazy(() => TripWhereUniqueInputSchema),z.lazy(() => TripWhereUniqueInputSchema).array() ]).optional(),
-  delete: z.union([ z.lazy(() => TripWhereUniqueInputSchema),z.lazy(() => TripWhereUniqueInputSchema).array() ]).optional(),
-  connect: z.union([ z.lazy(() => TripWhereUniqueInputSchema),z.lazy(() => TripWhereUniqueInputSchema).array() ]).optional(),
-  update: z.union([ z.lazy(() => TripUpdateWithWhereUniqueWithoutPriceInputSchema),z.lazy(() => TripUpdateWithWhereUniqueWithoutPriceInputSchema).array() ]).optional(),
-  updateMany: z.union([ z.lazy(() => TripUpdateManyWithWhereWithoutPriceInputSchema),z.lazy(() => TripUpdateManyWithWhereWithoutPriceInputSchema).array() ]).optional(),
-  deleteMany: z.union([ z.lazy(() => TripScalarWhereInputSchema),z.lazy(() => TripScalarWhereInputSchema).array() ]).optional(),
-}).strict();
-
-export const TripUncheckedUpdateManyWithoutPriceNestedInputSchema: z.ZodType<Prisma.TripUncheckedUpdateManyWithoutPriceNestedInput> = z.object({
-  create: z.union([ z.lazy(() => TripCreateWithoutPriceInputSchema),z.lazy(() => TripCreateWithoutPriceInputSchema).array(),z.lazy(() => TripUncheckedCreateWithoutPriceInputSchema),z.lazy(() => TripUncheckedCreateWithoutPriceInputSchema).array() ]).optional(),
-  connectOrCreate: z.union([ z.lazy(() => TripCreateOrConnectWithoutPriceInputSchema),z.lazy(() => TripCreateOrConnectWithoutPriceInputSchema).array() ]).optional(),
-  upsert: z.union([ z.lazy(() => TripUpsertWithWhereUniqueWithoutPriceInputSchema),z.lazy(() => TripUpsertWithWhereUniqueWithoutPriceInputSchema).array() ]).optional(),
-  createMany: z.lazy(() => TripCreateManyPriceInputEnvelopeSchema).optional(),
-  set: z.union([ z.lazy(() => TripWhereUniqueInputSchema),z.lazy(() => TripWhereUniqueInputSchema).array() ]).optional(),
-  disconnect: z.union([ z.lazy(() => TripWhereUniqueInputSchema),z.lazy(() => TripWhereUniqueInputSchema).array() ]).optional(),
-  delete: z.union([ z.lazy(() => TripWhereUniqueInputSchema),z.lazy(() => TripWhereUniqueInputSchema).array() ]).optional(),
-  connect: z.union([ z.lazy(() => TripWhereUniqueInputSchema),z.lazy(() => TripWhereUniqueInputSchema).array() ]).optional(),
-  update: z.union([ z.lazy(() => TripUpdateWithWhereUniqueWithoutPriceInputSchema),z.lazy(() => TripUpdateWithWhereUniqueWithoutPriceInputSchema).array() ]).optional(),
-  updateMany: z.union([ z.lazy(() => TripUpdateManyWithWhereWithoutPriceInputSchema),z.lazy(() => TripUpdateManyWithWhereWithoutPriceInputSchema).array() ]).optional(),
-  deleteMany: z.union([ z.lazy(() => TripScalarWhereInputSchema),z.lazy(() => TripScalarWhereInputSchema).array() ]).optional(),
+export const TripUpdateOneRequiredWithoutPriceNestedInputSchema: z.ZodType<Prisma.TripUpdateOneRequiredWithoutPriceNestedInput> = z.object({
+  create: z.union([ z.lazy(() => TripCreateWithoutPriceInputSchema),z.lazy(() => TripUncheckedCreateWithoutPriceInputSchema) ]).optional(),
+  connectOrCreate: z.lazy(() => TripCreateOrConnectWithoutPriceInputSchema).optional(),
+  upsert: z.lazy(() => TripUpsertWithoutPriceInputSchema).optional(),
+  connect: z.lazy(() => TripWhereUniqueInputSchema).optional(),
+  update: z.union([ z.lazy(() => TripUpdateWithoutPriceInputSchema),z.lazy(() => TripUncheckedUpdateWithoutPriceInputSchema) ]).optional(),
 }).strict();
 
 export const TripCreateNestedOneWithoutLocationsInputSchema: z.ZodType<Prisma.TripCreateNestedOneWithoutLocationsInput> = z.object({
@@ -5852,10 +5858,6 @@ export const AirportCreateNestedOneWithoutFlightInputSchema: z.ZodType<Prisma.Ai
   create: z.union([ z.lazy(() => AirportCreateWithoutFlightInputSchema),z.lazy(() => AirportUncheckedCreateWithoutFlightInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => AirportCreateOrConnectWithoutFlightInputSchema).optional(),
   connect: z.lazy(() => AirportWhereUniqueInputSchema).optional()
-}).strict();
-
-export const NullableDateTimeFieldUpdateOperationsInputSchema: z.ZodType<Prisma.NullableDateTimeFieldUpdateOperationsInput> = z.object({
-  set: z.coerce.date().optional().nullable()
 }).strict();
 
 export const TripUpdateOneWithoutFlightNestedInputSchema: z.ZodType<Prisma.TripUpdateOneWithoutFlightNestedInput> = z.object({
@@ -6419,31 +6421,6 @@ export const NestedJsonFilterSchema: z.ZodType<Prisma.NestedJsonFilter> = z.obje
   not: z.union([ InputJsonValue,z.lazy(() => JsonFieldRefInputSchema),z.lazy(() => JsonNullValueFilterSchema) ]).optional(),
 }).strict();
 
-export const NestedDateTimeNullableFilterSchema: z.ZodType<Prisma.NestedDateTimeNullableFilter> = z.object({
-  equals: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldRefInputSchema) ]).optional().nullable(),
-  in: z.coerce.date().array().optional().nullable(),
-  notIn: z.coerce.date().array().optional().nullable(),
-  lt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldRefInputSchema) ]).optional(),
-  lte: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldRefInputSchema) ]).optional(),
-  gt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldRefInputSchema) ]).optional(),
-  gte: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldRefInputSchema) ]).optional(),
-  not: z.union([ z.coerce.date(),z.lazy(() => NestedDateTimeNullableFilterSchema) ]).optional().nullable(),
-}).strict();
-
-export const NestedDateTimeNullableWithAggregatesFilterSchema: z.ZodType<Prisma.NestedDateTimeNullableWithAggregatesFilter> = z.object({
-  equals: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldRefInputSchema) ]).optional().nullable(),
-  in: z.coerce.date().array().optional().nullable(),
-  notIn: z.coerce.date().array().optional().nullable(),
-  lt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldRefInputSchema) ]).optional(),
-  lte: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldRefInputSchema) ]).optional(),
-  gt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldRefInputSchema) ]).optional(),
-  gte: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldRefInputSchema) ]).optional(),
-  not: z.union([ z.coerce.date(),z.lazy(() => NestedDateTimeNullableWithAggregatesFilterSchema) ]).optional().nullable(),
-  _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
-  _min: z.lazy(() => NestedDateTimeNullableFilterSchema).optional(),
-  _max: z.lazy(() => NestedDateTimeNullableFilterSchema).optional()
-}).strict();
-
 export const UserCreateWithoutAccountInputSchema: z.ZodType<Prisma.UserCreateWithoutAccountInput> = z.object({
   id: z.string().optional(),
   created_at: z.coerce.date().optional(),
@@ -6818,23 +6795,23 @@ export const UserUncheckedUpdateWithoutConversionInputSchema: z.ZodType<Prisma.U
 export const PriceCreateWithoutQuoteInputSchema: z.ZodType<Prisma.PriceCreateWithoutQuoteInput> = z.object({
   id: z.string().optional(),
   created_at: z.coerce.date().optional(),
-  updated_at: z.coerce.date(),
+  updated_at: z.coerce.date().optional(),
   line_items_list: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   line_items_subtotal: z.number().optional().nullable(),
   line_items_tax: z.number().optional().nullable(),
   line_items_total: z.number().optional().nullable(),
-  trip: z.lazy(() => TripCreateNestedManyWithoutPriceInputSchema).optional()
+  trip: z.lazy(() => TripCreateNestedOneWithoutPriceInputSchema)
 }).strict();
 
 export const PriceUncheckedCreateWithoutQuoteInputSchema: z.ZodType<Prisma.PriceUncheckedCreateWithoutQuoteInput> = z.object({
   id: z.string().optional(),
   created_at: z.coerce.date().optional(),
-  updated_at: z.coerce.date(),
+  updated_at: z.coerce.date().optional(),
   line_items_list: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   line_items_subtotal: z.number().optional().nullable(),
   line_items_tax: z.number().optional().nullable(),
   line_items_total: z.number().optional().nullable(),
-  trip: z.lazy(() => TripUncheckedCreateNestedManyWithoutPriceInputSchema).optional()
+  trip_id: z.string()
 }).strict();
 
 export const PriceCreateOrConnectWithoutQuoteInputSchema: z.ZodType<Prisma.PriceCreateOrConnectWithoutQuoteInput> = z.object({
@@ -7018,6 +6995,8 @@ export const TripCreateWithoutQuoteInputSchema: z.ZodType<Prisma.TripCreateWitho
   duration_value: z.number().optional().nullable(),
   distance_value: z.number().optional().nullable(),
   calculated_distance: z.number().optional().nullable(),
+  carry_on_luggage: z.number().optional(),
+  large_luggage: z.number().optional(),
   service_label: z.string().optional().nullable(),
   vehicle_label: z.string().optional().nullable(),
   affiliate_payout: z.number().optional().nullable(),
@@ -7025,6 +7004,7 @@ export const TripCreateWithoutQuoteInputSchema: z.ZodType<Prisma.TripCreateWitho
   is_farmed_out: z.boolean().optional().nullable(),
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable(),
+  price_id: z.string().optional().nullable(),
   price: z.lazy(() => PriceCreateNestedOneWithoutTripInputSchema).optional(),
   Payment: z.lazy(() => PaymentCreateNestedOneWithoutTripInputSchema).optional(),
   locations: z.lazy(() => LocationCreateNestedManyWithoutTripInputSchema).optional(),
@@ -7044,6 +7024,8 @@ export const TripUncheckedCreateWithoutQuoteInputSchema: z.ZodType<Prisma.TripUn
   duration_value: z.number().optional().nullable(),
   distance_value: z.number().optional().nullable(),
   calculated_distance: z.number().optional().nullable(),
+  carry_on_luggage: z.number().optional(),
+  large_luggage: z.number().optional(),
   service_label: z.string().optional().nullable(),
   vehicle_label: z.string().optional().nullable(),
   affiliate_payout: z.number().optional().nullable(),
@@ -7052,6 +7034,7 @@ export const TripUncheckedCreateWithoutQuoteInputSchema: z.ZodType<Prisma.TripUn
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable(),
   price_id: z.string().optional().nullable(),
+  price: z.lazy(() => PriceUncheckedCreateNestedOneWithoutTripInputSchema).optional(),
   Payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutTripInputSchema).optional(),
   locations: z.lazy(() => LocationUncheckedCreateNestedManyWithoutTripInputSchema).optional(),
   flight: z.lazy(() => FlightUncheckedCreateNestedOneWithoutTripInputSchema).optional()
@@ -7131,6 +7114,7 @@ export const PriceScalarWhereInputSchema: z.ZodType<Prisma.PriceScalarWhereInput
   line_items_tax: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   line_items_total: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   quote_number: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
+  trip_id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
 }).strict();
 
 export const ServiceUpsertWithoutQuotesInputSchema: z.ZodType<Prisma.ServiceUpsertWithoutQuotesInput> = z.object({
@@ -7325,6 +7309,8 @@ export const TripScalarWhereInputSchema: z.ZodType<Prisma.TripScalarWhereInput> 
   distance_value: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
   calculated_distance: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   quote_number: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  carry_on_luggage: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  large_luggage: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   service_label: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   vehicle_label: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   affiliate_payout: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
@@ -7371,7 +7357,7 @@ export const PaymentScalarWhereInputSchema: z.ZodType<Prisma.PaymentScalarWhereI
 export const PriceCreateWithoutTripInputSchema: z.ZodType<Prisma.PriceCreateWithoutTripInput> = z.object({
   id: z.string().optional(),
   created_at: z.coerce.date().optional(),
-  updated_at: z.coerce.date(),
+  updated_at: z.coerce.date().optional(),
   line_items_list: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   line_items_subtotal: z.number().optional().nullable(),
   line_items_tax: z.number().optional().nullable(),
@@ -7382,7 +7368,7 @@ export const PriceCreateWithoutTripInputSchema: z.ZodType<Prisma.PriceCreateWith
 export const PriceUncheckedCreateWithoutTripInputSchema: z.ZodType<Prisma.PriceUncheckedCreateWithoutTripInput> = z.object({
   id: z.string().optional(),
   created_at: z.coerce.date().optional(),
-  updated_at: z.coerce.date(),
+  updated_at: z.coerce.date().optional(),
   line_items_list: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   line_items_subtotal: z.number().optional().nullable(),
   line_items_tax: z.number().optional().nullable(),
@@ -7522,16 +7508,16 @@ export const FlightCreateWithoutTripInputSchema: z.ZodType<Prisma.FlightCreateWi
   id: z.string().optional(),
   created_at: z.coerce.date().optional(),
   updated_at: z.coerce.date().optional(),
-  airline_code: z.string(),
+  airline_code: z.string().optional().nullable(),
   airline_name: z.string().optional().nullable(),
   flight_number: z.string(),
   is_active: z.boolean().optional(),
   is_landed: z.boolean().optional(),
   is_arrived: z.boolean().optional(),
-  departure_time: z.coerce.date().optional().nullable(),
-  arrival_time: z.coerce.date().optional().nullable(),
-  departure_time_actual: z.coerce.date().optional().nullable(),
-  arrival_time_actual: z.coerce.date().optional().nullable(),
+  departure_time: z.string().optional().nullable(),
+  arrival_time: z.string().optional().nullable(),
+  departure_time_actual: z.string().optional().nullable(),
+  arrival_time_actual: z.string().optional().nullable(),
   airline: z.lazy(() => AirlineCreateNestedOneWithoutFlightInputSchema).optional(),
   airport: z.lazy(() => AirportCreateNestedOneWithoutFlightInputSchema).optional()
 }).strict();
@@ -7540,16 +7526,16 @@ export const FlightUncheckedCreateWithoutTripInputSchema: z.ZodType<Prisma.Fligh
   id: z.string().optional(),
   created_at: z.coerce.date().optional(),
   updated_at: z.coerce.date().optional(),
-  airline_code: z.string(),
+  airline_code: z.string().optional().nullable(),
   airline_name: z.string().optional().nullable(),
   flight_number: z.string(),
   is_active: z.boolean().optional(),
   is_landed: z.boolean().optional(),
   is_arrived: z.boolean().optional(),
-  departure_time: z.coerce.date().optional().nullable(),
-  arrival_time: z.coerce.date().optional().nullable(),
-  departure_time_actual: z.coerce.date().optional().nullable(),
-  arrival_time_actual: z.coerce.date().optional().nullable(),
+  departure_time: z.string().optional().nullable(),
+  arrival_time: z.string().optional().nullable(),
+  departure_time_actual: z.string().optional().nullable(),
+  arrival_time_actual: z.string().optional().nullable(),
   airlineId: z.number().optional().nullable(),
   airportId: z.number().optional().nullable()
 }).strict();
@@ -7711,16 +7697,16 @@ export const FlightUpdateWithoutTripInputSchema: z.ZodType<Prisma.FlightUpdateWi
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  airline_code: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  airline_code: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   airline_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   flight_number: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   is_active: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_landed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_arrived: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  departure_time: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  arrival_time: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  departure_time_actual: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  arrival_time_actual: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  departure_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  arrival_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  departure_time_actual: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  arrival_time_actual: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   airline: z.lazy(() => AirlineUpdateOneWithoutFlightNestedInputSchema).optional(),
   airport: z.lazy(() => AirportUpdateOneWithoutFlightNestedInputSchema).optional()
 }).strict();
@@ -7729,16 +7715,16 @@ export const FlightUncheckedUpdateWithoutTripInputSchema: z.ZodType<Prisma.Fligh
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  airline_code: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  airline_code: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   airline_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   flight_number: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   is_active: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_landed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_arrived: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  departure_time: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  arrival_time: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  departure_time_actual: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  arrival_time_actual: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  departure_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  arrival_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  departure_time_actual: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  arrival_time_actual: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   airlineId: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   airportId: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
@@ -7804,6 +7790,8 @@ export const TripCreateWithoutPriceInputSchema: z.ZodType<Prisma.TripCreateWitho
   duration_value: z.number().optional().nullable(),
   distance_value: z.number().optional().nullable(),
   calculated_distance: z.number().optional().nullable(),
+  carry_on_luggage: z.number().optional(),
+  large_luggage: z.number().optional(),
   service_label: z.string().optional().nullable(),
   vehicle_label: z.string().optional().nullable(),
   affiliate_payout: z.number().optional().nullable(),
@@ -7811,6 +7799,7 @@ export const TripCreateWithoutPriceInputSchema: z.ZodType<Prisma.TripCreateWitho
   is_farmed_out: z.boolean().optional().nullable(),
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable(),
+  price_id: z.string().optional().nullable(),
   quote: z.lazy(() => QuoteCreateNestedOneWithoutTripsInputSchema),
   Payment: z.lazy(() => PaymentCreateNestedOneWithoutTripInputSchema).optional(),
   locations: z.lazy(() => LocationCreateNestedManyWithoutTripInputSchema).optional(),
@@ -7831,6 +7820,8 @@ export const TripUncheckedCreateWithoutPriceInputSchema: z.ZodType<Prisma.TripUn
   distance_value: z.number().optional().nullable(),
   calculated_distance: z.number().optional().nullable(),
   quote_number: z.number(),
+  carry_on_luggage: z.number().optional(),
+  large_luggage: z.number().optional(),
   service_label: z.string().optional().nullable(),
   vehicle_label: z.string().optional().nullable(),
   affiliate_payout: z.number().optional().nullable(),
@@ -7838,6 +7829,7 @@ export const TripUncheckedCreateWithoutPriceInputSchema: z.ZodType<Prisma.TripUn
   is_farmed_out: z.boolean().optional().nullable(),
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable(),
+  price_id: z.string().optional().nullable(),
   Payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutTripInputSchema).optional(),
   locations: z.lazy(() => LocationUncheckedCreateNestedManyWithoutTripInputSchema).optional(),
   flight: z.lazy(() => FlightUncheckedCreateNestedOneWithoutTripInputSchema).optional()
@@ -7846,11 +7838,6 @@ export const TripUncheckedCreateWithoutPriceInputSchema: z.ZodType<Prisma.TripUn
 export const TripCreateOrConnectWithoutPriceInputSchema: z.ZodType<Prisma.TripCreateOrConnectWithoutPriceInput> = z.object({
   where: z.lazy(() => TripWhereUniqueInputSchema),
   create: z.union([ z.lazy(() => TripCreateWithoutPriceInputSchema),z.lazy(() => TripUncheckedCreateWithoutPriceInputSchema) ]),
-}).strict();
-
-export const TripCreateManyPriceInputEnvelopeSchema: z.ZodType<Prisma.TripCreateManyPriceInputEnvelope> = z.object({
-  data: z.union([ z.lazy(() => TripCreateManyPriceInputSchema),z.lazy(() => TripCreateManyPriceInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const QuoteUpsertWithoutPricingInputSchema: z.ZodType<Prisma.QuoteUpsertWithoutPricingInput> = z.object({
@@ -7901,20 +7888,67 @@ export const QuoteUncheckedUpdateWithoutPricingInputSchema: z.ZodType<Prisma.Quo
   payment: z.lazy(() => PaymentUncheckedUpdateManyWithoutQuoteNestedInputSchema).optional()
 }).strict();
 
-export const TripUpsertWithWhereUniqueWithoutPriceInputSchema: z.ZodType<Prisma.TripUpsertWithWhereUniqueWithoutPriceInput> = z.object({
-  where: z.lazy(() => TripWhereUniqueInputSchema),
+export const TripUpsertWithoutPriceInputSchema: z.ZodType<Prisma.TripUpsertWithoutPriceInput> = z.object({
   update: z.union([ z.lazy(() => TripUpdateWithoutPriceInputSchema),z.lazy(() => TripUncheckedUpdateWithoutPriceInputSchema) ]),
   create: z.union([ z.lazy(() => TripCreateWithoutPriceInputSchema),z.lazy(() => TripUncheckedCreateWithoutPriceInputSchema) ]),
 }).strict();
 
-export const TripUpdateWithWhereUniqueWithoutPriceInputSchema: z.ZodType<Prisma.TripUpdateWithWhereUniqueWithoutPriceInput> = z.object({
-  where: z.lazy(() => TripWhereUniqueInputSchema),
-  data: z.union([ z.lazy(() => TripUpdateWithoutPriceInputSchema),z.lazy(() => TripUncheckedUpdateWithoutPriceInputSchema) ]),
+export const TripUpdateWithoutPriceInputSchema: z.ZodType<Prisma.TripUpdateWithoutPriceInput> = z.object({
+  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  pickup_date: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pickup_time: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  formatted_pickup_date: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  formatted_pickup_time: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  distance_text: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  duration_text: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  duration_value: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  distance_value: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  calculated_distance: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  carry_on_luggage: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  large_luggage: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  service_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  vehicle_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  trip_order: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  is_farmed_out: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  price_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  quote: z.lazy(() => QuoteUpdateOneRequiredWithoutTripsNestedInputSchema).optional(),
+  Payment: z.lazy(() => PaymentUpdateOneWithoutTripNestedInputSchema).optional(),
+  locations: z.lazy(() => LocationUpdateManyWithoutTripNestedInputSchema).optional(),
+  flight: z.lazy(() => FlightUpdateOneWithoutTripNestedInputSchema).optional()
 }).strict();
 
-export const TripUpdateManyWithWhereWithoutPriceInputSchema: z.ZodType<Prisma.TripUpdateManyWithWhereWithoutPriceInput> = z.object({
-  where: z.lazy(() => TripScalarWhereInputSchema),
-  data: z.union([ z.lazy(() => TripUpdateManyMutationInputSchema),z.lazy(() => TripUncheckedUpdateManyWithoutTripInputSchema) ]),
+export const TripUncheckedUpdateWithoutPriceInputSchema: z.ZodType<Prisma.TripUncheckedUpdateWithoutPriceInput> = z.object({
+  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  pickup_date: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pickup_time: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  formatted_pickup_date: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  formatted_pickup_time: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  distance_text: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  duration_text: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  duration_value: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  distance_value: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  calculated_distance: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  quote_number: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  carry_on_luggage: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  large_luggage: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  service_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  vehicle_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  trip_order: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  is_farmed_out: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  price_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  Payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutTripNestedInputSchema).optional(),
+  locations: z.lazy(() => LocationUncheckedUpdateManyWithoutTripNestedInputSchema).optional(),
+  flight: z.lazy(() => FlightUncheckedUpdateOneWithoutTripNestedInputSchema).optional()
 }).strict();
 
 export const TripCreateWithoutLocationsInputSchema: z.ZodType<Prisma.TripCreateWithoutLocationsInput> = z.object({
@@ -7930,6 +7964,8 @@ export const TripCreateWithoutLocationsInputSchema: z.ZodType<Prisma.TripCreateW
   duration_value: z.number().optional().nullable(),
   distance_value: z.number().optional().nullable(),
   calculated_distance: z.number().optional().nullable(),
+  carry_on_luggage: z.number().optional(),
+  large_luggage: z.number().optional(),
   service_label: z.string().optional().nullable(),
   vehicle_label: z.string().optional().nullable(),
   affiliate_payout: z.number().optional().nullable(),
@@ -7937,6 +7973,7 @@ export const TripCreateWithoutLocationsInputSchema: z.ZodType<Prisma.TripCreateW
   is_farmed_out: z.boolean().optional().nullable(),
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable(),
+  price_id: z.string().optional().nullable(),
   price: z.lazy(() => PriceCreateNestedOneWithoutTripInputSchema).optional(),
   quote: z.lazy(() => QuoteCreateNestedOneWithoutTripsInputSchema),
   Payment: z.lazy(() => PaymentCreateNestedOneWithoutTripInputSchema).optional(),
@@ -7957,6 +7994,8 @@ export const TripUncheckedCreateWithoutLocationsInputSchema: z.ZodType<Prisma.Tr
   distance_value: z.number().optional().nullable(),
   calculated_distance: z.number().optional().nullable(),
   quote_number: z.number(),
+  carry_on_luggage: z.number().optional(),
+  large_luggage: z.number().optional(),
   service_label: z.string().optional().nullable(),
   vehicle_label: z.string().optional().nullable(),
   affiliate_payout: z.number().optional().nullable(),
@@ -7965,6 +8004,7 @@ export const TripUncheckedCreateWithoutLocationsInputSchema: z.ZodType<Prisma.Tr
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable(),
   price_id: z.string().optional().nullable(),
+  price: z.lazy(() => PriceUncheckedCreateNestedOneWithoutTripInputSchema).optional(),
   Payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutTripInputSchema).optional(),
   flight: z.lazy(() => FlightUncheckedCreateNestedOneWithoutTripInputSchema).optional()
 }).strict();
@@ -7992,6 +8032,8 @@ export const TripUpdateWithoutLocationsInputSchema: z.ZodType<Prisma.TripUpdateW
   duration_value: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   distance_value: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   calculated_distance: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  carry_on_luggage: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  large_luggage: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   service_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   vehicle_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -7999,6 +8041,7 @@ export const TripUpdateWithoutLocationsInputSchema: z.ZodType<Prisma.TripUpdateW
   is_farmed_out: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  price_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   price: z.lazy(() => PriceUpdateOneWithoutTripNestedInputSchema).optional(),
   quote: z.lazy(() => QuoteUpdateOneRequiredWithoutTripsNestedInputSchema).optional(),
   Payment: z.lazy(() => PaymentUpdateOneWithoutTripNestedInputSchema).optional(),
@@ -8019,6 +8062,8 @@ export const TripUncheckedUpdateWithoutLocationsInputSchema: z.ZodType<Prisma.Tr
   distance_value: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   calculated_distance: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   quote_number: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  carry_on_luggage: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  large_luggage: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   service_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   vehicle_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -8027,6 +8072,7 @@ export const TripUncheckedUpdateWithoutLocationsInputSchema: z.ZodType<Prisma.Tr
   is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   price_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  price: z.lazy(() => PriceUncheckedUpdateOneWithoutTripNestedInputSchema).optional(),
   Payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutTripNestedInputSchema).optional(),
   flight: z.lazy(() => FlightUncheckedUpdateOneWithoutTripNestedInputSchema).optional()
 }).strict();
@@ -8044,6 +8090,8 @@ export const TripCreateWithoutFlightInputSchema: z.ZodType<Prisma.TripCreateWith
   duration_value: z.number().optional().nullable(),
   distance_value: z.number().optional().nullable(),
   calculated_distance: z.number().optional().nullable(),
+  carry_on_luggage: z.number().optional(),
+  large_luggage: z.number().optional(),
   service_label: z.string().optional().nullable(),
   vehicle_label: z.string().optional().nullable(),
   affiliate_payout: z.number().optional().nullable(),
@@ -8051,6 +8099,7 @@ export const TripCreateWithoutFlightInputSchema: z.ZodType<Prisma.TripCreateWith
   is_farmed_out: z.boolean().optional().nullable(),
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable(),
+  price_id: z.string().optional().nullable(),
   price: z.lazy(() => PriceCreateNestedOneWithoutTripInputSchema).optional(),
   quote: z.lazy(() => QuoteCreateNestedOneWithoutTripsInputSchema),
   Payment: z.lazy(() => PaymentCreateNestedOneWithoutTripInputSchema).optional(),
@@ -8071,6 +8120,8 @@ export const TripUncheckedCreateWithoutFlightInputSchema: z.ZodType<Prisma.TripU
   distance_value: z.number().optional().nullable(),
   calculated_distance: z.number().optional().nullable(),
   quote_number: z.number(),
+  carry_on_luggage: z.number().optional(),
+  large_luggage: z.number().optional(),
   service_label: z.string().optional().nullable(),
   vehicle_label: z.string().optional().nullable(),
   affiliate_payout: z.number().optional().nullable(),
@@ -8079,6 +8130,7 @@ export const TripUncheckedCreateWithoutFlightInputSchema: z.ZodType<Prisma.TripU
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable(),
   price_id: z.string().optional().nullable(),
+  price: z.lazy(() => PriceUncheckedCreateNestedOneWithoutTripInputSchema).optional(),
   Payment: z.lazy(() => PaymentUncheckedCreateNestedOneWithoutTripInputSchema).optional(),
   locations: z.lazy(() => LocationUncheckedCreateNestedManyWithoutTripInputSchema).optional()
 }).strict();
@@ -8158,6 +8210,8 @@ export const TripUpdateWithoutFlightInputSchema: z.ZodType<Prisma.TripUpdateWith
   duration_value: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   distance_value: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   calculated_distance: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  carry_on_luggage: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  large_luggage: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   service_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   vehicle_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -8165,6 +8219,7 @@ export const TripUpdateWithoutFlightInputSchema: z.ZodType<Prisma.TripUpdateWith
   is_farmed_out: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  price_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   price: z.lazy(() => PriceUpdateOneWithoutTripNestedInputSchema).optional(),
   quote: z.lazy(() => QuoteUpdateOneRequiredWithoutTripsNestedInputSchema).optional(),
   Payment: z.lazy(() => PaymentUpdateOneWithoutTripNestedInputSchema).optional(),
@@ -8185,6 +8240,8 @@ export const TripUncheckedUpdateWithoutFlightInputSchema: z.ZodType<Prisma.TripU
   distance_value: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   calculated_distance: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   quote_number: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  carry_on_luggage: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  large_luggage: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   service_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   vehicle_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -8193,6 +8250,7 @@ export const TripUncheckedUpdateWithoutFlightInputSchema: z.ZodType<Prisma.TripU
   is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   price_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  price: z.lazy(() => PriceUncheckedUpdateOneWithoutTripNestedInputSchema).optional(),
   Payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutTripNestedInputSchema).optional(),
   locations: z.lazy(() => LocationUncheckedUpdateManyWithoutTripNestedInputSchema).optional()
 }).strict();
@@ -8262,6 +8320,8 @@ export const TripCreateWithoutPaymentInputSchema: z.ZodType<Prisma.TripCreateWit
   duration_value: z.number().optional().nullable(),
   distance_value: z.number().optional().nullable(),
   calculated_distance: z.number().optional().nullable(),
+  carry_on_luggage: z.number().optional(),
+  large_luggage: z.number().optional(),
   service_label: z.string().optional().nullable(),
   vehicle_label: z.string().optional().nullable(),
   affiliate_payout: z.number().optional().nullable(),
@@ -8269,6 +8329,7 @@ export const TripCreateWithoutPaymentInputSchema: z.ZodType<Prisma.TripCreateWit
   is_farmed_out: z.boolean().optional().nullable(),
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable(),
+  price_id: z.string().optional().nullable(),
   price: z.lazy(() => PriceCreateNestedOneWithoutTripInputSchema).optional(),
   quote: z.lazy(() => QuoteCreateNestedOneWithoutTripsInputSchema),
   locations: z.lazy(() => LocationCreateNestedManyWithoutTripInputSchema).optional(),
@@ -8289,6 +8350,8 @@ export const TripUncheckedCreateWithoutPaymentInputSchema: z.ZodType<Prisma.Trip
   distance_value: z.number().optional().nullable(),
   calculated_distance: z.number().optional().nullable(),
   quote_number: z.number(),
+  carry_on_luggage: z.number().optional(),
+  large_luggage: z.number().optional(),
   service_label: z.string().optional().nullable(),
   vehicle_label: z.string().optional().nullable(),
   affiliate_payout: z.number().optional().nullable(),
@@ -8297,6 +8360,7 @@ export const TripUncheckedCreateWithoutPaymentInputSchema: z.ZodType<Prisma.Trip
   is_return: z.boolean().optional(),
   notes: z.string().optional().nullable(),
   price_id: z.string().optional().nullable(),
+  price: z.lazy(() => PriceUncheckedCreateNestedOneWithoutTripInputSchema).optional(),
   locations: z.lazy(() => LocationUncheckedCreateNestedManyWithoutTripInputSchema).optional(),
   flight: z.lazy(() => FlightUncheckedCreateNestedOneWithoutTripInputSchema).optional()
 }).strict();
@@ -8372,6 +8436,8 @@ export const TripUpdateWithoutPaymentInputSchema: z.ZodType<Prisma.TripUpdateWit
   duration_value: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   distance_value: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   calculated_distance: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  carry_on_luggage: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  large_luggage: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   service_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   vehicle_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -8379,6 +8445,7 @@ export const TripUpdateWithoutPaymentInputSchema: z.ZodType<Prisma.TripUpdateWit
   is_farmed_out: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  price_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   price: z.lazy(() => PriceUpdateOneWithoutTripNestedInputSchema).optional(),
   quote: z.lazy(() => QuoteUpdateOneRequiredWithoutTripsNestedInputSchema).optional(),
   locations: z.lazy(() => LocationUpdateManyWithoutTripNestedInputSchema).optional(),
@@ -8399,6 +8466,8 @@ export const TripUncheckedUpdateWithoutPaymentInputSchema: z.ZodType<Prisma.Trip
   distance_value: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   calculated_distance: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   quote_number: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  carry_on_luggage: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  large_luggage: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   service_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   vehicle_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -8407,6 +8476,7 @@ export const TripUncheckedUpdateWithoutPaymentInputSchema: z.ZodType<Prisma.Trip
   is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   price_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  price: z.lazy(() => PriceUncheckedUpdateOneWithoutTripNestedInputSchema).optional(),
   locations: z.lazy(() => LocationUncheckedUpdateManyWithoutTripNestedInputSchema).optional(),
   flight: z.lazy(() => FlightUncheckedUpdateOneWithoutTripNestedInputSchema).optional()
 }).strict();
@@ -8734,16 +8804,16 @@ export const FlightCreateWithoutAirlineInputSchema: z.ZodType<Prisma.FlightCreat
   id: z.string().optional(),
   created_at: z.coerce.date().optional(),
   updated_at: z.coerce.date().optional(),
-  airline_code: z.string(),
+  airline_code: z.string().optional().nullable(),
   airline_name: z.string().optional().nullable(),
   flight_number: z.string(),
   is_active: z.boolean().optional(),
   is_landed: z.boolean().optional(),
   is_arrived: z.boolean().optional(),
-  departure_time: z.coerce.date().optional().nullable(),
-  arrival_time: z.coerce.date().optional().nullable(),
-  departure_time_actual: z.coerce.date().optional().nullable(),
-  arrival_time_actual: z.coerce.date().optional().nullable(),
+  departure_time: z.string().optional().nullable(),
+  arrival_time: z.string().optional().nullable(),
+  departure_time_actual: z.string().optional().nullable(),
+  arrival_time_actual: z.string().optional().nullable(),
   trip: z.lazy(() => TripCreateNestedOneWithoutFlightInputSchema).optional(),
   airport: z.lazy(() => AirportCreateNestedOneWithoutFlightInputSchema).optional()
 }).strict();
@@ -8752,16 +8822,16 @@ export const FlightUncheckedCreateWithoutAirlineInputSchema: z.ZodType<Prisma.Fl
   id: z.string().optional(),
   created_at: z.coerce.date().optional(),
   updated_at: z.coerce.date().optional(),
-  airline_code: z.string(),
+  airline_code: z.string().optional().nullable(),
   airline_name: z.string().optional().nullable(),
   flight_number: z.string(),
   is_active: z.boolean().optional(),
   is_landed: z.boolean().optional(),
   is_arrived: z.boolean().optional(),
-  departure_time: z.coerce.date().optional().nullable(),
-  arrival_time: z.coerce.date().optional().nullable(),
-  departure_time_actual: z.coerce.date().optional().nullable(),
-  arrival_time_actual: z.coerce.date().optional().nullable(),
+  departure_time: z.string().optional().nullable(),
+  arrival_time: z.string().optional().nullable(),
+  departure_time_actual: z.string().optional().nullable(),
+  arrival_time_actual: z.string().optional().nullable(),
   trip_id: z.string().optional().nullable(),
   airportId: z.number().optional().nullable()
 }).strict();
@@ -8799,16 +8869,16 @@ export const FlightScalarWhereInputSchema: z.ZodType<Prisma.FlightScalarWhereInp
   id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   created_at: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updated_at: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  airline_code: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  airline_code: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   airline_name: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   flight_number: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   is_active: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   is_landed: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   is_arrived: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
-  departure_time: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
-  arrival_time: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
-  departure_time_actual: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
-  arrival_time_actual: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
+  departure_time: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  arrival_time: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  departure_time_actual: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  arrival_time_actual: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   trip_id: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   airlineId: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
   airportId: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
@@ -8818,16 +8888,16 @@ export const FlightCreateWithoutAirportInputSchema: z.ZodType<Prisma.FlightCreat
   id: z.string().optional(),
   created_at: z.coerce.date().optional(),
   updated_at: z.coerce.date().optional(),
-  airline_code: z.string(),
+  airline_code: z.string().optional().nullable(),
   airline_name: z.string().optional().nullable(),
   flight_number: z.string(),
   is_active: z.boolean().optional(),
   is_landed: z.boolean().optional(),
   is_arrived: z.boolean().optional(),
-  departure_time: z.coerce.date().optional().nullable(),
-  arrival_time: z.coerce.date().optional().nullable(),
-  departure_time_actual: z.coerce.date().optional().nullable(),
-  arrival_time_actual: z.coerce.date().optional().nullable(),
+  departure_time: z.string().optional().nullable(),
+  arrival_time: z.string().optional().nullable(),
+  departure_time_actual: z.string().optional().nullable(),
+  arrival_time_actual: z.string().optional().nullable(),
   trip: z.lazy(() => TripCreateNestedOneWithoutFlightInputSchema).optional(),
   airline: z.lazy(() => AirlineCreateNestedOneWithoutFlightInputSchema).optional()
 }).strict();
@@ -8836,16 +8906,16 @@ export const FlightUncheckedCreateWithoutAirportInputSchema: z.ZodType<Prisma.Fl
   id: z.string().optional(),
   created_at: z.coerce.date().optional(),
   updated_at: z.coerce.date().optional(),
-  airline_code: z.string(),
+  airline_code: z.string().optional().nullable(),
   airline_name: z.string().optional().nullable(),
   flight_number: z.string(),
   is_active: z.boolean().optional(),
   is_landed: z.boolean().optional(),
   is_arrived: z.boolean().optional(),
-  departure_time: z.coerce.date().optional().nullable(),
-  arrival_time: z.coerce.date().optional().nullable(),
-  departure_time_actual: z.coerce.date().optional().nullable(),
-  arrival_time_actual: z.coerce.date().optional().nullable(),
+  departure_time: z.string().optional().nullable(),
+  arrival_time: z.string().optional().nullable(),
+  departure_time_actual: z.string().optional().nullable(),
+  arrival_time_actual: z.string().optional().nullable(),
   trip_id: z.string().optional().nullable(),
   airlineId: z.number().optional().nullable()
 }).strict();
@@ -9026,11 +9096,12 @@ export const QuoteUncheckedUpdateManyWithoutQuotesInputSchema: z.ZodType<Prisma.
 export const PriceCreateManyQuoteInputSchema: z.ZodType<Prisma.PriceCreateManyQuoteInput> = z.object({
   id: z.string().uuid().optional(),
   created_at: z.coerce.date().optional(),
-  updated_at: z.coerce.date(),
+  updated_at: z.coerce.date().optional(),
   line_items_list: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
   line_items_subtotal: z.number().optional().nullable(),
   line_items_tax: z.number().optional().nullable(),
-  line_items_total: z.number().optional().nullable()
+  line_items_total: z.number().optional().nullable(),
+  trip_id: z.string()
 }).strict();
 
 export const TripCreateManyQuoteInputSchema: z.ZodType<Prisma.TripCreateManyQuoteInput> = z.object({
@@ -9046,6 +9117,8 @@ export const TripCreateManyQuoteInputSchema: z.ZodType<Prisma.TripCreateManyQuot
   duration_value: z.number().int().optional().nullable(),
   distance_value: z.number().int().optional().nullable(),
   calculated_distance: z.number().optional().nullable(),
+  carry_on_luggage: z.number().int().optional(),
+  large_luggage: z.number().int().optional(),
   service_label: z.string().optional().nullable(),
   vehicle_label: z.string().optional().nullable(),
   affiliate_payout: z.number().optional().nullable(),
@@ -9077,7 +9150,7 @@ export const PriceUpdateWithoutQuoteInputSchema: z.ZodType<Prisma.PriceUpdateWit
   line_items_subtotal: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   line_items_tax: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   line_items_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  trip: z.lazy(() => TripUpdateManyWithoutPriceNestedInputSchema).optional()
+  trip: z.lazy(() => TripUpdateOneRequiredWithoutPriceNestedInputSchema).optional()
 }).strict();
 
 export const PriceUncheckedUpdateWithoutQuoteInputSchema: z.ZodType<Prisma.PriceUncheckedUpdateWithoutQuoteInput> = z.object({
@@ -9088,7 +9161,7 @@ export const PriceUncheckedUpdateWithoutQuoteInputSchema: z.ZodType<Prisma.Price
   line_items_subtotal: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   line_items_tax: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   line_items_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  trip: z.lazy(() => TripUncheckedUpdateManyWithoutPriceNestedInputSchema).optional()
+  trip_id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const PriceUncheckedUpdateManyWithoutPricingInputSchema: z.ZodType<Prisma.PriceUncheckedUpdateManyWithoutPricingInput> = z.object({
@@ -9099,6 +9172,7 @@ export const PriceUncheckedUpdateManyWithoutPricingInputSchema: z.ZodType<Prisma
   line_items_subtotal: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   line_items_tax: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   line_items_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  trip_id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const LineItemUpdateWithoutQuotesInputSchema: z.ZodType<Prisma.LineItemUpdateWithoutQuotesInput> = z.object({
@@ -9153,6 +9227,8 @@ export const TripUpdateWithoutQuoteInputSchema: z.ZodType<Prisma.TripUpdateWitho
   duration_value: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   distance_value: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   calculated_distance: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  carry_on_luggage: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  large_luggage: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   service_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   vehicle_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -9160,6 +9236,7 @@ export const TripUpdateWithoutQuoteInputSchema: z.ZodType<Prisma.TripUpdateWitho
   is_farmed_out: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  price_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   price: z.lazy(() => PriceUpdateOneWithoutTripNestedInputSchema).optional(),
   Payment: z.lazy(() => PaymentUpdateOneWithoutTripNestedInputSchema).optional(),
   locations: z.lazy(() => LocationUpdateManyWithoutTripNestedInputSchema).optional(),
@@ -9179,6 +9256,8 @@ export const TripUncheckedUpdateWithoutQuoteInputSchema: z.ZodType<Prisma.TripUn
   duration_value: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   distance_value: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   calculated_distance: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  carry_on_luggage: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  large_luggage: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   service_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   vehicle_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -9187,6 +9266,7 @@ export const TripUncheckedUpdateWithoutQuoteInputSchema: z.ZodType<Prisma.TripUn
   is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   price_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  price: z.lazy(() => PriceUncheckedUpdateOneWithoutTripNestedInputSchema).optional(),
   Payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutTripNestedInputSchema).optional(),
   locations: z.lazy(() => LocationUncheckedUpdateManyWithoutTripNestedInputSchema).optional(),
   flight: z.lazy(() => FlightUncheckedUpdateOneWithoutTripNestedInputSchema).optional()
@@ -9205,6 +9285,8 @@ export const TripUncheckedUpdateManyWithoutTripsInputSchema: z.ZodType<Prisma.Tr
   duration_value: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   distance_value: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   calculated_distance: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  carry_on_luggage: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  large_luggage: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   service_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   vehicle_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -9320,104 +9402,6 @@ export const LocationUncheckedUpdateManyWithoutLocationsInputSchema: z.ZodType<P
   is_origin: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_destination: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_waypoint: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-}).strict();
-
-export const TripCreateManyPriceInputSchema: z.ZodType<Prisma.TripCreateManyPriceInput> = z.object({
-  id: z.string().uuid().optional(),
-  created_at: z.coerce.date().optional(),
-  updated_at: z.coerce.date().optional(),
-  pickup_date: z.number().optional().nullable(),
-  pickup_time: z.number().optional().nullable(),
-  formatted_pickup_date: z.string(),
-  formatted_pickup_time: z.string(),
-  distance_text: z.string().optional().nullable(),
-  duration_text: z.string().optional().nullable(),
-  duration_value: z.number().int().optional().nullable(),
-  distance_value: z.number().int().optional().nullable(),
-  calculated_distance: z.number().optional().nullable(),
-  quote_number: z.number().int(),
-  service_label: z.string().optional().nullable(),
-  vehicle_label: z.string().optional().nullable(),
-  affiliate_payout: z.number().optional().nullable(),
-  trip_order: z.number().int().optional().nullable(),
-  is_farmed_out: z.boolean().optional().nullable(),
-  is_return: z.boolean().optional(),
-  notes: z.string().optional().nullable()
-}).strict();
-
-export const TripUpdateWithoutPriceInputSchema: z.ZodType<Prisma.TripUpdateWithoutPriceInput> = z.object({
-  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  pickup_date: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  pickup_time: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  formatted_pickup_date: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  formatted_pickup_time: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  distance_text: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  duration_text: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  duration_value: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  distance_value: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  calculated_distance: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  service_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  vehicle_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  trip_order: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  is_farmed_out: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  quote: z.lazy(() => QuoteUpdateOneRequiredWithoutTripsNestedInputSchema).optional(),
-  Payment: z.lazy(() => PaymentUpdateOneWithoutTripNestedInputSchema).optional(),
-  locations: z.lazy(() => LocationUpdateManyWithoutTripNestedInputSchema).optional(),
-  flight: z.lazy(() => FlightUpdateOneWithoutTripNestedInputSchema).optional()
-}).strict();
-
-export const TripUncheckedUpdateWithoutPriceInputSchema: z.ZodType<Prisma.TripUncheckedUpdateWithoutPriceInput> = z.object({
-  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  pickup_date: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  pickup_time: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  formatted_pickup_date: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  formatted_pickup_time: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  distance_text: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  duration_text: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  duration_value: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  distance_value: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  calculated_distance: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  quote_number: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  service_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  vehicle_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  trip_order: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  is_farmed_out: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  Payment: z.lazy(() => PaymentUncheckedUpdateOneWithoutTripNestedInputSchema).optional(),
-  locations: z.lazy(() => LocationUncheckedUpdateManyWithoutTripNestedInputSchema).optional(),
-  flight: z.lazy(() => FlightUncheckedUpdateOneWithoutTripNestedInputSchema).optional()
-}).strict();
-
-export const TripUncheckedUpdateManyWithoutTripInputSchema: z.ZodType<Prisma.TripUncheckedUpdateManyWithoutTripInput> = z.object({
-  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  pickup_date: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  pickup_time: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  formatted_pickup_date: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  formatted_pickup_time: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  distance_text: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  duration_text: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  duration_value: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  distance_value: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  calculated_distance: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  quote_number: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  service_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  vehicle_label: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  affiliate_payout: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  trip_order: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  is_farmed_out: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  is_return: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const QuoteCreateManyServiceInputSchema: z.ZodType<Prisma.QuoteCreateManyServiceInput> = z.object({
@@ -9650,16 +9634,16 @@ export const FlightCreateManyAirlineInputSchema: z.ZodType<Prisma.FlightCreateMa
   id: z.string().uuid().optional(),
   created_at: z.coerce.date().optional(),
   updated_at: z.coerce.date().optional(),
-  airline_code: z.string(),
+  airline_code: z.string().optional().nullable(),
   airline_name: z.string().optional().nullable(),
   flight_number: z.string(),
   is_active: z.boolean().optional(),
   is_landed: z.boolean().optional(),
   is_arrived: z.boolean().optional(),
-  departure_time: z.coerce.date().optional().nullable(),
-  arrival_time: z.coerce.date().optional().nullable(),
-  departure_time_actual: z.coerce.date().optional().nullable(),
-  arrival_time_actual: z.coerce.date().optional().nullable(),
+  departure_time: z.string().optional().nullable(),
+  arrival_time: z.string().optional().nullable(),
+  departure_time_actual: z.string().optional().nullable(),
+  arrival_time_actual: z.string().optional().nullable(),
   trip_id: z.string().optional().nullable(),
   airportId: z.number().int().optional().nullable()
 }).strict();
@@ -9668,16 +9652,16 @@ export const FlightUpdateWithoutAirlineInputSchema: z.ZodType<Prisma.FlightUpdat
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  airline_code: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  airline_code: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   airline_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   flight_number: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   is_active: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_landed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_arrived: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  departure_time: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  arrival_time: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  departure_time_actual: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  arrival_time_actual: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  departure_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  arrival_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  departure_time_actual: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  arrival_time_actual: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   trip: z.lazy(() => TripUpdateOneWithoutFlightNestedInputSchema).optional(),
   airport: z.lazy(() => AirportUpdateOneWithoutFlightNestedInputSchema).optional()
 }).strict();
@@ -9686,16 +9670,16 @@ export const FlightUncheckedUpdateWithoutAirlineInputSchema: z.ZodType<Prisma.Fl
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  airline_code: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  airline_code: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   airline_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   flight_number: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   is_active: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_landed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_arrived: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  departure_time: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  arrival_time: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  departure_time_actual: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  arrival_time_actual: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  departure_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  arrival_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  departure_time_actual: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  arrival_time_actual: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   trip_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   airportId: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
@@ -9704,16 +9688,16 @@ export const FlightUncheckedUpdateManyWithoutFlightInputSchema: z.ZodType<Prisma
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  airline_code: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  airline_code: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   airline_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   flight_number: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   is_active: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_landed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_arrived: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  departure_time: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  arrival_time: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  departure_time_actual: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  arrival_time_actual: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  departure_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  arrival_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  departure_time_actual: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  arrival_time_actual: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   trip_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   airportId: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
@@ -9722,16 +9706,16 @@ export const FlightCreateManyAirportInputSchema: z.ZodType<Prisma.FlightCreateMa
   id: z.string().uuid().optional(),
   created_at: z.coerce.date().optional(),
   updated_at: z.coerce.date().optional(),
-  airline_code: z.string(),
+  airline_code: z.string().optional().nullable(),
   airline_name: z.string().optional().nullable(),
   flight_number: z.string(),
   is_active: z.boolean().optional(),
   is_landed: z.boolean().optional(),
   is_arrived: z.boolean().optional(),
-  departure_time: z.coerce.date().optional().nullable(),
-  arrival_time: z.coerce.date().optional().nullable(),
-  departure_time_actual: z.coerce.date().optional().nullable(),
-  arrival_time_actual: z.coerce.date().optional().nullable(),
+  departure_time: z.string().optional().nullable(),
+  arrival_time: z.string().optional().nullable(),
+  departure_time_actual: z.string().optional().nullable(),
+  arrival_time_actual: z.string().optional().nullable(),
   trip_id: z.string().optional().nullable(),
   airlineId: z.number().int().optional().nullable()
 }).strict();
@@ -9740,16 +9724,16 @@ export const FlightUpdateWithoutAirportInputSchema: z.ZodType<Prisma.FlightUpdat
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  airline_code: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  airline_code: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   airline_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   flight_number: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   is_active: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_landed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_arrived: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  departure_time: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  arrival_time: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  departure_time_actual: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  arrival_time_actual: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  departure_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  arrival_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  departure_time_actual: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  arrival_time_actual: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   trip: z.lazy(() => TripUpdateOneWithoutFlightNestedInputSchema).optional(),
   airline: z.lazy(() => AirlineUpdateOneWithoutFlightNestedInputSchema).optional()
 }).strict();
@@ -9758,16 +9742,16 @@ export const FlightUncheckedUpdateWithoutAirportInputSchema: z.ZodType<Prisma.Fl
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  airline_code: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  airline_code: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   airline_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   flight_number: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   is_active: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_landed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   is_arrived: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  departure_time: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  arrival_time: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  departure_time_actual: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  arrival_time_actual: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  departure_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  arrival_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  departure_time_actual: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  arrival_time_actual: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   trip_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   airlineId: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();

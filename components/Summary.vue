@@ -1,55 +1,16 @@
 <script setup lang="ts">
 import { generatePdf } from '@/utils/generatePdf'
 import { useTrpc, ref } from '#imports'
-import type { QuoteFormReturn } from '~~/schema/QuoteFormSchema'
-import { useQuery } from '@tanstack/vue-query'
-import { z } from 'zod'
+import { getQuote } from '~/utils/getQuote'
 
-const quoteNumberAsString = useRoute().query.quote_number
-const quoteNumberSchema = z.coerce.number()
-const quoteNumber = quoteNumberSchema.parse(quoteNumberAsString)
-const getQuote = () =>
-  useTrpc().quote.get.query({
-    quote_number: quoteNumber,
-  })
-const { data: quoteData, suspense: quoteSuspense } = await useQuery({
-  queryKey: ['quote'],
-  queryFn: getQuote,
-})
-await quoteSuspense()
-const quote = quoteData.value!.quote
+const quoteNumberAsString = useRoute().query.quote_number as unknown as string
+const quote = await getQuote(quoteNumberAsString)
 
 const { quote_number, user, vehicle, trips, service, combined_line_items } =
-  quote as unknown as QuoteFormReturn
+  quote
 const orderSummary = ref(null)
 
-// const quote = useDefaults().defaultQuote
-// const stripe = useStripe()
-// const messageElement = stripe.messageElement
-// const clientSecret = stripe.clientSecret
-
-// const { $client } = useNuxtApp()
-
-// const route = useRoute()
-// const { quote_number } = route.query
-// clientSecret.value = setup_intent_client_secret as string
-// await stripe.checkSetupIntent()
-// const quoteNumberSchema = z.coerce.number()
-// const quoteNumber = quoteNumberSchema.parse(quote_number)
-
-// const { data } = await useTrpc().quote.get.useQuery({
-// quote_number: quoteNumber,
-// })
-// quote.value = data.value
-
-const sendConfirmation = async () => {
-  const booked = await useTrpc().book.bookOrder.query({
-    quote_number,
-    id: trips[0].id,
-  })
-  return booked
-}
-await sendConfirmation()
+onBeforeRouteLeave(async () => await useTrpc().book.confirmOrder.mutate(quote))
 
 const saveOrderSummary = async () => {
   if (orderSummary.value) {
@@ -81,7 +42,7 @@ const saveOrderSummary = async () => {
             <h1 class="text-xl font-bold">Summary</h1>
             <p>
               Quote Number:
-              <span class="text-red-700"> HPL-{{ quote_number }}</span>
+              <span class="text-red-700"> HPL-{{ quote.quote_number }}</span>
             </p>
           </div>
         </div>
@@ -91,26 +52,26 @@ const saveOrderSummary = async () => {
             <h2 class="text-lg font-bold">Customer Details</h2>
             <p>
               <span class="font-semibold">Name: </span>
-              {{ user.first_name }} {{ user.last_name }}
+              {{ quote.user.first_name }} {{ quote.user.last_name }}
             </p>
             <p>
               <span class="font-semibold">Email: </span>
-              {{ user.email_address }}
+              {{ quote.user.email_address }}
             </p>
             <p>
               <span class="font-semibold">Phone: </span>
-              {{ user.phone_number }}
+              {{ quote.user.phone_number }}
             </p>
           </div>
           <div>
             <h2 class="text-lg font-bold">Vehicle</h2>
             <p>
               <span class="font-semibold">Type: </span>
-              {{ vehicle.label }}
+              {{ quote.vehicle.label }}
             </p>
             <img
               class="mt-2 h-auto w-48"
-              :src="vehicle.vehicle_image!"
+              :src="quote.vehicle.vehicle_image!"
               alt="Vehicle Image"
             />
           </div>
@@ -118,35 +79,35 @@ const saveOrderSummary = async () => {
         <div class="mb-6">
           <h2 class="mb-4 text-lg font-bold">Trip Details</h2>
           <div
-            v-for="(trip, index) in trips"
+            v-for="(trip, index) in quote.trips"
             :key="index"
             class="mb-4 rounded-md border p-4"
           >
             <p>
               <span class="font-semibold">Pick Up: </span>
-              {{ trips[0].location[0].full_name }}
+              {{ quote.trips[0].locations[0].full_name }}
             </p>
             <p>
               <span class="font-semibold">Drop Off: </span>
-              {{ trips[0].location[1].full_name }}
+              {{ quote.trips[0].locations[1].full_name }}
             </p>
             <p>
               <span class="font-semibold">Pickup Date: </span>
-              {{ trips[0].formatted_pickup_date }}
+              {{ quote.trips[0].formatted_pickup_date }}
             </p>
             <p>
               <span class="font-semibold">Pickup Time: </span>
-              {{ trips[0].formatted_pickup_time }}
+              {{ quote.trips[0].formatted_pickup_time }}
             </p>
             <p>
               <span class="font-semibold">Service: </span>
-              {{ service.label }}
+              {{ quote.service.label }}
             </p>
             <div class="mt-4">
               <table class="w-full">
                 <tbody>
                   <tr
-                    v-for="(lineItem, itemIndex) in combined_line_items"
+                    v-for="(lineItem, itemIndex) in quote.combined_line_items"
                     :key="itemIndex"
                     class="border-t border-gray-200"
                   >
@@ -161,7 +122,7 @@ const saveOrderSummary = async () => {
           </div>
         </div>
         <div class="text-right">
-          <p v-for="item in combined_line_items" :key="item.label">
+          <p v-for="item in quote.combined_line_items" :key="item.label">
             <span class="font-semibold">{{ item.label }}:</span>
             <span> ${{ item.total.toFixed(2) }}</span>
           </p>

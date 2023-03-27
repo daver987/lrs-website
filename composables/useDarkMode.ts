@@ -1,16 +1,16 @@
 export const useDarkMode = () => {
-  const colorMode = useColorMode();
+  const colorMode = useColorMode()
 
-  const cookie = useCookie('color-mode');
+  const cookie = useCookie('color-mode')
 
   watchEffect(() => {
-    if (colorMode.preference === 'system') return;
-    cookie.value = colorMode.preference;
-  });
+    if (colorMode.preference === 'system') return
+    cookie.value = colorMode.preference
+  })
 
   return computed(() => {
-    if (colorMode.value === 'system') return cookie.value === 'dark';
+    if (colorMode.value === 'system') return cookie.value === 'dark'
 
-    return colorMode.value === 'dark';
-  });
-};
+    return colorMode.value === 'dark'
+  })
+}

@@ -59,6 +59,7 @@
     "nuxt-lodash": "^2.4.1",
     "nuxt-typed-router": "^3.0.7",
     "nuxt-vitest": "^0.6.9",
+    "openai": "^3.2.1",
     "prettier": "^2.8.7",
     "prettier-plugin-tailwindcss": "^0.2.5",
     "prisma": "^4.11.0",

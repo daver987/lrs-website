@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { useStripeStore } from '~/stores/useStripeStore'
 import { storeToRefs } from 'pinia'
-import type { QuoteFormReturn } from '~~/schema/QuoteFormSchema'
-import { z } from 'zod'
-import { useMutation, useQuery } from '@tanstack/vue-query'
-import { useTrpc } from '~/composables/useTrpc'
+import { getQuote } from '~/utils/getQuote'
 
 definePageMeta({
   name: 'checkout',
@@ -15,23 +12,11 @@ definePageMeta({
 const stripeClient = useStripe()
 const stripeStore = useStripeStore()
 const { client_secret } = storeToRefs(stripeStore)
-const quoteNumberAsString = useRoute().query.quote_number
-const quoteNumberSchema = z.coerce.number()
-const routeQuoteNumber = quoteNumberSchema.parse(quoteNumberAsString)
 const loading = ref(false)
 const tripNotes = ref('')
 
-const getQuote = () =>
-  useTrpc().quote.get.query({
-    quote_number: routeQuoteNumber,
-  })
-
-const { data: quoteData, suspense: quoteSuspense } = await useQuery({
-  queryKey: ['quote'],
-  queryFn: getQuote,
-})
-await quoteSuspense()
-const quote = quoteData.value! as unknown as QuoteFormReturn
+const quoteNumberAsString = useRoute().query.quote_number as unknown as string
+const quote = await getQuote(quoteNumberAsString)
 
 const {
   vehicle,
@@ -68,22 +53,14 @@ onMounted(() => {
   })
 })
 const totalPrice = quote_total
-console.log('Trip Notes', tripNotes)
-
-const bookOrder = async () =>
-  await useTrpc().book.booking.mutate({
-    quote_number: routeQuoteNumber,
-    notes: tripNotes.value,
-    id: trips[0].id,
-  })
-
+const isLoading = ref(false)
 const bookingHandler = async () => {
   try {
+    isLoading.value = true
     const stripeResponse = await stripeClient.submitHandler()
     console.log('Stripe Response', stripeResponse)
     if (typeof stripeResponse?.success === 'number') {
-      const { isLoading } = useMutation(['book'], bookOrder)
-      loading.value = isLoading.value
+      isLoading.value = false
     } else {
       throw new Error('Stripe submission failed.')
     }
@@ -94,11 +71,8 @@ const bookingHandler = async () => {
 }
 
 //todo: add in the creation of draft invoice in stripe
-//todo: add spot for flight information in the checkout flow
-//todo: add trip notes in the checkout flow
 //todo: add region functionality for auto tax calculation for out of town trips
 //todo: make proper cancel page
-//todo: purge codebase of old components and unnecessary packages
 </script>
 
 <template>
@@ -233,29 +207,6 @@ const bookingHandler = async () => {
               <div id="payment-element" ref="paymentElement">
                 <!--Stripe.js injects the Payment Element-->
               </div>
-              <div class="col-span-full">
-                <label
-                  for="notes"
-                  class="block text-sm font-medium leading-6 text-neutral-900"
-                  >Trip Notes</label
-                >
-                <div class="mt-2">
-                  <textarea
-                    v-model="tripNotes"
-                    id="notes"
-                    name="notes"
-                    rows="3"
-                    class="block w-full rounded-md border-0 text-neutral-900 shadow-sm ring-1 ring-inset ring-neutral-300 placeholder:text-neutral-400 focus:ring-2 focus:ring-inset focus:ring-brand-600 sm:py-1.5 sm:text-sm sm:leading-6"
-                  />
-                </div>
-                {{ tripNotes }}
-                <p class="mt-3 text-sm leading-6 text-gray-600">
-                  <strong
-                    >*Please provide any applicable flight details or additional
-                    notes pertaining to your trip.</strong
-                  >
-                </p>
-              </div>
               <div
                 class="mt-2 flex justify-end border-t border-neutral-200 pt-6"
               >
@@ -265,7 +216,9 @@ const bookingHandler = async () => {
                   class="w-full rounded-md border border-transparent bg-brand-600 px-4 py-2 text-sm font-medium uppercase text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-neutral-50"
                 >
                   <div class="spinner hidden" id="spinner"></div>
-                  <span v-if="loading" id="button-text">Processing......</span>
+                  <span v-if="isLoading" id="button-text"
+                    >Processing......</span
+                  >
                   <span v-else id="button-text">Complete Booking</span>
                 </button>
                 <div id="payment-message" class="hidden"></div>
