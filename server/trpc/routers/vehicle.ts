@@ -1,6 +1,11 @@
-import { router, publicProcedure } from '../trpc'
+import { publicProcedure, router } from '../trpc'
+
 export const vehicleRouter = router({
-  get: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.vehicle.findMany()
+  get: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.vehicle.findMany({
+      orderBy: {
+        vehicle_number: 'asc',
+      },
+    })
   }),
 })

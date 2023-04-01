@@ -21,12 +21,12 @@ interface NewQuote {
   return_time: any
   sales_tax_id: number
   selected_hours: any
-  service_id: number
+  service_number: number
   tax_amount: number
   total_price: number
   updated_at: string
   user_id: string
-  vehicle_id: number
+  vehicle_number: number
 }
 
 const lineItemsListTest = [
@@ -77,12 +77,12 @@ const newQuoteTest = {
   sales_tax_id: 1,
   selected_hours: null,
   selected_passengers: 1,
-  service_id: 3,
+  service_number: 3,
   tax_amount: 17.94956436,
   total_price: 181.59231636,
   updated_at: '2023-02-20T20:49:42.485Z',
   user_id: 'b98f28e7-9505-4bb2-8f47-7bc006584828',
-  vehicle_id: 3,
+  vehicle_number: 3,
 }
 
 const quoteData = {
@@ -104,8 +104,8 @@ const quoteData = {
     total_price: 397.4151364,
     session_id: null,
     user_id: 'b98f28e7-9505-4bb2-8f47-7bc006584828',
-    service_id: 3,
-    vehicle_id: 2,
+    service_number: 3,
+    vehicle_number: 2,
     sales_tax_id: 1,
     sales_tax: {
       id: 1,

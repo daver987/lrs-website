@@ -28,10 +28,8 @@ export const createQuoteFromForm = (quotes: {
   quote_subtotal: number
   quote_tax_total: number
   combined_line_items: any
-  pickup_date: number
-  pickup_time: number
-  formatted_pickup_date: string
-  formatted_pickup_time: string
+  pickup_date: string
+  pickup_time: string
   distance_text: string
   duration_text: string
   duration_value: number
@@ -87,8 +85,6 @@ export const createQuoteFromForm = (quotes: {
         {
           pickup_date: quotes.pickup_date,
           pickup_time: quotes.pickup_time,
-          formatted_pickup_date: quotes.formatted_pickup_date,
-          formatted_pickup_time: quotes.formatted_pickup_time,
           distance_text: quotes.distance_text,
           duration_text: quotes.duration_text,
           duration_value: quotes.duration_value,
@@ -160,17 +156,17 @@ export const createQuoteFromForm = (quotes: {
     },
     sales_tax: {
       connect: {
-        id: quotes.salesTaxId,
+        tax_number: quotes.salesTaxId,
       },
     },
     vehicle: {
       connect: {
-        value: quotes.vehicleId,
+        vehicle_number: quotes.vehicleId,
       },
     },
     service: {
       connect: {
-        value: quotes.serviceId,
+        service_number: quotes.serviceId,
       },
     },
     line_items: {

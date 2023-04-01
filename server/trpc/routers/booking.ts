@@ -1,7 +1,6 @@
-import { router, publicProcedure } from '../trpc'
+import { publicProcedure, router } from '../trpc'
 import { z } from 'zod'
 import { createConfirmationEmail } from '~/server/services/sendGridEmail'
-import type { QuoteFormReturn } from '~/schema/QuoteFormSchema'
 import { quoteFormReturnSchema } from '~/schema/QuoteFormSchema'
 
 export const bookingRouter = router({
@@ -14,11 +13,10 @@ export const bookingRouter = router({
         large_luggage: z.number(),
         carry_on_luggage: z.number(),
         flight_number: z.string(),
-        arrival_time: z.number(),
+        arrival_time: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const arrivalTime = new Date(input.arrival_time * 1000).toISOString()
       const data = await ctx.prisma.quote.update({
         where: {
           quote_number: input.quote_number,
@@ -34,7 +32,7 @@ export const bookingRouter = router({
                 flight: {
                   create: {
                     flight_number: input.flight_number,
-                    arrival_time: arrivalTime,
+                    arrival_time: input.arrival_time,
                   },
                 },
               },
@@ -55,7 +53,6 @@ export const bookingRouter = router({
     .mutation(async ({ ctx, input }) => {
       const sendGridKey = useRuntimeConfig().SENDGRID_API_KEY
       console.log('Booking Information', input)
-      const bookingData = input
-      await createConfirmationEmail(bookingData, sendGridKey)
+      await createConfirmationEmail(input, sendGridKey)
     }),
 })

@@ -22,8 +22,8 @@ const QuoteSchemaPicked = QuoteSchema.pick({
 
 const TripSchemaPicked = TripSchema.pick({
   id: true,
-  formatted_pickup_date: true,
-  formatted_pickup_time: true,
+  pickup_date: true,
+  pickup_time: true,
   distance_text: true,
   duration_text: true,
   trip_order: true,
@@ -51,6 +51,7 @@ const UserSchemaPicked = UserSchema.pick({
 })
 
 const VehicleSchemaPicked = VehicleSchema.pick({
+  vehicle_number: true,
   label: true,
   vehicle_image: true,
   max_luggage: true,
@@ -103,19 +104,18 @@ export const QuoteFormSchema = z.object({
     place_id: z.string(),
     types: z.array(z.string()),
   }),
-  pickup_date: z.number().nullable(),
-  pickup_time: z.number().nullable(),
-  return_date: z.number().nullable(),
-  return_time: z.number().nullable(),
+  pickup_date: z.string().nullable(),
+  pickup_time: z.string().nullable(),
+  return_date: z.string().nullable(),
+  return_time: z.string().nullable(),
   selected_hours: z.number().nullable(),
   selected_passengers: z.number().nullable(),
   is_hourly: z.boolean(),
-  vehicle_id: z.number().nullable(),
-  service_id: z.number().nullable(),
-  return_service_id: z.number().nullable(),
+  vehicle_number: z.number().nullable(),
+  service_number: z.number().nullable(),
   is_round_trip: z.boolean(),
-  vehicle: VehicleSchema.array(),
-  service: ServiceSchema.array(),
+  vehicle: VehicleSchema,
+  service: ServiceSchema,
   line_items: LineItemSchema.array(),
   sales_tax: SalesTaxSchema.array(),
 })

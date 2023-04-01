@@ -1,11 +1,7 @@
 import { ref, Ref } from 'vue'
 import { z } from 'zod'
-import {
-  Service,
-  LineItemSchema,
-  Vehicle,
-  SalesTax,
-} from '~/prisma/generated/zod'
+import { LineItemSchema } from '~/prisma/generated/zod'
+import type { Vehicle, Service, LineItem, SalesTax } from '@prisma/client'
 import {
   DirectionsSchema,
   DirectionsApiResponse,
@@ -48,8 +44,8 @@ export async function calculateDistance(
 }
 
 export function usePricingEngine(
-  vehicles: Vehicle[],
-  services: Service[],
+  vehicle: Vehicle,
+  service: Service,
   lineItems: LineItemExtended[],
   salesTaxes: SalesTax[]
 ) {
@@ -82,32 +78,32 @@ export function usePricingEngine(
   }
 
   function updateBaseRate() {
-    const selectedVehicleType = vehicles.find(
-      (v) => v.value === vehicleTypeId.value
-    )
-    const selectedServiceType = services.find(
-      (s) => s.value === serviceTypeId.value
-    )
-    selectedVehicle.value = selectedVehicleType
-    selectedService.value = selectedServiceType
+    // const selectedVehicleType = vehicles.find(
+    //   (v) => v.vehicle_number === vehicleTypeId.value
+    // )
+    // const selectedServiceType = services.find(
+    //   (s) => s.service_number === serviceTypeId.value
+    // )
+    selectedVehicle.value = vehicle
+    selectedService.value = service
 
-    if (!selectedVehicleType || !selectedServiceType) {
+    if (!selectedVehicle.value || !selectedService.value) {
       baseRate.value = 0
       return
     }
 
-    if (selectedServiceType.is_hourly) {
+    if (selectedService.value.is_hourly) {
       baseRate.value = +(
-        selectedHours.value * selectedVehicleType.per_hour
+        selectedHours.value * selectedVehicle.value.per_hour
       ).toFixed(2)
     } else {
       const distanceOverMin = Math.max(
         0,
-        distance.value - selectedVehicleType.min_distance
+        distance.value - selectedVehicle.value.min_distance
       )
       const calculatedBaseRate =
-        selectedVehicleType.min_rate +
-        distanceOverMin * selectedVehicleType.per_km
+        selectedVehicle.value.min_rate +
+        distanceOverMin * selectedVehicle.value.per_km
       baseRate.value = parseFloat(calculatedBaseRate.toFixed(2))
     }
   }
@@ -179,8 +175,8 @@ export function usePricingEngine(
     origin,
     destination,
     routeData,
-    vehicles,
-    services,
+    vehicle,
+    service,
     lineItems,
     lineItemsList,
     salesTaxes,

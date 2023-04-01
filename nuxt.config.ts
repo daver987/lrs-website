@@ -113,15 +113,15 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
-    TWILIO_STRIPE_RESPONSE_SERVICE: process.env.TWILIO_STRIPE_RESPONSE_SERVICE,
+    TWILIO_MESSAGING_SID: process.env.TWILIO_MESSAGING_SID,
+    TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID,
+    TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
     ZAPIER_WEBHOOK_SECRET: process.env.ZAPIER_WEBHOOK_SECRET,
     ZAPIER_WEBHOOK_EMAIL: process.env.ZAPIER_WEBHOOK_EMAIL,
     AIRCALL_API_TOKEN: process.env.AIRCALL_API_TOKEN,
     AIRCALL_API_ID: process.env.AIRCALL_API_ID,
-    TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID,
-    TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN,
     SENDGRID_API_KEY: process.env.SENDGRID_API_KEY,
     public: {
       STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
@@ -136,7 +136,7 @@ export default defineNuxtConfig({
     },
   },
   typescript: {
-    shim: true,
+    shim: false,
   },
   vite: {
     resolve: {

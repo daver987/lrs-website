@@ -2,7 +2,6 @@ import { publicProcedure, router } from '../trpc'
 import { z } from 'zod'
 import { formatAddress } from '~/utils/formatAddress'
 import { usePricingEngine } from '~/composables/usePricingEngine'
-import { useFormatDateTime } from '~/composables/useFormatDateTime'
 import { sendQuoteEmail } from '~/server/services/sendGridEmail'
 import { createAircallContact } from '~/server/services/createAircallContact'
 import { sendTwilioSms } from '~/server/services/sendTwilioSms'
@@ -170,8 +169,8 @@ export const quoteRouter = router({
         email_address,
         phone_number,
         is_round_trip,
-        service_id,
-        vehicle_id,
+        service_number,
+        vehicle_number,
         selected_hours,
         selected_passengers,
         service,
@@ -199,8 +198,8 @@ export const quoteRouter = router({
       pricingEngine.origin.value = origin.place_id
       pricingEngine.destination.value = destination.place_id
       pricingEngine.selectedHours.value = selected_hours!
-      pricingEngine.serviceTypeId.value = service_id!
-      pricingEngine.vehicleTypeId.value = vehicle_id!
+      pricingEngine.serviceTypeId.value = service_number!
+      pricingEngine.vehicleTypeId.value = vehicle_number!
 
       await pricingEngine.updateDistance()
       pricingEngine.updateBaseRate()
@@ -214,13 +213,6 @@ export const quoteRouter = router({
       const taxTotal = parseFloat(pricingEngine.taxTotal.value.toFixed(2))
       const totalAmount = parseFloat(pricingEngine.totalAmount.value.toFixed(2))
 
-      const formattedPickupDate = useFormatDateTime().formattedDate(
-        pickup_date!
-      )
-      const formattedPickupTime = useFormatDateTime().formattedTime(
-        pickup_time!
-      )
-
       const quotes = {
         selected_hours: selected_hours!,
         selected_passengers: selected_passengers!,
@@ -229,10 +221,8 @@ export const quoteRouter = router({
         quote_subtotal: subTotal,
         quote_tax_total: taxTotal,
         combined_line_items: calculatedLineItemsTotals!,
-        pickup_date: pickup_date!,
-        pickup_time: pickup_time!,
-        formatted_pickup_date: formattedPickupDate,
-        formatted_pickup_time: formattedPickupTime,
+        pickup_date: pickup_date as string,
+        pickup_time: pickup_time as string,
         distance_text: routeData?.routes[0].legs[0].distance.text!,
         duration_text: routeData?.routes[0].legs[0].duration.text!,
         duration_value: routeData?.routes[0].legs[0].distance.value!,
@@ -271,9 +261,9 @@ export const quoteRouter = router({
         utm_source: conversion.utm_source,
         utm_campaign: conversion.utm_campaign,
         gclid: conversion.gclid,
-        salesTaxId: pricingEngine.salesTaxes[0].id,
-        vehicleId: pricingEngine.selectedVehicle.value?.value,
-        serviceId: pricingEngine.selectedService.value?.value,
+        salesTaxId: pricingEngine.salesTaxes[0].tax_number,
+        vehicleId: pricingEngine.selectedVehicle.value?.vehicle_number,
+        serviceId: pricingEngine.selectedService.value?.service_number,
         lineItemsIdOne: pricingEngine.lineItems[0].id,
         lineItemsIdTwo: pricingEngine.lineItems[1].id,
         lineItemsIdThree: pricingEngine.lineItems[2].id,
@@ -306,6 +296,7 @@ export const quoteRouter = router({
         },
       })
       const quote = quoteFormReturnSchema.parse(data)
+      type QuoteReturn = typeof quote
       shortLink.value = createShortLink(quote.quote_number)
       await Promise.all([
         sendQuoteEmail(quote, sendGridKey, shortLink.value),

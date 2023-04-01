@@ -3,10 +3,7 @@ import { readRawBody, defineEventHandler } from 'h3'
 import { stripe } from '../services/stripeInit'
 import { z } from 'zod'
 
-interface StripeResponse {
-  [key: string]: any
-}
-const messagingSID = useRuntimeConfig().TWILIO_STRIPE_RESPONSE_SERVICE
+const messagingSID = useRuntimeConfig().TWILIO_MESSAGING_SID
 const stripeWebhookSecret = useRuntimeConfig().STRIPE_WEBHOOK_SECRET
 export default defineEventHandler(async (event) => {
   const client = event.context.twilioClient

@@ -8,7 +8,6 @@ import type { QuoteForm } from '~/schema/QuoteFormSchema'
 import { useGtm } from '@gtm-support/vue-gtm'
 import { useDataStore } from '~/stores/useDataStore'
 import { useUserStore } from '~/stores/useUserStore'
-import { useQuoteStore } from '~/stores/useQuoteStore'
 import { storeToRefs } from 'pinia'
 import {
   buildPassengerOptions,
@@ -18,11 +17,9 @@ import {
 import { useQuery } from '@tanstack/vue-query'
 import { ChatCompletionResponseMessage } from 'openai'
 import { format } from 'date-fns'
-import superjson from 'superjson'
 
 const formRef = ref<FormInst | null>(null)
 const loading = ref(false)
-const quoteStore = useQuoteStore()
 const userStore = useUserStore()
 const dataStore = useDataStore()
 const { user_id } = storeToRefs(userStore)
@@ -65,7 +62,7 @@ dataStore.setSalesTaxes(salesTax.value!)
 const hoursOptions = buildHoursOptions()
 const maxPassengers = computed<number>(() => {
   const vehicleType = vehicle.value!.find(
-    (type: Option) => type.value === formValue.value.vehicle_id
+    (type: Option) => type.value === formValue.value.vehicle_number
   )
   formValue.value.selected_passengers = null
   return vehicleType ? vehicleType.max_passengers : 3
@@ -109,12 +106,14 @@ const formValue: Ref<QuoteForm> = ref({
   selected_hours: null,
   selected_passengers: null,
   is_hourly: computed(() => {
-    return formValue.value.service_id === 4
+    return formValue.value.service_number === 4
   }),
-  vehicle_id: null,
-  service_id: null,
-  return_service_id: computed(() => {
-    return formValue.value.service_id === 2 ? 3 : formValue.value.service_id
+  vehicle_number: null,
+  service_number: null,
+  return_service_number: computed(() => {
+    return formValue.value.service_number === 2
+      ? 3
+      : formValue.value.service_number
   }),
   is_round_trip: false,
   vehicle: vehicleTypes.value,
@@ -185,13 +184,13 @@ const rules: FormRules = {
     trigger: ['blur', 'change'],
     required: true,
   },
-  vehicle_id: {
+  vehicle_number: {
     type: 'number',
     trigger: ['blur', 'change'],
     required: true,
     message: 'Please select a vehicle type',
   },
-  service_id: {
+  service_number: {
     type: 'number',
     message: 'Please select a service type',
     trigger: ['blur', 'change'],
@@ -259,11 +258,11 @@ const handleFormValueChange: WatchCallback<
   const toAirportServiceType = 2
 
   if (isOriginAirport) {
-    formValue.value.service_id = fromAirportServiceType
+    formValue.value.service_number = fromAirportServiceType
   } else if (isDestinationAirport) {
-    formValue.value.service_id = toAirportServiceType
+    formValue.value.service_number = toAirportServiceType
   } else {
-    formValue.value.service_id = null
+    formValue.value.service_number = null
   }
 }
 
@@ -355,7 +354,7 @@ function disablePreviousDate(ts: number) {
               <div
                 class="border-1 rounded border border-white bg-black p-4 sm:mx-auto sm:w-full sm:max-w-2xl sm:overflow-hidden sm:rounded-lg"
               >
-                <h2 class="mt-2 mb-4 text-center text-3xl uppercase text-white">
+                <h2 class="mb-4 mt-2 text-center text-3xl uppercase text-white">
                   Instant Quote
                 </h2>
                 <n-form ref="formRef" :label-width="80" :model="formValueTwo">
@@ -461,10 +460,10 @@ function disablePreviousDate(ts: number) {
                       span="0:2 500:1"
                       :show-label="false"
                       label="Service Type"
-                      path="service_id"
+                      path="service_number"
                     >
                       <n-select
-                        v-model:value="formValue.service_id"
+                        v-model:value="formValue.service_number"
                         :options="service"
                         placeholder="Select Service Type..."
                       />
@@ -474,10 +473,10 @@ function disablePreviousDate(ts: number) {
                       span="0:2 500:1"
                       :show-label="false"
                       label="Vehicle Type"
-                      path="vehicle_id"
+                      path="vehicle_number"
                     >
                       <n-select
-                        v-model:value="formValue.vehicle_id"
+                        v-model:value="formValue.vehicle_number"
                         :options="vehicle"
                         placeholder="Select Vehicle Type..."
                       />

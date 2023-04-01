@@ -10,7 +10,7 @@ import { ref } from 'vue'
 import { Vehicle, Service } from '~/prisma/generated/zod'
 import { test, expect } from 'vitest'
 
-// Mock data
+// Mock services
 
 const lineItems: LineItemPartial[] = [
   {
@@ -45,14 +45,14 @@ const lineItems: LineItemPartial[] = [
 const salesTaxes: SalesTaxPartial[] = [
   {
     amount: 13,
-    id: 1,
+    tax_number: 1,
     is_active: true,
     region: 'Ontario',
     tax_name: 'HST',
   },
   {
     amount: 14.975,
-    id: 2,
+    tax_number: 2,
     is_active: false,
     region: 'Quebec',
     tax_name: 'QST',
@@ -99,13 +99,25 @@ test('Check that we pick the correct vehicle and service object', () => {
   const selectedHoursTwo = 4
 
   const vehicles: VehiclePartial[] = [
-    { value: 1, per_hour: 80, min_distance: 25, min_rate: 80, per_km: 1.7 },
-    { value: 2, per_hour: 105, min_distance: 25, min_rate: 105, per_km: 2 },
+    {
+      vehicle_number: 1,
+      per_hour: 80,
+      min_distance: 25,
+      min_rate: 80,
+      per_km: 1.7,
+    },
+    {
+      vehicle_number: 2,
+      per_hour: 105,
+      min_distance: 25,
+      min_rate: 105,
+      per_km: 2,
+    },
   ]
 
   const services: ServicePartial[] = [
-    { value: 1, label: 'Distance Service', is_hourly: false },
-    { value: 4, label: 'Hourly Service', is_hourly: true },
+    { service_number: 1, label: 'Distance Service', is_hourly: false },
+    { service_number: 4, label: 'Hourly Service', is_hourly: true },
   ]
   //@ts-ignore
   const vehicleType = findObjectByValue(vehicles, vehicleTypeId)

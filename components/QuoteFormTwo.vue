@@ -1,76 +1,46 @@
 <script setup lang="ts">
-import { FormInst, useMessage, FormRules, useLoadingBar } from 'naive-ui'
-import { WatchCallback } from 'vue'
-import { ref, computed } from '#imports'
+import {
+  FormInst,
+  useMessage,
+  FormRules,
+  useLoadingBar,
+  SelectOption,
+} from 'naive-ui'
 import { VueTelInput } from 'vue-tel-input'
+import { LineItem, SalesTax, Service, Vehicle } from '.prisma/client'
 import { Place, placeSchema } from '~/schema/placeSchema'
-import type { QuoteForm } from '~/schema/QuoteFormSchema'
 import { useGtm } from '@gtm-support/vue-gtm'
-import { useDataStore } from '~/stores/useDataStore'
 import { useUserStore } from '~/stores/useUserStore'
 import { useQuoteStore } from '~/stores/useQuoteStore'
+import { ref } from '#imports'
+import type { Ref, ShallowReactive, WatchCallback } from 'vue'
 import { storeToRefs } from 'pinia'
-import {
-  buildPassengerOptions,
-  buildHoursOptions,
-  Option,
-} from '~/composables/useBuildOptions'
-import { useQuery } from '@tanstack/vue-query'
+import { FormValue } from '~/utils/formUtils'
+import { isAirport } from '~/utils/formUtils/isAirport'
+import { format } from 'date-fns'
 
 const formRef = ref<FormInst | null>(null)
-const loading = ref(false)
+const loading: Ref<boolean> = ref(false)
 const quoteStore = useQuoteStore()
 const userStore = useUserStore()
-const dataStore = useDataStore()
 const { user_id } = storeToRefs(userStore)
-const { vehicleTypes, serviceTypes, lineItems, salesTaxes } =
-  storeToRefs(dataStore)
 const message = useMessage()
 const loadingBar = useLoadingBar()
 
-const serviceTypeFetch = () => useTrpc().service.get.query()
-const vehicleTypeFetch = () => useTrpc().vehicle.get.query()
-const lineItemsFetch = () => useTrpc().lineItem.get.query()
-const salesTaxesFetch = () => useTrpc().salesTax.get.query()
+const service = (await getService()) as Ref<Service[]>
+const vehicle = (await getVehicle()) as Ref<Vehicle[]>
+const lineItem = (await getLineItems()) as Ref<LineItem[]>
+const salesTax = (await getSalesTax()) as Ref<SalesTax[]>
 
-const { data: service, suspense: serviceSuspense } = await useQuery({
-  queryKey: ['services'],
-  queryFn: serviceTypeFetch,
+const vehicleOptions = computed(() => {
+  return computeVehicleOptions(vehicle.value)
 })
-await serviceSuspense()
-const { data: vehicle, suspense: vehicleSuspense } = await useQuery({
-  queryKey: ['vehicles'],
-  queryFn: vehicleTypeFetch,
+const serviceOptions = computed(() => {
+  return computeServiceOptions(service.value)
 })
-await vehicleSuspense()
-const { data: lineItem, suspense: salesTaxSuspense } = await useQuery({
-  queryKey: ['lineItems'],
-  queryFn: lineItemsFetch,
+const hoursOptions = computed(() => {
+  return computeHoursOptions()
 })
-await salesTaxSuspense()
-const { data: salesTax, suspense: lineItemsSuspense } = await useQuery({
-  queryKey: ['taxes'],
-  queryFn: salesTaxesFetch,
-})
-await lineItemsSuspense()
-
-dataStore.setVehicleTypes(vehicle.value!)
-dataStore.setServiceTypes(service.value!)
-dataStore.setLineItems(lineItem.value!)
-dataStore.setSalesTaxes(salesTax.value!)
-
-const hoursOptions = buildHoursOptions()
-const maxPassengers = computed<number>(() => {
-  const vehicleType = vehicle.value!.find(
-    (type: Option) => type.value === formValue.value.vehicle_id
-  )
-  formValue.value.selected_passengers = null
-  return vehicleType ? vehicleType.max_passengers : 3
-})
-
-const passengerOptions = computed(() =>
-  buildPassengerOptions(maxPassengers.value)
-)
 
 const route = useRoute()
 const gtmValues = route.query
@@ -88,7 +58,7 @@ function triggerEvent() {
   })
 }
 
-const formValue: Ref<QuoteForm> = ref({
+const formValue: ShallowReactive<FormValue> = reactive({
   id: user_id.value,
   first_name: '',
   last_name: '',
@@ -105,30 +75,74 @@ const formValue: Ref<QuoteForm> = ref({
   return_time: null,
   selected_hours: null,
   selected_passengers: null,
-  is_hourly: computed(() => {
-    return formValue.value.service_id === 4
-  }),
-  vehicle_id: null,
-  service_id: null,
-  return_service_id: computed(() => {
-    return formValue.value.service_id === 2 ? 3 : formValue.value.service_id
-  }),
+  vehicle_number: null,
+  service_number: null,
   is_round_trip: false,
-  vehicle: vehicleTypes.value,
-  service: serviceTypes.value,
-  line_items: lineItems.value,
-  sales_tax: salesTaxes.value,
+  is_hourly: false,
+  vehicle: null,
+  service: null,
+  line_items: lineItem,
+  sales_tax: salesTax,
 })
+formValue.service = computed(() => {
+  return getServiceTypeByNumber(service.value, formValue.service_number!)
+})
+formValue.vehicle = computed(() => {
+  return getVehicleTypeByNumber(vehicle.value, formValue.vehicle_number!)
+})
+
+formValue.is_hourly = computeIsHourly(formValue.service?.value!)
+
+// watch(
+//   () => [formValue.pickup_date, formValue.pickup_time],
+//   () => {
+//     if (formValue.pickup_date && formValue.pickup_time) {
+//       formValue.pickup_date_time = `${format(
+//         new Date(formValue.pickup_date),
+//         'PPP'
+//       )} ${format(new Date(formValue.pickup_time), 'p')}`
+//     }
+//   }
+// )
+const maxPassengers = computed(() => {
+  const vehicleType = vehicleOptions.value.find(
+    (type: SelectOption) => type.value === formValue.vehicle_number
+  )
+  return vehicleType ? vehicleType.max_passengers : 3
+})
+
+const passengerOptions = computed(() => {
+  return computePassengerOptions(maxPassengers?.value as number)
+})
+
+watch(
+  () => formValue.vehicle_number,
+  () => {
+    formValue.selected_passengers = null
+  }
+)
+const disabled = ref(true)
+watch(
+  () => formValue.service_number,
+  () => {
+    if (formValue.service_number === 4) {
+      disabled.value = false
+      formValue.service_number = null
+    } else {
+      disabled.value = true
+    }
+  }
+)
 
 const rules: FormRules = {
   pickup_date: {
-    type: 'number',
+    type: 'string',
     required: true,
     message: 'Please enter a pickup date',
     trigger: ['blur'],
   },
   pickup_time: {
-    type: 'number',
+    type: 'string',
     required: true,
     message: 'Please enter a pickup time',
     trigger: 'blur',
@@ -157,13 +171,13 @@ const rules: FormRules = {
     trigger: ['blur', 'change'],
     required: true,
   },
-  vehicle_id: {
+  vehicle_number: {
     type: 'number',
     trigger: ['blur', 'change'],
     required: true,
     message: 'Please select a vehicle type',
   },
-  service_id: {
+  service_number: {
     type: 'number',
     message: 'Please select a service type',
     trigger: ['blur', 'change'],
@@ -207,19 +221,8 @@ const dropdownOptions = ref({
   showDialCodeInList: true,
 })
 
-function isAirport(place?: Place): boolean {
-  if (!place) {
-    return false
-  }
-  try {
-    return placeSchema.parse(place).types.includes('airport')
-  } catch (error) {
-    return false
-  }
-}
-
 const handleFormValueChange: WatchCallback<
-  [typeof formValue.value.origin, typeof formValue.value.destination]
+  [typeof formValue.origin, typeof formValue.destination]
 > = ([origin, destination]) => {
   if (!origin || !destination) {
     return
@@ -231,16 +234,16 @@ const handleFormValueChange: WatchCallback<
   const toAirportServiceType = 2
 
   if (isOriginAirport) {
-    formValue.value.service_id = fromAirportServiceType
+    formValue.service_number = fromAirportServiceType
   } else if (isDestinationAirport) {
-    formValue.value.service_id = toAirportServiceType
+    formValue.service_number = toAirportServiceType
   } else {
-    formValue.value.service_id = null
+    formValue.service_number = null
   }
 }
 
 watch(
-  [() => formValue.value.origin, () => formValue.value.destination],
+  [() => formValue.origin, () => formValue.destination],
   handleFormValueChange,
   {
     deep: true,
@@ -248,18 +251,18 @@ watch(
 )
 
 const handleChangeOrigin = (evt: Place) => {
-  formValue.value.origin = evt
+  formValue.origin = evt
 }
 
 const handleChangeDestination = (evt: Place) => {
-  formValue.value.destination = evt
+  formValue.destination = evt
 }
 
 async function onSubmit() {
   try {
     loading.value = true
-    console.log('Quote Values Before Submission', formValue.value)
-    const quoteData = await useTrpc().quote.postQuote.mutate(formValue.value)
+    console.log('Quote Values Before Submission', formValue)
+    const quoteData = await useTrpc().quote.postQuote.mutate(formValue)
     console.log('Returned Quote:', quoteData)
     quoteStore.setQuote(quoteData)
     setTimeout(async () => {
@@ -307,7 +310,7 @@ function disablePreviousDate(ts: number) {
         <div
           class="border-1 rounded border border-white bg-black p-4 sm:mx-auto sm:w-full sm:max-w-2xl sm:overflow-hidden sm:rounded-lg"
         >
-          <h2 class="mt-2 mb-4 text-center text-3xl uppercase text-white">
+          <h2 class="mb-4 mt-2 text-center text-3xl uppercase text-white">
             Instant Quote
           </h2>
           <n-form
@@ -349,11 +352,12 @@ function disablePreviousDate(ts: number) {
                 label="Pickup Date"
               >
                 <n-date-picker
-                  v-model:value="formValue.pickup_date"
+                  v-model:formatted-value="formValue.pickup_date"
                   type="date"
                   placeholder="Select Pickup Date..."
                   :default-value="Date.now()"
                   :is-date-disabled="disablePreviousDate"
+                  value-format="PPP"
                 />
               </n-form-item-gi>
               <n-form-item-gi
@@ -364,10 +368,11 @@ function disablePreviousDate(ts: number) {
               >
                 <n-space justify="space-between">
                   <n-time-picker
-                    v-model:value="formValue.pickup_time"
+                    v-model:formatted-value="formValue.pickup_time"
                     format="h:mm a"
                     :clearable="true"
                     use12-hours
+                    value-format="p"
                   />
                   <n-switch
                     v-if="false"
@@ -415,11 +420,11 @@ function disablePreviousDate(ts: number) {
                 span="0:2 500:1"
                 :show-label="false"
                 label="Service Type"
-                path="service_id"
+                path="service_number"
               >
                 <n-select
-                  v-model:value="formValue.service_id"
-                  :options="service"
+                  v-model:value="formValue.service_number"
+                  :options="serviceOptions"
                   placeholder="Select Service Type..."
                 />
               </n-form-item-gi>
@@ -428,11 +433,11 @@ function disablePreviousDate(ts: number) {
                 span="0:2 500:1"
                 :show-label="false"
                 label="Vehicle Type"
-                path="vehicle_id"
+                path="vehicle_number"
               >
                 <n-select
-                  v-model:value="formValue.vehicle_id"
-                  :options="vehicle"
+                  v-model:value="formValue.vehicle_number"
+                  :options="vehicleOptions"
                   placeholder="Select Vehicle Type..."
                 />
               </n-form-item-gi>
@@ -445,7 +450,7 @@ function disablePreviousDate(ts: number) {
               >
                 <n-select
                   v-model:value="formValue.selected_passengers"
-                  :options="passengerOptions"
+                  :options="passengerOptions as SelectOption[]"
                   placeholder="Select Passengers..."
                 />
               </n-form-item-gi>
@@ -460,7 +465,7 @@ function disablePreviousDate(ts: number) {
                   v-model:value="formValue.selected_hours"
                   :options="hoursOptions"
                   placeholder="For Hourly Service..."
-                  :disabled="!formValue.is_hourly"
+                  :disabled="disabled"
                 />
               </n-form-item-gi>
 
@@ -532,5 +537,6 @@ function disablePreviousDate(ts: number) {
         </div>
       </n-grid-item>
     </n-grid>
+    <pre class="text-white">{{ formValue }}</pre>
   </n-config-provider>
 </template>

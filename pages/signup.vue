@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useQuoteStore } from '~/stores/useQuoteStore'
 import { storeToRefs } from 'pinia'
+import { ref } from '#imports'
 import {
   Dialog,
   DialogPanel,
@@ -54,7 +55,7 @@ const src =
             <DialogPanel
               class="relative flex w-full max-w-xs flex-col overflow-y-auto bg-white pb-12 shadow-xl"
             >
-              <div class="flex px-4 pt-5 pb-2">
+              <div class="flex px-4 pb-2 pt-5">
                 <button
                   type="button"
                   class="-m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400"

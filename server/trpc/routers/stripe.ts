@@ -6,7 +6,7 @@ import {
 } from '~/server/services/stripe'
 
 export const stripeRouter = router({
-  createCheckout: publicProcedure
+  createSetup: publicProcedure
     .input(
       z.object({
         userId: z.string(),

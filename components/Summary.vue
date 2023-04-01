@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { generatePdf } from '@/utils/generatePdf'
 import { useTrpc, ref } from '#imports'
-import { getQuote } from '~/utils/getQuote'
 
 const quoteNumberAsString = useRoute().query.quote_number as unknown as string
 const quote = await getQuote(quoteNumberAsString)
@@ -24,7 +23,6 @@ const saveOrderSummary = async () => {
     <div class="flex w-full justify-between py-1 uppercase">
       <NuxtLink
         to="/"
-        type="button"
         class="flex items-center px-3 py-2 text-sm text-brand shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
       >
         <svg

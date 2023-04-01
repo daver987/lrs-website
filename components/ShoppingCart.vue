@@ -4,7 +4,6 @@ import { storeToRefs } from 'pinia'
 import { useStripeStore } from '~/stores/useStripeStore'
 import { format } from 'date-fns'
 import { ref } from '#imports'
-import { getQuote } from '~/utils/getQuote'
 
 const quoteNumberAsString = useRoute().query.quote_number as unknown as string
 const quote = await getQuote(quoteNumberAsString)
@@ -19,7 +18,7 @@ const createBooking = async () => {
   checkoutLoading.value = true
   try {
     const { setupIntent, stripeId, statusCode } =
-      await useTrpc().stripe.createCheckout.mutate({
+      await useTrpc().stripe.createSetup.mutate({
         userId: quote!.user.id,
         quoteNumber: quoteNumber.value,
       })
@@ -43,7 +42,7 @@ const createBooking = async () => {
 </script>
 
 <template>
-  <main class="mx-auto max-w-2xl px-4 pt-6 pb-8 sm:px-6 lg:max-w-7xl lg:px-8">
+  <main class="mx-auto max-w-2xl px-4 pb-8 pt-6 sm:px-6 lg:max-w-7xl lg:px-8">
     <h1
       class="text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100"
     >
@@ -88,7 +87,7 @@ const createBooking = async () => {
         <h2 id="cart-heading" class="sr-only">Items in your shopping cart</h2>
         <ul
           role="list"
-          class="divide-y divide-neutral-200 border-t border-b border-neutral-200"
+          class="divide-y divide-neutral-200 border-b border-t border-neutral-200"
         >
           <li
             v-for="(trip, index) in quote!.trips"
@@ -146,13 +145,13 @@ const createBooking = async () => {
                     </p>
                   </div>
                   <p class="text-neutral-500 dark:text-neutral-100">
-                    <span class="text-brand-400">Base Rate: </span>$
+                    <span class="text-brand-400">Total Price: </span>$
                     {{ quote!.quote_total }}
                   </p>
                 </div>
 
                 <div class="mt-4 sm:mt-0 sm:pr-9">
-                  <div v-if="false" class="absolute top-0 right-0">
+                  <div v-if="false" class="absolute right-0 top-0">
                     <button
                       type="button"
                       class="-m-2 inline-flex p-2 text-neutral-400 hover:text-neutral-500"

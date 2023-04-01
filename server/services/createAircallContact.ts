@@ -37,7 +37,7 @@ export const createAircallContact = async (
     const response = await fetch('https://api.aircall.io/v1/contacts', options)
     if (response.ok) {
       const data = await response.json()
-      console.log('This is the returned aircall data', data)
+      console.log('This is the returned aircall services', data)
     } else {
       console.error(`Error creating Aircall contact: ${response.statusText}`)
     }

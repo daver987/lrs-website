@@ -2,26 +2,36 @@
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
 import { storeToRefs } from 'pinia'
 import { useCartStore } from '~/stores/useCartStore'
-import { useQuoteStore } from '~/stores/useQuoteStore'
+import type { QuoteFormReturn } from '~~/schema/QuoteFormSchema'
+import { ref } from '#imports'
 
 const cartStore = useCartStore()
 const { addedToCart } = storeToRefs(cartStore)
 
-const quoteStore = useQuoteStore()
-const { quote: quoteFromStore } = storeToRefs(quoteStore)
+const quoteNumberAsString = useRoute().query.quote_number as unknown as string
+const quote = ref<null | QuoteFormReturn>(null)
+const vehicleImage = ref('')
+const vehicleLabel = ref('')
+const serviceLabel = ref('')
 
-const quote = computed(() => (addedToCart.value ? quoteFromStore.value : null))
+onBeforeMount(async () => {
+  if (quoteNumberAsString) {
+    const fetchedQuote = await getQuote(quoteNumberAsString)
+    quote.value = fetchedQuote
+    vehicleImage.value = fetchedQuote.vehicle.vehicle_image!
+    vehicleLabel.value = fetchedQuote.vehicle.label
+    serviceLabel.value = fetchedQuote.service.label
+  }
+})
 
 const itemsInCart = computed(() =>
   addedToCart.value ? (quote.value!.is_round_trip ? 2 : 1) : 0
 )
 
-const trips = computed(() => (quote.value ? quote.value.trips : []))
-const serviceLabel = computed(() =>
-  quote.value && quote.value.trips.length > 0
-    ? quote.value.trips[0].service_label
-    : ''
-)
+// const trips = computed(() => (quote ? quote.trips : []))
+// const serviceLabel = computed(() =>
+//   quote && quote.trips.length > 0 ? quote.service.label : ''
+// )
 </script>
 
 <template>
@@ -52,7 +62,7 @@ const serviceLabel = computed(() =>
       leave-to-class="opacity-0"
     >
       <PopoverPanel
-        class="absolute inset-x-0 top-16 z-10 mt-px bg-white pb-6 shadow-lg sm:px-2 lg:top-full lg:left-auto lg:right-0 lg:mt-3 lg:-mr-1.5 lg:w-80 lg:rounded-lg lg:ring-1 lg:ring-black lg:ring-opacity-5"
+        class="absolute inset-x-0 top-16 z-10 mt-px bg-white pb-6 shadow-lg sm:px-2 lg:left-auto lg:right-0 lg:top-full lg:-mr-1.5 lg:mt-3 lg:w-80 lg:rounded-lg lg:ring-1 lg:ring-black lg:ring-opacity-5"
       >
         <h2 class="sr-only">Shopping Cart</h2>
 
@@ -73,7 +83,7 @@ const serviceLabel = computed(() =>
             </li>
             <li v-else class="flex items-center py-6">
               <NuxtPicture
-                :src="quoteFromStore.vehicle.vehicle_image"
+                :src="vehicleImage"
                 alt="Vehicle"
                 :img-attrs="{
                   class:
@@ -82,10 +92,10 @@ const serviceLabel = computed(() =>
               />
               <div class="ml-4 flex-auto">
                 <h3 class="font-brand-body font-medium text-neutral-900">
-                  <NuxtLink to="#">{{ quoteFromStore.vehicle.label }}</NuxtLink>
+                  <NuxtLink to="#">{{ vehicleLabel }}</NuxtLink>
                 </h3>
                 <p class="font-brand-body text-neutral-500">
-                  {{ quoteFromStore.service.label }}
+                  {{ serviceLabel }}
                 </p>
               </div>
             </li>

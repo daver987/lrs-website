@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, useTrpc } from '#imports'
 import { buildLuggageOptions } from '~/composables/useBuildOptions'
-import { getQuote } from '~/utils/getQuote'
 import { FormRules } from 'naive-ui'
 import { Ref } from 'vue'
-
 
 const quoteNumberAsString = useRoute().query.quote_number as unknown as string
 const quote = await getQuote(quoteNumberAsString)
@@ -17,7 +15,7 @@ interface AirportInfoForm {
   carry_on_luggage: number | null
   large_luggage: number | null
   flight_number: string | null
-  arrival_time: number | null
+  arrival_time: string | null
   trip_notes: string | null
   quote_number: number
 }
@@ -34,7 +32,7 @@ const formValue: Ref<AirportInfoForm> = ref({
 
 const rules = {
   arrival_time: {
-    type: 'number',
+    type: 'string',
     required: false,
     message: 'Please enter a pickup date',
     trigger: ['blur'],
@@ -144,9 +142,6 @@ const submitHandler = async () => {
                 </n-collapse-item>
               </n-collapse>
             </n-card>
-            <n-card>
-              <pre>{{ formValue }}</pre>
-            </n-card>
           </n-space>
         </n-grid-item>
 
@@ -188,11 +183,12 @@ const submitHandler = async () => {
                         >
                           <n-time-picker
                             id="arrival-time"
-                            v-model:value="formValue.arrival_time"
+                            v-model:formatted-value="formValue.arrival_time"
                             required
                             format="h:mm a"
                             :clearable="true"
                             use12-hours
+                            value-format="p"
                             placeholder="Enter Arrival Time.."
                           />
                         </n-form-item-gi>

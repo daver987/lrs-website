@@ -53,7 +53,10 @@ const loader = new Loader({
 })
 
 const initAutocomplete = async () => {
-  const inputEl = document.getElementById(props.name) as HTMLInputElement
+  await nextTick()
+  const inputEl = document.getElementById(
+    <string>props.name
+  ) as HTMLInputElement
 
   await loader.load().then(() => {
     autocomplete.value = new google.maps.places.Autocomplete(
@@ -66,6 +69,13 @@ const initAutocomplete = async () => {
     )
     autocomplete.value.addListener('place_changed', getAutocompleteComponents)
   })
+}
+
+const cleanupAutocomplete = () => {
+  if (autocomplete.value) {
+    google.maps.event.clearInstanceListeners(autocomplete.value)
+    autocomplete.value = null
+  }
 }
 
 const getAutocompleteComponents = () => {
@@ -86,6 +96,10 @@ const emit = defineEmits(['change'])
 onMounted(async () => {
   await initAutocomplete()
 })
+
+onBeforeUnmount(() => {
+  cleanupAutocomplete()
+})
 const modelValue = ref<string | undefined>('')
 </script>
 
@@ -97,5 +111,6 @@ const modelValue = ref<string | undefined>('')
     }"
     :placeholder="placeholder"
     v-model:value="modelValue"
+    @ready="initAutocomplete"
   />
 </template>

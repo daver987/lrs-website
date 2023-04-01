@@ -37,14 +37,10 @@ export async function sendQuoteEmail(
               ? quote.service.label
               : '',
             is_round_trip: quote.is_round_trip,
-            pickup_date: quote.trips[0].formatted_pickup_date,
-            pickup_time: quote.trips[0].formatted_pickup_time,
-            return_date: quote.is_round_trip
-              ? quote.trips[1].formatted_pickup_date
-              : '',
-            return_time: quote.is_round_trip
-              ? quote.trips[1].formatted_pickup_time
-              : '',
+            pickup_date: quote.trips[0].pickup_date,
+            pickup_time: quote.trips[0].pickup_time,
+            return_date: quote.is_round_trip ? quote.trips[1].pickup_date : '',
+            return_time: quote.is_round_trip ? quote.trips[1].pickup_time : '',
             quote_number: quote.quote_number.toString(),
             origin_full_name: quote.trips[0].locations[0].full_name,
             destination_full_name: quote.trips[0].locations[1].full_name,
@@ -104,8 +100,8 @@ export async function createConfirmationEmail(
     console.log('Trip Duration:', tripDuration)
 
     const startTime = parseDateTime(
-      quote.trips[0].formatted_pickup_date!,
-      quote.trips[0].formatted_pickup_time!
+      quote.trips[0].pickup_date!,
+      quote.trips[0].pickup_time!
     )
     console.log('Combine Date and Time', startTime)
 
@@ -147,14 +143,10 @@ export async function createConfirmationEmail(
               ? quote.service.label
               : '',
             is_round_trip: quote.is_round_trip,
-            pickup_date: quote.trips[0].formatted_pickup_date,
-            pickup_time: quote.trips[0].formatted_pickup_time,
-            return_date: quote.is_round_trip
-              ? quote.trips[1].formatted_pickup_date
-              : '',
-            return_time: quote.is_round_trip
-              ? quote.trips[1].formatted_pickup_time
-              : '',
+            pickup_date: quote.trips[0].pickup_date,
+            pickup_time: quote.trips[0].pickup_time,
+            return_date: quote.is_round_trip ? quote.trips[1].pickup_date : '',
+            return_time: quote.is_round_trip ? quote.trips[1].pickup_time : '',
             quote_number: quote.quote_number.toString(),
             origin_full_name: quote.trips[0].locations[0].full_name,
             destination_full_name: quote.trips[0].locations[1].full_name,

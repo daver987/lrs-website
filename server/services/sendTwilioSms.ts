@@ -1,5 +1,5 @@
 import { Twilio } from 'twilio'
-const messagingSid = useRuntimeConfig().TWILIO_STRIPE_RESPONSE_SERVICE
+const messagingSid = useRuntimeConfig().TWILIO_MESSAGING_SID
 export async function sendTwilioSms(
   twilioClient: Twilio,
   firstName: string,

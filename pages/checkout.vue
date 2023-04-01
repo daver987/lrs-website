@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useStripeStore } from '~/stores/useStripeStore'
 import { storeToRefs } from 'pinia'
-import { getQuote } from '~/utils/getQuote'
+import { ref } from '#imports'
 
 definePageMeta({
   name: 'checkout',
@@ -13,7 +13,6 @@ const stripeClient = useStripe()
 const stripeStore = useStripeStore()
 const { client_secret } = storeToRefs(stripeStore)
 const loading = ref(false)
-const tripNotes = ref('')
 
 const quoteNumberAsString = useRoute().query.quote_number as unknown as string
 const quote = await getQuote(quoteNumberAsString)
@@ -79,16 +78,16 @@ const bookingHandler = async () => {
   <div class="h-screen w-full">
     <!-- Background color split screen for large screens -->
     <div
-      class="fixed top-0 left-0 hidden h-full w-1/2 bg-white lg:block"
+      class="fixed left-0 top-0 hidden h-full w-1/2 bg-white lg:block"
       aria-hidden="true"
     />
     <div
-      class="fixed top-0 right-0 hidden h-full w-1/2 bg-brand-900 lg:block"
+      class="fixed right-0 top-0 hidden h-full w-1/2 bg-brand-900 lg:block"
       aria-hidden="true"
     />
 
     <header
-      class="relative mx-auto max-w-7xl bg-brand-900 py-6 lg:grid lg:grid-cols-2 lg:gap-x-16 lg:bg-transparent lg:px-8 lg:pt-16 lg:pb-10"
+      class="relative mx-auto max-w-7xl bg-brand-900 py-6 lg:grid lg:grid-cols-2 lg:gap-x-16 lg:bg-transparent lg:px-8 lg:pb-10 lg:pt-16"
     >
       <div class="mx-auto flex max-w-2xl px-4 lg:w-full lg:max-w-lg lg:px-0">
         <NuxtLink to="/" class="self-center">
@@ -112,7 +111,7 @@ const bookingHandler = async () => {
 
       <section
         aria-labelledby="summary-heading"
-        class="bg-brand-900 pt-2 pb-12 text-brand-300 md:px-10 lg:col-start-2 lg:row-start-1 lg:mx-auto lg:w-full lg:max-w-lg lg:bg-transparent lg:px-0 lg:pt-0 lg:pb-24"
+        class="bg-brand-900 pb-12 pt-2 text-brand-300 md:px-10 lg:col-start-2 lg:row-start-1 lg:mx-auto lg:w-full lg:max-w-lg lg:bg-transparent lg:px-0 lg:pb-24 lg:pt-0"
       >
         <div class="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0">
           <h2 id="summary-heading" class="sr-only">Order summary</h2>
@@ -180,7 +179,7 @@ const bookingHandler = async () => {
 
       <section
         aria-labelledby="payment-and-shipping-heading"
-        class="py-8 lg:col-start-1 lg:row-start-1 lg:mx-auto lg:w-full lg:max-w-lg lg:pt-0 lg:pb-24"
+        class="py-8 lg:col-start-1 lg:row-start-1 lg:mx-auto lg:w-full lg:max-w-lg lg:pb-24 lg:pt-0"
       >
         <h2 id="payment-and-shipping-heading" class="sr-only">
           Payment and shipping details

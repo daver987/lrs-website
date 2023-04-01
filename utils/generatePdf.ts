@@ -1,11 +1,14 @@
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
+import { UnwrapRef } from 'vue'
+import { HTMLElement } from 'happy-dom'
 
 const generatePdf = async (
-  element: HTMLElement,
+  element: UnwrapRef<null>,
   fileName = 'order_summary.pdf'
 ) => {
   // Convert the HTML element to a canvas
+  //@ts-ignore
   const canvas = await html2canvas(element, { scale: 2 })
 
   // Initialize a new jsPDF instance
@@ -22,7 +25,7 @@ const generatePdf = async (
 
   // Add the image to the PDF
   const dataURL = canvas.toDataURL('image/jpeg', 1.0)
-  pdf.addImage(dataURL, 'JPEG', 10, 10, imgWidth, imgHeight)
+  await pdf.addImage(dataURL, 'JPEG', 10, 10, imgWidth, imgHeight)
 
   // Save the PDF
   pdf.save(fileName)
