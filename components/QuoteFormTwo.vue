@@ -8,7 +8,7 @@ import {
 } from 'naive-ui'
 import { VueTelInput } from 'vue-tel-input'
 import { LineItem, SalesTax, Service, Vehicle } from '.prisma/client'
-import { Place, placeSchema } from '~/schema/placeSchema'
+import { Place } from '~/schema/placeSchema'
 import { useGtm } from '@gtm-support/vue-gtm'
 import { useUserStore } from '~/stores/useUserStore'
 import { useQuoteStore } from '~/stores/useQuoteStore'
@@ -17,7 +17,6 @@ import type { Ref, ShallowReactive, WatchCallback } from 'vue'
 import { storeToRefs } from 'pinia'
 import { FormValue } from '~/utils/formUtils'
 import { isAirport } from '~/utils/formUtils/isAirport'
-import { format } from 'date-fns'
 
 const formRef = ref<FormInst | null>(null)
 const loading: Ref<boolean> = ref(false)
@@ -93,17 +92,6 @@ formValue.vehicle = computed(() => {
 
 formValue.is_hourly = computeIsHourly(formValue.service?.value!)
 
-// watch(
-//   () => [formValue.pickup_date, formValue.pickup_time],
-//   () => {
-//     if (formValue.pickup_date && formValue.pickup_time) {
-//       formValue.pickup_date_time = `${format(
-//         new Date(formValue.pickup_date),
-//         'PPP'
-//       )} ${format(new Date(formValue.pickup_time), 'p')}`
-//     }
-//   }
-// )
 const maxPassengers = computed(() => {
   const vehicleType = vehicleOptions.value.find(
     (type: SelectOption) => type.value === formValue.vehicle_number
@@ -537,6 +525,5 @@ function disablePreviousDate(ts: number) {
         </div>
       </n-grid-item>
     </n-grid>
-    <pre class="text-white">{{ formValue }}</pre>
   </n-config-provider>
 </template>
