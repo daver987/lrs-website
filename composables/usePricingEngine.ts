@@ -78,12 +78,8 @@ export function usePricingEngine(
   }
 
   function updateBaseRate() {
-    // const selectedVehicleType = vehicles.find(
-    //   (v) => v.vehicle_number === vehicleTypeId.value
-    // )
-    // const selectedServiceType = services.find(
-    //   (s) => s.service_number === serviceTypeId.value
-    // )
+    const selectedVehicleType = vehicle.vehicle_number
+    const selectedServiceType = service.service_number
     selectedVehicle.value = vehicle
     selectedService.value = service
 
@@ -140,6 +136,7 @@ export function usePricingEngine(
         return { label: item.label, tax: tax, total: amount }
       }),
     ]
+    console.log('Line Items Details', lineItemDetails)
     detailedLineItems.value = lineItemDetails
     subTotal.value = lineItemDetails.reduce((acc, item) => acc + item.total, 0)
     taxTotal.value = lineItemDetails.reduce((acc, item) => acc + item.tax, 0)

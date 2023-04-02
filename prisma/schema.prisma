@@ -272,6 +272,7 @@ model Service {
 
 model LineItem {
   id            String   @id @unique @default(uuid())
+  item_number   Int      @unique @default(autoincrement())
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
   label         String

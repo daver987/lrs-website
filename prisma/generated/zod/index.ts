@@ -66,7 +66,7 @@ export const JsonNullValueFilterSchema = z.enum(['DbNull','JsonNull','AnyNull',]
 
 export const JsonNullValueInputSchema = z.enum(['JsonNull',]);
 
-export const LineItemScalarFieldEnumSchema = z.enum(['id','created_at','updated_at','label','description','is_percentage','is_taxable','is_active','amount','applies_to']);
+export const LineItemScalarFieldEnumSchema = z.enum(['id','item_number','created_at','updated_at','label','description','is_percentage','is_taxable','is_active','amount','applies_to']);
 
 export const LineItemToQuoteScalarFieldEnumSchema = z.enum(['A','B']);
 
@@ -491,6 +491,7 @@ export type ServicePartial = z.infer<typeof ServicePartialSchema>
 
 export const LineItemSchema = z.object({
   id: z.string().uuid(),
+  item_number: z.number().int(),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date(),
   label: z.string(),
@@ -1104,6 +1105,7 @@ export const LineItemCountOutputTypeSelectSchema: z.ZodType<Prisma.LineItemCount
 
 export const LineItemSelectSchema: z.ZodType<Prisma.LineItemSelect> = z.object({
   id: z.boolean().optional(),
+  item_number: z.boolean().optional(),
   created_at: z.boolean().optional(),
   updated_at: z.boolean().optional(),
   label: z.boolean().optional(),
@@ -2352,6 +2354,7 @@ export const LineItemWhereInputSchema: z.ZodType<Prisma.LineItemWhereInput> = z.
   OR: z.lazy(() => LineItemWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => LineItemWhereInputSchema),z.lazy(() => LineItemWhereInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  item_number: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   created_at: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updated_at: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   label: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
@@ -2366,6 +2369,7 @@ export const LineItemWhereInputSchema: z.ZodType<Prisma.LineItemWhereInput> = z.
 
 export const LineItemOrderByWithRelationInputSchema: z.ZodType<Prisma.LineItemOrderByWithRelationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
+  item_number: z.lazy(() => SortOrderSchema).optional(),
   created_at: z.lazy(() => SortOrderSchema).optional(),
   updated_at: z.lazy(() => SortOrderSchema).optional(),
   label: z.lazy(() => SortOrderSchema).optional(),
@@ -2379,11 +2383,13 @@ export const LineItemOrderByWithRelationInputSchema: z.ZodType<Prisma.LineItemOr
 }).strict();
 
 export const LineItemWhereUniqueInputSchema: z.ZodType<Prisma.LineItemWhereUniqueInput> = z.object({
-  id: z.string().uuid().optional()
+  id: z.string().uuid().optional(),
+  item_number: z.number().int().optional()
 }).strict();
 
 export const LineItemOrderByWithAggregationInputSchema: z.ZodType<Prisma.LineItemOrderByWithAggregationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
+  item_number: z.lazy(() => SortOrderSchema).optional(),
   created_at: z.lazy(() => SortOrderSchema).optional(),
   updated_at: z.lazy(() => SortOrderSchema).optional(),
   label: z.lazy(() => SortOrderSchema).optional(),
@@ -2405,6 +2411,7 @@ export const LineItemScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Line
   OR: z.lazy(() => LineItemScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => LineItemScalarWhereWithAggregatesInputSchema),z.lazy(() => LineItemScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  item_number: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
   created_at: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
   updated_at: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
   label: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
@@ -4171,6 +4178,7 @@ export const ServiceUncheckedUpdateManyInputSchema: z.ZodType<Prisma.ServiceUnch
 
 export const LineItemCreateInputSchema: z.ZodType<Prisma.LineItemCreateInput> = z.object({
   id: z.string().uuid().optional(),
+  item_number: z.number().int().optional(),
   created_at: z.coerce.date().optional(),
   updated_at: z.coerce.date().optional(),
   label: z.string(),
@@ -4185,6 +4193,7 @@ export const LineItemCreateInputSchema: z.ZodType<Prisma.LineItemCreateInput> = 
 
 export const LineItemUncheckedCreateInputSchema: z.ZodType<Prisma.LineItemUncheckedCreateInput> = z.object({
   id: z.string().uuid().optional(),
+  item_number: z.number().int().optional(),
   created_at: z.coerce.date().optional(),
   updated_at: z.coerce.date().optional(),
   label: z.string(),
@@ -4213,6 +4222,7 @@ export const LineItemUpdateInputSchema: z.ZodType<Prisma.LineItemUpdateInput> = 
 
 export const LineItemUncheckedUpdateInputSchema: z.ZodType<Prisma.LineItemUncheckedUpdateInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  item_number: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   label: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
@@ -4227,6 +4237,7 @@ export const LineItemUncheckedUpdateInputSchema: z.ZodType<Prisma.LineItemUnchec
 
 export const LineItemCreateManyInputSchema: z.ZodType<Prisma.LineItemCreateManyInput> = z.object({
   id: z.string().uuid().optional(),
+  item_number: z.number().int().optional(),
   created_at: z.coerce.date().optional(),
   updated_at: z.coerce.date().optional(),
   label: z.string(),
@@ -4253,6 +4264,7 @@ export const LineItemUpdateManyMutationInputSchema: z.ZodType<Prisma.LineItemUpd
 
 export const LineItemUncheckedUpdateManyInputSchema: z.ZodType<Prisma.LineItemUncheckedUpdateManyInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  item_number: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   label: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
@@ -5824,6 +5836,7 @@ export const ServiceSumOrderByAggregateInputSchema: z.ZodType<Prisma.ServiceSumO
 
 export const LineItemCountOrderByAggregateInputSchema: z.ZodType<Prisma.LineItemCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
+  item_number: z.lazy(() => SortOrderSchema).optional(),
   created_at: z.lazy(() => SortOrderSchema).optional(),
   updated_at: z.lazy(() => SortOrderSchema).optional(),
   label: z.lazy(() => SortOrderSchema).optional(),
@@ -5836,11 +5849,13 @@ export const LineItemCountOrderByAggregateInputSchema: z.ZodType<Prisma.LineItem
 }).strict();
 
 export const LineItemAvgOrderByAggregateInputSchema: z.ZodType<Prisma.LineItemAvgOrderByAggregateInput> = z.object({
+  item_number: z.lazy(() => SortOrderSchema).optional(),
   amount: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const LineItemMaxOrderByAggregateInputSchema: z.ZodType<Prisma.LineItemMaxOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
+  item_number: z.lazy(() => SortOrderSchema).optional(),
   created_at: z.lazy(() => SortOrderSchema).optional(),
   updated_at: z.lazy(() => SortOrderSchema).optional(),
   label: z.lazy(() => SortOrderSchema).optional(),
@@ -5854,6 +5869,7 @@ export const LineItemMaxOrderByAggregateInputSchema: z.ZodType<Prisma.LineItemMa
 
 export const LineItemMinOrderByAggregateInputSchema: z.ZodType<Prisma.LineItemMinOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
+  item_number: z.lazy(() => SortOrderSchema).optional(),
   created_at: z.lazy(() => SortOrderSchema).optional(),
   updated_at: z.lazy(() => SortOrderSchema).optional(),
   label: z.lazy(() => SortOrderSchema).optional(),
@@ -5866,6 +5882,7 @@ export const LineItemMinOrderByAggregateInputSchema: z.ZodType<Prisma.LineItemMi
 }).strict();
 
 export const LineItemSumOrderByAggregateInputSchema: z.ZodType<Prisma.LineItemSumOrderByAggregateInput> = z.object({
+  item_number: z.lazy(() => SortOrderSchema).optional(),
   amount: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
@@ -8108,6 +8125,7 @@ export const SalesTaxCreateOrConnectWithoutQuotesInputSchema: z.ZodType<Prisma.S
 
 export const LineItemCreateWithoutQuotesInputSchema: z.ZodType<Prisma.LineItemCreateWithoutQuotesInput> = z.object({
   id: z.string().optional(),
+  item_number: z.number().optional(),
   created_at: z.coerce.date().optional(),
   updated_at: z.coerce.date().optional(),
   label: z.string(),
@@ -8121,6 +8139,7 @@ export const LineItemCreateWithoutQuotesInputSchema: z.ZodType<Prisma.LineItemCr
 
 export const LineItemUncheckedCreateWithoutQuotesInputSchema: z.ZodType<Prisma.LineItemUncheckedCreateWithoutQuotesInput> = z.object({
   id: z.string().optional(),
+  item_number: z.number().optional(),
   created_at: z.coerce.date().optional(),
   updated_at: z.coerce.date().optional(),
   label: z.string(),
@@ -8430,6 +8449,7 @@ export const LineItemScalarWhereInputSchema: z.ZodType<Prisma.LineItemScalarWher
   OR: z.lazy(() => LineItemScalarWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => LineItemScalarWhereInputSchema),z.lazy(() => LineItemScalarWhereInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  item_number: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   created_at: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updated_at: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   label: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
@@ -10474,6 +10494,7 @@ export const LineItemUpdateWithoutQuotesInputSchema: z.ZodType<Prisma.LineItemUp
 
 export const LineItemUncheckedUpdateWithoutQuotesInputSchema: z.ZodType<Prisma.LineItemUncheckedUpdateWithoutQuotesInput> = z.object({
   id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  item_number: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   label: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
@@ -10487,6 +10508,7 @@ export const LineItemUncheckedUpdateWithoutQuotesInputSchema: z.ZodType<Prisma.L
 
 export const LineItemUncheckedUpdateManyWithoutLine_itemsInputSchema: z.ZodType<Prisma.LineItemUncheckedUpdateManyWithoutLine_itemsInput> = z.object({
   id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  item_number: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   label: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
