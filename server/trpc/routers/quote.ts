@@ -120,6 +120,7 @@ export const quoteRouter = router({
               label: true,
               vehicle_image: true,
               max_luggage: true,
+              vehicle_number: true,
             },
           },
           service: {
@@ -296,7 +297,6 @@ export const quoteRouter = router({
         },
       })
       const quote = quoteFormReturnSchema.parse(data)
-      type QuoteReturn = typeof quote
       shortLink.value = createShortLink(quote.quote_number)
       await Promise.all([
         sendQuoteEmail(quote, sendGridKey, shortLink.value),

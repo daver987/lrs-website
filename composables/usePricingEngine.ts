@@ -64,8 +64,8 @@ export function usePricingEngine(
   const detailedLineItemsWithTotals: Ref<LineItemsPartial[] | null> = ref(null)
   const selectedVehicle = ref<Vehicle>()
   const selectedService = ref<Service>()
-  const taxesList = ref(salesTaxes)
-  const lineItemsList = ref(lineItems)
+  const selectedTaxesList = ref<SalesTax[]>()
+  const selectedLineItemsList = ref<LineItem[]>()
 
   // methods
   async function updateDistance() {
@@ -78,8 +78,6 @@ export function usePricingEngine(
   }
 
   function updateBaseRate() {
-    const selectedVehicleType = vehicle.vehicle_number
-    const selectedServiceType = service.service_number
     selectedVehicle.value = vehicle
     selectedService.value = service
 
@@ -105,13 +103,15 @@ export function usePricingEngine(
   }
 
   function updateLineItemsTotal(originRef: string) {
-    const filteredLineItems = lineItemsList.value
+    selectedLineItemsList.value = lineItems
+    selectedTaxesList.value = salesTaxes
+    const filteredLineItems: LineItemExtended[] = selectedLineItemsList.value
       .filter((item) => {
         return item.applies_to === null || item.applies_to === originRef
       })
       .filter((item) => item.is_active)
 
-    const matchingTaxes = taxesList.value.filter((tax) => tax.is_active)
+    const matchingTaxes = selectedTaxesList.value.filter((tax) => tax.is_active)
     const taxRate = matchingTaxes.length > 0 ? matchingTaxes[0].amount : 0
     const baseRateAmount = parseFloat(baseRate.value.toFixed(2))
     const baseRateTax = parseFloat(
@@ -165,7 +165,8 @@ export function usePricingEngine(
     selectedHours.value = 0
     distance.value = 0
     baseRate.value = 0
-    lineItemsList.value = []
+    selectedLineItemsList.value = []
+    selectedTaxesList.value = []
   }
 
   return {
@@ -175,7 +176,7 @@ export function usePricingEngine(
     vehicle,
     service,
     lineItems,
-    lineItemsList,
+    selectedLineItemsList,
     salesTaxes,
     vehicleTypeId,
     serviceTypeId,
@@ -187,6 +188,7 @@ export function usePricingEngine(
     subTotal,
     taxTotal,
     totalAmount,
+    selectedTaxesList,
     detailedLineItems,
     detailedLineItemsWithTotals,
     updateDistance,

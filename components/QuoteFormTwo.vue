@@ -12,8 +12,8 @@ import { Place } from '~/schema/placeSchema'
 import { useGtm } from '@gtm-support/vue-gtm'
 import { useUserStore } from '~/stores/useUserStore'
 import { useQuoteStore } from '~/stores/useQuoteStore'
-import { ref } from '#imports'
-import type { Ref, ShallowReactive, WatchCallback } from 'vue'
+import { ref, useTrpc } from '#imports'
+import type { Ref, WatchCallback } from 'vue'
 import { storeToRefs } from 'pinia'
 import { FormValue } from '~/utils/formUtils'
 import { isAirport } from '~/utils/formUtils/isAirport'
@@ -25,6 +25,35 @@ const userStore = useUserStore()
 const { user_id } = storeToRefs(userStore)
 const message = useMessage()
 const loadingBar = useLoadingBar()
+
+// const getSalesTax = () => useTrpc().salesTax.get.query()
+// const getLineItems = () => useTrpc().lineItem.get.query()
+// const getVehicle = () => useTrpc().vehicle.get.query()
+// const getService = () => useTrpc().service.get.query()
+//
+// const { data: salesTax, suspense: salesTaxSuspense } = useQuery({
+//   queryKey: ['salesTax'],
+//   queryFn: getSalesTax,
+// })
+// await salesTaxSuspense()
+//
+// const { data: lineItems, suspense: lineItemSuspense } = useQuery({
+//   queryKey: ['lineItem'],
+//   queryFn: getLineItems,
+// })
+// await lineItemSuspense()
+//
+// const { data: vehicle, suspense: vehicleSuspense } = useQuery({
+//   queryKey: ['vehicle'],
+//   queryFn: getVehicle,
+// })
+// await vehicleSuspense()
+//
+// const { data: service, suspense: serviceSuspense } = useQuery({
+//   queryKey: ['service'],
+//   queryFn: getService,
+// })
+// await serviceSuspense()
 
 const service = (await getService()) as Ref<Service[]>
 const vehicle = (await getVehicle()) as Ref<Vehicle[]>
@@ -57,7 +86,7 @@ function triggerEvent() {
   })
 }
 
-const formValue: ShallowReactive<FormValue> = reactive({
+const formValue: Ref<FormValue> = ref({
   id: user_id.value,
   first_name: '',
   last_name: '',
@@ -83,18 +112,18 @@ const formValue: ShallowReactive<FormValue> = reactive({
   line_items: lineItem,
   sales_tax: salesTax,
 })
-formValue.service = computed(() => {
-  return getServiceTypeByNumber(service.value, formValue.service_number!)
+formValue.value.service = computed(() => {
+  return getServiceTypeByNumber(service.value, formValue.value.service_number!)
 })
-formValue.vehicle = computed(() => {
-  return getVehicleTypeByNumber(vehicle.value, formValue.vehicle_number!)
+formValue.value.vehicle = computed(() => {
+  return getVehicleTypeByNumber(vehicle.value, formValue.value.vehicle_number!)
 })
 
-formValue.is_hourly = computeIsHourly(formValue.service?.value!)
+formValue.value.is_hourly = computeIsHourly(formValue.value.service?.value!)
 
 const maxPassengers = computed(() => {
   const vehicleType = vehicleOptions.value.find(
-    (type: SelectOption) => type.value === formValue.vehicle_number
+    (type: SelectOption) => type.value === formValue.value.vehicle_number
   )
   return vehicleType ? vehicleType.max_passengers : 3
 })
@@ -104,18 +133,18 @@ const passengerOptions = computed(() => {
 })
 
 watch(
-  () => formValue.vehicle_number,
+  () => formValue.value.vehicle_number,
   () => {
-    formValue.selected_passengers = null
+    formValue.value.selected_passengers = null
   }
 )
 const disabled = ref(true)
 watch(
-  () => formValue.service_number,
+  () => formValue.value.service_number,
   () => {
-    if (formValue.service_number === 4) {
+    if (formValue.value.service_number === 4) {
       disabled.value = false
-      formValue.service_number = null
+      formValue.value.service_number = null
     } else {
       disabled.value = true
     }
@@ -210,7 +239,7 @@ const dropdownOptions = ref({
 })
 
 const handleFormValueChange: WatchCallback<
-  [typeof formValue.origin, typeof formValue.destination]
+  [typeof formValue.value.origin, typeof formValue.value.destination]
 > = ([origin, destination]) => {
   if (!origin || !destination) {
     return
@@ -222,16 +251,16 @@ const handleFormValueChange: WatchCallback<
   const toAirportServiceType = 2
 
   if (isOriginAirport) {
-    formValue.service_number = fromAirportServiceType
+    formValue.value.service_number = fromAirportServiceType
   } else if (isDestinationAirport) {
-    formValue.service_number = toAirportServiceType
+    formValue.value.service_number = toAirportServiceType
   } else {
-    formValue.service_number = null
+    formValue.value.service_number = null
   }
 }
 
 watch(
-  [() => formValue.origin, () => formValue.destination],
+  [() => formValue.value.origin, () => formValue.value.destination],
   handleFormValueChange,
   {
     deep: true,
@@ -239,18 +268,18 @@ watch(
 )
 
 const handleChangeOrigin = (evt: Place) => {
-  formValue.origin = evt
+  formValue.value.origin = evt
 }
 
 const handleChangeDestination = (evt: Place) => {
-  formValue.destination = evt
+  formValue.value.destination = evt
 }
 
 async function onSubmit() {
   try {
     loading.value = true
-    console.log('Quote Values Before Submission', formValue)
-    const quoteData = await useTrpc().quote.postQuote.mutate(formValue)
+    console.log('Quote Values Before Submission', formValue.value)
+    const quoteData = await useTrpc().quote.postQuote.mutate(formValue.value)
     console.log('Returned Quote:', quoteData)
     quoteStore.setQuote(quoteData)
     setTimeout(async () => {

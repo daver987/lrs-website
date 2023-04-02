@@ -123,9 +123,9 @@ const createBooking = async () => {
                   <div class="mt-2 flex flex-col space-y-1 text-sm">
                     <p class="text-neutral-500 dark:text-neutral-100">
                       <span class="text-brand-400">Date: </span
-                      >{{ trip.formatted_pickup_date }}
+                      >{{ trip.pickup_date }}
                       <span class="text-brand-400">Time: </span
-                      >{{ trip.formatted_pickup_time }}
+                      >{{ trip.pickup_time }}
                     </p>
                     <p class="text-neutral-500 dark:text-neutral-100">
                       <span class="text-brand-400">PU: </span

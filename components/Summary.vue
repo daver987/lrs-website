@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { generatePdf } from '@/utils/generatePdf'
-import { useTrpc, ref } from '#imports'
+import { useTrpc, ref, generatePdf } from '#imports'
+import { ArrowBackIcon } from 'naive-ui/es/_internal/icons'
 
 const quoteNumberAsString = useRoute().query.quote_number as unknown as string
 const quote = await getQuote(quoteNumberAsString)
@@ -8,38 +8,32 @@ const quote = await getQuote(quoteNumberAsString)
 const { quote_number, user, vehicle, trips, service, combined_line_items } =
   quote
 const orderSummary = ref(null)
+async function sendConfirmation(quoteData) {
+  await useTrpc().book.confirmOrder.mutate(quoteData)
+}
 
-onBeforeRouteLeave(async () => await useTrpc().book.confirmOrder.mutate(quote))
+onBeforeRouteLeave(async () => await sendConfirmation(quote))
 
 const saveOrderSummary = async () => {
   if (orderSummary.value) {
     await generatePdf(orderSummary.value)
   }
 }
+const goHome = async () => {
+  await navigateTo('/')
+}
 </script>
 
 <template>
   <div class="mx-auto max-w-6xl px-6 pb-6">
     <div class="flex w-full justify-between py-1 uppercase">
-      <NuxtLink
-        to="/"
-        class="flex items-center px-3 py-2 text-sm text-brand shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
+      <n-button @click="goHome" color="#A57C52" text
+        ><template #icon>
+          <n-icon>
+            <ArrowBackIcon />
+          </n-icon> </template
+        >DONE</n-button
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="mr-1 h-4 w-4"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-            clip-rule="evenodd"
-          />
-        </svg>
-        DONE
-      </NuxtLink>
-
       <button
         @click="saveOrderSummary"
         type="button"
@@ -111,11 +105,11 @@ const saveOrderSummary = async () => {
             </p>
             <p>
               <span class="font-semibold">Pickup Date: </span>
-              {{ quote.trips[0].formatted_pickup_date }}
+              {{ quote.trips[0].pickup_date }}
             </p>
             <p>
               <span class="font-semibold">Pickup Time: </span>
-              {{ quote.trips[0].formatted_pickup_time }}
+              {{ quote.trips[0].pickup_time }}
             </p>
             <p>
               <span class="font-semibold">Service: </span>
