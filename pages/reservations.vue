@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useQuoteStore } from '~/stores/useQuoteStore'
+import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import {
   Dialog,
@@ -15,8 +16,7 @@ definePageMeta({
   name: 'reservations',
 })
 const quoteStore = useQuoteStore()
-//@ts-ignore
-const { isRoundTrip } = storeToRefs(quoteStore)
+const { quote } = storeToRefs(quoteStore)
 
 const nav = navigation
 
@@ -54,7 +54,7 @@ const src =
             <DialogPanel
               class="relative flex w-full max-w-xs flex-col overflow-y-auto bg-white pb-12 shadow-xl"
             >
-              <div class="flex px-4 pt-5 pb-2">
+              <div class="flex px-4 pb-2 pt-5">
                 <button
                   type="button"
                   class="-m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400"
@@ -190,7 +190,7 @@ const src =
               <div class="hidden lg:ml-8 lg:flex">
                 <a
                   href="#"
-                  class="flex items-center text-gray-500 text-gray-900 hover:text-brand"
+                  class="flex items-center text-gray-500 hover:text-brand"
                 >
                   <NuxtPicture
                     src="https://tailwindui.com/img/flags/flag-canada.svg"

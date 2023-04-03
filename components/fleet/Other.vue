@@ -6,11 +6,17 @@
       >
         <div class="w-full md:col-span-6">
           <BaseCard class="w-full space-y-6">
-            <h3 class="subheading">About The Vehicle</h3>
-            <h2 class="heading text-center text-3xl md:text-left">
-              Executive Sprinter Van
+            <h2
+              class="font-brand-subheading uppercase tracking-[0.4em] text-brand"
+            >
+              About The Vehicle
             </h2>
-            <p class="max-w-[50ch] font-sans text-gray-500">
+            <h3
+              class="text-center font-brand-heading text-4xl uppercase dark:text-neutral-400 lg:text-left lg:text-5xl"
+            >
+              Executive Sprinter Van
+            </h3>
+            <p class="max-w-[50ch] font-brand-body text-neutral-400">
               The 11 Passenger Sprinter Van is a perfect vehicle for the large
               group looking to travel together. This van can accommodate up to
               eleven people with luggage. This makes it perfect for large
@@ -47,11 +53,17 @@
         </div>
         <div class="mb-8 md:col-span-6">
           <BaseCard class="container col-span-6 mb-8 space-y-6 md:pl-56">
-            <h2 class="subheading">ABOUT THE VEHICLE</h2>
-            <h2 class="heading text-center text-3xl md:text-left">
-              Chevy Suburban
+            <h2
+              class="font-brand-subheading uppercase tracking-[0.4em] text-brand"
+            >
+              ABOUT THE VEHICLE
             </h2>
-            <p class="max-w-[50ch] font-sans text-gray-500">
+            <h3
+              class="text-center font-brand-heading text-4xl uppercase dark:text-neutral-400 lg:text-left lg:text-5xl"
+            >
+              Chevy Suburban
+            </h3>
+            <p class="max-w-[50ch] font-brand-body text-neutral-400">
               The Chevy Suburban is a full-size SUV that seats up to six people
               comfortably. This vehicle can be used for airport transportation,
               weddings or any other destination requiring an upgrade from a
@@ -68,9 +80,17 @@
       <div class="flex flex-col-reverse md:grid md:grid-cols-10">
         <div class="mb-8 md:col-span-6">
           <BaseCard class="container space-y-6 md:col-span-6">
-            <h2 class="subheading">ABOUT THE VEHICLE</h2>
-            <h3 class="heading text-center text-3xl md:text-left">YUKON XL</h3>
-            <p class="max-w-[50ch] font-sans text-gray-500">
+            <h2
+              class="font-brand-subheading uppercase tracking-[0.4em] text-brand"
+            >
+              ABOUT THE VEHICLE
+            </h2>
+            <h3
+              class="text-center font-brand-heading text-4xl uppercase dark:text-neutral-400 lg:text-left lg:text-5xl"
+            >
+              YUKON XL
+            </h3>
+            <p class="max-w-[50ch] font-brand-body text-neutral-400">
               The GMC Yukon XL is a full-size SUV that seats up to eight people
               comfortably. This vehicle can be used for airport transportation,
               weddings or any other destination requiring an upgrade from a
@@ -96,3 +116,4 @@
     </section>
   </div>
 </template>
+<script setup lang="ts"></script>

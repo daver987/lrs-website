@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useQuoteStore } from '~/stores/useQuoteStore'
-import { storeToRefs } from 'pinia'
 import {
   Dialog,
   DialogPanel,
@@ -8,6 +6,7 @@ import {
   TransitionRoot,
 } from '@headlessui/vue'
 import { navigation, NavigationItem } from '~/data/navigation'
+import { ref } from '#imports'
 
 defineProps({
   linkClasses: {
@@ -21,13 +20,9 @@ defineProps({
   },
 })
 
-const quoteStore = useQuoteStore()
-//@ts-ignore
-const { isRoundTrip } = storeToRefs(quoteStore)
-
 const nav = navigation as NavigationItem[]
 
-const open = ref<boolean>(false)
+const open = ref(false)
 </script>
 
 <template>
@@ -61,7 +56,7 @@ const open = ref<boolean>(false)
             <div class="flex px-4 pt-5 pb-2">
               <button
                 type="button"
-                class="-m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400"
+                class="-m-2 inline-flex items-center justify-center rounded-md p-2 text-neutral-400"
                 @click="open = false"
               >
                 <span class="sr-only">Close menu</span>
@@ -73,7 +68,7 @@ const open = ref<boolean>(false)
               </button>
             </div>
 
-            <div class="space-y-6 border-t border-gray-200 px-4 py-6">
+            <div class="space-y-6 border-t border-neutral-200 px-4 py-6">
               <template v-for="page in nav" :key="page.id">
                 <div class="flow-root">
                   <NuxtLink
@@ -86,12 +81,12 @@ const open = ref<boolean>(false)
               </template>
             </div>
 
-            <div class="space-y-6 border-t border-gray-200 px-4 py-6">
+            <div class="space-y-6 border-t border-neutral-200 px-4 py-6">
               <div class="flow-root">
                 <NuxtLink
                   exact-active-class="text-brand hover:text-brand-600"
                   to="/signin"
-                  class="-m-2 block p-2 font-medium text-gray-900"
+                  class="-m-2 block p-2 font-brand-body font-medium text-neutral-900"
                   >Sign in</NuxtLink
                 >
               </div>
@@ -99,13 +94,13 @@ const open = ref<boolean>(false)
                 <NuxtLink
                   exact-active-class="text-brand hover:text-brand-600"
                   to="/signup"
-                  class="-m-2 block p-2 font-medium text-gray-900"
+                  class="-m-2 block p-2 font-brand-body font-medium text-neutral-900"
                   >Create account</NuxtLink
                 >
               </div>
             </div>
 
-            <div class="border-t border-gray-200 px-4 py-6">
+            <div class="border-t border-neutral-200 px-4 py-6">
               <NuxtLink class="-m-2 flex items-center p-2">
                 <NuxtPicture
                   src="https://tailwindui.com/img/flags/flag-canada.svg"
@@ -127,11 +122,11 @@ const open = ref<boolean>(false)
   </TransitionRoot>
   <header class="relative bg-transparent">
     <nav aria-label="Top" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div class="border-b border-gray-200/30 py-2">
+      <div class="border-b border-neutral-200/30 py-2">
         <div class="flex h-16 w-full justify-center lg:items-center">
           <button
             type="button"
-            class="flex-shrink-0 rounded bg-transparent p-2 text-gray-400 hover:text-gray-500 lg:hidden"
+            class="flex-shrink-0 rounded bg-transparent p-2 text-neutral-400 hover:text-neutral-500 lg:hidden"
             @click="open = true"
           >
             <span class="sr-only">Open menu</span>
@@ -154,13 +149,15 @@ const open = ref<boolean>(false)
           </div>
 
           <div class="hidden lg:ml-8 lg:block lg:self-stretch">
-            <div class="flex h-full space-x-8">
+            <div
+              class="flex h-full space-x-8 font-brand-body text-sm font-medium uppercase tracking-wider hover:text-brand"
+            >
               <template v-for="page in nav" :key="page.id">
                 <NuxtLink
                   exact-active-class="text-brand hover:text-brand-600"
                   :to="page.href"
                   :class="linkClasses"
-                  class="flex items-center text-sm font-medium capitalize tracking-wider hover:text-brand"
+                  class="flex items-center"
                   >{{ page.name }}</NuxtLink
                 >
               </template>
@@ -175,22 +172,22 @@ const open = ref<boolean>(false)
                 to="/signin"
                 exact-active-class="text-brand hover:text-brand-600"
                 :class="linkClasses"
-                class="text-sm font-medium text-gray-100 hover:text-brand"
+                class="font-brand-body text-sm font-medium capitalize text-neutral-200 hover:text-brand"
                 >Sign in</NuxtLink
               >
-              <span class="h-6 w-px bg-gray-200" aria-hidden="true" />
+              <span class="h-6 w-px bg-neutral-200" aria-hidden="true" />
               <NuxtLink
                 to="/signup"
                 exact-active-class="text-brand hover:text-brand-600"
                 :class="linkClasses"
-                class="text-sm font-medium text-gray-100 hover:text-brand"
+                class="font-brand-body text-sm font-medium capitalize text-neutral-200 hover:text-brand"
                 >Create account</NuxtLink
               >
             </div>
 
             <div class="hidden lg:ml-8 lg:flex">
               <div
-                class="flex items-center text-gray-500 text-gray-100 hover:text-brand"
+                class="flex items-center text-neutral-500 hover:text-brand dark:text-neutral-100"
               >
                 <NuxtPicture
                   src="https://tailwindui.com/img/flags/flag-canada.svg"

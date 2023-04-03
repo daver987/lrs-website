@@ -1,0 +1,350 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fieldReference"]
+}
+
+generator zod {
+  provider           = "zod-prisma-types"
+  createPartialTypes = "true"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model Account {
+  id                     String   @id @unique @default(uuid())
+  number                 Int      @unique @default(autoincrement())
+  created_at             DateTime @default(now())
+  updated_at             DateTime @updatedAt
+  company_name           String
+  company_address        String
+  company_phone          String?
+  company_email          String
+  company_account_number Int
+  users                  User[]
+}
+
+model Session {
+  id            String   @id @default(cuid())
+  session_token String   @unique
+  user_id       String
+  expires       DateTime
+  user          User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+}
+
+model User {
+  id                   String       @id @unique @default(uuid())
+  created_at           DateTime     @default(now())
+  updated_at           DateTime     @updatedAt
+  first_name           String
+  last_name            String
+  email_address        String       @unique
+  phone_number         String
+  phone_number_country String?
+  stripe_customer_id   String?
+  is_customer          Boolean      @default(false)
+  account_id           String?
+  notes                String?
+  meta_data            Json?
+  full_name            String?
+  email_verified       DateTime?
+  image                String?
+  sessions             Session[]
+  quotes               Quote[]
+  account              Account?     @relation(fields: [account_id], references: [id])
+  conversion           Conversion[]
+
+  @@index([account_id])
+}
+
+model Affiliate {
+  id            String   @id @unique @default(uuid())
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  name          String
+  email_address String
+  phone_number  String
+  address       String?
+  notes         String?
+  is_driver     Boolean  @default(false)
+}
+
+model Driver {
+  id              String   @id @unique @default(uuid())
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+  first_name      String
+  last_name       String?
+  email_address   String?
+  phone_number    String
+  drivers_licence String?
+  notes           String?
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+  id         String   @id @default(cuid())
+
+  @@unique([identifier, token])
+}
+
+model Conversion {
+  id              String    @id @default(uuid())
+  created_at      DateTime? @default(now())
+  utm_term        String?
+  utm_medium      String?
+  utm_source      String?
+  utm_campaign    String?
+  gclid           String?
+  source          String?
+  conversion_name String?
+  user_id         String
+  user            User      @relation(fields: [user_id], references: [id])
+
+  @@index([user_id])
+}
+
+model Quote {
+  quote_number        Int        @unique @default(autoincrement())
+  created_at          DateTime   @default(now())
+  updated_at          DateTime   @updatedAt
+  id                  String     @id @default(uuid())
+  selected_hours      Int?       @default(2)
+  selected_passengers Int        @default(1)
+  is_round_trip       Boolean    @default(false)
+  is_booked           Boolean    @default(false)
+  user_id             String
+  quote_total         Float
+  service_number      Int
+  vehicle_number      Int
+  reference_value     String?
+  sales_tax_number    Int        @default(1)
+  quote_subtotal      Float?
+  quote_tax_total     Float?
+  short_link          String?
+  combined_line_items Json?
+  pricing             Price[]
+  service             Service    @relation(fields: [service_number], references: [service_number], onDelete: Cascade)
+  vehicle             Vehicle    @relation(fields: [vehicle_number], references: [vehicle_number], onDelete: Cascade)
+  user                User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  sales_tax           SalesTax   @relation(fields: [sales_tax_number], references: [tax_number], onDelete: Cascade)
+  line_items          LineItem[]
+  trips               Trip[]
+  payment             Payment[]
+
+  @@index([user_id])
+  @@index([sales_tax_number])
+  @@index([vehicle_number])
+  @@index([service_number])
+}
+
+model Trip {
+  id                  String     @id @unique @default(uuid())
+  created_at          DateTime   @default(now())
+  updated_at          DateTime   @updatedAt()
+  pickup_date         String?
+  pickup_time         String?
+  distance_text       String?
+  duration_text       String?
+  duration_value      Int?
+  distance_value      Int?
+  calculated_distance Float?
+  quote_number        Int
+  service_label       String?
+  vehicle_label       String?
+  affiliate_payout    Float?
+  is_farmed_out       Boolean    @default(false)
+  is_return           Boolean    @default(false)
+  notes               String?
+  trip_order          Int?       @default(0)
+  price_id            String?
+  carry_on_luggage    Int        @default(0)
+  large_luggage       Int        @default(0)
+  meta_data           Json?
+  price               Price?
+  quote               Quote      @relation(fields: [quote_number], references: [quote_number], onDelete: Cascade)
+  payment             Payment?
+  locations           Location[]
+  flight              Flight?
+
+  @@index([quote_number])
+  @@index([price_id])
+}
+
+model Location {
+  id                String   @id @default(uuid())
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+  lat               Float
+  lng               Float
+  name              String
+  formatted_address String
+  full_name         String?
+  place_id          String
+  types             Json
+  is_origin         Boolean  @default(false)
+  is_destination    Boolean  @default(false)
+  is_waypoint       Boolean  @default(false)
+  trip_id           String
+  route_order       Int      @default(0)
+  trip              Trip     @relation(fields: [trip_id], references: [id], onDelete: Cascade)
+
+  @@index([trip_id])
+}
+
+model Price {
+  id                  String   @id @unique @default(uuid())
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+  line_items_list     Json?
+  line_items_subtotal Float?
+  line_items_tax      Float?
+  line_items_total    Float?
+  quote_number        Int?
+  trip_id             String   @unique
+  quote               Quote?   @relation(fields: [quote_number], references: [quote_number], onDelete: Cascade)
+  trip                Trip     @relation(fields: [trip_id], references: [id], onDelete: Cascade)
+
+  @@index([quote_number])
+}
+
+model Flight {
+  id                    String   @id @unique @default(uuid())
+  created_at            DateTime @default(now())
+  updated_at            DateTime @updatedAt
+  airline_code          String?
+  airline_name          String?
+  flight_number         String
+  is_active             Boolean  @default(false)
+  is_landed             Boolean  @default(false)
+  is_arrived            Boolean  @default(false)
+  departure_time_actual String?
+  arrival_time_actual   String?
+  trip_id               String?  @unique
+  airline_id            Int?
+  airport_id            Int?
+  departure_time        String?
+  arrival_time          String?
+  trip                  Trip?    @relation(fields: [trip_id], references: [id], onDelete: Cascade)
+  airline               Airline? @relation(fields: [airline_id], references: [id], onDelete: Cascade)
+  airport               Airport? @relation(fields: [airport_id], references: [id], onDelete: Cascade)
+
+  @@index([airline_id])
+  @@index([airport_id])
+}
+
+model Payment {
+  id               String   @id @unique @default(uuid())
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+  is_preauthorized Boolean  @default(false)
+  is_paid          Boolean  @default(false)
+  setup_intent     Json?
+  payment_intent   Json?
+  payment_type     String?
+  notes            String?
+  trip_id          String   @unique
+  quote_number     Int?
+  trip             Trip     @relation(fields: [trip_id], references: [id], onDelete: Cascade)
+  quote            Quote?   @relation(fields: [quote_number], references: [quote_number], onDelete: Cascade)
+
+  @@index([quote_number])
+}
+
+model Service {
+  id               String   @id @unique @default(uuid())
+  service_number   Int      @unique @default(autoincrement())
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+  label            String
+  is_active        Boolean  @default(false)
+  is_hourly        Boolean  @default(false)
+  limo_anywhere_id Int?
+  quotes           Quote[]
+}
+
+model LineItem {
+  id            String   @id @unique @default(uuid())
+  item_number   Int      @unique @default(autoincrement())
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  label         String
+  description   String?
+  is_percentage Boolean  @default(true)
+  is_taxable    Boolean  @default(true)
+  is_active     Boolean  @default(true)
+  amount        Float
+  applies_to    String?
+  quotes        Quote[]
+}
+
+model SalesTax {
+  id         String   @id @unique @default(uuid())
+  tax_number Int      @unique @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  tax_name   String
+  amount     Float
+  region     String
+  is_active  Boolean  @default(true)
+  quotes     Quote[]
+}
+
+model Vehicle {
+  id               String   @id @unique @default(uuid())
+  vehicle_number   Int      @unique @default(autoincrement())
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+  max_passengers   Int      @default(0)
+  max_luggage      Int      @default(0)
+  per_km           Float    @default(0)
+  per_hour         Float    @default(0)
+  min_hours        Int      @default(0)
+  min_distance     Int      @default(0)
+  min_rate         Float    @default(0)
+  is_active        Boolean  @default(true)
+  label            String
+  limo_anywhere_id Int?
+  vehicle_image    String?
+  quotes           Quote[]
+}
+
+model LineItemToQuote {
+  A String
+  B Int
+
+  @@unique([A, B], map: "_LineItemToQuote_AB_unique")
+  @@index([B], map: "_LineItemToQuote_B_index")
+  @@map("_LineItemToQuote")
+}
+
+model Airline {
+  id       Int      @id @unique @default(autoincrement())
+  name     String?
+  iata     String?
+  icao     String?
+  callsign String?
+  country  String?
+  flight   Flight[]
+}
+
+model Airport {
+  id       Int      @id @unique @default(autoincrement())
+  name     String
+  city     String?
+  country  String?
+  lat      Float
+  lng      Float
+  timezone String
+  type     String
+  iata     String?
+  icao     String?
+  flight   Flight[]
+}

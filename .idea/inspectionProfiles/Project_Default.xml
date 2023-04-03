@@ -12,14 +12,34 @@
         <option value="Tests" />
       </list>
     </option>
+    <inspection_tool class="AngularAmbiguousComponentTag" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="AngularCliAddDependency" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="AngularInaccessibleComponentMemberInAotMode" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="AngularIncorrectTemplateDefinition" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="AngularInsecureBindingToEvent" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="AngularInvalidAnimationTriggerAssignment" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="AngularInvalidEntryComponent" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="AngularInvalidI18nAttribute" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="AngularInvalidImportedOrDeclaredSymbol" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="AngularInvalidSelector" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="AngularInvalidTemplateReferenceVariable" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="AngularMissingEventHandler" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="AngularMissingOrInvalidDeclarationInModule" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="AngularMultipleStructuralDirectives" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="AngularNgOptimizedImage" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="AngularNonEmptyNgContent" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="AngularRecursiveModuleImportExport" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="AngularUndefinedBinding" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="AngularUndefinedModuleExport" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="AngularUndefinedTag" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="AssignmentResultUsedJS" enabled="true" level="WARNING" enabled_by_default="false">
       <scope name="Project Files" level="WARNING" enabled="true" />
     </inspection_tool>
     <inspection_tool class="AssignmentToForLoopParameterJS" enabled="true" level="WARNING" enabled_by_default="false">
       <scope name="Project Files" level="WARNING" enabled="true" />
     </inspection_tool>
-    <inspection_tool class="AssignmentToFunctionParameterJS" enabled="true" level="WARNING" enabled_by_default="false">
-      <scope name="Project Files" level="WARNING" enabled="true" />
+    <inspection_tool class="AssignmentToFunctionParameterJS" enabled="false" level="WARNING" enabled_by_default="false">
+      <scope name="Project Files" level="WARNING" enabled="false" />
     </inspection_tool>
     <inspection_tool class="BlockStatementJS" enabled="true" level="WARNING" enabled_by_default="false">
       <scope name="Project Files" level="WARNING" enabled="true" />
@@ -63,6 +83,10 @@
     </inspection_tool>
     <inspection_tool class="CssUnresolvedCustomProperty" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="CssUnusedSymbol" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="CucumberExamplesColon" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="CucumberMissedExamples" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="CucumberTableInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="CucumberUndefinedStep" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="CyclomaticComplexityJS" enabled="true" level="WARNING" enabled_by_default="false">
       <scope name="Project Files" level="WARNING" enabled="true">
         <option name="m_limit" value="10" />
@@ -112,6 +136,7 @@
       <option name="m_reportEmptyBlocks" value="false" />
     </inspection_tool>
     <inspection_tool class="EmptyTryBlockJS" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="ExceptionCaughtLocallyJS" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="FlowJSConfig" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="FlowJSFlagCommentPlacement" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="ForLoopReplaceableByWhileJS" enabled="true" level="WARNING" enabled_by_default="false">
@@ -131,8 +156,8 @@
       <option name="m_minLength" value="4" />
       <option name="m_maxLength" value="32" />
     </inspection_tool>
-    <inspection_tool class="FunctionWithInconsistentReturnsJS" enabled="true" level="WARNING" enabled_by_default="true">
-      <scope name="Project Files" level="WARNING" enabled="true" />
+    <inspection_tool class="FunctionWithInconsistentReturnsJS" enabled="false" level="WARNING" enabled_by_default="false">
+      <scope name="Project Files" level="WARNING" enabled="false" />
     </inspection_tool>
     <inspection_tool class="FunctionWithMultipleLoopsJS" enabled="true" level="WARNING" enabled_by_default="false">
       <scope name="Project Files" level="WARNING" enabled="true" />
@@ -140,6 +165,9 @@
     <inspection_tool class="FunctionWithMultipleReturnPointsJS" enabled="false" level="WARNING" enabled_by_default="false">
       <scope name="Project Files" level="WARNING" enabled="false" />
     </inspection_tool>
+    <inspection_tool class="GherkinBrokenTableInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="GherkinMisplacedBackground" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="GherkinScenarioToScenarioOutline" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="HtmlRequiredSummaryAttribute" enabled="true" level="INFORMATION" enabled_by_default="true" />
     <inspection_tool class="HtmlRequiredTitleAttribute" enabled="true" level="INFORMATION" enabled_by_default="true" />
     <inspection_tool class="HtmlUnknownAttribute" enabled="false" level="WARNING" enabled_by_default="false">
@@ -323,14 +351,15 @@
     <inspection_tool class="LoopStatementThatDoesntLoopJS" enabled="true" level="WARNING" enabled_by_default="true">
       <scope name="Project Files" level="WARNING" enabled="true" />
     </inspection_tool>
-    <inspection_tool class="MagicNumberJS" enabled="true" level="WARNING" enabled_by_default="false">
-      <scope name="Project Files" level="WARNING" enabled="true" />
+    <inspection_tool class="LossyEncoding" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="MagicNumberJS" enabled="false" level="WARNING" enabled_by_default="false">
+      <scope name="Project Files" level="WARNING" enabled="false" />
     </inspection_tool>
-    <inspection_tool class="NegatedConditionalExpressionJS" enabled="true" level="WARNING" enabled_by_default="false">
-      <scope name="Project Files" level="WARNING" enabled="true" />
+    <inspection_tool class="NegatedConditionalExpressionJS" enabled="false" level="WARNING" enabled_by_default="false">
+      <scope name="Project Files" level="WARNING" enabled="false" />
     </inspection_tool>
-    <inspection_tool class="NegatedIfStatementJS" enabled="true" level="WARNING" enabled_by_default="false">
-      <scope name="Project Files" level="WARNING" enabled="true" />
+    <inspection_tool class="NegatedIfStatementJS" enabled="false" level="WARNING" enabled_by_default="false">
+      <scope name="Project Files" level="WARNING" enabled="false" />
     </inspection_tool>
     <inspection_tool class="NestedAssignmentJS" enabled="true" level="WARNING" enabled_by_default="false">
       <scope name="Project Files" level="WARNING" enabled="true" />
@@ -357,8 +386,9 @@
     <inspection_tool class="NodeCoreCodingAssistance" enabled="true" level="WARNING" enabled_by_default="false">
       <scope name="Project Files" level="WARNING" enabled="true" />
     </inspection_tool>
-    <inspection_tool class="NonBlockStatementBodyJS" enabled="true" level="WARNING" enabled_by_default="true">
-      <scope name="Project Files" level="WARNING" enabled="true" />
+    <inspection_tool class="NonAsciiCharacters" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="NonBlockStatementBodyJS" enabled="false" level="WARNING" enabled_by_default="false">
+      <scope name="Project Files" level="WARNING" enabled="false" />
     </inspection_tool>
     <inspection_tool class="ObjectAllocationIgnoredJS" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="OverlyComplexArithmeticExpressionJS" enabled="true" level="WARNING" enabled_by_default="false">
@@ -383,8 +413,8 @@
       <option name="m_minLength" value="1" />
       <option name="m_maxLength" value="32" />
     </inspection_tool>
-    <inspection_tool class="ParametersPerFunctionJS" enabled="true" level="WARNING" enabled_by_default="false">
-      <scope name="Project Files" level="WARNING" enabled="true">
+    <inspection_tool class="ParametersPerFunctionJS" enabled="false" level="WARNING" enabled_by_default="false">
+      <scope name="Project Files" level="WARNING" enabled="false">
         <option name="m_limit" value="5" />
       </scope>
       <option name="m_limit" value="5" />
@@ -411,11 +441,11 @@
     <inspection_tool class="ShiftOutOfRangeJS" enabled="true" level="WARNING" enabled_by_default="true">
       <scope name="Project Files" level="WARNING" enabled="true" />
     </inspection_tool>
-    <inspection_tool class="SillyAssignmentJS" enabled="true" level="WARNING" enabled_by_default="false">
-      <scope name="Project Files" level="WARNING" enabled="true" />
+    <inspection_tool class="SillyAssignmentJS" enabled="false" level="WARNING" enabled_by_default="false">
+      <scope name="Project Files" level="WARNING" enabled="false" />
     </inspection_tool>
-    <inspection_tool class="StatementsPerFunctionJS" enabled="true" level="WARNING" enabled_by_default="false">
-      <scope name="Project Files" level="WARNING" enabled="true">
+    <inspection_tool class="StatementsPerFunctionJS" enabled="false" level="WARNING" enabled_by_default="false">
+      <scope name="Project Files" level="WARNING" enabled="false">
         <option name="m_limit" value="30" />
       </scope>
       <option name="m_limit" value="30" />
@@ -425,8 +455,8 @@
       <scope name="Project Files" level="WARNING" enabled="true" />
     </inspection_tool>
     <inspection_tool class="TextLabelInSwitchStatementJS" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="ThreeNegationsPerFunctionJS" enabled="true" level="WARNING" enabled_by_default="false">
-      <scope name="Project Files" level="WARNING" enabled="true" />
+    <inspection_tool class="ThreeNegationsPerFunctionJS" enabled="false" level="WARNING" enabled_by_default="false">
+      <scope name="Project Files" level="WARNING" enabled="false" />
     </inspection_tool>
     <inspection_tool class="ThrowFromFinallyBlockJS" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="TodoComment" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -443,6 +473,7 @@
     <inspection_tool class="UnnecessaryContinueJS" enabled="true" level="WARNING" enabled_by_default="true">
       <scope name="Project Files" level="WARNING" enabled="true" />
     </inspection_tool>
+    <inspection_tool class="UnresolvedReference" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="VueMissingComponentImportInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="VueUnrecognizedDirective" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="VueUnrecognizedSlot" enabled="false" level="WEAK WARNING" enabled_by_default="false" />

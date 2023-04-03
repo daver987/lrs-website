@@ -1,16 +1,11 @@
 {
   "compilerOptions": {
     "module": "esnext",
-    "target": "es5",
+    "target": "es2022",
     "sourceMap": true,
     "lib": ["es2018", "dom", "esnext"]
   },
-  "exclude": [
-    "node_modules"
-  ],
+  "exclude": ["node_modules"],
   "extends": "./.nuxt/tsconfig.json",
-  "types": [
-    "@pinia/nuxt",
-    "@types/ip"
-  ]
+  "types": ["@pinia/nuxt", "@types/ip", "naive-ui/volar"]
 }

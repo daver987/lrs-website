@@ -53,10 +53,10 @@ const {
       :value="inputValue"
       class="-mt-1 block w-full border-0 p-0 pb-0.5 text-gray-900 placeholder-gray-400 focus:ring-0 sm:text-sm"
     />
-    <div v-if="!showError" class="flex">
-      <div class="block text-xs text-red-700">
-        <div role="alert">{{ errorMessage }}</div>
-      </div>
-    </div>
+    <!--    <div v-if="!showError" class="flex">-->
+    <!--      <div class="block text-xs text-red-700">-->
+    <!--        <div role="alert">{{ errorMessage }}</div>-->
+    <!--      </div>-->
+    <!--    </div>-->
   </div>
 </template>

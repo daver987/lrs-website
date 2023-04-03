@@ -2,6 +2,7 @@
 definePageMeta({
   title: 'Contact Us',
   layout: 'default',
+  colorMode: 'dark',
 })
 useHead({
   title: 'High Park Livery | Contact Us',

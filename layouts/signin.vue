@@ -8,7 +8,6 @@ import {
   MenuItem,
   MenuItems,
 } from '@headlessui/vue'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 import { navigation } from '~/data/navigation'
 </script>
 
@@ -52,7 +51,7 @@ import { navigation } from '~/data/navigation'
               class="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
             >
               <span class="sr-only">View notifications</span>
-              <BellIcon class="h-6 w-6" aria-hidden="true" />
+              <Icon name="heroicons:bell" class="h-6 w-6" aria-hidden="true" />
             </button>
 
             <!-- Profile dropdown -->
@@ -121,12 +120,18 @@ import { navigation } from '~/data/navigation'
               class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand"
             >
               <span class="sr-only">Open main menu</span>
-              <Bars3Icon
+              <Icon
+                name="heroicons:bars-3"
                 v-if="!open"
                 class="block h-6 w-6"
                 aria-hidden="true"
               />
-              <XMarkIcon v-else class="block h-6 w-6" aria-hidden="true" />
+              <Icon
+                name="heroicons:x-mark"
+                v-else
+                class="block h-6 w-6"
+                aria-hidden="true"
+              />
             </DisclosureButton>
           </div>
         </div>
@@ -184,7 +189,7 @@ import { navigation } from '~/data/navigation'
               class="ml-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
             >
               <span class="sr-only">View notifications</span>
-              <BellIcon class="h-6 w-6" aria-hidden="true" />
+              <Icon name="heroicons:bell" class="h-6 w-6" aria-hidden="true" />
             </button>
           </div>
           <div class="mt-3 space-y-1">

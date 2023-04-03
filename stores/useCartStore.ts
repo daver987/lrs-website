@@ -1,24 +1,21 @@
-import { defineStore, acceptHMRUpdate } from 'pinia'
+import { acceptHMRUpdate, defineStore } from 'pinia'
 
 export const useCartStore = defineStore('cartStore', {
-  state: () => ({ addedToCart: false, loading: false }),
-  getters: {
-    //
+  state: () => {
+    return { addedToCart: false, loading: false }
   },
   actions: {
-    addToCart() {
+    async addToCart() {
       this.loading = true
-      setTimeout(() => {
-        this.addedToCart = true
-        this.loading = false
-      }, 1000)
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      this.addedToCart = true
+      this.loading = false
     },
-    removeFromCart() {
+    async removeFromCart() {
       this.loading = true
-      setTimeout(() => {
-        this.addedToCart = false
-        this.loading = false
-      }, 1000)
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      this.addedToCart = false
+      this.loading = false
     },
   },
 })

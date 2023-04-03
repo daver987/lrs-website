@@ -1,7 +1,14 @@
 <template>
   <div>
     <div class="mb-12 grid grid-cols-1 place-items-center md:grid-cols-2">
-      <div><h2 class="heading pt-8 text-center">Cadillac XTS Sedan</h2></div>
+      <div>
+        <h2
+          class="text-center font-brand-heading text-4xl uppercase dark:text-neutral-400 lg:text-left lg:text-5xl"
+        >
+          Cadillac XTS<br />
+          Sedan
+        </h2>
+      </div>
       <div>
         <NuxtPicture
           src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/12f57e26-99ae-4fe0-9579-fa3129277800/1920"
@@ -12,8 +19,10 @@
     </div>
     <div class="mb-12 grid grid-cols-1 place-items-center md:grid-cols-2">
       <BaseCard class="space-y-6">
-        <h3 class="subheading">About The Vehicle</h3>
-        <p class="font-sans text-gray-500">
+        <h3 class="font-brand-subheading uppercase tracking-[0.4em] text-brand">
+          About The Vehicle
+        </h3>
+        <p class="font-brand-body text-neutral-400">
           If you're looking for a legend to take care of you regardless of
           whether your destination is Toronto or Montreal, the Cadillac XTS is
           it. Its sophisticated and sleek design comes with features that make
@@ -57,3 +66,4 @@
     </div>
   </div>
 </template>
+<script setup lang="ts"></script>

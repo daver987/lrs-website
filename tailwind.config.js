@@ -1,11 +1,12 @@
 /** @type {import("tailwindcss").Config} */
 
 module.exports = {
+  darkMode: 'class',
   content: [
     `components/**/*.{vue,js}`,
     `layouts/**/*.vue`,
     `pages/**/*.vue`,
-    `composables/**/*.{js,ts}`,
+    `compatibles/**/*.{js,ts}`,
     `plugins/**/*.{js,ts}`,
     `App.{js,ts,vue}`,
     `app.{js,ts,vue}`,
@@ -15,6 +16,10 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ["'Inter var'", 'caviar-dreams'],
+        brand: ['caviar-dreams'],
+        'brand-heading': ['campton-thin'],
+        'brand-subheading': ['caviar-dreams-bold'],
+        'brand-body': ['campton-light'],
         subheading: ['caviar-dreams-bold'],
         heading: ['campton-thin'],
         body: ['campton-light'],
@@ -29,7 +34,7 @@ module.exports = {
           200: '#DECCBA',
           300: '#CDB398',
           400: '#BD9975',
-          DEFAULT: '#9f6c27',
+          DEFAULT: '#A57C52',
           600: '#8A6642',
           700: '#674D32',
           800: '#453321',
@@ -59,32 +64,16 @@ module.exports = {
           900: '#111111',
         },
         body: {
-          light: '#fff',
           50: '#EBEBEB',
           100: '#D6D6D6',
           200: '#ADADAD',
           300: '#858585',
           400: '#5C5C5C',
           DEFAULT: '#333333',
-          600: '#292929',
+          600: '#262626',
           700: '#1F1F1F',
           800: '#141414',
           900: '#0A0A0A',
-        },
-        heading: {
-          light: '#fff',
-          DEFAULT: '#2B2B2B',
-        },
-        icon: {
-          DEFAULT: '#C0C0C0',
-        },
-        background: {
-          light: '#fff',
-          DEFAULT: '#EBEBEB',
-          dark: '#262626',
-        },
-        primary: {
-          DEFAULT: '#A57C52',
         },
       },
       screens: {

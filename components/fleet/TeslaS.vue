@@ -1,7 +1,13 @@
 <template>
   <div>
     <div class="mb-12 grid grid-cols-1 place-items-center md:grid-cols-2">
-      <div><h2 class="heading pt-8 text-center md:text-left">Tesla S</h2></div>
+      <div>
+        <h2
+          class="text-center font-brand-heading text-4xl uppercase dark:text-neutral-400 lg:text-left lg:text-5xl"
+        >
+          Tesla S
+        </h2>
+      </div>
       <div>
         <NuxtPicture
           src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/966d3175-0900-4b44-8330-ccfeb264ed00/1920"
@@ -12,8 +18,10 @@
     </div>
     <div class="mb-12 grid grid-cols-1 place-items-center md:grid-cols-2">
       <BaseCard class="space-y-6">
-        <h3 class="subheading">About The Vehicle</h3>
-        <p class="font-sans text-gray-500">
+        <h3 class="font-brand-subheading uppercase tracking-[0.4em] text-brand">
+          About The Vehicle
+        </h3>
+        <p class="font-brand-body text-neutral-400">
           The Tesla Model S luxury electric car is a fantastic choice for riders
           wanting an environmentally conscious and luxurious ride. The Tesla
           Model S has become the standard in eco-friendly limousines. The Model
@@ -48,3 +56,4 @@
     </div>
   </div>
 </template>
+<script setup lang="ts"></script>

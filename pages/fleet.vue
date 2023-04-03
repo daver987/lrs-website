@@ -1,16 +1,11 @@
 <script setup lang="ts">
-import {
-  TabGroup,
-  TabList,
-  Tab,
-  TabPanels,
-  TabPanel,
-  TransitionRoot,
-} from '@headlessui/vue'
+import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue'
+import { ref, resolveComponent } from '#imports'
 
 definePageMeta({
   layout: 'default',
   title: 'High Park Livery | Luxury Fleet',
+  colorMode: 'dark',
 })
 const headerInfo = {
   aboveHeading: 'Discover Our Luxury Vehicles',
@@ -20,16 +15,9 @@ const headerInfo = {
     'background-image: url("https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/8027755f-611b-4470-96bf-4b845c9f5600/4200")',
 }
 
-interface Vehicles {
-  icon: string
-  title: string
-  id: string
-  tag: string
-  to: string
-}
 const selectedTab = ref(0)
 
-function changeTab(index: number) {
+const changeTab = (index: number) => {
   selectedTab.value = index
 }
 
@@ -91,7 +79,7 @@ const tabs = [
       :selected-index="selectedTab"
       @change="changeTab"
       as="main"
-      class="mx-auto max-w-7xl px-6 pt-6 md:-mt-20 md:px-8 lg:px-12"
+      class="mx-auto max-w-7xl md:-mt-20"
     >
       <TabList
         class="relative z-10 mx-auto mb-12 grid grid-cols-2 gap-1 md:grid-cols-3 lg:grid-cols-6"
@@ -104,21 +92,25 @@ const tabs = [
         >
           <button
             :class="[
-              selected ? 'bg-primary text-white' : 'bg-white text-gray-500',
+              selected
+                ? 'bg-brand text-neutral-200'
+                : 'bg-white text-neutral-200 dark:bg-neutral-700',
             ]"
-            class="col-span-1 flex w-full flex-col items-center justify-center space-y-4 border-white px-2 py-16 hover:bg-primary hover:text-white"
+            class="col-span-1 flex w-full flex-col items-center justify-center space-y-4 px-2 py-16 hover:bg-brand hover:text-neutral-400"
           >
             <img :src="`/icons/${tab.icon}.svg`" alt="icon" class="w-16" />
             <span
-              class="text-center text-sm uppercase tracking-widest hover:text-white"
-              :class="[selected ? 'bg-primary text-white' : 'text-gray-500']"
+              class="text-center text-sm uppercase tracking-widest hover:text-neutral-200"
+              :class="[
+                selected ? 'bg-brand text-neutral-200' : 'text-neutral-400',
+              ]"
             >
               {{ tab.title }}
             </span>
           </button>
         </Tab>
       </TabList>
-      <TabPanels>
+      <TabPanels v-auto-animate="{ duration: 300 }">
         <TabPanel>
           <FleetCadillacXts />
         </TabPanel>

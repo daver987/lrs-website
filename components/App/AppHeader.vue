@@ -27,35 +27,42 @@ defineProps({
     default: 'info@highparklivery.com',
   },
 })
+
+const $img = useImage()
+const backgroundImage = computed(() => {
+  const imgUrl = $img(
+    'https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/c2f2c5f0-7a8d-4617-e4aa-d81156a40600/4200',
+    { width: 100 }
+  )
+  return { backgroundImage: `url('${imgUrl}')` }
+})
 </script>
 
 <template>
   <header
     class="relative min-h-screen overflow-hidden"
-    style="
-      background-image: url('https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/c2f2c5f0-7a8d-4617-e4aa-d81156a40600/4200');
-    "
+    :style="backgroundImage"
   >
     <AppNavigation />
-    <BaseContainer
-      class="relative mt-20 grid h-full grid-cols-1 md:grid-cols-2"
-    >
+    <BaseContainer class="relative mt-20 grid grid-cols-1 md:grid-cols-2">
       <div
         :style="image"
         class="relative bg-black bg-opacity-60 bg-cover bg-center bg-no-repeat py-32 bg-blend-darken md:col-span-2 md:px-10"
       >
         <div class="space-y-4 text-center md:text-left">
           <p
-            class="text-center font-subheading text-sm tracking-widest text-brand md:text-left"
+            class="text-center font-brand-subheading text-sm uppercase leading-relaxed tracking-widest text-brand md:text-left md:text-base"
           >
             {{ aboveHeading }}
           </p>
           <h1
-            class="text-center font-heading capitalize leading-tight text-white md:text-left"
+            class="text-center font-brand-heading text-4xl uppercase leading-tight text-neutral-200 md:text-left lg:text-5xl"
           >
             {{ heading }}
           </h1>
-          <p class="mx-auto max-w-xs md:m-0 md:text-left">
+          <p
+            class="mx-auto max-w-xs font-brand-body text-neutral-400 md:m-0 md:text-left"
+          >
             {{ body }}
           </p>
           <div
@@ -63,7 +70,7 @@ defineProps({
           >
             <NuxtLink
               :href="`tel:${companyPhone}`"
-              class="text-center font-body text-sm text-gray-300"
+              class="text-center font-brand-body text-sm text-neutral-200"
               ><span class="text-brand">CALL :</span>
               {{ companyPhone }}</NuxtLink
             >
@@ -73,7 +80,7 @@ defineProps({
           >
             <NuxtLink
               :href="`mailto:${companyEmail}`"
-              class="text-center font-body text-sm uppercase tracking-wide text-gray-300"
+              class="text-center font-brand-body text-sm uppercase tracking-wide text-neutral-200"
               ><span class="text-brand">EMAIL :</span>
               {{ companyEmail }}
             </NuxtLink>

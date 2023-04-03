@@ -1,400 +1,177 @@
 <script setup lang="ts">
-import { format, isValid } from 'date-fns'
-import { useStorage } from '@vueuse/core'
-import { useQuoteStore } from '~/stores/useQuoteStore'
-import { storeToRefs } from 'pinia'
+import { useTrpc, ref, generatePdf } from '#imports'
+import { ArrowBackIcon } from 'naive-ui/es/_internal/icons'
 
-const quoteStore = useQuoteStore()
-const { quote_number, quote } = storeToRefs(quoteStore)
-quote_number.value = useStorage('quote_number', '')
-quoteStore.getQuoteSingle()
+const quoteNumberAsString = useRoute().query.quote_number as unknown as string
+const quote = await getQuote(quoteNumberAsString)
 
-const firstNameQuote = ref()
-const lastNameQuote = ref()
-const userEmailQuote = ref()
-const phoneNumber = ref()
-const originNameQuote = ref()
-const destinationNameQuote = ref()
-const serviceTypeLabelQuote = ref()
-const vehicleTypeLabelQuote = ref()
-const isPearsonAirportDropoffQuote = ref()
-const isPearsonAirportPickupQuote = ref()
-const totalFareQuote = ref()
-const roundTripTotalQuote = ref()
-const isRoundTripQuote = ref()
-
-const {
-  pickupDate,
-  pickupTime,
-  returnDate,
-  returnTime,
-  firstName,
-  lastName,
-  userEmail,
-  origin_name,
-  origin_formatted_address,
-  destination_name,
-  destination_formatted_address,
-  serviceTypeLabel,
-  vehicleTypeLabel,
-  isPearsonAirportDropoff,
-  isPearsonAirportPickup,
-  totalFare,
-  roundTripTotal,
-  isRoundTrip,
-  phone_number,
-} = quote.value[0]
-
-firstNameQuote.value = firstName
-lastNameQuote.value = lastName
-userEmailQuote.value = userEmail
-phoneNumber.value = phone_number
-originNameQuote.value = formatAddress(origin_name, origin_formatted_address)
-destinationNameQuote.value = formatAddress(
-  destination_name,
-  destination_formatted_address
-)
-serviceTypeLabelQuote.value = serviceTypeLabel
-vehicleTypeLabelQuote.value = vehicleTypeLabel
-isPearsonAirportDropoffQuote.value = isPearsonAirportDropoff
-isPearsonAirportPickupQuote.value = isPearsonAirportPickup
-totalFareQuote.value = totalFare
-roundTripTotalQuote.value = roundTripTotal
-isRoundTripQuote.value = isRoundTrip
-
-console.log('Returned Quote from summary', quote.value)
-
-const formattedPickupDate = computed(() => {
-  if (isValid(new Date(pickupDate))) {
-    return formatDateNew(pickupDate)
-  } else {
-    return 'January 1, 2023'
-  }
-})
-const formattedPickupTime = computed(() => {
-  if (isValid(new Date(pickupTime))) {
-    return format(new Date(pickupTime), 'hh:mm a')
-  } else {
-    return '12:00'
-  }
-})
-const formattedReturnDate = computed(() => {
-  if (isValid(new Date(returnDate))) {
-    return formatDateNew(returnDate)
-  } else {
-    return 'January 1, 2023'
-  }
-})
-const formattedReturnTime = computed(() => {
-  if (isValid(new Date(returnTime))) {
-    return format(new Date(returnTime), 'hh:mm a')
-  } else {
-    return '12:00'
-  }
-})
-
-function formatAddress(name: string, address: string) {
-  return address.includes(name) ? address : `${name}, ${address}`
+const { quote_number, user, vehicle, trips, service, combined_line_items } =
+  quote
+const orderSummary = ref(null)
+async function sendConfirmation(quoteData) {
+  await useTrpc().book.confirmOrder.mutate(quoteData)
 }
 
-const printSummary = () => {
-  window.print()
+onBeforeRouteLeave(async () => await sendConfirmation(quote))
+
+const saveOrderSummary = async () => {
+  if (orderSummary.value) {
+    await generatePdf(orderSummary.value)
+  }
 }
-const space = ' '
+const goHome = async () => {
+  await navigateTo('/')
+}
 </script>
 
 <template>
-  <BaseContainer class="rounded bg-gray-100 p-6">
-    <div class="sm:flex sm:items-center">
-      <div class="sm:flex-auto">
-        <h1 class="font-sans text-xl font-semibold text-gray-900">
-          Thank You For Your Booking
-        </h1>
-        <p class="mt-2 text-sm font-bold text-gray-700">
-          <span
-            class="font-sans text-base font-bold leading-relaxed text-gray-900"
-            >Order Number: </span
-          ><span
-            class="font-sans text-base font-bold leading-relaxed text-red-600"
+  <div class="mx-auto max-w-6xl px-6 pb-6">
+    <div class="flex w-full justify-between py-1 uppercase">
+      <n-button @click="goHome" color="#A57C52" text
+        ><template #icon>
+          <n-icon>
+            <ArrowBackIcon />
+          </n-icon> </template
+        >DONE</n-button
+      >
+      <button
+        @click="saveOrderSummary"
+        type="button"
+        class="hover:bg-brand-500 rounded-md bg-brand-600 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
+      >
+        Save as PDF
+      </button>
+    </div>
+    <div class="bg-white p-4 md:p-8" id="order-summary" ref="orderSummary">
+      <div class="mx-auto w-full md:max-w-4xl">
+        <div class="mb-6 flex items-center justify-between">
+          <img
+            class="h-auto w-32"
+            src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/6a0f4d3c-3f6a-4e4e-f86b-1face7a5e400/1920"
+            alt="Logo"
+          />
+          <div class="text-right">
+            <h1 class="text-xl font-bold">Summary</h1>
+            <p>
+              Quote Number:
+              <span class="text-red-700"> HPL-{{ quote.quote_number }}</span>
+            </p>
+          </div>
+        </div>
+        <div class="mb-6 border-b-2 border-gray-200"></div>
+        <div class="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div>
+            <h2 class="text-lg font-bold">Customer Details</h2>
+            <p>
+              <span class="font-semibold">Name: </span>
+              {{ quote.user.first_name }} {{ quote.user.last_name }}
+            </p>
+            <p>
+              <span class="font-semibold">Email: </span>
+              {{ quote.user.email_address }}
+            </p>
+            <p>
+              <span class="font-semibold">Phone: </span>
+              {{ quote.user.phone_number }}
+            </p>
+          </div>
+          <div>
+            <h2 class="text-lg font-bold">Vehicle</h2>
+            <p>
+              <span class="font-semibold">Type: </span>
+              {{ quote.vehicle.label }}
+            </p>
+            <img
+              class="mt-2 h-auto w-48"
+              :src="quote.vehicle.vehicle_image!"
+              alt="Vehicle Image"
+            />
+          </div>
+        </div>
+        <div class="mb-6">
+          <h2 class="mb-4 text-lg font-bold">Trip Details</h2>
+          <div
+            v-for="(trip, index) in quote.trips"
+            :key="index"
+            class="mb-4 rounded-md border p-4"
           >
-            HPL-{{ quote_number }}</span
-          ><br />
-          For:
-          <span class="font-sans font-normal"
-            >{{ firstNameQuote }} {{ lastNameQuote }}</span
-          >
-          <span class="font-sans font-normal"> {{ phoneNumber }}</span
-          ><br />
-          Email:
-          <span class="font-sans font-normal">{{ userEmailQuote }}</span
-          ><br />
-          Pick up Date:
-          <time class="font-sans font-normal" :datetime="formattedPickupDate"
-            >{{ formattedPickupDate }}
-          </time>
-          <br />
-          Pick up Time:
-          <time class="font-sans font-normal" :datetime="formattedPickupTime"
-            >{{ formattedPickupTime }}
-          </time>
-        </p>
-        <p>
-          Return Pick up Date:
-          <time class="font-sans font-normal" :datetime="formattedReturnDate"
-            >{{ formattedReturnDate }}
-          </time>
-          <br />
-          Return Pick up Time:
-          <time class="font-sans font-normal" :datetime="formattedReturnTime"
-            >{{ formattedReturnTime }}
-          </time>
-        </p>
-      </div>
-      <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-        <button
-          @click="printSummary"
-          type="button"
-          class="inline-flex items-center justify-center rounded-md border border-transparent bg-primary px-4 py-2 font-sans text-sm font-medium uppercase tracking-wider text-white shadow-sm hover:bg-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 sm:w-auto"
-        >
-          Print
-        </button>
+            <p>
+              <span class="font-semibold">Pick Up: </span>
+              {{ quote.trips[0].locations[0].full_name }}
+            </p>
+            <p>
+              <span class="font-semibold">Drop Off: </span>
+              {{ quote.trips[0].locations[1].full_name }}
+            </p>
+            <p>
+              <span class="font-semibold">Pickup Date: </span>
+              {{ quote.trips[0].pickup_date }}
+            </p>
+            <p>
+              <span class="font-semibold">Pickup Time: </span>
+              {{ quote.trips[0].pickup_time }}
+            </p>
+            <p>
+              <span class="font-semibold">Service: </span>
+              {{ quote.service.label }}
+            </p>
+            <div class="mt-4">
+              <table class="w-full">
+                <tbody>
+                  <tr
+                    v-for="(lineItem, itemIndex) in quote.combined_line_items"
+                    :key="itemIndex"
+                    class="border-t border-gray-200"
+                  >
+                    <td class="py-2">{{ lineItem.label }}</td>
+                    <td class="py-2 text-right">
+                      ${{ lineItem.total.toFixed(2) }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="text-right">
+          <p v-for="item in quote.combined_line_items" :key="item.label">
+            <span class="font-semibold">{{ item.label }}:</span>
+            <span> ${{ item.total.toFixed(2) }}</span>
+          </p>
+        </div>
+        <div class="mt-6 border-t-2 border-gray-200 pt-6">
+          <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div class="flex flex-col">
+              <p class="font-brand-body text-base font-bold text-black">
+                Check your email for your trip confirmation
+              </p>
+              <p class="max-w-[65ch] font-brand-body text-sm text-red-700">
+                **Please note, due to scheduling you may not receive a
+                confirmation right away. If your trip is not confirmed within 2
+                hours, please contact us at 647-360-9631
+              </p>
+            </div>
+            <div class="flex flex-col">
+              <p class="font-brand-body text-base font-bold text-black">
+                Contact us if your trip is booked within 6 hours or less
+              </p>
+              <p class="font-brand-body text-sm text-red-700">
+                Due to scheduling, we may not be able to accommodate your
+                request if it is booked less than two hours from now. We will
+                contact you asap if we cannot accommodate your booking.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="-mx-4 mt-8 flex flex-col sm:-mx-6 md:mx-0">
-      <table class="min-w-full divide-y divide-gray-300">
-        <thead>
-          <tr>
-            <th
-              scope="col"
-              class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 md:pl-0"
-            >
-              <span class="font-sans sm:hidden">Details</span>
-              <span class="invisible font-sans sm:visible">Routing</span>
-            </th>
-
-            <th
-              scope="col"
-              class="hidden py-3.5 px-3 text-right font-sans text-sm font-semibold text-gray-900 sm:table-cell"
-            >
-              Service Type
-            </th>
-            <th
-              scope="col"
-              class="hidden py-3.5 px-3 text-right font-sans text-sm font-semibold text-gray-900 sm:table-cell"
-            >
-              Vehicle Type
-            </th>
-            <th
-              scope="col"
-              class="py-3.5 pl-3 pr-4 text-right font-sans text-sm font-semibold text-gray-900 sm:pr-6 md:pr-0"
-            >
-              Price
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-b border-gray-200">
-            <td class="py-4 pl-4 pr-3 text-sm sm:pl-6 md:pl-0">
-              <div class="mt-0.5 text-gray-500 sm:hidden">
-                <span class="font-sans font-bold text-gray-900">Routing </span>
-              </div>
-              <div class="font-normal text-gray-500">
-                <span class="font-sans font-bold text-gray-900">PU: </span
-                >{{ originNameQuote }}
-              </div>
-              <div class="font-normal text-gray-500">
-                <span class="font-sans font-bold text-gray-900">DO: </span>
-                {{ destinationNameQuote }}
-              </div>
-              <div class="mt-0.5 text-gray-500 sm:hidden">
-                <span class="font-sans font-bold text-gray-900"
-                  >Vehicle Type:
-                </span>
-                {{ serviceTypeLabelQuote }}<br /><span
-                  class="font-bold text-gray-900"
-                  >Service Type: </span
-                >{{ vehicleTypeLabelQuote }}
-              </div>
-            </td>
-            <td
-              v-if="isPearsonAirportPickupQuote || isPearsonAirportDropoffQuote"
-              class="hidden px-3 py-4 text-right font-sans text-sm text-gray-500 sm:table-cell"
-            >
-              {{
-                serviceTypeLabelQuote !== 'From Airport'
-                  ? 'To Airport'
-                  : serviceTypeLabelQuote
-              }}
-            </td>
-
-            <td
-              v-else
-              class="hidden px-3 py-4 text-right font-sans text-sm text-gray-500 sm:table-cell"
-            >
-              {{ serviceTypeLabelQuote }}
-            </td>
-            <td
-              class="hidden px-3 py-4 text-right font-sans text-sm text-gray-500 sm:table-cell"
-            >
-              {{ vehicleTypeLabelQuote }}
-            </td>
-            <td
-              class="py-4 pl-3 pr-4 text-right font-sans text-sm text-gray-500 sm:pr-6 md:pr-0"
-            >
-              ${{ totalFareQuote ? totalFareQuote?.toFixed(2) : 'Loading....' }}
-            </td>
-          </tr>
-          <tr v-if="isRoundTripQuote" class="border-b border-gray-200">
-            <td class="py-4 pl-4 pr-3 text-sm sm:pl-6 md:pl-0">
-              <div class="mt-0.5 text-gray-500 sm:hidden">
-                <span class="font-sans font-bold text-gray-900">Routing </span>
-              </div>
-              <div class="font-normal text-gray-500">
-                <span class="font-sans font-bold text-gray-900">PU: </span
-                >{{ destinationNameQuote }}
-              </div>
-              <div class="font-normal text-gray-500">
-                <span class="font-sans font-bold text-gray-900">DO: </span>
-                {{ originNameQuote }}
-              </div>
-              <div class="mt-0.5 text-gray-500 sm:hidden">
-                <span class="font-sans font-bold text-gray-900"
-                  >Vehicle Type:
-                </span>
-                {{ serviceTypeLabelQuote }}<br /><span
-                  class="font-sans font-bold text-gray-900"
-                  >Service Type: </span
-                >{{ vehicleTypeLabelQuote }}
-              </div>
-            </td>
-            <td
-              v-if="isPearsonAirportPickupQuote || isPearsonAirportDropoffQuote"
-              class="hidden px-3 py-4 text-right font-sans text-sm text-gray-500 sm:table-cell"
-            >
-              {{
-                serviceTypeLabelQuote === 'From Airport'
-                  ? 'To Airport'
-                  : serviceTypeLabelQuote
-              }}
-            </td>
-
-            <td
-              v-else
-              class="hidden px-3 py-4 text-right font-sans text-sm text-gray-500 sm:table-cell"
-            >
-              {{ serviceTypeLabelQuote }}
-            </td>
-            <td
-              class="hidden px-3 py-4 text-right font-sans text-sm text-gray-500 sm:table-cell"
-            >
-              {{ vehicleTypeLabelQuote }}
-            </td>
-            <td
-              class="py-4 pl-3 pr-4 text-right font-sans text-sm text-gray-500 sm:pr-6 md:pr-0"
-            >
-              ${{ totalFareQuote ? totalFareQuote?.toFixed(2) : 'Loading....' }}
-            </td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr v-if="false">
-            <th
-              scope="row"
-              colspan="3"
-              class="hidden pt-6 pl-6 pr-3 text-right font-sans text-sm font-normal text-gray-500 sm:table-cell md:pl-0"
-            >
-              Subtotal
-            </th>
-            <th
-              scope="row"
-              class="pt-6 pl-4 pr-3 text-left font-sans text-sm font-normal text-gray-500 sm:hidden"
-            >
-              Subtotal
-            </th>
-            <td
-              class="pt-6 pl-3 pr-4 text-right font-sans text-sm text-gray-500 sm:pr-6 md:pr-0"
-            >
-              $0.00
-            </td>
-          </tr>
-          <tr>
-            <th
-              scope="row"
-              colspan="3"
-              class="hidden pt-4 pl-6 pr-3 text-right font-sans text-sm font-normal text-gray-500 sm:table-cell md:pl-0"
-            >
-              Airport Fee
-            </th>
-            <th
-              scope="row"
-              class="pt-4 pl-4 pr-3 text-left font-sans text-sm font-normal text-gray-500 sm:hidden"
-            >
-              Airport Fee
-            </th>
-            <td
-              class="pt-4 pl-3 pr-4 text-right font-sans text-sm text-gray-500 sm:pr-6 md:pr-0"
-            >
-              ${{
-                isPearsonAirportDropoffQuote || isPearsonAirportPickupQuote
-                  ? '15.00'
-                  : '0.00'
-              }}
-            </td>
-          </tr>
-          <tr>
-            <th
-              scope="row"
-              colspan="3"
-              class="hidden pt-4 pl-6 pr-3 text-right font-sans text-sm font-semibold text-gray-900 sm:table-cell md:pl-0"
-            >
-              Total
-            </th>
-            <th
-              scope="row"
-              class="pt-3 pl-4 pr-3 text-left font-sans text-sm font-semibold text-gray-900 sm:hidden"
-            >
-              Total
-            </th>
-            <td
-              class="pt-3 pl-3 pr-4 text-right font-sans text-sm font-semibold text-gray-900 sm:pr-6 md:pr-0"
-            >
-              ${{ roundTripTotalQuote }}
-            </td>
-          </tr>
-        </tfoot>
-      </table>
-      <table class="mt-4">
-        <tr class="border-t border-gray-200 pb-4">
-          <td class="py-2">
-            <BaseContainer>
-              <div
-                class="mt-4 mb-6 grid grid-cols-1 items-start gap-4 md:grid-cols-2"
-              >
-                <div class="mb-2 flex flex-col">
-                  <p class="font-sans text-base font-bold text-black">
-                    Check your email for your trip confirmation
-                  </p>
-                  <p class="max-w-[65ch] font-sans text-sm text-red-700">
-                    **Please note, due to scheduling you may not receive a
-                    confirmation right away. If your trip is not confirmed
-                    within 2 hours, please contact us at 1-800-668-8687.
-                  </p>
-                </div>
-                <div class="flex flex-col">
-                  <p class="font-sans text-base font-bold text-black">
-                    Contact us if your trip is booked within 6 hours or less
-                  </p>
-                  <p class="font-sans text-sm text-red-700">
-                    Due to scheduling, we may not be able to accommodate your
-                    request if it is booked less than two hours from now. We
-                    will contact you asap if we cannot accommodate your booking.
-                  </p>
-                </div>
-              </div>
-            </BaseContainer>
-          </td>
-        </tr>
-      </table>
-    </div>
-  </BaseContainer>
+  </div>
 </template>
+
+<style scoped>
+@media print {
+  img {
+    max-width: 100% !important;
+  }
+}
+</style>

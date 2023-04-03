@@ -8,64 +8,73 @@ interface Props {
   nuxtLink?: boolean
   button?: boolean
 }
+
+const buttonStyles: { [key: string]: string } = {
+  'btn-light':
+    'border-neutral-100 text-neutral-100 hover:border-brand hover:text-brand focus:border-brand focus:ring focus:ring-brand',
+  'btn-brand':
+    'border-brand text-brand hover:border-brand hover:text-brand focus:border-brand focus:ring focus:ring-brand',
+  'btn-dark':
+    'border-neutral-900 text-neutral-900 focus:border-brand focus:ring focus:ring-brand dark:text-neutral-400 dark:border-neutral-400 hover:border-brand hover:text-brand',
+  'btn-flat':
+    'border-0 text-brand font-brand-body hover:text-brand active:outline-none focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand',
+  'btn-solid':
+    'bg-brand border-brand text-neutral-900 hover:border-brand hover:text-neutral-900',
+}
+
 const props = defineProps<Props>()
 
-const btnType = computed(() => {
-  if (props.link) {
-    return true
-  } else if (props.nuxtLink) {
-    return true
-  } else return true
-})
 const btnStyle = computed(() => {
-  if (props.kind === 'btn-light') {
-    return [
-      'inline-flex items-center cursor-pointer border border-solid border-white text-white text-base py-2 px-5 tracking-[0.4em] uppercase hover:border-brand hover:text-brand hover:transform hover:transition hover:ease-in-out hover:scale-x-105 hover:-translate-y-1 hover:duration-300 active:bg-brand/20 focus:border-brand focus:ring focus:ring-brand',
-    ]
-  }
-  if (props.kind === 'btn-brand') {
-    return [
-      'inline-flex items-center cursor-pointer border border-solid border-brand text-brand text-base py-2 px-5 tracking-[0.4em] uppercase hover:border-brand hover:text-brand hover:transform hover:transition hover:ease-in-out hover:scale-x-105 hover:-translate-y-1 hover:duration-300 active:bg-brand/20 focus:border-brand focus:ring focus:ring-brand',
-    ]
-  }
-
-  if (props.kind === 'btn-dark') {
-    return [
-      'inline-flex items-center cursor-pointer border border-solid border-background-dark text-background-dark text-base py-2 px-5 tracking-[0.4em] uppercase hover:border-brand hover:text-brand hover:transform hover:transition hover:ease-in-out hover:scale-x-105 hover:-translate-y-1 hover:duration-300 active:bg-brand/20 focus:border-brand focus:ring focus:ring-brand',
-    ]
-  }
-  if (props.kind === 'btn-flat') {
-    return [
-      'inline-flex items-center cursor-pointer border-0 text-brand font-sans text-base py-2 px-5 tracking-[0.4em] uppercase hover:border-brand hover:text-brand hover:transform hover:transition hover:ease-in-out hover:scale-x-105 hover:-translate-y-1 hover:duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand active:bg-brand/20 active:outline-none',
-    ]
-  }
-  if (props.kind === 'btn-solid') {
-    return [
-      'inline-flex text-center cursor-pointer bg-brand border border-solid border-brand text-background-dark text-sm py-4 px-4 w-full tracking-[0.4em] uppercase hover:border-brand hover:text-background-dark hover:transform-none hover:transition-none active:bg-brand/50 focus:border-brand focus:ring focus:ring-brand',
-    ]
-  }
-  return [
-    'inline-flex items-center cursor-pointer border border-solid border-white text-white text-base py-2 px-5 tracking-[0.4em] uppercase hover:border-brand hover:text-brand hover:transform hover:transition hover:ease-in-out hover:scale-x-105 hover:-translate-y-1 hover:duration-300 active:bg-brand/20 focus:border-brand focus:ring focus:ring-brand',
-  ]
+  const style =
+    buttonStyles[props.kind || 'btn-light'] || buttonStyles['btn-light']
+  return `inline-flex items-center cursor-pointer border border-solid ${style} text-base py-2 px-5 tracking-[0.4em] uppercase transition duration-300 active:bg-brand/20`
 })
+const NuxtLink = resolveComponent('nuxt-link')
 </script>
-
 <template>
-  <button @click="$emit('click')" :class="btnStyle" v-if="button === true">
-    <span class="mx-auto">{{ label }}</span>
-    <slot></slot>
-  </button>
-  <NuxtLink
+  <component
+    :class="['ripple', btnStyle]"
     @click="$emit('click')"
-    v-if="nuxtLink === true"
-    :class="btnStyle"
-    :href="href"
+    v-if="button || nuxtLink || link"
     :to="to"
+    :href="href"
+    :is="button ? 'button' : nuxtLink ? NuxtLink : 'a'"
   >
-    <span class="mx-auto">{{ label }}</span>
-    <slot></slot>
-  </NuxtLink>
-  <a v-if="link === true" :class="btnStyle" :href="href">
-    <slot></slot>
-  </a>
+    <span class="mx-auto">{{ label }}<slot /></span>
+  </component>
 </template>
+
+<style scoped>
+.ripple {
+  position: relative;
+  overflow: hidden;
+  transform: translate3d(0, 0, 0);
+}
+
+.ripple::after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  background-image: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.3) 10%,
+    transparent 10.01%
+  );
+  background-repeat: no-repeat;
+  background-position: 50%;
+  transform: scale(10, 10);
+  opacity: 0;
+  transition: transform 0.3s, opacity 0.5s;
+}
+
+.ripple:hover::after {
+  transform: scale(0, 0);
+  opacity: 0.2;
+  transition: 0s;
+}
+</style>
