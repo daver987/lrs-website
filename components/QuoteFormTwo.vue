@@ -26,35 +26,6 @@ const { user_id } = storeToRefs(userStore)
 const message = useMessage()
 const loadingBar = useLoadingBar()
 
-// const getSalesTax = () => useTrpc().salesTax.get.query()
-// const getLineItems = () => useTrpc().lineItem.get.query()
-// const getVehicle = () => useTrpc().vehicle.get.query()
-// const getService = () => useTrpc().service.get.query()
-//
-// const { data: salesTax, suspense: salesTaxSuspense } = useQuery({
-//   queryKey: ['salesTax'],
-//   queryFn: getSalesTax,
-// })
-// await salesTaxSuspense()
-//
-// const { data: lineItems, suspense: lineItemSuspense } = useQuery({
-//   queryKey: ['lineItem'],
-//   queryFn: getLineItems,
-// })
-// await lineItemSuspense()
-//
-// const { data: vehicle, suspense: vehicleSuspense } = useQuery({
-//   queryKey: ['vehicle'],
-//   queryFn: getVehicle,
-// })
-// await vehicleSuspense()
-//
-// const { data: service, suspense: serviceSuspense } = useQuery({
-//   queryKey: ['service'],
-//   queryFn: getService,
-// })
-// await serviceSuspense()
-
 const service = (await getService()) as Ref<Service[]>
 const vehicle = (await getVehicle()) as Ref<Vehicle[]>
 const lineItem = (await getLineItems()) as Ref<LineItem[]>
