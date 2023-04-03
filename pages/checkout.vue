@@ -8,7 +8,7 @@ definePageMeta({
   layout: 'store',
   colorMode: 'dark',
 })
-
+const gtag = useGtag()
 const stripeClient = useStripe()
 const stripeStore = useStripeStore()
 const { client_secret } = storeToRefs(stripeStore)
@@ -56,8 +56,19 @@ const isLoading = ref(false)
 const bookingHandler = async () => {
   try {
     isLoading.value = true
+    const gclidCookie = useCookie('gclid')
     const stripeResponse = await stripeClient.submitHandler()
     console.log('Stripe Response', stripeResponse)
+    gtag('event', 'book_quote', {
+      event_category: 'Booking',
+      event_label: 'Car Service Booking',
+    })
+    gtag('event', 'conversion', {
+      send_to: 11019465988,
+      value: quote.quote_total,
+      gclid: gclidCookie.value,
+    })
+
     if (typeof stripeResponse?.success === 'number') {
       isLoading.value = false
     } else {

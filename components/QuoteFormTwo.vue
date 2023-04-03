@@ -9,7 +9,6 @@ import {
 import { VueTelInput } from 'vue-tel-input'
 import { LineItem, SalesTax, Service, Vehicle } from '.prisma/client'
 import { Place } from '~/schema/placeSchema'
-import { useGtm } from '@gtm-support/vue-gtm'
 import { useUserStore } from '~/stores/useUserStore'
 import { useQuoteStore } from '~/stores/useQuoteStore'
 import { ref, useTrpc } from '#imports'
@@ -43,19 +42,8 @@ const hoursOptions = computed(() => {
 
 const route = useRoute()
 const gtmValues = route.query
-const gtm = useGtm()
 
 //Todo enable tag manager
-function triggerEvent() {
-  gtm?.trackEvent({
-    event: 'submitQuote',
-    category: 'Request quote',
-    action: 'click',
-    label: 'Request Quote',
-    value: 1,
-    noninteraction: false,
-  })
-}
 
 const formValue: Ref<FormValue> = ref({
   id: user_id.value,
@@ -245,6 +233,26 @@ const handleChangeOrigin = (evt: Place) => {
 const handleChangeDestination = (evt: Place) => {
   formValue.value.destination = evt
 }
+const gtag = useGtag()
+gtag('event', 'submit_form', {
+  event_category: 'Quote',
+  event_label: 'Car Service Quote',
+})
+const gclidCookie = useCookie('gclid')
+const tags = useRuntimeConfig().public
+
+function triggerEvent() {
+  gtag('event', 'submitQuote', {
+    event_category: 'Quote',
+    event_label: 'Request Quote',
+    value: 1,
+    send_to: tags.GA4_SEND_TO,
+    conversion: tags.G_ADS_QUOTE_SUBMIT_CONVERSION,
+    conversion_label: tags.G_ADS_QUOTE_SUBMIT_CONVERSION_LABEL,
+    gclid: gclidCookie.value,
+    non_interaction: false,
+  })
+}
 
 async function onSubmit() {
   try {
@@ -254,6 +262,7 @@ async function onSubmit() {
     console.log('Returned Quote:', quoteData)
     quoteStore.setQuote(quoteData)
     setTimeout(async () => {
+      triggerEvent()
       await navigateTo({
         path: '/cart',
         query: { quote_number: quoteData.quote_number },
@@ -302,6 +311,8 @@ function disablePreviousDate(ts: number) {
             Instant Quote
           </h2>
           <n-form
+            @focus="onFormFocus"
+            @invalid="onFormInvalid"
             ref="formRef"
             :label-width="80"
             :model="formValue"

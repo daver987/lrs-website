@@ -18,16 +18,44 @@ type DateAndTime = [
   hours: number,
   minutes: number
 ]
+function parseMonth(monthStr: string) {
+  const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ]
+
+  const index = monthNames.findIndex((month) => month === monthStr)
+
+  return index === -1 ? null : index + 1
+}
 
 export function parseDateTime(dateStr: string, timeStr: string): DateAndTime {
-  const combinedDateTimeStr = `${dateStr} ${timeStr}`
-  const dateTime = new Date(combinedDateTimeStr)
+  const dateParts = dateStr.split(' ')
+  const year = parseInt(dateParts[2], 10)
+  const month = parseMonth(dateParts[0]) as number
+  const day = parseInt(dateParts[1].slice(0, -1), 10)
 
-  const year = dateTime.getFullYear()
-  const month = dateTime.getMonth() + 1 // Months are zero-based in JavaScript
-  const day = dateTime.getDate()
-  const hours = dateTime.getHours() // Returns hours in 0-23 format
-  const minutes = dateTime.getMinutes()
+  const timeParts = timeStr.split(':')
+  const hours = parseInt(timeParts[0], 10)
+  const minutes = parseInt(timeParts[1].split(' ')[0], 10)
+  const amPm = timeParts[1].split(' ')[1]
 
-  return [year, month, day, hours, minutes]
+  const adjustedHours =
+    amPm === 'PM' && hours !== 12
+      ? hours + 12
+      : hours === 12 && amPm === 'AM'
+      ? 0
+      : hours
+
+  return [year, month, day, adjustedHours, minutes]
 }

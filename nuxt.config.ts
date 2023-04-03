@@ -17,9 +17,9 @@ export default defineNuxtConfig({
     '@nuxt/image-edge',
     '@nuxtjs/color-mode',
     'nuxt-icon',
-    'nuxt-typed-router',
     'nuxt-lodash',
     'nuxt-vitest',
+    'nuxt-gtag',
     '@huntersofbook/naive-ui-nuxt',
     [
       '@pinia/nuxt',
@@ -124,6 +124,11 @@ export default defineNuxtConfig({
     AIRCALL_API_ID: process.env.AIRCALL_API_ID,
     SENDGRID_API_KEY: process.env.SENDGRID_API_KEY,
     public: {
+      GA4_SEND_TO: process.env.GA4_SEND_TO,
+      G_ADS_QUOTE_SUBMIT_CONVERSION: process.env.G_ADS_QUOTE_SUBMIT_CONVERSION,
+      G_ADS_QUOTE_SUBMIT_CONVERSION_LABEL:
+        process.env.G_ADS_QUOTE_SUBMIT_CONVERSION_LABEL,
+      NUXT_PUBLIC_GTAG_ID: process.env.NUXT_PUBLIC_GTAG_ID,
       STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
       GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY,
       WEBSITE_URL: process.env.WEBSITE_URL,
@@ -135,8 +140,23 @@ export default defineNuxtConfig({
       titleSeparator: '|',
     },
   },
+  gtag: {
+    config: {
+      page_title: 'Toronto Car Service | High Park Livery',
+      allow_google_signals: true,
+      allow_ad_personalization_signals: true,
+      cookie_domain: 'auto',
+      cookie_expires: 63072000,
+      cookie_flags: 'SameSite=None;Secure',
+      cookie_path: '/',
+      cookie_update: true,
+      language: 'en-US',
+      send_page_view: true,
+    },
+  },
+
   typescript: {
-    shim: false,
+    shim: true,
   },
   vite: {
     resolve: {
