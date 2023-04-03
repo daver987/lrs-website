@@ -20,8 +20,14 @@ export const bookingRouter = router({
       console.log('Booking input', input)
       const updateData: any = {
         notes: input.notes,
-        large_luggage: input.large_luggage,
-        carry_on_luggage: input.carry_on_luggage,
+      }
+
+      if (input.large_luggage !== null) {
+        updateData.large_luggage = input.large_luggage
+      }
+
+      if (input.carry_on_luggage !== null) {
+        updateData.carry_on_luggage = input.carry_on_luggage
       }
 
       if (input.flight_number || input.arrival_time) {
