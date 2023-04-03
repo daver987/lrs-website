@@ -6,7 +6,7 @@ export async function sendTwilioSms(
   phoneNumber: string,
   checkoutLink: string
 ) {
-  const message = `Hi ${firstName} This is High Park Livery. Thank you for requesting a quote. Please use this link to book: ${checkoutLink}.`
+  const message = `${firstName}, your luxury ride quote is in your email! 🚘 Book with High Park Livery now: ${checkoutLink}. Experience our top-notch service!`
   setTimeout(async () => {
     await twilioClient.messages.create({
       body: message,
