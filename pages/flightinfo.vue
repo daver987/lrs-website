@@ -96,10 +96,13 @@ const submitHandler = async () => {
       </n-space>
     </n-layout-header>
     <n-layout-content content-style="padding: 24px;">
-      <n-grid :cols="2" :x-gap="48">
-        <n-grid-item :span="1">
+      <n-grid cols="1 1000:2" :x-gap="48" :y-gap="24">
+        <n-grid-item>
           <n-space justify="center">
-            <n-card style="width: 500px" title="Frequently Asked Questions">
+            <n-card
+              style="width: 100%; max-width: 500px"
+              title="Frequently Asked Questions"
+            >
               <n-collapse
                 style="max-width: 500px; min-width: 100%"
                 default-expanded-names="1"
@@ -144,7 +147,7 @@ const submitHandler = async () => {
           </n-space>
         </n-grid-item>
 
-        <n-grid-item :span="1">
+        <n-grid-item>
           <n-space justify="center">
             <n-form
               ref="formRef"
