@@ -1,7 +1,7 @@
 import { useTrpc } from '~/composables/useTrpc'
 import { useQuery } from '@tanstack/vue-query'
 import { QuoteFormReturn } from '~/schema/QuoteFormSchema'
-import { z } from 'zod'
+import _ from 'lodash'
 export async function getSalesTax() {
   const getSalesTax = () => useTrpc().salesTax.get.query()
 
@@ -43,8 +43,7 @@ export async function getService() {
   return data
 }
 export async function getQuote(quoteNumber: string) {
-  const quoteNumberSchema = z.coerce.number()
-  const routeQuoteNumber = quoteNumberSchema.parse(quoteNumber)
+  const routeQuoteNumber = _.toNumber(quoteNumber)
   const getQuote = () =>
     useTrpc().quote.get.query({
       quote_number: routeQuoteNumber,

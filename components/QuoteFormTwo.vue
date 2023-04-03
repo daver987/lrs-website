@@ -311,8 +311,6 @@ function disablePreviousDate(ts: number) {
             Instant Quote
           </h2>
           <n-form
-            @focus="onFormFocus"
-            @invalid="onFormInvalid"
             ref="formRef"
             :label-width="80"
             :model="formValue"

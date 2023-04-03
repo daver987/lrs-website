@@ -4,9 +4,9 @@ import { buildLuggageOptions } from '~/composables/useBuildOptions'
 import { FormRules } from 'naive-ui'
 import { Ref } from 'vue'
 
-const quoteNumberAsString = useRoute().query.quote_number as unknown as string
-const quote = await getQuote(quoteNumberAsString)
-const maxLuggage = ref(quote.vehicle.max_luggage as number)
+const quoteNumber = useRoute().query.quote_number as string
+const quote = await getQuote(quoteNumber)
+const maxLuggage = ref(quote.vehicle.max_luggage)
 const formRef = ref(null)
 const luggageOptions = computed(() => buildLuggageOptions(maxLuggage.value))
 
@@ -72,7 +72,9 @@ const isLoading = ref(false)
 const submitHandler = async () => {
   isLoading.value = true
   try {
-    const booking = await useTrpc().book.booking.mutate({ ...formValue.value })
+    const booking = await useTrpc().book.updateBooking.mutate({
+      ...formValue.value,
+    })
     console.log('Booking Object', booking)
     setTimeout(async () => {
       await navigateTo({
@@ -154,116 +156,115 @@ const submitHandler = async () => {
               :label-width="80"
               :model="formValue"
               :rules="rules"
+              style="width: 100%"
             >
-              <n-grid :cols="1" style="max-width: 500px" :y-gap="24">
-                <n-grid-item :span="1">
-                  <n-card title="Flight Information:">
-                    <n-grid :cols="2" :x-gap="16">
-                      <n-grid-item :span="1">
-                        <n-form-item-gi
-                          path="flight_number"
-                          feedback="Enter flight number, e.g. AC116"
-                          :span="1"
-                          class="flight-info"
-                          label="Flight Number:"
-                        >
-                          <n-input
-                            type="text"
-                            id="flight-number"
-                            v-model:value="formValue.flight_number"
-                            required
-                            placeholder="Enter Flight Number.."
-                          />
-                        </n-form-item-gi>
-                      </n-grid-item>
-                      <n-grid-item>
-                        <n-form-item-gi
-                          path="arrival_time"
-                          feedback="Enter Scheduled Arrival Time"
-                          :span="1"
-                          label="Arrival Time:"
-                        >
-                          <n-time-picker
-                            id="arrival-time"
-                            v-model:formatted-value="formValue.arrival_time"
-                            required
-                            format="h:mm a"
-                            :clearable="true"
-                            use12-hours
-                            value-format="p"
-                            placeholder="Enter Arrival Time.."
-                          />
-                        </n-form-item-gi>
-                      </n-grid-item>
-                    </n-grid>
-                  </n-card>
-                </n-grid-item>
+              <n-card
+                title="Flight Information:"
+                style="width: 100%; margin-bottom: 1rem"
+              >
+                <n-grid
+                  cols="1 400:2"
+                  :y-gap="16"
+                  :x-gap="16"
+                  style="width: 100%; min-width: 400px"
+                >
+                  <n-form-item-gi
+                    path="flight_number"
+                    feedback="Enter flight number, e.g. AC116"
+                    class="flight-info"
+                    label="Flight Number:"
+                  >
+                    <n-input
+                      type="text"
+                      id="flight-number"
+                      v-model:value="formValue.flight_number"
+                      required
+                      placeholder="Enter Flight Number.."
+                    />
+                  </n-form-item-gi>
+                  <n-form-item-gi
+                    path="arrival_time"
+                    feedback="Enter Scheduled Arrival Time"
+                    label="Arrival Time:"
+                  >
+                    <n-time-picker
+                      id="arrival-time"
+                      v-model:formatted-value="formValue.arrival_time"
+                      required
+                      format="h:mm a"
+                      :clearable="true"
+                      use12-hours
+                      value-format="p"
+                      placeholder="Enter Arrival Time.."
+                    />
+                  </n-form-item-gi>
+                </n-grid>
+              </n-card>
 
-                <n-grid-item :span="1">
-                  <n-card title="Luggage Information:">
-                    <n-grid :cols="2" :x-gap="12">
-                      <n-form-item-gi
-                        path="carry_on_luggage"
-                        :span="1"
-                        label="Carry-On Luggage:"
-                      >
-                        <n-select
-                          id="carry-on"
-                          v-model:value="formValue.carry_on_luggage"
-                          min="0"
-                          required
-                          placeholder="Select Carry On"
-                          :options="luggageOptions"
-                        />
-                      </n-form-item-gi>
-                      <n-form-item-gi
-                        path="large_luggage"
-                        :span="1"
-                        label="Full-Size Luggage:"
-                      >
-                        <n-select
-                          id="full-size"
-                          v-model:value="formValue.large_luggage"
-                          min="0"
-                          required
-                          placeholder="Select Large Luggage"
-                          :options="luggageOptions"
-                        />
-                      </n-form-item-gi>
-                    </n-grid>
-                  </n-card>
-                </n-grid-item>
-                <n-grid-item :span="2">
-                  <n-card title="Trip Notes">
-                    <n-form-item
-                      path="trip_notes"
-                      label="Trip Notes"
-                      :show-label="false"
-                      feedback="Add any notes or special instructions your trip."
-                    >
-                      <n-input
-                        v-model:value="formValue.trip_notes"
-                        type="textarea"
-                        rows="4"
-                        placeholder="Enter Trip Notes"
-                      />
-                    </n-form-item>
-                    <template #footer>
-                      <n-button
-                        :loading="isLoading"
-                        @click="submitHandler"
-                        text-color="#fff"
-                        style="
-                          width: 100%;
-                          background-color: #a57c52;
-                          text-transform: uppercase;
-                        "
-                        >Continue
-                      </n-button>
-                    </template>
-                  </n-card>
-                </n-grid-item>
-              </n-grid>
+              <n-card
+                title="Luggage Information:"
+                style="width: 100%; margin-bottom: 1rem"
+              >
+                <n-grid cols="1 400:2" :y-gap="16" :x-gap="16">
+                  <n-form-item-gi
+                    path="carry_on_luggage"
+                    label="Carry-On Luggage:"
+                  >
+                    <n-select
+                      id="carry-on"
+                      v-model:value="formValue.carry_on_luggage"
+                      min="0"
+                      required
+                      placeholder="Select Carry On"
+                      :options="luggageOptions"
+                    />
+                  </n-form-item-gi>
+                  <n-form-item-gi
+                    path="large_luggage"
+                    label="Full-Size Luggage:"
+                  >
+                    <n-select
+                      id="full-size"
+                      v-model:value="formValue.large_luggage"
+                      min="0"
+                      required
+                      placeholder="Select Large Luggage"
+                      :options="luggageOptions"
+                    />
+                  </n-form-item-gi>
+                </n-grid>
+              </n-card>
+              <n-card
+                title="Trip Notes"
+                style="width: 100%; margin-bottom: 1rem"
+              >
+                <n-form-item
+                  path="trip_notes"
+                  label="Trip Notes"
+                  :show-label="false"
+                  feedback="Add any notes or special instructions your trip."
+                >
+                  <n-input
+                    v-model:value="formValue.trip_notes"
+                    type="textarea"
+                    rows="4"
+                    placeholder="Enter Trip Notes"
+                  />
+                </n-form-item>
+                <template #footer>
+                  <n-button
+                    :loading="isLoading"
+                    @click="submitHandler"
+                    text-color="#fff"
+                    style="
+                      width: 100%;
+                      background-color: #a57c52;
+                      text-transform: uppercase;
+                    "
+                    >Continue
+                  </n-button>
+                </template>
+              </n-card>
             </n-form>
           </n-space>
         </n-grid-item>

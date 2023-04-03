@@ -4,7 +4,7 @@ import { createConfirmationEmail } from '~/server/services/sendGridEmail'
 import { quoteFormReturnSchema } from '~/schema/QuoteFormSchema'
 
 export const bookingRouter = router({
-  booking: publicProcedure
+  updateBooking: publicProcedure
     .input(
       z.object({
         quote_number: z.number(),
@@ -17,6 +17,7 @@ export const bookingRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      console.log('Booking input', input)
       const updateData: any = {
         notes: input.notes,
         large_luggage: input.large_luggage,
