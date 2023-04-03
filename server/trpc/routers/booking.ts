@@ -8,15 +8,30 @@ export const bookingRouter = router({
     .input(
       z.object({
         quote_number: z.number(),
-        notes: z.string().optional(),
+        notes: z.string().optional().default('No notes supplied'),
         id: z.string(),
-        large_luggage: z.number(),
-        carry_on_luggage: z.number(),
-        flight_number: z.string(),
-        arrival_time: z.string(),
+        large_luggage: z.number().nullable().default(0),
+        carry_on_luggage: z.number().nullable().default(0),
+        flight_number: z.string().nullable().default('No Flight Supplied'),
+        arrival_time: z.string().nullable().default('No Arrival time Supplied'),
       })
     )
     .mutation(async ({ ctx, input }) => {
+      const updateData: any = {
+        notes: input.notes,
+        large_luggage: input.large_luggage,
+        carry_on_luggage: input.carry_on_luggage,
+      }
+
+      if (input.flight_number || input.arrival_time) {
+        updateData.flight = {
+          create: {
+            flight_number: input.flight_number || 'No Flight Supplied',
+            arrival_time: input.arrival_time || 'No Arrival time Supplied',
+          },
+        }
+      }
+
       const data = await ctx.prisma.quote.update({
         where: {
           quote_number: input.quote_number,
@@ -24,18 +39,8 @@ export const bookingRouter = router({
         data: {
           is_booked: true,
           trips: {
-            update: {
-              data: {
-                notes: input.notes,
-                large_luggage: input.large_luggage,
-                carry_on_luggage: input.carry_on_luggage,
-                flight: {
-                  create: {
-                    flight_number: input.flight_number,
-                    arrival_time: input.arrival_time,
-                  },
-                },
-              },
+            updateMany: {
+              data: updateData,
               where: {
                 id: input.id,
               },
@@ -43,11 +48,13 @@ export const bookingRouter = router({
           },
         },
       })
+
       return {
         data,
         status: 200,
       }
     }),
+
   confirmOrder: publicProcedure
     .input(quoteFormReturnSchema)
     .mutation(async ({ ctx, input }) => {

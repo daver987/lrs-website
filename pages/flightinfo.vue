@@ -52,17 +52,17 @@ const rules = {
   },
 
   flight_number: {
-    required: true,
+    required: false,
     message: 'A Flight Number is Required',
     trigger: 'blur',
   },
   trip_notes: {
-    required: true,
+    required: false,
     message: 'Enter In Trip Notes',
     trigger: 'blur',
   },
   quote_number: {
-    required: true,
+    required: false,
     message: 'Add Quote',
     trigger: 'blur',
   },
@@ -72,7 +72,6 @@ const isLoading = ref(false)
 const submitHandler = async () => {
   isLoading.value = true
   try {
-    //@ts-ignore
     const booking = await useTrpc().book.booking.mutate({ ...formValue.value })
     console.log('Booking Object', booking)
     setTimeout(async () => {
@@ -81,7 +80,7 @@ const submitHandler = async () => {
         query: { quote_number: quote.quote_number },
       })
       isLoading.value = false
-    }, 2500)
+    }, 1500)
   } catch (error) {
     console.error('Error during booking:', error)
     isLoading.value = false

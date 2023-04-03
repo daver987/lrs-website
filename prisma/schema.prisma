@@ -165,8 +165,8 @@ model Trip {
   notes               String?
   trip_order          Int?       @default(0)
   price_id            String?
-  carry_on_luggage    Int        @default(0)
-  large_luggage       Int        @default(0)
+  carry_on_luggage    Int?       @default(0)
+  large_luggage       Int?       @default(0)
   meta_data           Json?
   price               Price?
   quote               Quote      @relation(fields: [quote_number], references: [quote_number], onDelete: Cascade)

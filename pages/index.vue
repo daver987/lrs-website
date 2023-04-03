@@ -12,25 +12,19 @@ const color = useColorMode()
 console.log('color', color.value)
 const iconColor = color.value === 'light' ? '#fff' : '#737373'
 const $img = useImage()
-const backgroundImage = computed(() => {
-  const imgUrl = $img(
-    'https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/c2f2c5f0-7a8d-4617-e4aa-d81156a40600/4200',
-    { width: 100 }
-  )
-  return { backgroundImage: `url('${imgUrl}')` }
-})
-const fleetImage = computed(() => {
-  const imgUrl = $img(
-    'https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/5d10059a-b5c4-44cc-ef3f-6ef867396000/1920',
-    { width: 100 }
-  )
-  return { backgroundImage: `url('${imgUrl}')` }
-})
+const backgroundImage = ref(
+  'https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/c2f2c5f0-7a8d-4617-e4aa-d81156a40600/4200'
+)
+const fleetBackgroundImage = ref(
+  'https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/5d10059a-b5c4-44cc-ef3f-6ef867396000/1920'
+)
+const bgImg = useBackgroundImage($img, backgroundImage)
+const fleetBackgroundImg = useBackgroundImage($img, fleetBackgroundImage)
 </script>
 
 <template>
   <div>
-    <div class="relative min-h-screen overflow-hidden" :style="backgroundImage">
+    <div class="relative min-h-screen overflow-hidden" :style="bgImg">
       <AppNavigation />
       <div class="relative">
         <div class="mt-16 sm:mt-24">
@@ -87,7 +81,7 @@ const fleetImage = computed(() => {
     </BaseSection>
     <BaseSection
       class="bg-black/50 bg-cover bg-center bg-no-repeat pt-10 bg-blend-hard-light"
-      :style="fleetImage"
+      :style="fleetBackgroundImg"
     >
       <BaseContainer
         class="flex flex-col place-items-center justify-between lg:flex-row"
@@ -118,7 +112,7 @@ const fleetImage = computed(() => {
       <BaseContainer
         class="-mt-12 grid grid-cols-1 gap-6 bg-white shadow-xl dark:bg-neutral-700 md:grid-cols-2"
       >
-        <div class="py-10 px-6 font-brand-body text-neutral-400 md:pr-12">
+        <div class="px-6 py-10 font-brand-body text-neutral-400 md:pr-12">
           <p class="font-brand-body text-sm">
             Upgrade your travel experience with
             <span class="font-brand-subheading text-sm uppercase text-brand"
@@ -202,7 +196,7 @@ const fleetImage = computed(() => {
       />
     </BaseSection>
     <BaseSection class="px-4 pt-0 sm:px-6 lg:px-8">
-      <BaseContainer class="-mt-16 bg-white pt-32 pb-16 dark:bg-neutral-700">
+      <BaseContainer class="-mt-16 bg-white pb-16 pt-32 dark:bg-neutral-700">
         <p
           class="text-center font-brand-subheading uppercase tracking-[0.4em] text-brand"
         >

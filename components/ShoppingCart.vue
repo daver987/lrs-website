@@ -27,7 +27,7 @@ const createBooking = async () => {
       stripeStore.setCustomer(stripeId)
       stripeStore.setClientSecret(setupIntent)
       await navigateTo({
-        path: '/FlightInfo',
+        path: '/flightinfo',
         query: { quote_number: quoteNumber.value },
       })
     } else {
