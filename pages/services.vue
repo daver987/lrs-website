@@ -15,6 +15,14 @@ const headerInfo = {
     'background-image: url("https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/957a09cd-d97c-4f1d-1226-f7c31cdd8d00/1920")',
   body: "High Park Livery is here to help you get from place to place. It's our job to provide you with the means of transportation, and we won't stop until it's done right.",
 }
+const $img = useImage()
+const backgroundImage = computed(() => {
+  const imgUrl = $img('images/toronto-9.jpg', {
+    width: '100%',
+    style: 'filter: greyscale(100%)',
+  })
+  return { backgroundImage: `url('${imgUrl}')` }
+})
 </script>
 
 <template>
@@ -72,7 +80,7 @@ const headerInfo = {
           <div :class="service.infoPosition" class="flex">
             <div
               :class="service.infoBoxPosition"
-              class="space-y-4 px-5 py-7 md:py-12 md:px-10"
+              class="space-y-4 px-5 py-7 md:px-10 md:py-12"
             >
               <h2
                 class="font-brand-subheading uppercase tracking-widest text-brand"
@@ -103,18 +111,20 @@ const headerInfo = {
     </BaseSection>
     <BaseSection
       class="space-y-3 bg-cover bg-center bg-no-repeat"
-      style="background-image: url('/images/niagara-falls-1.jpg')"
+      :style="backgroundImage"
     >
-      <p
-        class="text-center font-brand-subheading uppercase tracking-widest text-brand-400"
-      >
-        High Park Livery Tours
-      </p>
-      <h2
-        class="text-center font-brand-heading text-4xl uppercase text-neutral-200"
-      >
-        Tour Services Available
-      </h2>
+      <div class="w-full">
+        <p
+          class="text-center font-brand-subheading uppercase tracking-widest text-brand-400"
+        >
+          High Park Livery Tours
+        </p>
+        <h2
+          class="text-center font-brand-heading text-4xl uppercase text-neutral-200"
+        >
+          Tour Services Available
+        </h2>
+      </div>
     </BaseSection>
     <BaseSection class="pt-0">
       <BaseContainer
