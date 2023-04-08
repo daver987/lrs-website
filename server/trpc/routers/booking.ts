@@ -4,40 +4,20 @@ import { createConfirmationEmail } from '~/server/services/sendGridEmail'
 import { quoteFormReturnSchema } from '~/schema/QuoteFormSchema'
 
 export const bookingRouter = router({
-  updateBooking: publicProcedure
+  update: publicProcedure
     .input(
       z.object({
         quote_number: z.number(),
         notes: z.string().optional().default('No notes supplied'),
         id: z.string(),
-        large_luggage: z.number().nullable().default(0),
-        carry_on_luggage: z.number().nullable().default(0),
-        flight_number: z.string().nullable().default('No Flight Supplied'),
-        arrival_time: z.string().nullable().default('No Arrival time Supplied'),
+        large_luggage: z.number().optional().nullable(),
+        carry_on_luggage: z.number().optional().nullable(),
+        flight_number: z.string().optional().nullable(),
+        arrival_time: z.string().optional().nullable(),
       })
     )
     .mutation(async ({ ctx, input }) => {
       console.log('Booking input', input)
-      const updateData: any = {
-        notes: input.notes,
-      }
-
-      if (input.large_luggage !== null) {
-        updateData.large_luggage = input.large_luggage
-      }
-
-      if (input.carry_on_luggage !== null) {
-        updateData.carry_on_luggage = input.carry_on_luggage
-      }
-
-      if (input.flight_number || input.arrival_time) {
-        updateData.flight = {
-          create: {
-            flight_number: input.flight_number || 'No Flight Supplied',
-            arrival_time: input.arrival_time || 'No Arrival time Supplied',
-          },
-        }
-      }
 
       const data = await ctx.prisma.quote.update({
         where: {
@@ -45,26 +25,44 @@ export const bookingRouter = router({
         },
         data: {
           is_booked: true,
-          trips: {
-            updateMany: {
-              data: updateData,
+        },
+      })
+      const tripData = ctx.prisma.trip.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          carry_on_luggage: input.carry_on_luggage,
+          large_luggage: input.large_luggage,
+          notes: input.notes,
+          flight: {
+            connectOrCreate: {
               where: {
-                id: input.id,
+                trip_id: input.id,
+              },
+              create: {
+                flight_number: input.flight_number!,
+                arrival_time: input.arrival_time,
               },
             },
           },
         },
+        include: {
+          payment: true,
+          price: true,
+        },
       })
 
       return {
-        data,
+        ...tripData,
+        ...data,
         status: 200,
       }
     }),
 
   confirmOrder: publicProcedure
     .input(quoteFormReturnSchema)
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({ input }) => {
       const sendGridKey = useRuntimeConfig().SENDGRID_API_KEY
       console.log('Booking Information', input)
       await createConfirmationEmail(input, sendGridKey)

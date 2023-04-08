@@ -25,7 +25,15 @@ const {
   quote_number,
   quote_total,
   combined_line_items,
-} = quote
+} = quote!
+
+const payment = trips[0].payment
+const setupIntentJson = payment?.setup_intent
+const setupIntent = JSON.parse(setupIntentJson as string)
+console.log('Setup Intent', setupIntent)
+const prices = trips[0].price
+const locations = trips[0].locations
+
 const {
   fullName,
   emailAddress,
@@ -41,7 +49,7 @@ const {
 fullName.value = user.full_name!
 emailAddress.value = user.email_address!
 phoneNumber.value = user.phone_number!
-clientSecret.value = client_secret.value
+clientSecret.value = setupIntent?.client_secret
 quoteNumber.value = quote_number!
 websiteURL.value = useRuntimeConfig().public.WEBSITE_URL
 publicKey.value = useRuntimeConfig().public.STRIPE_PUBLISHABLE_KEY

@@ -30,9 +30,9 @@ export function buildHoursOptions(): Option[] {
 
 export function buildLuggageOptions(numLuggage: number): Option[] {
   const options: Option[] = []
-  for (let i = 1; i <= numLuggage; i++) {
+  for (let i = 0; i <= numLuggage; i++) {
     options.push({
-      label: `${i} Luggage Bag${i > 1 ? 's' : ''}`,
+      label: `${i} Luggage Bag${i !== 1 ? 's' : ''}`,
       value: i,
       isDisabled: false,
     })

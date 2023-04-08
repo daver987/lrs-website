@@ -221,7 +221,7 @@ model Flight {
   updated_at            DateTime @updatedAt
   airline_code          String?
   airline_name          String?
-  flight_number         String
+  flight_number         String?
   is_active             Boolean  @default(false)
   is_landed             Boolean  @default(false)
   is_arrived            Boolean  @default(false)

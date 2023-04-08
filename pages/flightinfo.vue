@@ -72,7 +72,7 @@ const isLoading = ref(false)
 const submitHandler = async () => {
   isLoading.value = true
   try {
-    const booking = await useTrpc().book.updateBooking.mutate({
+    const booking = await useTrpc().book.update.mutate({
       ...formValue.value,
     })
     console.log('Booking Object', booking)
@@ -269,6 +269,9 @@ const submitHandler = async () => {
           </n-space>
         </n-grid-item>
       </n-grid>
+      <n-card>
+        <pre>{{ formValue }}</pre>
+      </n-card>
     </n-layout-content>
   </n-layout>
 </template>
