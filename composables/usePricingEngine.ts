@@ -136,7 +136,6 @@ export function usePricingEngine(
         return { label: item.label, tax: tax, total: amount }
       }),
     ]
-    console.log('Line Items Details', lineItemDetails)
     detailedLineItems.value = lineItemDetails
     subTotal.value = lineItemDetails.reduce((acc, item) => acc + item.total, 0)
     taxTotal.value = lineItemDetails.reduce((acc, item) => acc + item.tax, 0)

@@ -78,9 +78,8 @@ const submitHandler = async () => {
       ...formValue.value,
     })
     console.log('Booking Object', booking)
-
+    stripeStore.setSession(booking)
     setTimeout(async () => {
-      stripeStore.setSession(booking)
       await navigateTo({
         path: '/checkout',
         query: { quote_number: quote?.quote_number },
@@ -273,9 +272,6 @@ const submitHandler = async () => {
           </n-space>
         </n-grid-item>
       </n-grid>
-      <n-card>
-        <pre>{{ formValue }}</pre>
-      </n-card>
     </n-layout-content>
   </n-layout>
 </template>

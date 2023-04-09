@@ -355,6 +355,7 @@ function disablePreviousDate(ts: number) {
                   :default-value="Date.now()"
                   :is-date-disabled="disablePreviousDate"
                   value-format="PPP"
+                  input-readonly
                 />
               </n-form-item-gi>
               <n-form-item-gi
@@ -370,6 +371,7 @@ function disablePreviousDate(ts: number) {
                     :clearable="true"
                     use12-hours
                     value-format="p"
+                    input-readonly
                   />
                   <n-switch
                     v-if="false"
@@ -395,6 +397,7 @@ function disablePreviousDate(ts: number) {
                     placeholder="Select Return Date"
                     :default-value="Date.now()"
                     :is-date-disabled="disablePreviousDate"
+                    input-readonly
                   />
                 </n-form-item-gi>
                 <n-form-item-gi
@@ -408,6 +411,7 @@ function disablePreviousDate(ts: number) {
                     format="h:mm a"
                     :clearable="true"
                     use12-hours
+                    input-readonly
                   />
                 </n-form-item-gi>
               </n-grid>
