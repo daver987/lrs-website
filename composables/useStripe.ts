@@ -15,7 +15,7 @@ const appearance = {
     colorText: '#222222',
     colorDanger: '#df1b41',
     fontFamily: 'Inter Var, system-ui, sans-serif',
-    spacingUnit: '2px',
+    spacingUnit: '2 px',
     borderRadius: '4px',
   },
 } as const

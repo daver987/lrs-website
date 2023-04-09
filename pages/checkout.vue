@@ -2,6 +2,8 @@
 import { useStripeStore } from '~/stores/useStripeStore'
 import { storeToRefs } from 'pinia'
 import { ref } from '#imports'
+import { Ref } from 'vue'
+import type { Payment } from '~/prisma/generated/zod'
 
 definePageMeta({
   name: 'checkout',
@@ -11,8 +13,11 @@ definePageMeta({
 const gtag = useGtag()
 const stripeClient = useStripe()
 const stripeStore = useStripeStore()
-const { client_secret } = storeToRefs(stripeStore)
+const { session } = storeToRefs(stripeStore)
 const loading = ref(false)
+const payment: Ref<Payment | null> = ref(null)
+const setupIntentJson: Ref<null | any> = ref(null)
+const setupIntent: Ref<string | null> = ref(null)
 
 const quoteNumberAsString = useRoute().query.quote_number as unknown as string
 const quote = await getQuote(quoteNumberAsString)
@@ -27,10 +32,15 @@ const {
   combined_line_items,
 } = quote!
 
-const payment = trips[0].payment
-const setupIntentJson = payment?.setup_intent
-const setupIntent = JSON.parse(setupIntentJson as string)
-console.log('Setup Intent', setupIntent)
+if (!trips) {
+  payment.value = session as Ref<Payment>
+} else {
+  payment.value = trips[0].payment
+}
+
+setupIntentJson.value = payment.value?.setup_intent
+setupIntent.value = JSON.parse(setupIntentJson.value as string)
+console.log('Setup Intent', setupIntent.value)
 const prices = trips[0].price
 const locations = trips[0].locations
 
@@ -49,7 +59,7 @@ const {
 fullName.value = user.full_name!
 emailAddress.value = user.email_address!
 phoneNumber.value = user.phone_number!
-clientSecret.value = setupIntent?.client_secret
+clientSecret.value = setupIntent.value?.client_secret
 quoteNumber.value = quote_number!
 websiteURL.value = useRuntimeConfig().public.WEBSITE_URL
 publicKey.value = useRuntimeConfig().public.STRIPE_PUBLISHABLE_KEY
@@ -73,7 +83,7 @@ const bookingHandler = async () => {
     })
     gtag('event', 'conversion', {
       send_to: 11019465988,
-      value: quote.quote_total,
+      value: quote?.quote_total,
       gclid: gclidCookie.value,
     })
 
@@ -151,7 +161,7 @@ const bookingHandler = async () => {
             >
               <li
                 v-for="trip in trips"
-                :key="trip.formatted_pickup_time"
+                :key="trip.pickup_time"
                 class="flex items-start space-x-4 py-6"
               >
                 <NuxtPicture

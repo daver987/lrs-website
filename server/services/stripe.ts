@@ -30,6 +30,9 @@ export async function getOrCreateStripCustomerId({
     },
     select: {
       stripe_customer_id: true,
+      email_address: true,
+      full_name: true,
+      phone_number: true,
     },
   })
 

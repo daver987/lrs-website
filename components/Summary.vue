@@ -5,8 +5,8 @@ import { ArrowBackIcon } from 'naive-ui/es/_internal/icons'
 const quoteNumberAsString = useRoute().query.quote_number as unknown as string
 const quote = await getQuote(quoteNumberAsString)
 
-const { quote_number, user, vehicle, trips, service, combined_line_items } =
-  quote
+// const { quote_number, user, vehicle, trips, service, combined_line_items } =
+//   quote
 const orderSummary = ref(null)
 async function sendConfirmation(quoteData) {
   await useTrpc().book.confirmOrder.mutate(quoteData)

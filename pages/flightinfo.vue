@@ -3,12 +3,14 @@ import { ref, computed, useTrpc } from '#imports'
 import { buildLuggageOptions } from '~/composables/useBuildOptions'
 import { FormRules } from 'naive-ui'
 import { Ref } from 'vue'
+import { useStripeStore } from '~/stores/useStripeStore'
 
 const quoteNumber = useRoute().query.quote_number as string
 const quote = await getQuote(quoteNumber)
-const maxLuggage = ref(quote.vehicle.max_luggage)
+const maxLuggage = ref(quote?.vehicle.max_luggage)
 const formRef = ref(null)
-const luggageOptions = computed(() => buildLuggageOptions(maxLuggage.value))
+const luggageOptions = computed(() => buildLuggageOptions(maxLuggage.value!))
+const stripeStore = useStripeStore()
 
 interface AirportInfoForm {
   id: string
@@ -20,15 +22,15 @@ interface AirportInfoForm {
   quote_number: number
 }
 
-const formValue: Ref<AirportInfoForm> = ref({
-  id: quote.trips[0].id,
+const formValue = ref({
+  id: quote?.trips[0].id,
   carry_on_luggage: null,
   large_luggage: null,
   flight_number: null,
   arrival_time: null,
   trip_notes: null,
-  quote_number: quote.quote_number,
-})
+  quote_number: quote?.quote_number,
+}) as Ref<AirportInfoForm>
 
 const rules = {
   arrival_time: {
@@ -76,10 +78,12 @@ const submitHandler = async () => {
       ...formValue.value,
     })
     console.log('Booking Object', booking)
+
     setTimeout(async () => {
+      stripeStore.setSession(booking)
       await navigateTo({
         path: '/checkout',
-        query: { quote_number: quote.quote_number },
+        query: { quote_number: quote?.quote_number },
       })
       isLoading.value = false
     }, 1500)

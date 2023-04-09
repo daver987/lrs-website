@@ -52,6 +52,8 @@ export async function getQuote(quoteNumber: string) {
     queryKey: ['quote'],
     queryFn: getQuote,
   })
+
   await suspense()
+
   return data.value
 }
