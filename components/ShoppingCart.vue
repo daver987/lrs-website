@@ -7,7 +7,7 @@ import { ref } from '#imports'
 
 const quoteNumberAsString = useRoute().query.quote_number as unknown as string
 const quote = await getQuote(quoteNumberAsString)
-const quoteNumber = ref(quote.quote_number)
+const quoteNumber = ref(quote?.quote_number)
 const cartStore = useCartStore()
 const stripeStore = useStripeStore()
 const { addedToCart, loading } = storeToRefs(cartStore)
@@ -20,7 +20,7 @@ const createBooking = async () => {
     const { setupIntent, stripeId, statusCode } =
       await useTrpc().stripe.createSetup.mutate({
         userId: quote!.user.id,
-        quoteNumber: quoteNumber.value,
+        quoteNumber: quoteNumber.value as number,
       })
 
     if (statusCode === 200) {
@@ -28,7 +28,10 @@ const createBooking = async () => {
       stripeStore.setClientSecret(setupIntent)
       await navigateTo({
         path: '/flightinfo',
-        query: { quote_number: quoteNumber.value },
+        query: {
+          quote_number: quoteNumber.value,
+          client_secret: setupIntent.client_secret,
+        },
       })
     } else {
       console.error('Failed to create booking. Status code:', statusCode)

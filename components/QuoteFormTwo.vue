@@ -28,7 +28,7 @@ const loadingBar = useLoadingBar()
 const service = (await getService()) as Ref<Service[]>
 const vehicle = (await getVehicle()) as Ref<Vehicle[]>
 const lineItem = (await getLineItems()) as Ref<LineItem[]>
-const salesTax = (await getSalesTax()) as Ref<SalesTax[]>
+const salesTax = (await getSalesTax()) as SalesTax[]
 
 const vehicleOptions = computed(() => {
   return computeVehicleOptions(vehicle.value)

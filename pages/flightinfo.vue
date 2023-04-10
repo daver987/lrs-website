@@ -6,6 +6,7 @@ import { Ref } from 'vue'
 import { useStripeStore } from '~/stores/useStripeStore'
 
 const quoteNumber = useRoute().query.quote_number as string
+const clientSecret = useRoute().query.client_secret
 const quote = await getQuote(quoteNumber)
 const maxLuggage = ref(quote?.vehicle.max_luggage)
 const formRef = ref(null)
@@ -82,7 +83,10 @@ const submitHandler = async () => {
     setTimeout(async () => {
       await navigateTo({
         path: '/checkout',
-        query: { quote_number: quote?.quote_number },
+        query: {
+          quote_number: quote?.quote_number,
+          client_secret: clientSecret,
+        },
       })
       isLoading.value = false
     }, 1500)

@@ -2,22 +2,20 @@
 import { useStripeStore } from '~/stores/useStripeStore'
 import { storeToRefs } from 'pinia'
 import { ref } from '#imports'
-import { Ref } from 'vue'
-import type { Payment } from '~/prisma/generated/zod'
 
 definePageMeta({
   name: 'checkout',
   layout: 'store',
   colorMode: 'dark',
 })
+
+const stripe = useNuxtApp().$stripe
+console.log('stripe', stripe)
+
 const gtag = useGtag()
 const stripeClient = useStripe()
 const stripeStore = useStripeStore()
 const { session } = storeToRefs(stripeStore)
-const loading = ref(false)
-const payment: Ref<Payment | null> = ref(null)
-const setupIntentJson: Ref<null | any> = ref(null)
-const setupIntent: Ref<string | null> = ref(null)
 
 const quoteNumberAsString = useRoute().query.quote_number as unknown as string
 const quote = await getQuote(quoteNumberAsString)
@@ -31,18 +29,6 @@ const {
   quote_total,
   combined_line_items,
 } = quote!
-
-if (!trips) {
-  payment.value = session as Ref<Payment>
-} else {
-  payment.value = trips[0].payment
-}
-
-setupIntentJson.value = payment.value?.setup_intent
-setupIntent.value = JSON.parse(setupIntentJson.value as string)
-console.log('Setup Intent', setupIntent.value)
-const prices = trips[0].price
-const locations = trips[0].locations
 
 const {
   fullName,
@@ -59,7 +45,7 @@ const {
 fullName.value = user.full_name!
 emailAddress.value = user.email_address!
 phoneNumber.value = user.phone_number!
-clientSecret.value = setupIntent.value?.client_secret
+clientSecret.value = useRoute().query.client_secret as string
 quoteNumber.value = quote_number!
 websiteURL.value = useRuntimeConfig().public.WEBSITE_URL
 publicKey.value = useRuntimeConfig().public.STRIPE_PUBLISHABLE_KEY

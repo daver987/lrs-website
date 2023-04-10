@@ -27,11 +27,6 @@ onBeforeMount(async () => {
 const itemsInCart = computed(() =>
   addedToCart.value ? (quote.value!.is_round_trip ? 2 : 1) : 0
 )
-
-// const trips = computed(() => (quote ? quote.trips : []))
-// const serviceLabel = computed(() =>
-//   quote && quote.trips.length > 0 ? quote.service.label : ''
-// )
 </script>
 
 <template>

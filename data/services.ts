@@ -43,7 +43,7 @@ export const services = [
     imagePosition: 'md:col-span-1 md:row-start-1 md:max-w-md md:mx-auto',
     infoPosition: 'md:self-stretch md:col-span-1 md:row-start-2',
     infoBoxPosition:
-      'bg-white shadow-xl px-4 py-6 md:px-6 lg:px-8 md:mx-2 md:pt-16 md:-mt-16 dark:bg-neutral-700',
+      'bg-white shadow-xl px-4 pm-6 md:px-6 lg:px-8 md:mx-2 md:pt-16 md:-mt-16 dark:bg-neutral-700',
   },
   {
     title: 'HOURLY SERVICE',
