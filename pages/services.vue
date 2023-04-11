@@ -2,8 +2,10 @@
 import { services } from '~/data/services'
 import { ourTours, Tour } from '~/data/tours'
 definePageMeta({
+  title: 'High Park Livery Services - Quality Black Car Solutions in Toronto',
+  description:
+    "Explore High Park Livery's wide range of black car services in Toronto, including airport transfers, corporate travel, and special event transportation.",
   layout: 'default',
-  title: 'High Park Livery | Our Services',
   colorMode: 'dark',
 })
 

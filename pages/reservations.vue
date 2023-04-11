@@ -11,7 +11,9 @@ import {
 import { navigation } from '~/data/navigation'
 
 definePageMeta({
-  title: 'Reservations',
+  title: 'Reserve Your High Park Livery Black Car Service in Toronto',
+  description:
+    'Book your next High Park Livery ride online. Ensure a seamless and luxurious transportation experience for airport transfers, corporate travel, and special events.',
   layout: 'auth',
   name: 'reservations',
 })

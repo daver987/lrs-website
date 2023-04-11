@@ -1,7 +1,9 @@
 <script lang="ts" setup>
 definePageMeta({
+  title: "About High Park Livery - Greater Toronto's Black Car Service Experts",
+  description:
+    'Learn about High Park Livery, the trusted provider of black car services in the Greater Toronto Area. Discover our commitment to exceptional service and reliability.',
   layout: 'default',
-  title: 'High Park Livery | About Us',
   colorMode: 'dark',
 })
 

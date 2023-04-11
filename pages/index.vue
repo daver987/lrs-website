@@ -3,6 +3,9 @@ import { servicesHome } from '~/data/servicesHome'
 import { features } from '~/data/features'
 
 definePageMeta({
+  title: 'High Park Livery - Premium Black Car Service in Greater Toronto',
+  description:
+    'High Park Livery offers top-quality black car services in the Greater Toronto Area. Book a ride for airport transfers, corporate travel, or special events.',
   name: 'Home',
   layout: 'default',
   colorMode: 'dark',
