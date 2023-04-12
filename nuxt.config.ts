@@ -108,7 +108,7 @@ export default defineNuxtConfig({
     },
   },
   nitro: {
-    preset: 'vercel',
+    preset: 'netlify',
   },
   runtimeConfig: {
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
