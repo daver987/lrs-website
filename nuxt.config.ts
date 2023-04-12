@@ -8,7 +8,7 @@ export default defineNuxtConfig({
   build: {
     transpile: ['@headlessui/vue', '@googlemaps/js-api-loader', 'trpc-nuxt'],
   },
-  css: ['vue-tel-input/dist/vue-tel-input.css'],
+  css: ['vue-tel-input/vue-tel-input.css'],
   modules: [
     '@vueuse/nuxt',
     '@nuxtjs/robots',
