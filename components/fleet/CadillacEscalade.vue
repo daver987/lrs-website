@@ -34,7 +34,7 @@
       </BaseCard>
       <div>
         <NuxtPicture
-          src="/images/premium_suv_12.jpeg"
+          src="/images/premium_suv-12.jpg"
           alt="Cadillac-Escalade"
           :img-attrs="{ class: 'object-cover object-center w-full' }"
           width="1980"

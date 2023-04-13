@@ -10,7 +10,7 @@
       </div>
       <div>
         <NuxtPicture
-          src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/58d16f60-282e-4e29-1805-ebfee9794f00/1920"
+          src="/images/premium_sedan-3.png"
           alt="Lincoln Continental Sedan"
           :img-attrs="{ class: 'h-full object-cover object-center w-full' }"
           width="1920"
@@ -36,7 +36,7 @@
       </BaseCard>
       <div>
         <NuxtPicture
-          src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/9b996a38-002e-4bef-5269-f8fa60b11c00/1920"
+          src="/images/premium_sedan-4.jpg"
           alt="Lincoln Continental Interior"
           width="1920"
         />
@@ -45,7 +45,7 @@
     <div class="mb-12 grid grid-cols-1 gap-4">
       <div class="col-span-1">
         <NuxtPicture
-          src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/5736467c-b928-4091-e3aa-e1f1524a3f00/1920"
+          src="/images/premium_sedan-1.jpg"
           alt="Lincoln Continental Interior"
           :img-attrs="{
             class: 'object-cover object-center w-full md:max-w-5xl',

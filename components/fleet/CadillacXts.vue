@@ -11,9 +11,9 @@
       </div>
       <div>
         <NuxtPicture
-          src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/12f57e26-99ae-4fe0-9579-fa3129277800/1920"
+          src="/images/standard_sedan-2.png"
           alt="XTS"
-          width="1920"
+          width="1242"
         />
       </div>
     </div>
@@ -34,7 +34,7 @@
       </BaseCard>
       <div>
         <NuxtPicture
-          src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/f0204aa2-4cb2-4204-10e5-5c3bed0d3500/1920"
+          src="/images/standard_sedan-1.jpg"
           alt="XTS"
           :img-attrs="{ class: 'h-full object-cover object-center w-full' }"
           width="1920"
@@ -46,10 +46,10 @@
     >
       <div class="col-span-2 mb-6 md:col-span-4 md:mb-0">
         <NuxtPicture
-          src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/b5750bfa-1cbf-4655-76b5-39214202e000/1920"
+          src="/images/standard_sedan-3.jpg"
           alt="XTS"
           :img-attrs="{ class: 'h-full object-cover object-center w-full' }"
-          width="1920"
+          width="1011"
         />
       </div>
       <div class="col-span-6">

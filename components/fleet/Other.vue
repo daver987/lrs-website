@@ -14,7 +14,7 @@
             <h3
               class="text-center font-brand-heading text-4xl uppercase dark:text-neutral-400 lg:text-left lg:text-5xl"
             >
-              Executive Sprinter Van
+              Executive <br />Sprinter Van
             </h3>
             <p class="max-w-[50ch] font-brand-body text-neutral-400">
               The 11 Passenger Sprinter Van is a perfect vehicle for the large
@@ -24,9 +24,9 @@
             </p>
           </BaseCard>
         </div>
-        <div class="md:col-span-4 md:w-full">
+        <div class="w-full md:col-span-4">
           <NuxtPicture
-            src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/263d0341-f195-4b04-fc88-aad794b34b00/1920"
+            src="/images/sprinter-5.png"
             alt="11 Passenger Van"
             :img-attrs="{
               class:
@@ -42,7 +42,7 @@
       <div class="flex flex-col md:grid md:grid-cols-10">
         <div class="w-full md:relative md:col-span-4">
           <NuxtPicture
-            src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/b36a1164-6e42-4224-432c-a1db5fb3f200/1920"
+            src="/images/standard_suv-1.png"
             alt="GMC Yukon XL"
             :img-attrs="{
               class:
@@ -102,7 +102,7 @@
         </div>
         <div class="w-full md:relative md:col-span-4">
           <NuxtPicture
-            src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/079c0cd1-e495-483c-1dbe-5ccc6fd47a00/1920"
+            src="/images/standard_suv-3.png"
             alt="GMC Yukon XL"
             :img-attrs="{
               class:

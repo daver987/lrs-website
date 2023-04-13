@@ -30,10 +30,7 @@ const props = defineProps({
 
 const $img = useImage()
 const backgroundImage = computed(() => {
-  const imgUrl = $img(
-    'https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/c2f2c5f0-7a8d-4617-e4aa-d81156a40600/4200',
-    { width: 100 }
-  )
+  const imgUrl = $img('/icons/gradient-background.svg', { width: '100%' })
   return { backgroundImage: `url('${imgUrl}')` }
 })
 const headerImage = computed(() => {
