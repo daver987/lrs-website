@@ -1,6 +1,7 @@
 import { useTrpc } from '~/composables/useTrpc'
 import { useQuery } from '@tanstack/vue-query'
 import _ from 'lodash'
+
 export async function getSalesTax() {
   const getSalesTax = () => useTrpc().salesTax.get.query()
 
@@ -52,8 +53,6 @@ export async function getQuote(quoteNumber: string) {
     queryKey: ['quote'],
     queryFn: getQuote,
   })
-
   await suspense()
-
   return data.value
 }

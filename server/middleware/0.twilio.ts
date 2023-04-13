@@ -1,6 +1,7 @@
 import twilio, { Twilio } from 'twilio'
 
 let twilioClient: Twilio
+
 declare module 'h3' {
   interface H3EventContext {
     twilioClient: Twilio

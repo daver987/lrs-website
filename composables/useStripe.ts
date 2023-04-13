@@ -1,4 +1,5 @@
-import { Ref, ref } from '#imports'
+import { ref } from '#imports'
+import type { Ref } from 'vue'
 import {
   StripeElements,
   Stripe,

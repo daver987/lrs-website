@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useQuoteStore } from '~/stores/useQuoteStore'
-import { storeToRefs } from 'pinia'
 import {
   Dialog,
   DialogPanel,
@@ -15,14 +13,11 @@ definePageMeta({
   layout: 'auth',
   name: 'signin',
 })
-const quoteStore = useQuoteStore()
-const { quote } = storeToRefs(quoteStore)
-useScriptTag('https://book.mylimobiz.com/v4/widgets/widget-loader.js')
 
 const nav = navigation
 
 const open = ref<boolean>(false)
-const src = 'hpl-logo-dark.png'
+const src = '/images/hpl-logo-dark.png'
 const url = useRuntimeConfig().public.WEBSITE_URL
 </script>
 
@@ -191,7 +186,7 @@ const url = useRuntimeConfig().public.WEBSITE_URL
               <div class="hidden lg:ml-8 lg:flex">
                 <a
                   href="#"
-                  class="flex items-center text-gray-500 text-gray-900 hover:text-brand"
+                  class="flex items-center text-gray-900 hover:text-brand dark:text-gray-500"
                 >
                   <NuxtPicture
                     src="https://tailwindui.com/img/flags/flag-canada.svg"
@@ -220,14 +215,6 @@ const url = useRuntimeConfig().public.WEBSITE_URL
         >
           Sign in to your account
         </h2>
-      </div>
-      <div class="relative mx-auto min-h-[75vh] max-w-sm">
-        <iframe
-          width="100%"
-          height="100%"
-          class="absolute inset-0"
-          :src="`https://book.mylimobiz.com/v4/luxridesvc/widget/login?redirectUrl=${url}/reservations`"
-        />
       </div>
     </div>
   </div>

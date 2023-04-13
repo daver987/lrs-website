@@ -12,7 +12,6 @@ definePageMeta({
 })
 
 const color = useColorMode()
-console.log('color', color.value)
 const iconColor = color.value === 'light' ? '#fff' : '#737373'
 const $img = useImage()
 const backgroundImage = ref('/icons/gradient-background.svg')
@@ -227,7 +226,6 @@ const fleetBackgroundImg = useBackgroundImage($img, fleetBackgroundImage)
       </BaseContainer>
       <TheLogoCloud />
     </BaseSection>
-
     <AppFooter />
   </div>
 </template>

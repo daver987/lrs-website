@@ -9,6 +9,7 @@ definePageMeta({
   layout: 'default',
   colorMode: 'dark',
 })
+
 const headerInfo = {
   aboveHeading: 'Discover Our Luxury Vehicles',
   heading: 'OUR FLEET',
@@ -28,42 +29,36 @@ const tabs = [
     title: 'Cadillac XTS',
     id: '0',
     tag: resolveComponent('FleetCadillacXts'),
-    to: '/fleet',
   },
   {
     icon: 'Fleet-XTS-Continental',
     title: 'Lincoln Continental',
     id: '1',
     tag: resolveComponent('FleetLincolnContinental'),
-    to: '/fleet/lincoln-continental',
   },
   {
     icon: 'Fleet-Navigator-Escalade',
     title: 'Cadillac Escalade',
     id: '2',
     tag: resolveComponent('FleetCadillacEscalade'),
-    to: '/fleet/cadillac-escalade',
   },
   {
     icon: 'Fleet-Navigator-Escalade',
     title: 'Lincoln Navigator',
     id: '3',
     tag: resolveComponent('FleetLincolnNavigator'),
-    to: '/fleet/lincoln-navigator',
   },
   {
     icon: 'Fleet-Tesla',
     title: 'Tesla S',
     id: '4',
     tag: resolveComponent('FleetTeslaS'),
-    to: '/fleet/tesla-s',
   },
   {
     icon: 'Fleet-Other',
     title: 'Other',
     id: '6',
     tag: resolveComponent('FleetOther'),
-    to: '/fleet/other',
   },
 ]
 </script>
@@ -111,7 +106,7 @@ const tabs = [
           </button>
         </Tab>
       </TabList>
-      <TabPanels v-auto-animate="{ duration: 300 }">
+      <TabPanels v-auto-animate="{ duration: 350 }">
         <TabPanel>
           <FleetCadillacXts />
         </TabPanel>

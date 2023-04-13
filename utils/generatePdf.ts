@@ -1,7 +1,6 @@
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
 import { UnwrapRef } from 'vue'
-import { HTMLElement } from 'happy-dom'
 
 const generatePdf = async (
   element: UnwrapRef<null>,

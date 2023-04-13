@@ -6,9 +6,6 @@ definePageMeta({
   layout: 'default',
   colorMode: 'dark',
 })
-useHead({
-  title: 'High Park Livery | Contact Us',
-})
 
 const headerInfo = {
   aboveHeading: 'GET IN TOUCH',

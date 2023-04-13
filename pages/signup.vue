@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useQuoteStore } from '~/stores/useQuoteStore'
-import { storeToRefs } from 'pinia'
 import { ref } from '#imports'
 import {
   Dialog,
@@ -15,9 +13,6 @@ definePageMeta({
   layout: 'auth',
   name: 'signup',
 })
-
-const quoteStore = useQuoteStore()
-const { quote } = storeToRefs(quoteStore)
 
 const nav = navigation
 
@@ -212,13 +207,5 @@ const src = 'hpl-logo-dark.png'
         </div>
       </nav>
     </header>
-    <div class="relative min-h-[125vh]">
-      <iframe
-        width="100%"
-        height="100%"
-        class="absolute inset-0"
-        src="https://book.mylimobiz.com/v4/luxridesvc/Account/Registration"
-      />
-    </div>
   </div>
 </template>

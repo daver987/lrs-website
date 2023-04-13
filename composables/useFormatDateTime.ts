@@ -1,5 +1,3 @@
-import { Ref } from 'vue'
-
 export function useFormatDateTime() {
   type FormatDateOptions = {
     year?: 'numeric' | '2-digit'

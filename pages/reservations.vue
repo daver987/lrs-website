@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { useQuoteStore } from '~/stores/useQuoteStore'
 import { ref } from 'vue'
-import { storeToRefs } from 'pinia'
 import {
   Dialog,
   DialogPanel,
@@ -17,8 +15,6 @@ definePageMeta({
   layout: 'auth',
   name: 'reservations',
 })
-const quoteStore = useQuoteStore()
-const { quote } = storeToRefs(quoteStore)
 
 const nav = navigation
 
@@ -214,13 +210,5 @@ const src =
         </div>
       </nav>
     </header>
-    <div class="relative min-h-[120vh]">
-      <iframe
-        width="100%"
-        height="100%"
-        class="absolute inset-0"
-        src="https://book.mylimobiz.com/v4/luxridesvc"
-      />
-    </div>
   </div>
 </template>

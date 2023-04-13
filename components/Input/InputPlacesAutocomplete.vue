@@ -99,31 +99,3 @@ const modelValue = ref('')
     />
   </div>
 </template>
-
-<!--<style scoped>-->
-<!--.autocomplete-input {-->
-<!--  box-sizing: border-box;-->
-<!--  font-size: 14px;-->
-<!--  line-height: 1.5;-->
-<!--  font-family: inherit;-->
-<!--  border: none;-->
-<!--  outline: none;-->
-<!--  text-align: inherit;-->
-<!--  transition: -webkit-text-fill-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),-->
-<!--    caret-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),-->
-<!--    color 0.3s cubic-bezier(0.4, 0, 0.2, 1),-->
-<!--    text-decoration-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);-->
-<!--  cursor: text;-->
-<!--  padding-top: calc((34px - 1.5 * 14px) / 2);-->
-<!--  padding-bottom: calc((34px - 1.5 * 14px) / 2);-->
-<!--  -webkit-appearance: none;-->
-<!--  scrollbar-width: none;-->
-<!--  width: 100%;-->
-<!--  min-width: 0;-->
-<!--  text-decoration-color: rgba(255, 255, 255, 0.82);-->
-<!--  color: rgba(255, 255, 255, 0.82);-->
-<!--  caret-color: #8a6642;-->
-<!--  background-color: transparent;-->
-<!--  height: 34px;-->
-<!--}-->
-<!--</style>-->

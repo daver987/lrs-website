@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useStripeStore } from '~/stores/useStripeStore'
-import { storeToRefs } from 'pinia'
 import { ref } from '#imports'
 
 definePageMeta({
@@ -9,26 +7,21 @@ definePageMeta({
   colorMode: 'dark',
 })
 
-const stripe = useNuxtApp().$stripe
-console.log('stripe', stripe)
+type CombinedLineItems = {
+  label: string
+  total: number
+}
 
 const gtag = useGtag()
 const stripeClient = useStripe()
-const stripeStore = useStripeStore()
-const { session } = storeToRefs(stripeStore)
 
-const quoteNumberAsString = useRoute().query.quote_number as unknown as string
+const quoteNumberAsString = useRoute().query.quote_number as string
 const quote = await getQuote(quoteNumberAsString)
 
-const {
-  vehicle,
-  service,
-  trips,
-  user,
-  quote_number,
-  quote_total,
-  combined_line_items,
-} = quote!
+const { vehicle, service, trips, user, quote_number, quote_total } = quote!
+
+const combinedLineItems: Ref<CombinedLineItems[] | null> = ref(null)
+combinedLineItems.value = quote?.combined_line_items as CombinedLineItems[]
 
 const {
   fullName,
@@ -42,11 +35,11 @@ const {
   publicKey,
 } = stripeClient
 
-fullName.value = user.full_name!
-emailAddress.value = user.email_address!
-phoneNumber.value = user.phone_number!
+fullName.value = user.full_name
+emailAddress.value = user.email_address
+phoneNumber.value = user.phone_number
 clientSecret.value = useRoute().query.client_secret as string
-quoteNumber.value = quote_number!
+quoteNumber.value = quote_number
 websiteURL.value = useRuntimeConfig().public.WEBSITE_URL
 publicKey.value = useRuntimeConfig().public.STRIPE_PUBLISHABLE_KEY
 
@@ -55,8 +48,10 @@ onMounted(() => {
     await stripeClient.initStripeElements()
   })
 })
-const totalPrice = quote_total
+
+const totalPrice = quote_total.toFixed(2)
 const isLoading = ref(false)
+
 const bookingHandler = async () => {
   try {
     isLoading.value = true
@@ -111,7 +106,7 @@ const bookingHandler = async () => {
             :img-attrs="{
               class: 'w-auto h-12 lg:h-14',
             }"
-            src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/6a0f4d3c-3f6a-4e4e-f86b-1face7a5e400/1920"
+            src="/images/HPL-Logo-White.png"
             alt="High Park Livery Logo"
             width="1920"
           />
@@ -137,7 +132,7 @@ const bookingHandler = async () => {
             <dl>
               <dt class="text-lg font-medium">Amount Due</dt>
               <dd class="mt-1 text-3xl font-bold tracking-tight text-brand-900">
-                $ {{ totalPrice!.toFixed(2) }}
+                $ {{ totalPrice }}
               </dd>
             </dl>
 
@@ -147,7 +142,7 @@ const bookingHandler = async () => {
             >
               <li
                 v-for="trip in trips"
-                :key="trip.pickup_time"
+                :key="trip.pickup_time as string"
                 class="flex items-start space-x-4 py-6"
               >
                 <NuxtPicture
@@ -169,7 +164,7 @@ const bookingHandler = async () => {
               class="space-y-6 border-t border-gray-200 pt-8 text-sm font-medium"
             >
               <div
-                v-for="item in combined_line_items"
+                v-for="item in combinedLineItems"
                 :key="item.label"
                 class="flex items-center justify-between"
               >
@@ -177,7 +172,7 @@ const bookingHandler = async () => {
                   {{ item.label }}
                 </dt>
                 <dd v-if="item.label === 'Total' ? '' : item.label">
-                  ${{ item.total!.toFixed(2) }}
+                  ${{ item.total }}
                 </dd>
               </div>
 
@@ -185,7 +180,7 @@ const bookingHandler = async () => {
                 class="flex items-center justify-between border-t border-gray-200 pt-6 text-brand-900"
               >
                 <dt class="text-base">Total</dt>
-                <dd class="text-base">${{ totalPrice!.toFixed(2) }}</dd>
+                <dd class="text-base">${{ totalPrice }}</dd>
               </div>
             </dl>
           </div>
@@ -212,7 +207,7 @@ const bookingHandler = async () => {
             <form
               id="payment-form"
               class="p-6"
-              @submit.prevent="bookingHandler()"
+              @submit.prevent="bookingHandler"
             >
               <div
                 id="link-authentication-element"

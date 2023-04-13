@@ -1,4 +1,5 @@
 import { computed, Ref } from 'vue'
+
 export const useBackgroundImage = (
   $img: Function,
   imageUrl: Ref<string>,

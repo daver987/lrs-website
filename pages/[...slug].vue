@@ -18,5 +18,3 @@ await navigateTo({
     </n-grid-item>
   </n-grid>
 </template>
-
-<style scoped></style>

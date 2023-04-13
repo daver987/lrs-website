@@ -5,6 +5,7 @@ const images = [
   '/images/premium_sedan-3.png',
   '/images/premium_suv-2.png',
   '/images/standard_suv-2.png',
+  'images/premium_suv-14.png',
 ]
 
 const currentImageIndex = ref(0)

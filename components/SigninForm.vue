@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-const url = useRuntimeConfig().public.WEBSITE_URL
-useScriptTag('https://book.mylimobiz.com/v4/widgets/widget-loader.js')
+// const url = useRuntimeConfig().public.WEBSITE_URL
 </script>
 
 <template>
@@ -14,14 +13,14 @@ useScriptTag('https://book.mylimobiz.com/v4/widgets/widget-loader.js')
     </div>
     <div class="mt-8">
       <div class="mt-6">
-        <a
+        <!--     <a
           href="https://book.mylimobiz.com/v4/highpark/widget/login"
           data-ores-widget="login"
           data-ores-alias="highpark"
           :data-redirect-url="`${url}/reservations`"
           class="block uppercase"
           >Login</a
-        >
+        > -->
       </div>
     </div>
   </div>

@@ -3,21 +3,21 @@ import { readRawBody, defineEventHandler } from 'h3'
 import { stripe } from '../services/stripeInit'
 import { z } from 'zod'
 
-const messagingSID = useRuntimeConfig().TWILIO_MESSAGING_SID
-const stripeWebhookSecret = useRuntimeConfig().STRIPE_WEBHOOK_SECRET
 export default defineEventHandler(async (event) => {
+  const messagingSID = useRuntimeConfig().TWILIO_MESSAGING_SID
+  const endpointSecret = useRuntimeConfig().STRIPE_WEBHOOK_SECRET
   const client = event.context.twilioClient
-  const endpointSecret = stripeWebhookSecret
+
   const rawBody = await readRawBody(event)
   const headers = getRequestHeaders(event)
   const sig = headers['stripe-signature'] as string
-  console.log('h3 event', headers)
 
   const bodySchema = z.string()
   const body = bodySchema.parse(rawBody)
   console.log('Request Body from stripe', body)
 
   let stripeEvent
+
   try {
     stripeEvent = stripe.webhooks.constructEvent(body, sig, endpointSecret)
   } catch (error) {

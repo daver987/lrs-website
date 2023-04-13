@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { services } from '~/data/services'
-import { ourTours, Tour } from '~/data/tours'
+import { ourTours } from '~/data/tours'
+
 definePageMeta({
   title: 'High Park Livery Services - Quality Black Car Solutions in Toronto',
   description:
@@ -9,8 +10,9 @@ definePageMeta({
   colorMode: 'dark',
 })
 
-const tours = ourTours as Tour[]
+const tours = ourTours
 const $img = useImage()
+
 const backgroundImage = computed(() => {
   const imgUrl = $img('images/toronto-9.jpg', {
     width: '100%',

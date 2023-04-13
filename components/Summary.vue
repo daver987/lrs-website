@@ -2,12 +2,11 @@
 import { useTrpc, ref, generatePdf } from '#imports'
 import { ArrowBackIcon } from 'naive-ui/es/_internal/icons'
 
-const quoteNumberAsString = useRoute().query.quote_number as unknown as string
+const quoteNumberAsString = useRoute().query.quote_number as string
 const quote = await getQuote(quoteNumberAsString)
 
-// const { quote_number, user, vehicle, trips, service, combined_line_items } =
-//   quote
 const orderSummary = ref(null)
+
 async function sendConfirmation(quoteData) {
   await useTrpc().book.confirmOrder.mutate(quoteData)
 }
@@ -19,6 +18,7 @@ const saveOrderSummary = async () => {
     await generatePdf(orderSummary.value)
   }
 }
+
 const goHome = async () => {
   await navigateTo('/')
 }
@@ -54,7 +54,7 @@ const goHome = async () => {
             <h1 class="text-xl font-bold">Summary</h1>
             <p>
               Quote Number:
-              <span class="text-red-700"> HPL-{{ quote.quote_number }}</span>
+              <span class="text-red-700"> HPL-{{ quote?.quote_number }}</span>
             </p>
           </div>
         </div>
@@ -64,7 +64,7 @@ const goHome = async () => {
             <h2 class="text-lg font-bold">Customer Details</h2>
             <p>
               <span class="font-semibold">Name: </span>
-              {{ quote.user.first_name }} {{ quote.user.last_name }}
+              {{ quote.user.first_name }} {{ quote?.user.last_name }}
             </p>
             <p>
               <span class="font-semibold">Email: </span>
