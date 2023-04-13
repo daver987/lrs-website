@@ -43,8 +43,6 @@ const hoursOptions = computed(() => {
 const route = useRoute()
 const gtmValues = route.query
 
-//Todo enable tag manager
-
 const formValue: Ref<FormValue> = ref({
   id: user_id.value,
   first_name: '',

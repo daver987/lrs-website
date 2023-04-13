@@ -28,7 +28,6 @@ const onSubmit = handleSubmit(async (values: ValidationSchema) => {
       method: 'POST',
       body: values,
     })
-    console.log('Contact Form Data:', data.value)
     setTimeout(() => {
       isShown.value = true
       loading.value = false
@@ -55,7 +54,7 @@ const onSubmit = handleSubmit(async (values: ValidationSchema) => {
             <div class="grid grid-cols-1 lg:grid-cols-3">
               <!-- Contact information -->
               <div
-                class="relative overflow-hidden bg-gradient-to-b from-brand to-brand-600 py-10 px-6 sm:px-10 xl:p-12"
+                class="relative overflow-hidden bg-gradient-to-b from-brand to-brand-600 px-6 py-10 sm:px-10 xl:p-12"
               >
                 <!-- Decorative angle backgrounds -->
                 <div
@@ -92,7 +91,7 @@ const onSubmit = handleSubmit(async (values: ValidationSchema) => {
                   </svg>
                 </div>
                 <div
-                  class="pointer-events-none absolute top-0 right-0 bottom-0 hidden w-1/2 sm:block lg:hidden"
+                  class="pointer-events-none absolute bottom-0 right-0 top-0 hidden w-1/2 sm:block lg:hidden"
                   aria-hidden="true"
                 >
                   <svg
@@ -125,7 +124,7 @@ const onSubmit = handleSubmit(async (values: ValidationSchema) => {
                   </svg>
                 </div>
                 <div
-                  class="pointer-events-none absolute top-0 right-0 bottom-0 hidden w-1/2 lg:block"
+                  class="pointer-events-none absolute bottom-0 right-0 top-0 hidden w-1/2 lg:block"
                   aria-hidden="true"
                 >
                   <svg
@@ -242,7 +241,7 @@ const onSubmit = handleSubmit(async (values: ValidationSchema) => {
               </div>
 
               <!-- Contact form -->
-              <div class="py-10 px-6 sm:px-10 lg:col-span-2 xl:p-12">
+              <div class="px-6 py-10 sm:px-10 lg:col-span-2 xl:p-12">
                 <h3
                   class="font-brand-subheading text-lg uppercase tracking-[0.4em] text-neutral-900 dark:text-neutral-400"
                 >
@@ -314,7 +313,7 @@ const onSubmit = handleSubmit(async (values: ValidationSchema) => {
                           name="message"
                           rows="4"
                           placeholder="Send Us a Message...."
-                          class="block w-full rounded-md border-neutral-300 py-3 px-4 shadow-sm focus:border-brand focus:ring-brand dark:bg-neutral-200"
+                          class="block w-full rounded-md border-neutral-300 px-4 py-3 shadow-sm focus:border-brand focus:ring-brand dark:bg-neutral-200"
                           aria-describedby="message-max"
                         />
                         <ErrorMessage class="red-700" name="message" />

@@ -8,7 +8,7 @@ import { ref } from '#imports'
 const cartStore = useCartStore()
 const { addedToCart } = storeToRefs(cartStore)
 
-const quoteNumberAsString = useRoute().query.quote_number as unknown as string
+const quoteNumberAsString = useRoute().query.quote_number as string
 const quote = ref<null | QuoteFormReturn>(null)
 const vehicleImage = ref('')
 const vehicleLabel = ref('')

@@ -22,8 +22,7 @@ const { quote } = storeToRefs(quoteStore)
 const nav = navigation
 
 const open = ref<boolean>(false)
-const src =
-  'https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/6a0f4d3c-3f6a-4e4e-f86b-1face7a5e400/1920'
+const src = 'hpl-logo-dark.png'
 </script>
 
 <template>
@@ -146,7 +145,7 @@ const src =
               <NuxtLink to="/" class="self-center">
                 <span class="sr-only">High Park Livery</span>
                 <NuxtPicture
-                  src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/6a0f4d3c-3f6a-4e4e-f86b-1face7a5e400/1920"
+                  src="hpl-logo-dark.png"
                   alt="High Park Livery Logo"
                   width="1920"
                   :img-attrs="{

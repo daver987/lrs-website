@@ -4,8 +4,7 @@ import { navigation, NavigationItem } from '~/data/navigation'
 const companyName = 'High Park Livery'
 const companyEmail = 'info@highparklivery.com'
 const companyPhone = '647.360.9631'
-const companyLogo =
-  'https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/c6c7415a-d52d-46fa-a85e-1ba5153b2000/1920'
+const companyLogo = '/images/HPL-Logo-White.png'
 
 const nav = navigation as NavigationItem[]
 </script>
@@ -16,7 +15,7 @@ const nav = navigation as NavigationItem[]
       <FooterCta />
     </div>
     <div
-      class="w-full bg-neutral-800 px-6 pt-24 pb-8 dark:bg-neutral-900 lg:px-10 lg:pt-16 lg:pb-4"
+      class="w-full bg-neutral-800 px-6 pb-8 pt-24 dark:bg-neutral-900 lg:px-10 lg:pb-4 lg:pt-16"
     >
       <div
         class="mx-auto grid max-w-7xl grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:gap-8"

@@ -15,12 +15,8 @@ const color = useColorMode()
 console.log('color', color.value)
 const iconColor = color.value === 'light' ? '#fff' : '#737373'
 const $img = useImage()
-const backgroundImage = ref(
-  'https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/c2f2c5f0-7a8d-4617-e4aa-d81156a40600/4200'
-)
-const fleetBackgroundImage = ref(
-  'https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/5d10059a-b5c4-44cc-ef3f-6ef867396000/1920'
-)
+const backgroundImage = ref('/icons/gradient-background.svg')
+const fleetBackgroundImage = ref('/images/premium_suv-1.jpg')
 const bgImg = useBackgroundImage($img, backgroundImage)
 const fleetBackgroundImg = useBackgroundImage($img, fleetBackgroundImage)
 </script>
@@ -48,15 +44,6 @@ const fleetBackgroundImg = useBackgroundImage($img, fleetBackgroundImage)
                     High Park Livery
                   </p>
                   <ImageSwitcher />
-                  <!--                  <NuxtPicture-->
-                  <!--                    :img-attrs="{-->
-                  <!--                      class:-->
-                  <!--                        'self-center object-cover object-center max-w-sm mt-8 md:max-w-lg md:self-start',-->
-                  <!--                    }"-->
-                  <!--                    alt="Lincoln Continental"-->
-                  <!--                    src="/images/premium_sedan-3.png"-->
-                  <!--                    width="1011"-->
-                  <!--                  />-->
                 </div>
               </div>
               <div class="mt-16 px-3 pb-8 sm:mt-24 lg:col-span-6 lg:mt-0">
@@ -160,7 +147,7 @@ const fleetBackgroundImg = useBackgroundImage($img, fleetBackgroundImage)
         />
         <IconBlockFleetImage
           altText="XTS Interior"
-          image="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/f0204aa2-4cb2-4204-10e5-5c3bed0d3500/1920"
+          image="/images/standard_sedan-4.jpg"
           class="md:col-span-1 md:col-start-2"
         />
       </BaseContainer>
@@ -174,7 +161,7 @@ const fleetBackgroundImg = useBackgroundImage($img, fleetBackgroundImage)
         <IconBlockFleetImage
           altText="Escalade Interior"
           class="order-1 md:col-span-1 md:col-start-1 md:row-start-1 md:row-end-2 md:mb-0 md:self-end"
-          image="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/180e12f4-a0c1-4c70-b5af-5f05bbfa4700/1920"
+          image="/images/premium_suv-1.jpg"
         />
         <IconBlockFleet
           class="order-4 w-full md:order-first md:max-w-[80%] md:place-self-end md:justify-self-end md:pb-8"
@@ -183,7 +170,7 @@ const fleetBackgroundImg = useBackgroundImage($img, fleetBackgroundImage)
         <IconBlockFleetImage
           altText="Continental Interior"
           class="order-3 md:col-start-2 md:row-start-2 md:-mt-8"
-          image="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/7968b80b-ad94-4501-02ca-43e552c67100/1920"
+          image="/images/premium_sedan-1.jpg"
         />
       </BaseContainer>
     </BaseSection>
@@ -193,7 +180,7 @@ const fleetBackgroundImg = useBackgroundImage($img, fleetBackgroundImage)
         :img-attrs="{
           class: 'object-cover object-center lg:mx-auto lg:max-w-6xl',
         }"
-        src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/d7e1f6bc-c349-4e62-48c4-642bbfcb3c00/1920"
+        src="/images/toronto-9.jpg"
         width="1920"
         loading="lazy"
       />

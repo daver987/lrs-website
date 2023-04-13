@@ -1,5 +1,5 @@
 <script setup lang="ts">
-defineProps({
+const props = defineProps({
   aboveHeading: {
     type: String,
     required: true,
@@ -36,6 +36,10 @@ const backgroundImage = computed(() => {
   )
   return { backgroundImage: `url('${imgUrl}')` }
 })
+const headerImage = computed(() => {
+  const imgUrl = $img(props.image, { width: 100 })
+  return { backgroundImage: `url('${imgUrl}')` }
+})
 </script>
 
 <template>
@@ -46,7 +50,7 @@ const backgroundImage = computed(() => {
     <AppNavigation />
     <BaseContainer class="relative mt-20 grid grid-cols-1 md:grid-cols-2">
       <div
-        :style="image"
+        :style="headerImage"
         class="relative bg-black bg-opacity-60 bg-cover bg-center bg-no-repeat py-32 bg-blend-darken md:col-span-2 md:px-10"
       >
         <div class="space-y-4 text-center md:text-left">

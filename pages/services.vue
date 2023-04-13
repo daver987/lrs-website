@@ -10,13 +10,6 @@ definePageMeta({
 })
 
 const tours = ourTours as Tour[]
-const headerInfo = {
-  aboveHeading: 'WHAT WE OFFER YOU',
-  heading: 'OUR SERVICES',
-  image:
-    'background-image: url("https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/957a09cd-d97c-4f1d-1226-f7c31cdd8d00/1920")',
-  body: "High Park Livery is here to help you get from place to place. It's our job to provide you with the means of transportation, and we won't stop until it's done right.",
-}
 const $img = useImage()
 const backgroundImage = computed(() => {
   const imgUrl = $img('images/toronto-9.jpg', {
@@ -25,6 +18,13 @@ const backgroundImage = computed(() => {
   })
   return { backgroundImage: `url('${imgUrl}')` }
 })
+
+const headerInfo = {
+  aboveHeading: 'WHAT WE OFFER YOU',
+  heading: 'OUR SERVICES',
+  image: '/images/toronto-8.jpg',
+  body: "High Park Livery is here to help you get from place to place. It's our job to provide you with the means of transportation, and we won't stop until it's done right.",
+}
 </script>
 
 <template>

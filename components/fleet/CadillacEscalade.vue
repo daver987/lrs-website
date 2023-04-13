@@ -10,7 +10,7 @@
       </div>
       <div>
         <NuxtPicture
-          src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/6371d7ad-ac92-4081-2fde-5e243dd2d500/1920"
+          src="/images/premium_suv-2.png"
           alt="Cadillac-Escalade"
           width="1920"
         />
@@ -34,7 +34,7 @@
       </BaseCard>
       <div>
         <NuxtPicture
-          src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/cbb0b6b5-eb8c-4557-5144-65f59654be00/1920"
+          src="/images/premium_suv_12.jpeg"
           alt="Cadillac-Escalade"
           :img-attrs="{ class: 'object-cover object-center w-full' }"
           width="1980"
@@ -44,9 +44,9 @@
     <div class="mb-12 grid grid-cols-1 gap-4">
       <div class="col-span-1 w-full lg:w-[80%]">
         <NuxtPicture
-          src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/f205c48a-d881-48e0-79d4-bec0a20caf00/4200"
+          src="/images/premium_suv-1.jpg"
           alt="Cadillac-Escalade"
-          width="4200"
+          width="960"
           :img-attrs="{ class: 'object-cover object-center w-full' }"
         />
       </div>
@@ -56,4 +56,3 @@
     </div>
   </div>
 </template>
-<script setup lang="ts"></script>

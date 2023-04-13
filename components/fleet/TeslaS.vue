@@ -9,11 +9,7 @@
         </h2>
       </div>
       <div>
-        <NuxtPicture
-          src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/966d3175-0900-4b44-8330-ccfeb264ed00/1920"
-          alt="Tesla S"
-          width="1920"
-        />
+        <NuxtPicture src="/images/tesla-s-1.png" alt="Tesla S" width="1083" />
       </div>
     </div>
     <div class="mb-12 grid grid-cols-1 place-items-center md:grid-cols-2">
@@ -32,22 +28,18 @@
         </p>
       </BaseCard>
       <div>
-        <NuxtPicture
-          src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/c5cff062-42f1-4edb-c895-4bf428bd8c00/1920"
-          alt="Tesla S"
-          width="1920"
-        />
+        <NuxtPicture src="/images/tesla-s-3.jpg" alt="Tesla S" width="828" />
       </div>
     </div>
     <div class="mb-12 grid grid-cols-1 gap-4">
       <div class="col-span-1">
         <NuxtPicture
-          src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/3cfdbe3b-4b0f-4821-d6dd-b4cae64dc000/1920"
+          src="/images/tesla-s-2.jpg"
           alt="Tesla S"
           :img-attrs="{
             class: 'object-cover object-center w-full md:max-w-5xl',
           }"
-          width="1920"
+          width="2760"
         />
       </div>
     </div>
@@ -56,4 +48,3 @@
     </div>
   </div>
 </template>
-<script setup lang="ts"></script>

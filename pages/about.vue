@@ -11,8 +11,7 @@ const headerInfo = {
   aboveHeading: 'DISCOVER High Park Livery',
   heading: 'ABOUT US',
   body: "High Park Livery is here to help you get from place to place. It's our job to provide you with the means of transportation, and we won't stop until it's done right.",
-  image:
-    'background-image: url("https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/33276e69-8f27-493e-57ee-7e63d9819700/1920")',
+  image: '/images/misc-8.jpg',
 }
 const qualities = [
   {
@@ -97,8 +96,8 @@ const qualities = [
             }"
             alt="Chauffeur Service"
             loading="lazy"
-            src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/81877055-3d82-4ba5-cef9-ba7f0148dc00/1920"
-            width="1920"
+            src="/images/misc-7.jpg"
+            width="919"
           />
         </div>
       </BaseContainer>
@@ -112,8 +111,8 @@ const qualities = [
           }"
           alt="Tesla-S-Back-Seat"
           loading="lazy"
-          src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/f56d5571-1af0-4986-7db7-bd29dc818200/4200"
-          width="1920"
+          src="/images/tesla-s-4.jpg"
+          width="814"
         />
         <div class="bg-white shadow-xl dark:bg-neutral-700">
           <IconBlockAbout
