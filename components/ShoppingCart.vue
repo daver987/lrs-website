@@ -5,7 +5,7 @@ import { useStripeStore } from '~/stores/useStripeStore'
 import { format } from 'date-fns'
 import { ref } from '#imports'
 
-const quoteNumberAsString = useRoute().query.quote_number as unknown as string
+const quoteNumberAsString = useRoute().query.quote_number as string
 const quote = await getQuote(quoteNumberAsString)
 const quoteNumber = ref(quote?.quote_number)
 const cartStore = useCartStore()
@@ -99,7 +99,7 @@ const createBooking = async () => {
           >
             <div class="flex-shrink-0">
               <NuxtPicture
-                :src="quote!.vehicle.vehicle_image!"
+                :src="quote.vehicle.vehicle_image"
                 :alt="quote!.vehicle.label"
                 :img-attrs="{
                   class:
