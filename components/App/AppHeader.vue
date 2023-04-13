@@ -37,7 +37,7 @@ const backgroundImage = computed(() => {
   return { backgroundImage: `url('${imgUrl}')` }
 })
 const headerImage = computed(() => {
-  const imgUrl = $img(props.image, { width: 100 })
+  const imgUrl = $img(props.image, { width: '100%' })
   return { backgroundImage: `url('${imgUrl}')` }
 })
 </script>
