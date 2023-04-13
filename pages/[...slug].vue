@@ -12,9 +12,7 @@ await navigateTo({
 
 <template>
   <n-grid :cols="1">
-    <n-grid-item> </n-grid-item>
-    <n-grid-item :span="1">
-      <FlightInformation />
-    </n-grid-item>
+    <n-grid-item> ITEM 1</n-grid-item>
+    <n-grid-item :span="1">Item 2 </n-grid-item>
   </n-grid>
 </template>
