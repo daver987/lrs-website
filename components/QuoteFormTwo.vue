@@ -251,6 +251,12 @@ function triggerEvent() {
     non_interaction: false,
   })
 }
+function setEnhancedTracking(email: string, phone: string) {
+  gtag('set', 'user_data', {
+    email: [email],
+    phone_number: [phone],
+  })
+}
 
 async function onSubmit() {
   try {
@@ -260,6 +266,10 @@ async function onSubmit() {
     console.log('Returned Quote:', quoteData)
     quoteStore.setQuote(quoteData)
     setTimeout(async () => {
+      setEnhancedTracking(
+        formValue.value.email_address,
+        formValue.value.phone_number
+      )
       triggerEvent()
       await navigateTo({
         path: '/cart',
@@ -477,8 +487,10 @@ function disablePreviousDate(ts: number) {
                 <n-input
                   v-model:value="formValue.first_name"
                   placeholder="Enter First Name..."
-                  :show-label="false"
-                  label="Phone Number"
+                  :input-props="{
+                    id: 'first_name',
+                    type: 'text',
+                  }"
                 />
               </n-form-item-gi>
 
@@ -491,6 +503,10 @@ function disablePreviousDate(ts: number) {
                 <n-input
                   v-model:value="formValue.last_name"
                   placeholder="Enter Last Name..."
+                  :input-props="{
+                    id: 'last_name',
+                    type: 'text',
+                  }"
                 />
               </n-form-item-gi>
 
@@ -503,6 +519,10 @@ function disablePreviousDate(ts: number) {
                 <n-input
                   v-model:value="formValue.email_address"
                   placeholder="Enter Email Address..."
+                  :input-props="{
+                    id: 'email_address',
+                    type: 'email',
+                  }"
                 />
               </n-form-item-gi>
 
@@ -517,6 +537,7 @@ function disablePreviousDate(ts: number) {
                   :dropdown-options="dropdownOptions"
                   :input-options="inputOptions"
                   aria-label="phone input"
+                  id="phone_number"
                 />
               </n-form-item-gi>
             </n-grid>

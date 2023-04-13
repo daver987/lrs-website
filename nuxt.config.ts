@@ -144,8 +144,10 @@ export default defineNuxtConfig({
   },
   gtag: {
     config: {
-      page_title: 'Toronto Car Service | High Park Livery',
+      page_title:
+        'High Park Livery - Premium Black Car Service in Greater Toronto',
       allow_google_signals: true,
+      allow_enhanced_conversions: true,
       allow_ad_personalization_signals: true,
       cookie_domain: 'auto',
       cookie_expires: 63072000,
