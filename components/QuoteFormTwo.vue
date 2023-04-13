@@ -7,6 +7,7 @@ import {
   SelectOption,
 } from 'naive-ui'
 import { VueTelInput } from 'vue-tel-input'
+import { sha256 } from 'js-sha256'
 import { LineItem, SalesTax, Service, Vehicle } from '.prisma/client'
 import { Place } from '~/schema/placeSchema'
 import { useUserStore } from '~/stores/useUserStore'
@@ -16,6 +17,7 @@ import type { Ref, WatchCallback } from 'vue'
 import { storeToRefs } from 'pinia'
 import { FormValue } from '~/utils/formUtils'
 import { isAirport } from '~/utils/formUtils/isAirport'
+import { useGtm } from '@gtm-support/vue-gtm'
 
 const formRef = ref<FormInst | null>(null)
 const loading: Ref<boolean> = ref(false)
@@ -231,16 +233,14 @@ const handleChangeOrigin = (evt: Place) => {
 const handleChangeDestination = (evt: Place) => {
   formValue.value.destination = evt
 }
-const gtag = useGtag()
-gtag('event', 'submit_form', {
-  event_category: 'Quote',
-  event_label: 'Car Service Quote',
-})
+
+const gtm = useGtm()
 const gclidCookie = useCookie('gclid')
 const tags = useRuntimeConfig().public
 
 function triggerEvent() {
-  gtag('event', 'submitQuote', {
+  gtm?.trackEvent({
+    event: 'submitQuote',
     event_category: 'Quote',
     event_label: 'Request Quote',
     value: 1,
@@ -251,10 +251,15 @@ function triggerEvent() {
     non_interaction: false,
   })
 }
+
 function setEnhancedTracking(email: string, phone: string) {
-  gtag('set', 'user_data', {
-    email: [email],
-    phone_number: [phone],
+  const hashedEmail = sha256(email)
+  const hashedPhone = sha256(phone)
+
+  gtm?.trackEvent({
+    set: 'user_data',
+    email: [hashedEmail],
+    phone_number: [hashedPhone],
   })
 }
 
