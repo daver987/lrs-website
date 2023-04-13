@@ -45,9 +45,9 @@ const goHome = async () => {
     <div class="bg-white p-4 md:p-8" id="order-summary" ref="orderSummary">
       <div class="mx-auto w-full md:max-w-4xl">
         <div class="mb-6 flex items-center justify-between">
-          <img
+          <Picture
             class="h-auto w-32"
-            src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/6a0f4d3c-3f6a-4e4e-f86b-1face7a5e400/1920"
+            src="/images/hpl-logo-dark.png"
             alt="Logo"
           />
           <div class="text-right">
