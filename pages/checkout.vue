@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { ref } from '#imports'
+import { Ref } from 'vue'
+import { useGtm } from '@gtm-support/vue-gtm'
+import { sha256 } from 'js-sha256'
 
 definePageMeta({
   name: 'checkout',
@@ -12,7 +15,6 @@ type CombinedLineItems = {
   total: number
 }
 
-const gtag = useGtag()
 const stripeClient = useStripe()
 
 const quoteNumberAsString = useRoute().query.quote_number as string
@@ -22,6 +24,39 @@ const { vehicle, service, trips, user, quote_number, quote_total } = quote!
 
 const combinedLineItems: Ref<CombinedLineItems[] | null> = ref(null)
 combinedLineItems.value = quote?.combined_line_items as CombinedLineItems[]
+
+const gtm = useGtm()
+const gclidCookie = useCookie('gclid')
+const tags = useRuntimeConfig().public
+
+function triggerEvent(totalPrice: number) {
+  gtm?.trackEvent({
+    event: 'submitOrder',
+    event_category: 'Purchase',
+    event_label: 'Submit Order',
+    value: totalPrice,
+    send_to: tags.GA4_SEND_TO,
+    conversion: tags.G_ADS_ORDER_SUBMIT_CONVERSION,
+    conversion_label: tags.G_ADS_ORDER_SUBMIT_CONVERSION_LABEL,
+    gclid: gclidCookie.value,
+    non_interaction: false,
+  })
+}
+
+function setEnhancedTracking(email: string, phone: string, order_id: string) {
+  const hashedEmail = sha256(email)
+  const hashedPhone = sha256(phone)
+
+  gtm?.trackEvent({
+    set: 'user_data',
+    email: [hashedEmail],
+    phone_number: [hashedPhone],
+  })
+  gtm?.trackEvent({
+    set: 'orderId',
+    orderId: order_id,
+  })
+}
 
 const {
   fullName,
@@ -35,7 +70,7 @@ const {
   publicKey,
 } = stripeClient
 
-fullName.value = user.full_name
+fullName.value = user.full_name!
 emailAddress.value = user.email_address
 phoneNumber.value = user.phone_number
 clientSecret.value = useRoute().query.client_secret as string
@@ -52,21 +87,14 @@ onMounted(() => {
 const totalPrice = quote_total.toFixed(2)
 const isLoading = ref(false)
 
-const bookingHandler = async () => {
+const submitOrder = async () => {
   try {
     isLoading.value = true
-    const gclidCookie = useCookie('gclid')
+    setEnhancedTracking(emailAddress.value, phoneNumber.value, quote?.id!)
+    triggerEvent(quote_total)
+
     const stripeResponse = await stripeClient.submitHandler()
     console.log('Stripe Response', stripeResponse)
-    gtag('event', 'book_quote', {
-      event_category: 'Booking',
-      event_label: 'Car Service Booking',
-    })
-    gtag('event', 'conversion', {
-      send_to: 11019465988,
-      value: quote?.quote_total,
-      gclid: gclidCookie.value,
-    })
 
     if (typeof stripeResponse?.success === 'number') {
       isLoading.value = false
@@ -204,11 +232,7 @@ const bookingHandler = async () => {
               Payment details
             </h3>
 
-            <form
-              id="payment-form"
-              class="p-6"
-              @submit.prevent="bookingHandler"
-            >
+            <form id="payment-form" class="p-6" @submit.prevent="submitOrder">
               <div
                 id="link-authentication-element"
                 ref="linkAuthenticationElement"

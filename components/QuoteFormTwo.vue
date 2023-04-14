@@ -238,12 +238,12 @@ const gtm = useGtm()
 const gclidCookie = useCookie('gclid')
 const tags = useRuntimeConfig().public
 
-function triggerEvent() {
+function triggerEvent(quoteTotal: number) {
   gtm?.trackEvent({
     event: 'submitQuote',
     event_category: 'Quote',
     event_label: 'Request Quote',
-    value: 1,
+    value: quoteTotal,
     send_to: tags.GA4_SEND_TO,
     conversion: tags.G_ADS_QUOTE_SUBMIT_CONVERSION,
     conversion_label: tags.G_ADS_QUOTE_SUBMIT_CONVERSION_LABEL,
@@ -252,14 +252,26 @@ function triggerEvent() {
   })
 }
 
-function setEnhancedTracking(email: string, phone: string) {
+function setEnhancedTracking(
+  email: string,
+  phone: string,
+  quoteNumber: number,
+  userId: string
+) {
   const hashedEmail = sha256(email)
   const hashedPhone = sha256(phone)
-
   gtm?.trackEvent({
     set: 'user_data',
     email: [hashedEmail],
     phone_number: [hashedPhone],
+  })
+  gtm?.trackEvent({
+    set: 'quote_number',
+    quote_number: quoteNumber,
+  })
+  gtm?.trackEvent({
+    set: 'user_id',
+    user_id: userId,
   })
 }
 
@@ -273,9 +285,11 @@ async function onSubmit() {
     setTimeout(async () => {
       setEnhancedTracking(
         formValue.value.email_address,
-        formValue.value.phone_number
+        formValue.value.phone_number,
+        quoteData.quote_number,
+        user_id.value
       )
-      triggerEvent()
+      triggerEvent(quoteData.quote_total)
       await navigateTo({
         path: '/cart',
         query: { quote_number: quoteData.quote_number },
@@ -328,6 +342,7 @@ function disablePreviousDate(ts: number) {
             :label-width="80"
             :model="formValue"
             :rules="rules"
+            id="quote_form"
           >
             <n-grid :x-gap="12" :cols="4" item-responsive>
               <n-form-item-gi
@@ -440,6 +455,9 @@ function disablePreviousDate(ts: number) {
                   v-model:value="formValue.service_number"
                   :options="serviceOptions"
                   placeholder="Select Service Type..."
+                  :input-props="{
+                    id: 'service_type',
+                  }"
                 />
               </n-form-item-gi>
 
@@ -453,6 +471,9 @@ function disablePreviousDate(ts: number) {
                   v-model:value="formValue.vehicle_number"
                   :options="vehicleOptions"
                   placeholder="Select Vehicle Type..."
+                  :input-props="{
+                    id: 'vehicle_type',
+                  }"
                 />
               </n-form-item-gi>
 
@@ -466,6 +487,9 @@ function disablePreviousDate(ts: number) {
                   v-model:value="formValue.selected_passengers"
                   :options="passengerOptions as SelectOption[]"
                   placeholder="Select Passengers..."
+                  :input-props="{
+                    id: 'passengers',
+                  }"
                 />
               </n-form-item-gi>
 
@@ -480,6 +504,9 @@ function disablePreviousDate(ts: number) {
                   :options="hoursOptions"
                   placeholder="For Hourly Service..."
                   :disabled="disabled"
+                  :input-props="{
+                    id: 'hours',
+                  }"
                 />
               </n-form-item-gi>
 

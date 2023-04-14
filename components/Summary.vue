@@ -45,7 +45,7 @@ const goHome = async () => {
     <div class="bg-white p-4 md:p-8" id="order-summary" ref="orderSummary">
       <div class="mx-auto w-full md:max-w-4xl">
         <div class="mb-6 flex items-center justify-between">
-          <Picture
+          <NuxtPicture
             class="h-auto w-32"
             src="/images/hpl-logo-dark.png"
             alt="Logo"

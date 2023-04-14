@@ -97,6 +97,7 @@ export const quoteRouter = router({
       return await ctx.prisma.quote.findUnique({
         where: { quote_number: input.quote_number },
         select: {
+          id: true,
           quote_number: true,
           selected_hours: true,
           selected_passengers: true,

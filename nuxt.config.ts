@@ -38,12 +38,20 @@ export default defineNuxtConfig({
     '**': { prerender: true },
   },
 
+  nitro: {
+    preset: 'netlify',
+  },
+
   colorMode: {
     classSuffix: '',
   },
 
   lodash: {
     prefix: '_',
+  },
+
+  typescript: {
+    shim: false,
   },
 
   naiveUI: {
@@ -117,10 +125,6 @@ export default defineNuxtConfig({
     },
   },
 
-  nitro: {
-    preset: 'netlify',
-  },
-
   runtimeConfig: {
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     TWILIO_MESSAGING_SID: process.env.TWILIO_MESSAGING_SID,
@@ -138,6 +142,9 @@ export default defineNuxtConfig({
       G_ADS_QUOTE_SUBMIT_CONVERSION: process.env.G_ADS_QUOTE_SUBMIT_CONVERSION,
       G_ADS_QUOTE_SUBMIT_CONVERSION_LABEL:
         process.env.G_ADS_QUOTE_SUBMIT_CONVERSION_LABEL,
+      G_ADS_ORDER_SUBMIT_CONVERSION: process.env.G_ADS_ORDER_SUBMIT_CONVERSION,
+      G_ADS_ORDER_SUBMIT_CONVERSION_LABEL:
+        process.env.G_ADS_ORDER_SUBMIT_CONVERSION_LABEL,
       GTM_ID: process.env.GTM_ID,
       STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
       GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY,
@@ -151,32 +158,9 @@ export default defineNuxtConfig({
     },
   },
 
-  // gtag: {
-  //   config: {
-  //     page_title:
-  //       'High Park Livery - Premium Black Car Service in Greater Toronto',
-  //     allow_google_signals: true,
-  //     allow_enhanced_conversions: true,
-  //     allow_ad_personalization_signals: true,
-  //     cookie_domain: 'auto',
-  //     cookie_expires: 63072000,
-  //     cookie_flags: 'SameSite=None;Secure',
-  //     cookie_path: '/',
-  //     cookie_update: true,
-  //     language: 'en-US',
-  //     send_page_view: true,
-  //   },
-  // },
-
-  typescript: {
-    shim: false,
-  },
-
   vite: {
     resolve: {
       alias: { '.prisma/client/index-browser': `@prisma/client/index-browser` },
     },
   },
-
-  devtools: true
 })
