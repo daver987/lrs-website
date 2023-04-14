@@ -6,6 +6,7 @@ import {
   loadStripe,
   StripePaymentElement,
   StripeLinkAuthenticationElement,
+  StripePaymentRequestButtonElement,
 } from '@stripe/stripe-js'
 
 const appearance = {
@@ -25,6 +26,7 @@ export function useStripe() {
   const paymentElement: Ref<HTMLElement | null> = ref(null)
   const linkAuthenticationElement: Ref<HTMLElement | null> = ref(null)
   const messageElement: Ref<HTMLElement | null> = ref(null)
+  const paymentRequest: Ref<HTMLElement | null> = ref(null)
   const fullName: Ref<string> = ref('')
   const emailAddress: Ref<string> = ref('')
   const phoneNumber: Ref<string> = ref('')
@@ -36,11 +38,25 @@ export function useStripe() {
 
   let stripePaymentElement: StripePaymentElement | null
   let stripeLinkAuthenticationElement: StripeLinkAuthenticationElement | null
+  let stripePaymentRequest: StripePaymentRequestButtonElement | null
   let stripe: Stripe | null
   let elements: StripeElements
 
   const stripeInit = async () => {
     return await loadStripe(publicKey.value)
+  }
+
+  const initStripePaymentRequestButton = async (stripe: Stripe) => {
+    const paymentRequest = stripe.paymentRequest({
+      country: 'CA',
+      currency: 'cad',
+      total: {
+        label: 'Total',
+        amount: 44730,
+      },
+      requestPayerName: true,
+      requestPayerEmail: true,
+    })
   }
 
   const initStripeElements = async () => {
