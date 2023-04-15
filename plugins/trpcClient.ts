@@ -18,7 +18,7 @@ export default defineNuxtPlugin(() => {
     links: [
       httpBatchLink({
         url: '/api/trpc',
-        // We provide our own fetch to leverage the use of Nuxt"s $fetch
+        // We provide our own fetch to leverage the use of Nuxt's $fetch
         // trpc-nuxt has its own NuxtHttpBatchLink, but it doesn't handle error well
         // in the case of a FetchError, the error won't be properly mzpped in the trpc client. This implementation fixes it
         async fetch(input: any, init?: any) {

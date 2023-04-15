@@ -43,10 +43,6 @@ export function useStripe() {
   let stripe: Stripe | null
   let elements: StripeElements
 
-  // const stripeInit = async () => {
-  //   return await loadStripe(publicKey.value)
-  // }
-
   const initStripePaymentRequestButton = async (
     stripe: Stripe,
     amountInCents: number

@@ -149,12 +149,7 @@ export default defineNuxtConfig({
       STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
       GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY,
       WEBSITE_URL: process.env.WEBSITE_URL,
-      siteUrl: 'https://highparklivery.com/',
-      siteName: 'Toronto Car Service | High Park Livery',
-      siteDescription:
-        'A top-rated Toronto car service, High Park Livery provides luxury transportation to and from Toronto Pearson Airport, Billy Bishop Airport, and more.',
-      language: 'en-CA',
-      titleSeparator: '|',
+      TAG_MANAGER_ENABLED: process.env.TAG_MANAGER_ENABLED,
     },
   },
 
