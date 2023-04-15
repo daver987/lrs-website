@@ -1,13 +1,13 @@
 import { ref } from '#imports'
 import type { Ref } from 'vue'
 import {
-  StripeElements,
   Stripe,
-  loadStripe,
-  StripePaymentElement,
+  StripeElements,
   StripeLinkAuthenticationElement,
+  StripePaymentElement,
   StripePaymentRequestButtonElement,
 } from '@stripe/stripe-js'
+import { useNuxtApp } from '#app'
 
 const appearance = {
   theme: 'stripe',
@@ -17,12 +17,13 @@ const appearance = {
     colorText: '#222222',
     colorDanger: '#df1b41',
     fontFamily: 'Inter Var, system-ui, sans-serif',
-    spacingUnit: '2 px',
+    spacingUnit: '2px',
     borderRadius: '4px',
   },
 } as const
 
 export function useStripe() {
+  const { $stripe } = useNuxtApp()
   const paymentElement: Ref<HTMLElement | null> = ref(null)
   const linkAuthenticationElement: Ref<HTMLElement | null> = ref(null)
   const messageElement: Ref<HTMLElement | null> = ref(null)
@@ -42,17 +43,20 @@ export function useStripe() {
   let stripe: Stripe | null
   let elements: StripeElements
 
-  const stripeInit = async () => {
-    return await loadStripe(publicKey.value)
-  }
+  // const stripeInit = async () => {
+  //   return await loadStripe(publicKey.value)
+  // }
 
-  const initStripePaymentRequestButton = async (stripe: Stripe) => {
-    const paymentRequest = stripe.paymentRequest({
+  const initStripePaymentRequestButton = async (
+    stripe: Stripe,
+    amountInCents: number
+  ) => {
+    return stripe.paymentRequest({
       country: 'CA',
       currency: 'cad',
       total: {
         label: 'Total',
-        amount: 44730,
+        amount: amountInCents,
       },
       requestPayerName: true,
       requestPayerEmail: true,
@@ -60,7 +64,7 @@ export function useStripe() {
   }
 
   const initStripeElements = async () => {
-    stripe = await stripeInit()
+    stripe = $stripe
     elements = stripe!.elements({
       clientSecret: clientSecret.value,
       appearance,

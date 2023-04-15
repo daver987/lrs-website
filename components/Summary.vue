@@ -142,23 +142,41 @@ const goHome = async () => {
         <div class="mt-6 border-t-2 border-gray-200 pt-6">
           <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div class="flex flex-col">
-              <p class="font-brand-body text-base font-bold text-black">
+              <p class="font-brand-body text-sm font-bold text-black">
                 Check your email for your trip confirmation
               </p>
-              <p class="max-w-[65ch] font-brand-body text-sm text-red-700">
-                **Please note, due to scheduling you may not receive a
-                confirmation right away. If your trip is not confirmed within 2
-                hours, please contact us at 647-360-9631
+              <p class="max-w-[65ch] font-brand-body text-xs text-red-700">
+                **Please check your email for your trip confirmation. Make sure
+                to also check your spam folder in case the confirmation email is
+                mistakenly marked as spam.
+              </p>
+              <p class="text-xs">
+                Feel free to contact us if you have any questions or concerns
+                at<br />
+                Phone:
+                <a
+                  class="text-xs text-blue-600 underline"
+                  href="tel:+16473609631"
+                  >647-360-9631.</a
+                ><br />
+                Email:
+                <a
+                  class="text-xs text-blue-600 underline"
+                  href="mailto:info@highparklivery.com"
+                  >info@highparklivery.com</a
+                >
               </p>
             </div>
             <div class="flex flex-col">
-              <p class="font-brand-body text-base font-bold text-black">
-                Contact us if your trip is booked within 6 hours or less
+              <p class="font-brand-body text-sm font-bold text-black">
+                Contact us if your trip is a short notice booking
               </p>
-              <p class="font-brand-body text-sm text-red-700">
-                Due to scheduling, we may not be able to accommodate your
-                request if it is booked less than two hours from now. We will
-                contact you asap if we cannot accommodate your booking.
+              <p class="font-brand-body text-xs text-red-700">
+                While we are highly capable of accommodating most last-minute
+                bookings, reaching out to us directly for short-notice trips
+                will help ensure a smooth and timely confirmation. We appreciate
+                your understanding and look forward to providing you with an
+                exceptional experience.
               </p>
             </div>
           </div>
