@@ -256,17 +256,21 @@ function setEnhancedTracking(
   quoteNumber: number,
   userId: string
 ) {
+  const formattedPhoneNumber: string = phone.replace(/\s+/g, '')
   const hashedEmail = sha256(email)
-  const hashedPhone = sha256(phone)
+  const hashedPhone = sha256(formattedPhoneNumber)
+
   gtm?.trackEvent({
     set: 'user_data',
     email: [hashedEmail],
     phone_number: [hashedPhone],
   })
+
   gtm?.trackEvent({
     set: 'quote_number',
     quote_number: quoteNumber,
   })
+
   gtm?.trackEvent({
     set: 'user_id',
     user_id: userId,
