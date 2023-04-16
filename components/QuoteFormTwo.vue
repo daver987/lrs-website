@@ -78,8 +78,6 @@ formValue.value.vehicle = computed(() => {
   return getVehicleTypeByNumber(vehicle.value, formValue.value.vehicle_number!)
 })
 
-formValue.value.is_hourly = computeIsHourly(formValue.value.service?.value!)
-
 const maxPassengers = computed(() => {
   const vehicleType = vehicleOptions.value.find(
     (type: SelectOption) => type.value === formValue.value.vehicle_number
@@ -97,15 +95,15 @@ watch(
     formValue.value.selected_passengers = null
   }
 )
-const disabled = ref(true)
+const isDisabled = ref(true)
 watch(
-  () => formValue.value.service_number,
+  () => formValue.value.service,
   () => {
-    if (formValue.value.service_number === 4) {
-      disabled.value = false
-      formValue.value.service_number = null
+    if (formValue.value.service.is_hourly) {
+      isDisabled.value = false
     } else {
-      disabled.value = true
+      isDisabled.value = true
+      formValue.value.selected_hours = null
     }
   }
 )
@@ -503,7 +501,7 @@ function disablePreviousDate(ts: number) {
                   v-model:value="formValue.selected_hours"
                   :options="hoursOptions"
                   placeholder="For Hourly Service..."
-                  :disabled="disabled"
+                  :disabled="isDisabled"
                   :input-props="{
                     id: 'hours',
                   }"

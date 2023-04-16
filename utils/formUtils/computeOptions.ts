@@ -16,6 +16,7 @@ export function computeServiceOptions(array: Service[]): SelectOption[] {
     return {
       label: item.label,
       value: item.service_number,
+      isHourly: item.is_hourly,
     }
   })
 }
