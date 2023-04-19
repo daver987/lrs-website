@@ -20,7 +20,7 @@ export default defineNuxtPlugin((nuxt) => {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
-        staleTime: 60000,
+        // Add your query client options here
       },
     },
   })

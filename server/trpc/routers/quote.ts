@@ -87,6 +87,35 @@ export const quoteRouter = router({
       return quoteReturn[0]
     }),
 
+  getCreatedAt: publicProcedure
+    .input(
+      z.object({
+        quote_number: z.number(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const result = await ctx.prisma.quote.findUnique({
+        where: {
+          quote_number: input.quote_number,
+        },
+        select: {
+          created_at: true,
+          is_booked: true,
+        },
+      })
+      console.log('Server Result:', result)
+
+      if (!result) {
+        console.log("Quote doesn't exist")
+        return result
+      } else {
+        return {
+          created_at: result.created_at,
+          is_booked: result.is_booked,
+        }
+      }
+    }),
+
   get: publicProcedure
     .input(
       z.object({

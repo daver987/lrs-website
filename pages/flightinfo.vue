@@ -5,6 +5,10 @@ import { FormRules } from 'naive-ui'
 import { Ref } from 'vue'
 import { useStripeStore } from '~/stores/useStripeStore'
 
+definePageMeta({
+  middleware: 'quotecheck',
+})
+
 const quoteNumber = useRoute().query.quote_number as string
 const clientSecret = useRoute().query.client_secret
 const quote = await getQuote(quoteNumber)

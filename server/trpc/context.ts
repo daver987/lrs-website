@@ -1,5 +1,7 @@
 import { inferAsyncReturnType } from '@trpc/server'
 import type { H3Event } from 'h3'
+import { getServerSession } from '#auth'
+import { prismaDb } from '~/server/prismadb'
 import { stripe } from '~/server/services/stripeInit'
 import openai from 'openai'
 
@@ -20,7 +22,7 @@ export function createContext(_event: H3Event) {
    * ```
    */
   return {
-    prisma: _event.context.prisma,
+    prisma: prismaDb,
     twilioClient: _event.context.twilioClient,
     stripe: stripe,
     openai: openAI,

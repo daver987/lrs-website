@@ -8,6 +8,7 @@ definePageMeta({
   name: 'checkout',
   layout: 'store',
   colorMode: 'dark',
+  middleware: 'quotecheck',
 })
 
 type CombinedLineItems = {
