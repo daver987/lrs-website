@@ -1,6 +1,6 @@
 import { publicProcedure, router } from '../trpc'
 import { z } from 'zod'
-import { createConfirmationEmail } from '~/server/services/sendGridEmail'
+import { createConfirmationEmail } from '~/server/utils/sendGridEmail'
 import { quoteFormReturnSchema } from '~/schema/QuoteFormSchema'
 
 export const bookingRouter = router({

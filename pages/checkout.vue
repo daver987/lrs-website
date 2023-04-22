@@ -107,10 +107,6 @@ const submitOrder = async () => {
     throw new Error('Booking failed.')
   }
 }
-
-//todo: add in the creation of draft invoice in stripe
-//todo: add region functionality for auto tax calculation for out of town trips
-//todo: make proper cancel page
 </script>
 
 <template>

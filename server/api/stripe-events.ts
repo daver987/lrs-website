@@ -1,6 +1,6 @@
 import { Stripe } from 'stripe'
 import { readRawBody, defineEventHandler } from 'h3'
-import { stripe } from '../services/stripeInit'
+import { stripe } from '~/server/utils/stripeInit'
 import { z } from 'zod'
 
 export default defineEventHandler(async (event) => {

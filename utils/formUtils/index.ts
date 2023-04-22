@@ -1,5 +1,5 @@
 import { Place } from '~/schema/placeSchema'
-import { LineItem, SalesTax, Service, Vehicle } from '.prisma/client'
+import { LineItem, SalesTax, Service, Vehicle } from '@prisma/client'
 import { LocationQueryValue } from 'vue-router'
 import { ComputedRef } from 'vue'
 
@@ -29,7 +29,6 @@ export interface FormValue {
 }
 
 // index.ts
-export * from './serviceTypes'
-export * from './computeUtils'
-export * from './computeOptions'
 export * from './isAirport'
+export * from './serviceTypes'
+export * from './computeOptions'

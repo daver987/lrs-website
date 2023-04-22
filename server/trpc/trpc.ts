@@ -9,7 +9,7 @@
  */
 import superjson from 'superjson'
 import { Context } from '~/server/trpc/context'
-import { TRPCError, initTRPC } from '@trpc/server'
+import { initTRPC } from '@trpc/server'
 import chalk from 'chalk'
 
 export const logger = (...messages: string[]) =>
@@ -19,18 +19,18 @@ const t = initTRPC.context<Context>().create({
   transformer: superjson,
 })
 
-const authMiddleware = t.middleware(({ ctx, next }) => {
-  if (!ctx.session?.user) {
-    throw new TRPCError({ code: 'UNAUTHORIZED' })
-  }
-
-  return next({
-    ctx: {
-      // infers the `session` as non-nullable
-      session: { ...ctx.session, user: ctx.session.user },
-    },
-  })
-})
+// const authMiddleware = t.middleware(({ ctx, next }) => {
+//   if (!ctx.session?.user) {
+//     throw new TRPCError({ code: 'UNAUTHORIZED' })
+//   }
+//
+//   return next({
+//     ctx: {
+//       // infers the `session` as non-nullable
+//       session: { ...ctx.session, user: ctx.session.user },
+//     },
+//   })
+// })
 
 const loggerMiddleware = t.middleware(async ({ path, next }) => {
   logger(`${path}`)
@@ -44,7 +44,6 @@ const loggerMiddleware = t.middleware(async ({ path, next }) => {
 })
 
 export const publicProcedure = t.procedure.use(loggerMiddleware)
-export const authenticatedProcedure = t.procedure
-  .use(loggerMiddleware)
-  .use(authMiddleware)
+export const authenticatedProcedure = t.procedure.use(loggerMiddleware)
+// .use(authMiddleware)
 export const router = t.router

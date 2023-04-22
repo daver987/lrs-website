@@ -1,4 +1,4 @@
-import { Service, Vehicle } from '.prisma/client'
+import { Service, Vehicle } from '@prisma/client'
 import { Place } from '~/schema/placeSchema'
 import { isAirport } from '~/utils/formUtils/isAirport'
 

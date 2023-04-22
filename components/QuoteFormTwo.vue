@@ -1,29 +1,25 @@
 <script setup lang="ts">
-import {
-  FormInst,
-  useMessage,
-  FormRules,
-  useLoadingBar,
-  SelectOption,
-} from 'naive-ui'
+import { useMessage, useLoadingBar } from 'naive-ui'
 import { VueTelInput } from 'vue-tel-input'
 import { sha256 } from 'js-sha256'
-import { LineItem, SalesTax, Service, Vehicle } from '.prisma/client'
+import { LineItem, SalesTax, Service, Vehicle } from '@prisma/client'
 import { Place } from '~/schema/placeSchema'
 import { useUserStore } from '~/stores/useUserStore'
 import { useQuoteStore } from '~/stores/useQuoteStore'
 import { ref, useTrpc } from '#imports'
-import type { Ref, WatchCallback } from 'vue'
 import { storeToRefs } from 'pinia'
 import { FormValue } from '~/utils/formUtils'
 import { isAirport } from '~/utils/formUtils/isAirport'
 import { useGtm } from '@gtm-support/vue-gtm'
+import type { Ref, WatchCallback } from 'vue'
+import type { FormInst, FormRules, SelectOption } from 'naive-ui'
 
 const formRef = ref<FormInst | null>(null)
 const loading: Ref<boolean> = ref(false)
 const quoteStore = useQuoteStore()
 const userStore = useUserStore()
 const { user_id } = storeToRefs(userStore)
+
 const message = useMessage()
 const loadingBar = useLoadingBar()
 
@@ -119,19 +115,19 @@ const rules: FormRules = {
     type: 'string',
     required: true,
     message: 'Please enter a pickup time',
-    trigger: 'blur',
+    trigger: ['blur'],
   },
   return_date: {
     type: 'number',
     required: false,
     message: 'Please enter a drop off date',
-    trigger: 'blur',
+    trigger: ['blur'],
   },
   return_time: {
     type: 'number',
     required: false,
     message: 'Please enter a drop off time',
-    trigger: 'blur',
+    trigger: ['blur'],
   },
   selected_hours: {
     type: 'number',
@@ -160,22 +156,22 @@ const rules: FormRules = {
   first_name: {
     required: true,
     message: 'First name is required',
-    trigger: 'blur',
+    trigger: ['blur'],
   },
   last_name: {
     required: true,
     message: 'Last name is required',
-    trigger: 'blur',
+    trigger: ['blur'],
   },
   email_address: {
     required: true,
-    message: 'Email is required',
-    trigger: 'blur',
+    message: 'Please enter a valid email',
+    trigger: ['blur'],
   },
   phone_number: {
     required: true,
     message: 'Phone number is required',
-    trigger: 'blur',
+    trigger: ['blur'],
   },
 }
 
@@ -323,7 +319,6 @@ function handleValidateButtonClick(e: MouseEvent) {
   })
 }
 
-//calculating the start date on the calendar component
 function disablePreviousDate(ts: number) {
   return ts < new Date().getTime() - 24 * 60 * 60 * 1000
 }

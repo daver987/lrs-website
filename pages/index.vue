@@ -126,12 +126,7 @@ const fleetBackgroundImg = useBackgroundImage($img, fleetBackgroundImage)
           </p>
         </div>
         <div class="flex w-full place-items-center justify-center p-6">
-          <SvgIcon
-            name="24-hours"
-            :color="iconColor"
-            :size="250"
-            alt="24 hours icon"
-          />
+          <nuxt-icon name="24-hours" :color="iconColor" />
         </div>
       </BaseContainer>
     </BaseSection>

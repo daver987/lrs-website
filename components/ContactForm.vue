@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { toFormValidator } from '@vee-validate/zod'
+import { toTypedSchema } from '@vee-validate/zod'
 import { useForm, ErrorMessage, Field } from 'vee-validate'
 import { z } from 'zod'
 import { ref } from '#imports'
@@ -13,7 +13,7 @@ const formSchema = z.object({
   message: z.string(),
 })
 
-const schema = toFormValidator(formSchema)
+const schema = toTypedSchema(formSchema)
 type ValidationSchema = z.infer<typeof formSchema>
 const { handleSubmit, errors, resetForm } = useForm({
   validationSchema: schema,
@@ -41,6 +41,7 @@ const onSubmit = handleSubmit(async (values: ValidationSchema) => {
     console.log(e)
   }
 })
+//Todo Connect to zapier using trpc
 </script>
 
 <template>

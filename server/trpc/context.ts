@@ -1,8 +1,7 @@
 import { inferAsyncReturnType } from '@trpc/server'
 import type { H3Event } from 'h3'
-import { getServerSession } from '#auth'
 import { prismaDb } from '~/server/prismadb'
-import { stripe } from '~/server/services/stripeInit'
+import { stripe } from '~/server/utils/stripeInit'
 import openai from 'openai'
 
 const apiKey = useRuntimeConfig().OPENAI_API_KEY

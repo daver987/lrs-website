@@ -1,4 +1,4 @@
-import type { QuoteFormReturn } from '~~/schema/QuoteFormSchema'
+import type { QuoteFormReturn } from '~/schema/QuoteFormSchema'
 
 export const createAircallContact = async (
   aircallSecret: string,

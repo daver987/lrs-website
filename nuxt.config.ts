@@ -6,12 +6,13 @@ export default defineNuxtConfig({
     layoutTransition: { name: 'layout', mode: 'out-in' },
   },
 
-  experimental: {
-    restoreState: true,
-  },
-
   build: {
-    transpile: ['@headlessui/vue', '@googlemaps/js-api-loader', 'trpc-nuxt'],
+    transpile: [
+      '@headlessui/vue',
+      '@googlemaps/js-api-loader',
+      'trpc-nuxt',
+      '@sendgrid/mail',
+    ],
   },
 
   css: ['vue-tel-input/vue-tel-input.css'],
@@ -23,8 +24,8 @@ export default defineNuxtConfig({
     '@nuxt/image-edge',
     '@nuxtjs/color-mode',
     'nuxt-icon',
+    'nuxt-icons',
     'nuxt-lodash',
-    'nuxt-vitest',
     '@huntersofbook/naive-ui-nuxt',
     [
       '@pinia/nuxt',
@@ -51,7 +52,7 @@ export default defineNuxtConfig({
   },
 
   typescript: {
-    shim: false,
+    shim: true,
   },
 
   naiveUI: {
@@ -158,6 +159,4 @@ export default defineNuxtConfig({
       alias: { '.prisma/client/index-browser': `@prisma/client/index-browser` },
     },
   },
-
-  devtools: true,
 })
