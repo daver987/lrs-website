@@ -139,6 +139,54 @@ export async function getCustomerByEmail({
 
   return null
 }
+
+const taxRateId = 'txr_1MWuVFEm9nnVhePIlujaVvBo'
+const fuelSurcharge = 'prod_NlYJ2HAaYwGg6U'
+const gratuity = 'prod_NlYIBCyMFKGpTP'
+const airportFee = 'prod_NlYJgktjL9N1iB'
+
+const pointToPoint = {
+  standardSuv: 'prod_NlYDJcWdMZRPSt',
+  premiumSuv: 'prod_NlYBOvskEn5KZC',
+  standardSedan: 'prod_NlYEjQB3uaMLB2',
+  premiumSedan: 'prod_NlYGoDq9BJ6byF',
+}
+const hourlyAsDirected = {
+  standardSuv: 'prod_NlYDx9nK1kFEo8',
+  premiumSuv: 'prod_NlYB8FLqnGMaUb',
+  standardSedan: 'prod_NlYFA7D3Ciw47P',
+  premiumSedan: 'prod_NlYG4s0s2Hq6bG',
+}
+const fromAirport = {
+  standardSuv: 'prod_NlYDXHuYFZVF3m',
+  premiumSuv: 'prod_NiKohs3QP756Xt',
+  standardSedan: 'prod_NlYF1FnuXpEAS2',
+  premiumSedan: 'prod_NlYCYqUCe6Hr1Q',
+}
+const toAirport = {
+  standardSuv: 'prod_NlYECp9qpv5X7U',
+  premiumSuv: 'prod_NlYARr96LHsDQn',
+  standardSedan: 'prod_NlYF0QwppLL5M7',
+  premiumSedan: 'prod_NlYHOQrTrOuxec',
+}
+async function createPrice(
+  amountInCents: number,
+  productId: string,
+  quoteNumber: number
+) {
+  const price = await stripe.prices.create({
+    billing_scheme: 'per_unit',
+    product: productId,
+    currency: 'cad',
+    unit_amount: amountInCents,
+    metadata: {
+      quoteNumber: quoteNumber,
+    },
+  })
+  console.log('Stripe Product and Price', price)
+  return price
+}
+
 // export const handleInvoicePaid = async ({
 //   event,
 //   stripe,

@@ -313,6 +313,7 @@ model Vehicle {
   is_active        Boolean  @default(true)
   label            String
   limo_anywhere_id Int?
+  fasttrak_id      Int?
   vehicle_image    String?
   quotes           Quote[]
 }
@@ -348,4 +349,72 @@ model Airport {
   iata     String?
   icao     String?
   flight   Flight[]
+}
+
+model LAOrders {
+  created_at                            DateTime @default(now())
+  conf_num                              Int      @id @unique @default(autoincrement())
+  type                                  String?
+  pu_date                               String?
+  pu_time                               String?
+  do_time                               String?
+  duration                              String?
+  account_num                           Int?
+  agent_first_name                      String?
+  agent_last_name                       String?
+  alias                                 String?
+  o_res_alias                           String?
+  affiliate_first_name                  String?
+  affiliate_last_name                   String?
+  billing_contact                       String?
+  booking_contact                       String?
+  passenger_first_name                  String?
+  passenger_last_name                   String?
+  passenger_email                       String?
+  ref_num                               String?
+  company                               String?
+  routing_details                       String?
+  pax_num                               Float?
+  driver                                String?
+  car                                   String?
+  vehicle_type                          String?
+  service_type                          String?
+  res_by                                String?
+  date_time_created                     String?
+  status                                String?
+  pmt_method                            String?
+  pmt_status                            String?
+  payments_deposits_excluding_auth_only Float?
+  pre_authorizations_auth_only          Float?
+  flat_rate                             Float?
+  misc_fee                              Float?
+  wait_time                             Float?
+  per_hour                              Float?
+  per_unit                              Float?
+  base_rate                             Float?
+  cleaning_fee                          Float?
+  extra_hrs                             Int?
+  extra_stops                           Int?
+  reimbursement_for_supplies            Float?
+  fuel_surcharge                        Float?
+  meet_and_greet                        Float?
+  parking                               Float?
+  gratuity                              Float?
+  admin_fee                             Float?
+  ETR                                   Float?
+  airport_tol                           Float?
+  toll_charge                           Float?
+  discount                              Float?
+  per_pass                              Float?
+  tax                                   Float?
+  flat                                  Float?
+  trip_total                            Float?
+  payment_date                          String?
+  pu_date_and_time                      String?
+  payment_method                        String?
+  transaction_type                      String?
+  other                                 String?
+  payment_id                            String?
+  notes                                 String?
+  amount                                String?
 }

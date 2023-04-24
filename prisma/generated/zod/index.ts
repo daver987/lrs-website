@@ -94,7 +94,7 @@ export const TripScalarFieldEnumSchema = z.enum(['id','created_at','updated_at',
 
 export const UserScalarFieldEnumSchema = z.enum(['id','created_at','updated_at','first_name','last_name','email_address','phone_number','phone_number_country','stripe_customer_id','is_customer','account_id','notes','payment_method','meta_data','full_name','email_verified','image']);
 
-export const VehicleScalarFieldEnumSchema = z.enum(['id','vehicle_number','created_at','updated_at','max_passengers','max_luggage','per_km','per_hour','min_hours','min_distance','min_rate','is_active','label','limo_anywhere_id','vehicle_image']);
+export const VehicleScalarFieldEnumSchema = z.enum(['id','vehicle_number','created_at','updated_at','max_passengers','max_luggage','per_km','per_hour','min_hours','min_distance','min_rate','is_active','label','limo_anywhere_id','fasttrak_id','vehicle_image']);
 
 export const VerificationTokenScalarFieldEnumSchema = z.enum(['identifier','token','expires','id']);
 /////////////////////////////////////////
@@ -572,6 +572,7 @@ export const VehicleSchema = z.object({
   is_active: z.boolean(),
   label: z.string(),
   limo_anywhere_id: z.number().int().nullable(),
+  fasttrak_id: z.number().int().nullable(),
   vehicle_image: z.string().nullable(),
 })
 
@@ -1211,6 +1212,7 @@ export const VehicleSelectSchema: z.ZodType<Prisma.VehicleSelect> = z.object({
   is_active: z.boolean().optional(),
   label: z.boolean().optional(),
   limo_anywhere_id: z.boolean().optional(),
+  fasttrak_id: z.boolean().optional(),
   vehicle_image: z.boolean().optional(),
   quotes: z.union([z.boolean(),z.lazy(() => QuoteFindManyArgsSchema)]).optional(),
   _count: z.union([z.boolean(),z.lazy(() => VehicleCountOutputTypeArgsSchema)]).optional(),
@@ -2529,6 +2531,7 @@ export const VehicleWhereInputSchema: z.ZodType<Prisma.VehicleWhereInput> = z.ob
   is_active: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   label: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   limo_anywhere_id: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
+  fasttrak_id: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
   vehicle_image: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   quotes: z.lazy(() => QuoteListRelationFilterSchema).optional()
 }).strict();
@@ -2548,6 +2551,7 @@ export const VehicleOrderByWithRelationInputSchema: z.ZodType<Prisma.VehicleOrde
   is_active: z.lazy(() => SortOrderSchema).optional(),
   label: z.lazy(() => SortOrderSchema).optional(),
   limo_anywhere_id: z.lazy(() => SortOrderSchema).optional(),
+  fasttrak_id: z.lazy(() => SortOrderSchema).optional(),
   vehicle_image: z.lazy(() => SortOrderSchema).optional(),
   quotes: z.lazy(() => QuoteOrderByRelationAggregateInputSchema).optional()
 }).strict();
@@ -2572,6 +2576,7 @@ export const VehicleOrderByWithAggregationInputSchema: z.ZodType<Prisma.VehicleO
   is_active: z.lazy(() => SortOrderSchema).optional(),
   label: z.lazy(() => SortOrderSchema).optional(),
   limo_anywhere_id: z.lazy(() => SortOrderSchema).optional(),
+  fasttrak_id: z.lazy(() => SortOrderSchema).optional(),
   vehicle_image: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => VehicleCountOrderByAggregateInputSchema).optional(),
   _avg: z.lazy(() => VehicleAvgOrderByAggregateInputSchema).optional(),
@@ -2598,6 +2603,7 @@ export const VehicleScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Vehic
   is_active: z.union([ z.lazy(() => BoolWithAggregatesFilterSchema),z.boolean() ]).optional(),
   label: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   limo_anywhere_id: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  fasttrak_id: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
   vehicle_image: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
 }).strict();
 
@@ -4403,6 +4409,7 @@ export const VehicleCreateInputSchema: z.ZodType<Prisma.VehicleCreateInput> = z.
   is_active: z.boolean().optional(),
   label: z.string(),
   limo_anywhere_id: z.number().int().optional().nullable(),
+  fasttrak_id: z.number().int().optional().nullable(),
   vehicle_image: z.string().optional().nullable(),
   quotes: z.lazy(() => QuoteCreateNestedManyWithoutVehicleInputSchema).optional()
 }).strict();
@@ -4422,6 +4429,7 @@ export const VehicleUncheckedCreateInputSchema: z.ZodType<Prisma.VehicleUnchecke
   is_active: z.boolean().optional(),
   label: z.string(),
   limo_anywhere_id: z.number().int().optional().nullable(),
+  fasttrak_id: z.number().int().optional().nullable(),
   vehicle_image: z.string().optional().nullable(),
   quotes: z.lazy(() => QuoteUncheckedCreateNestedManyWithoutVehicleInputSchema).optional()
 }).strict();
@@ -4440,6 +4448,7 @@ export const VehicleUpdateInputSchema: z.ZodType<Prisma.VehicleUpdateInput> = z.
   is_active: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   label: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   limo_anywhere_id: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  fasttrak_id: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   vehicle_image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   quotes: z.lazy(() => QuoteUpdateManyWithoutVehicleNestedInputSchema).optional()
 }).strict();
@@ -4459,6 +4468,7 @@ export const VehicleUncheckedUpdateInputSchema: z.ZodType<Prisma.VehicleUnchecke
   is_active: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   label: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   limo_anywhere_id: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  fasttrak_id: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   vehicle_image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   quotes: z.lazy(() => QuoteUncheckedUpdateManyWithoutVehicleNestedInputSchema).optional()
 }).strict();
@@ -4478,6 +4488,7 @@ export const VehicleCreateManyInputSchema: z.ZodType<Prisma.VehicleCreateManyInp
   is_active: z.boolean().optional(),
   label: z.string(),
   limo_anywhere_id: z.number().int().optional().nullable(),
+  fasttrak_id: z.number().int().optional().nullable(),
   vehicle_image: z.string().optional().nullable()
 }).strict();
 
@@ -4495,6 +4506,7 @@ export const VehicleUpdateManyMutationInputSchema: z.ZodType<Prisma.VehicleUpdat
   is_active: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   label: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   limo_anywhere_id: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  fasttrak_id: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   vehicle_image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
@@ -4513,6 +4525,7 @@ export const VehicleUncheckedUpdateManyInputSchema: z.ZodType<Prisma.VehicleUnch
   is_active: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   label: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   limo_anywhere_id: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  fasttrak_id: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   vehicle_image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
@@ -5980,6 +5993,7 @@ export const VehicleCountOrderByAggregateInputSchema: z.ZodType<Prisma.VehicleCo
   is_active: z.lazy(() => SortOrderSchema).optional(),
   label: z.lazy(() => SortOrderSchema).optional(),
   limo_anywhere_id: z.lazy(() => SortOrderSchema).optional(),
+  fasttrak_id: z.lazy(() => SortOrderSchema).optional(),
   vehicle_image: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
@@ -5992,7 +6006,8 @@ export const VehicleAvgOrderByAggregateInputSchema: z.ZodType<Prisma.VehicleAvgO
   min_hours: z.lazy(() => SortOrderSchema).optional(),
   min_distance: z.lazy(() => SortOrderSchema).optional(),
   min_rate: z.lazy(() => SortOrderSchema).optional(),
-  limo_anywhere_id: z.lazy(() => SortOrderSchema).optional()
+  limo_anywhere_id: z.lazy(() => SortOrderSchema).optional(),
+  fasttrak_id: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const VehicleMaxOrderByAggregateInputSchema: z.ZodType<Prisma.VehicleMaxOrderByAggregateInput> = z.object({
@@ -6010,6 +6025,7 @@ export const VehicleMaxOrderByAggregateInputSchema: z.ZodType<Prisma.VehicleMaxO
   is_active: z.lazy(() => SortOrderSchema).optional(),
   label: z.lazy(() => SortOrderSchema).optional(),
   limo_anywhere_id: z.lazy(() => SortOrderSchema).optional(),
+  fasttrak_id: z.lazy(() => SortOrderSchema).optional(),
   vehicle_image: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
@@ -6028,6 +6044,7 @@ export const VehicleMinOrderByAggregateInputSchema: z.ZodType<Prisma.VehicleMinO
   is_active: z.lazy(() => SortOrderSchema).optional(),
   label: z.lazy(() => SortOrderSchema).optional(),
   limo_anywhere_id: z.lazy(() => SortOrderSchema).optional(),
+  fasttrak_id: z.lazy(() => SortOrderSchema).optional(),
   vehicle_image: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
@@ -6040,7 +6057,8 @@ export const VehicleSumOrderByAggregateInputSchema: z.ZodType<Prisma.VehicleSumO
   min_hours: z.lazy(() => SortOrderSchema).optional(),
   min_distance: z.lazy(() => SortOrderSchema).optional(),
   min_rate: z.lazy(() => SortOrderSchema).optional(),
-  limo_anywhere_id: z.lazy(() => SortOrderSchema).optional()
+  limo_anywhere_id: z.lazy(() => SortOrderSchema).optional(),
+  fasttrak_id: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const LineItemToQuoteABCompoundUniqueInputSchema: z.ZodType<Prisma.LineItemToQuoteABCompoundUniqueInput> = z.object({
@@ -8070,6 +8088,7 @@ export const VehicleCreateWithoutQuotesInputSchema: z.ZodType<Prisma.VehicleCrea
   is_active: z.boolean().optional(),
   label: z.string(),
   limo_anywhere_id: z.number().optional().nullable(),
+  fasttrak_id: z.number().optional().nullable(),
   vehicle_image: z.string().optional().nullable()
 }).strict();
 
@@ -8088,6 +8107,7 @@ export const VehicleUncheckedCreateWithoutQuotesInputSchema: z.ZodType<Prisma.Ve
   is_active: z.boolean().optional(),
   label: z.string(),
   limo_anywhere_id: z.number().optional().nullable(),
+  fasttrak_id: z.number().optional().nullable(),
   vehicle_image: z.string().optional().nullable()
 }).strict();
 
@@ -8383,6 +8403,7 @@ export const VehicleUpdateWithoutQuotesInputSchema: z.ZodType<Prisma.VehicleUpda
   is_active: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   label: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   limo_anywhere_id: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  fasttrak_id: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   vehicle_image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
@@ -8401,6 +8422,7 @@ export const VehicleUncheckedUpdateWithoutQuotesInputSchema: z.ZodType<Prisma.Ve
   is_active: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   label: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   limo_anywhere_id: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  fasttrak_id: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   vehicle_image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 

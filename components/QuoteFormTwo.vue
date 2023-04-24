@@ -2,15 +2,14 @@
 import { useMessage, useLoadingBar } from 'naive-ui'
 import { VueTelInput } from 'vue-tel-input'
 import { sha256 } from 'js-sha256'
-import { LineItem, SalesTax, Service, Vehicle } from '@prisma/client'
-import { Place } from '~/schema/placeSchema'
 import { useUserStore } from '~/stores/useUserStore'
 import { useQuoteStore } from '~/stores/useQuoteStore'
-import { ref, useTrpc } from '#imports'
+import { ref, useTrpc, isAirport } from '#imports'
 import { storeToRefs } from 'pinia'
-import { FormValue } from '~/utils/formUtils'
-import { isAirport } from '~/utils/formUtils/isAirport'
 import { useGtm } from '@gtm-support/vue-gtm'
+import type { LineItem, SalesTax, Service, Vehicle } from '@prisma/client'
+import type { FormValue } from '~/utils/formUtils'
+import type { Place } from '~/schema/placeSchema'
 import type { Ref, WatchCallback } from 'vue'
 import type { FormInst, FormRules, SelectOption } from 'naive-ui'
 
@@ -276,9 +275,7 @@ function setEnhancedTracking(
 async function onSubmit() {
   try {
     loading.value = true
-    console.log('Quote Values Before Submission', formValue.value)
     const quoteData = await useTrpc().quote.postQuote.mutate(formValue.value)
-    console.log('Returned Quote:', quoteData)
     quoteStore.setQuote(quoteData)
     setTimeout(async () => {
       setEnhancedTracking(
@@ -292,7 +289,7 @@ async function onSubmit() {
         path: '/cart',
         query: { quote_number: quoteData.quote_number },
       })
-    }, 200)
+    }, 500)
   } catch (e) {
     setTimeout(() => {
       console.log('error', e)
