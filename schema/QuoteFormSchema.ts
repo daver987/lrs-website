@@ -55,6 +55,7 @@ const VehicleSchemaPicked = VehicleSchema.pick({
   label: true,
   vehicle_image: true,
   max_luggage: true,
+  fasttrak_id: true,
 })
 const ServiceSchemaPicked = ServiceSchema.pick({
   label: true,
