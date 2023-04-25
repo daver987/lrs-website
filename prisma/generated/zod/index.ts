@@ -66,11 +66,15 @@ export const JsonNullValueFilterSchema = z.enum(['DbNull','JsonNull','AnyNull',]
 
 export const JsonNullValueInputSchema = z.enum(['JsonNull',]);
 
+export const LAOrdersScalarFieldEnumSchema = z.enum(['created_at','conf_num','type','pu_date','pu_time','do_time','duration','account_num','agent_first_name','agent_last_name','alias','o_res_alias','affiliate_first_name','affiliate_last_name','billing_contact','booking_contact','passenger_first_name','passenger_last_name','passenger_email','ref_num','company','routing_details','pax_num','driver','car','vehicle_type','service_type','res_by','date_time_created','status','pmt_method','pmt_status','payments_deposits_excluding_auth_only','pre_authorizations_auth_only','flat_rate','misc_fee','wait_time','per_hour','per_unit','base_rate','cleaning_fee','extra_hrs','extra_stops','reimbursement_for_supplies','fuel_surcharge','meet_and_greet','parking','gratuity','admin_fee','ETR','airport_tol','toll_charge','discount','per_pass','tax','flat','trip_total','payment_date','pu_date_and_time','payment_method','transaction_type','other','payment_id','notes','amount']);
+
 export const LineItemScalarFieldEnumSchema = z.enum(['id','item_number','created_at','updated_at','label','description','is_percentage','is_taxable','is_active','amount','applies_to']);
 
 export const LineItemToQuoteScalarFieldEnumSchema = z.enum(['A','B']);
 
 export const LocationScalarFieldEnumSchema = z.enum(['id','created_at','updated_at','lat','lng','name','formatted_address','full_name','place_id','types','is_origin','is_destination','is_waypoint','trip_id','route_order']);
+
+export const MessageScalarFieldEnumSchema = z.enum(['id','created_at','updated_at','message','subject','user_id','is_read']);
 
 export const NullableJsonNullValueInputSchema = z.enum(['DbNull','JsonNull',]).transform((v) => transformJsonNull(v));
 
@@ -181,6 +185,30 @@ export type User = z.infer<typeof UserSchema>
 export const UserPartialSchema = UserSchema.partial()
 
 export type UserPartial = z.infer<typeof UserPartialSchema>
+
+/////////////////////////////////////////
+// MESSAGE SCHEMA
+/////////////////////////////////////////
+
+export const MessageSchema = z.object({
+  id: z.string().uuid(),
+  created_at: z.coerce.date(),
+  updated_at: z.coerce.date(),
+  message: z.string(),
+  subject: z.string(),
+  user_id: z.string(),
+  is_read: z.boolean(),
+})
+
+export type Message = z.infer<typeof MessageSchema>
+
+/////////////////////////////////////////
+// MESSAGE PARTIAL SCHEMA
+/////////////////////////////////////////
+
+export const MessagePartialSchema = MessageSchema.partial()
+
+export type MessagePartial = z.infer<typeof MessagePartialSchema>
 
 /////////////////////////////////////////
 // AFFILIATE SCHEMA
@@ -656,6 +684,88 @@ export const AirportPartialSchema = AirportSchema.partial()
 export type AirportPartial = z.infer<typeof AirportPartialSchema>
 
 /////////////////////////////////////////
+// LA ORDERS SCHEMA
+/////////////////////////////////////////
+
+export const LAOrdersSchema = z.object({
+  created_at: z.coerce.date(),
+  conf_num: z.number().int(),
+  type: z.string().nullable(),
+  pu_date: z.string().nullable(),
+  pu_time: z.string().nullable(),
+  do_time: z.string().nullable(),
+  duration: z.string().nullable(),
+  account_num: z.number().int().nullable(),
+  agent_first_name: z.string().nullable(),
+  agent_last_name: z.string().nullable(),
+  alias: z.string().nullable(),
+  o_res_alias: z.string().nullable(),
+  affiliate_first_name: z.string().nullable(),
+  affiliate_last_name: z.string().nullable(),
+  billing_contact: z.string().nullable(),
+  booking_contact: z.string().nullable(),
+  passenger_first_name: z.string().nullable(),
+  passenger_last_name: z.string().nullable(),
+  passenger_email: z.string().nullable(),
+  ref_num: z.string().nullable(),
+  company: z.string().nullable(),
+  routing_details: z.string().nullable(),
+  pax_num: z.number().nullable(),
+  driver: z.string().nullable(),
+  car: z.string().nullable(),
+  vehicle_type: z.string().nullable(),
+  service_type: z.string().nullable(),
+  res_by: z.string().nullable(),
+  date_time_created: z.string().nullable(),
+  status: z.string().nullable(),
+  pmt_method: z.string().nullable(),
+  pmt_status: z.string().nullable(),
+  payments_deposits_excluding_auth_only: z.number().nullable(),
+  pre_authorizations_auth_only: z.number().nullable(),
+  flat_rate: z.number().nullable(),
+  misc_fee: z.number().nullable(),
+  wait_time: z.number().nullable(),
+  per_hour: z.number().nullable(),
+  per_unit: z.number().nullable(),
+  base_rate: z.number().nullable(),
+  cleaning_fee: z.number().nullable(),
+  extra_hrs: z.number().int().nullable(),
+  extra_stops: z.number().int().nullable(),
+  reimbursement_for_supplies: z.number().nullable(),
+  fuel_surcharge: z.number().nullable(),
+  meet_and_greet: z.number().nullable(),
+  parking: z.number().nullable(),
+  gratuity: z.number().nullable(),
+  admin_fee: z.number().nullable(),
+  ETR: z.number().nullable(),
+  airport_tol: z.number().nullable(),
+  toll_charge: z.number().nullable(),
+  discount: z.number().nullable(),
+  per_pass: z.number().nullable(),
+  tax: z.number().nullable(),
+  flat: z.number().nullable(),
+  trip_total: z.number().nullable(),
+  payment_date: z.string().nullable(),
+  pu_date_and_time: z.string().nullable(),
+  payment_method: z.string().nullable(),
+  transaction_type: z.string().nullable(),
+  other: z.string().nullable(),
+  payment_id: z.string().nullable(),
+  notes: z.string().nullable(),
+  amount: z.string().nullable(),
+})
+
+export type LAOrders = z.infer<typeof LAOrdersSchema>
+
+/////////////////////////////////////////
+// LA ORDERS PARTIAL SCHEMA
+/////////////////////////////////////////
+
+export const LAOrdersPartialSchema = LAOrdersSchema.partial()
+
+export type LAOrdersPartial = z.infer<typeof LAOrdersPartialSchema>
+
+/////////////////////////////////////////
 // SELECT & INCLUDE
 /////////////////////////////////////////
 
@@ -722,6 +832,7 @@ export const UserIncludeSchema: z.ZodType<Prisma.UserInclude> = z.object({
   quotes: z.union([z.boolean(),z.lazy(() => QuoteFindManyArgsSchema)]).optional(),
   account: z.union([z.boolean(),z.lazy(() => AccountArgsSchema)]).optional(),
   conversion: z.union([z.boolean(),z.lazy(() => ConversionFindManyArgsSchema)]).optional(),
+  messages: z.union([z.boolean(),z.lazy(() => MessageFindManyArgsSchema)]).optional(),
   _count: z.union([z.boolean(),z.lazy(() => UserCountOutputTypeArgsSchema)]).optional(),
 }).strict()
 
@@ -738,6 +849,7 @@ export const UserCountOutputTypeSelectSchema: z.ZodType<Prisma.UserCountOutputTy
   sessions: z.boolean().optional(),
   quotes: z.boolean().optional(),
   conversion: z.boolean().optional(),
+  messages: z.boolean().optional(),
 }).strict();
 
 export const UserSelectSchema: z.ZodType<Prisma.UserSelect> = z.object({
@@ -762,7 +874,31 @@ export const UserSelectSchema: z.ZodType<Prisma.UserSelect> = z.object({
   quotes: z.union([z.boolean(),z.lazy(() => QuoteFindManyArgsSchema)]).optional(),
   account: z.union([z.boolean(),z.lazy(() => AccountArgsSchema)]).optional(),
   conversion: z.union([z.boolean(),z.lazy(() => ConversionFindManyArgsSchema)]).optional(),
+  messages: z.union([z.boolean(),z.lazy(() => MessageFindManyArgsSchema)]).optional(),
   _count: z.union([z.boolean(),z.lazy(() => UserCountOutputTypeArgsSchema)]).optional(),
+}).strict()
+
+// MESSAGE
+//------------------------------------------------------
+
+export const MessageIncludeSchema: z.ZodType<Prisma.MessageInclude> = z.object({
+  user: z.union([z.boolean(),z.lazy(() => UserArgsSchema)]).optional(),
+}).strict()
+
+export const MessageArgsSchema: z.ZodType<Prisma.MessageArgs> = z.object({
+  select: z.lazy(() => MessageSelectSchema).optional(),
+  include: z.lazy(() => MessageIncludeSchema).optional(),
+}).strict();
+
+export const MessageSelectSchema: z.ZodType<Prisma.MessageSelect> = z.object({
+  id: z.boolean().optional(),
+  created_at: z.boolean().optional(),
+  updated_at: z.boolean().optional(),
+  message: z.boolean().optional(),
+  subject: z.boolean().optional(),
+  user_id: z.boolean().optional(),
+  is_read: z.boolean().optional(),
+  user: z.union([z.boolean(),z.lazy(() => UserArgsSchema)]).optional(),
 }).strict()
 
 // AFFILIATE
@@ -1294,6 +1430,77 @@ export const AirportSelectSchema: z.ZodType<Prisma.AirportSelect> = z.object({
   _count: z.union([z.boolean(),z.lazy(() => AirportCountOutputTypeArgsSchema)]).optional(),
 }).strict()
 
+// LA ORDERS
+//------------------------------------------------------
+
+export const LAOrdersSelectSchema: z.ZodType<Prisma.LAOrdersSelect> = z.object({
+  created_at: z.boolean().optional(),
+  conf_num: z.boolean().optional(),
+  type: z.boolean().optional(),
+  pu_date: z.boolean().optional(),
+  pu_time: z.boolean().optional(),
+  do_time: z.boolean().optional(),
+  duration: z.boolean().optional(),
+  account_num: z.boolean().optional(),
+  agent_first_name: z.boolean().optional(),
+  agent_last_name: z.boolean().optional(),
+  alias: z.boolean().optional(),
+  o_res_alias: z.boolean().optional(),
+  affiliate_first_name: z.boolean().optional(),
+  affiliate_last_name: z.boolean().optional(),
+  billing_contact: z.boolean().optional(),
+  booking_contact: z.boolean().optional(),
+  passenger_first_name: z.boolean().optional(),
+  passenger_last_name: z.boolean().optional(),
+  passenger_email: z.boolean().optional(),
+  ref_num: z.boolean().optional(),
+  company: z.boolean().optional(),
+  routing_details: z.boolean().optional(),
+  pax_num: z.boolean().optional(),
+  driver: z.boolean().optional(),
+  car: z.boolean().optional(),
+  vehicle_type: z.boolean().optional(),
+  service_type: z.boolean().optional(),
+  res_by: z.boolean().optional(),
+  date_time_created: z.boolean().optional(),
+  status: z.boolean().optional(),
+  pmt_method: z.boolean().optional(),
+  pmt_status: z.boolean().optional(),
+  payments_deposits_excluding_auth_only: z.boolean().optional(),
+  pre_authorizations_auth_only: z.boolean().optional(),
+  flat_rate: z.boolean().optional(),
+  misc_fee: z.boolean().optional(),
+  wait_time: z.boolean().optional(),
+  per_hour: z.boolean().optional(),
+  per_unit: z.boolean().optional(),
+  base_rate: z.boolean().optional(),
+  cleaning_fee: z.boolean().optional(),
+  extra_hrs: z.boolean().optional(),
+  extra_stops: z.boolean().optional(),
+  reimbursement_for_supplies: z.boolean().optional(),
+  fuel_surcharge: z.boolean().optional(),
+  meet_and_greet: z.boolean().optional(),
+  parking: z.boolean().optional(),
+  gratuity: z.boolean().optional(),
+  admin_fee: z.boolean().optional(),
+  ETR: z.boolean().optional(),
+  airport_tol: z.boolean().optional(),
+  toll_charge: z.boolean().optional(),
+  discount: z.boolean().optional(),
+  per_pass: z.boolean().optional(),
+  tax: z.boolean().optional(),
+  flat: z.boolean().optional(),
+  trip_total: z.boolean().optional(),
+  payment_date: z.boolean().optional(),
+  pu_date_and_time: z.boolean().optional(),
+  payment_method: z.boolean().optional(),
+  transaction_type: z.boolean().optional(),
+  other: z.boolean().optional(),
+  payment_id: z.boolean().optional(),
+  notes: z.boolean().optional(),
+  amount: z.boolean().optional(),
+}).strict()
+
 
 /////////////////////////////////////////
 // INPUT TYPES
@@ -1433,7 +1640,8 @@ export const UserWhereInputSchema: z.ZodType<Prisma.UserWhereInput> = z.object({
   sessions: z.lazy(() => SessionListRelationFilterSchema).optional(),
   quotes: z.lazy(() => QuoteListRelationFilterSchema).optional(),
   account: z.union([ z.lazy(() => AccountRelationFilterSchema),z.lazy(() => AccountWhereInputSchema) ]).optional().nullable(),
-  conversion: z.lazy(() => ConversionListRelationFilterSchema).optional()
+  conversion: z.lazy(() => ConversionListRelationFilterSchema).optional(),
+  messages: z.lazy(() => MessageListRelationFilterSchema).optional()
 }).strict();
 
 export const UserOrderByWithRelationInputSchema: z.ZodType<Prisma.UserOrderByWithRelationInput> = z.object({
@@ -1457,7 +1665,8 @@ export const UserOrderByWithRelationInputSchema: z.ZodType<Prisma.UserOrderByWit
   sessions: z.lazy(() => SessionOrderByRelationAggregateInputSchema).optional(),
   quotes: z.lazy(() => QuoteOrderByRelationAggregateInputSchema).optional(),
   account: z.lazy(() => AccountOrderByWithRelationInputSchema).optional(),
-  conversion: z.lazy(() => ConversionOrderByRelationAggregateInputSchema).optional()
+  conversion: z.lazy(() => ConversionOrderByRelationAggregateInputSchema).optional(),
+  messages: z.lazy(() => MessageOrderByRelationAggregateInputSchema).optional()
 }).strict();
 
 export const UserWhereUniqueInputSchema: z.ZodType<Prisma.UserWhereUniqueInput> = z.object({
@@ -1509,6 +1718,61 @@ export const UserScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.UserScal
   full_name: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   email_verified: z.union([ z.lazy(() => DateTimeNullableWithAggregatesFilterSchema),z.coerce.date() ]).optional().nullable(),
   image: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+}).strict();
+
+export const MessageWhereInputSchema: z.ZodType<Prisma.MessageWhereInput> = z.object({
+  AND: z.union([ z.lazy(() => MessageWhereInputSchema),z.lazy(() => MessageWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => MessageWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => MessageWhereInputSchema),z.lazy(() => MessageWhereInputSchema).array() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  created_at: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
+  updated_at: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
+  message: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  subject: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  user_id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  is_read: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
+  user: z.union([ z.lazy(() => UserRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
+}).strict();
+
+export const MessageOrderByWithRelationInputSchema: z.ZodType<Prisma.MessageOrderByWithRelationInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  created_at: z.lazy(() => SortOrderSchema).optional(),
+  updated_at: z.lazy(() => SortOrderSchema).optional(),
+  message: z.lazy(() => SortOrderSchema).optional(),
+  subject: z.lazy(() => SortOrderSchema).optional(),
+  user_id: z.lazy(() => SortOrderSchema).optional(),
+  is_read: z.lazy(() => SortOrderSchema).optional(),
+  user: z.lazy(() => UserOrderByWithRelationInputSchema).optional()
+}).strict();
+
+export const MessageWhereUniqueInputSchema: z.ZodType<Prisma.MessageWhereUniqueInput> = z.object({
+  id: z.string().uuid().optional()
+}).strict();
+
+export const MessageOrderByWithAggregationInputSchema: z.ZodType<Prisma.MessageOrderByWithAggregationInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  created_at: z.lazy(() => SortOrderSchema).optional(),
+  updated_at: z.lazy(() => SortOrderSchema).optional(),
+  message: z.lazy(() => SortOrderSchema).optional(),
+  subject: z.lazy(() => SortOrderSchema).optional(),
+  user_id: z.lazy(() => SortOrderSchema).optional(),
+  is_read: z.lazy(() => SortOrderSchema).optional(),
+  _count: z.lazy(() => MessageCountOrderByAggregateInputSchema).optional(),
+  _max: z.lazy(() => MessageMaxOrderByAggregateInputSchema).optional(),
+  _min: z.lazy(() => MessageMinOrderByAggregateInputSchema).optional()
+}).strict();
+
+export const MessageScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.MessageScalarWhereWithAggregatesInput> = z.object({
+  AND: z.union([ z.lazy(() => MessageScalarWhereWithAggregatesInputSchema),z.lazy(() => MessageScalarWhereWithAggregatesInputSchema).array() ]).optional(),
+  OR: z.lazy(() => MessageScalarWhereWithAggregatesInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => MessageScalarWhereWithAggregatesInputSchema),z.lazy(() => MessageScalarWhereWithAggregatesInputSchema).array() ]).optional(),
+  id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  created_at: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
+  updated_at: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
+  message: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  subject: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  user_id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  is_read: z.union([ z.lazy(() => BoolWithAggregatesFilterSchema),z.boolean() ]).optional(),
 }).strict();
 
 export const AffiliateWhereInputSchema: z.ZodType<Prisma.AffiliateWhereInput> = z.object({
@@ -2764,6 +3028,293 @@ export const AirportScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Airpo
   icao: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
 }).strict();
 
+export const LAOrdersWhereInputSchema: z.ZodType<Prisma.LAOrdersWhereInput> = z.object({
+  AND: z.union([ z.lazy(() => LAOrdersWhereInputSchema),z.lazy(() => LAOrdersWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => LAOrdersWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => LAOrdersWhereInputSchema),z.lazy(() => LAOrdersWhereInputSchema).array() ]).optional(),
+  created_at: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
+  conf_num: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  type: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  pu_date: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  pu_time: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  do_time: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  duration: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  account_num: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
+  agent_first_name: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  agent_last_name: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  alias: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  o_res_alias: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  affiliate_first_name: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  affiliate_last_name: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  billing_contact: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  booking_contact: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  passenger_first_name: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  passenger_last_name: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  passenger_email: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  ref_num: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  company: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  routing_details: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  pax_num: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  driver: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  car: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  vehicle_type: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  service_type: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  res_by: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  date_time_created: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  status: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  pmt_method: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  pmt_status: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  payments_deposits_excluding_auth_only: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  pre_authorizations_auth_only: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  flat_rate: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  misc_fee: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  wait_time: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  per_hour: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  per_unit: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  base_rate: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  cleaning_fee: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  extra_hrs: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
+  extra_stops: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
+  reimbursement_for_supplies: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  fuel_surcharge: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  meet_and_greet: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  parking: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  gratuity: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  admin_fee: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  ETR: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  airport_tol: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  toll_charge: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  discount: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  per_pass: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  tax: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  flat: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  trip_total: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  payment_date: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  pu_date_and_time: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  payment_method: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  transaction_type: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  other: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  payment_id: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  notes: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  amount: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+}).strict();
+
+export const LAOrdersOrderByWithRelationInputSchema: z.ZodType<Prisma.LAOrdersOrderByWithRelationInput> = z.object({
+  created_at: z.lazy(() => SortOrderSchema).optional(),
+  conf_num: z.lazy(() => SortOrderSchema).optional(),
+  type: z.lazy(() => SortOrderSchema).optional(),
+  pu_date: z.lazy(() => SortOrderSchema).optional(),
+  pu_time: z.lazy(() => SortOrderSchema).optional(),
+  do_time: z.lazy(() => SortOrderSchema).optional(),
+  duration: z.lazy(() => SortOrderSchema).optional(),
+  account_num: z.lazy(() => SortOrderSchema).optional(),
+  agent_first_name: z.lazy(() => SortOrderSchema).optional(),
+  agent_last_name: z.lazy(() => SortOrderSchema).optional(),
+  alias: z.lazy(() => SortOrderSchema).optional(),
+  o_res_alias: z.lazy(() => SortOrderSchema).optional(),
+  affiliate_first_name: z.lazy(() => SortOrderSchema).optional(),
+  affiliate_last_name: z.lazy(() => SortOrderSchema).optional(),
+  billing_contact: z.lazy(() => SortOrderSchema).optional(),
+  booking_contact: z.lazy(() => SortOrderSchema).optional(),
+  passenger_first_name: z.lazy(() => SortOrderSchema).optional(),
+  passenger_last_name: z.lazy(() => SortOrderSchema).optional(),
+  passenger_email: z.lazy(() => SortOrderSchema).optional(),
+  ref_num: z.lazy(() => SortOrderSchema).optional(),
+  company: z.lazy(() => SortOrderSchema).optional(),
+  routing_details: z.lazy(() => SortOrderSchema).optional(),
+  pax_num: z.lazy(() => SortOrderSchema).optional(),
+  driver: z.lazy(() => SortOrderSchema).optional(),
+  car: z.lazy(() => SortOrderSchema).optional(),
+  vehicle_type: z.lazy(() => SortOrderSchema).optional(),
+  service_type: z.lazy(() => SortOrderSchema).optional(),
+  res_by: z.lazy(() => SortOrderSchema).optional(),
+  date_time_created: z.lazy(() => SortOrderSchema).optional(),
+  status: z.lazy(() => SortOrderSchema).optional(),
+  pmt_method: z.lazy(() => SortOrderSchema).optional(),
+  pmt_status: z.lazy(() => SortOrderSchema).optional(),
+  payments_deposits_excluding_auth_only: z.lazy(() => SortOrderSchema).optional(),
+  pre_authorizations_auth_only: z.lazy(() => SortOrderSchema).optional(),
+  flat_rate: z.lazy(() => SortOrderSchema).optional(),
+  misc_fee: z.lazy(() => SortOrderSchema).optional(),
+  wait_time: z.lazy(() => SortOrderSchema).optional(),
+  per_hour: z.lazy(() => SortOrderSchema).optional(),
+  per_unit: z.lazy(() => SortOrderSchema).optional(),
+  base_rate: z.lazy(() => SortOrderSchema).optional(),
+  cleaning_fee: z.lazy(() => SortOrderSchema).optional(),
+  extra_hrs: z.lazy(() => SortOrderSchema).optional(),
+  extra_stops: z.lazy(() => SortOrderSchema).optional(),
+  reimbursement_for_supplies: z.lazy(() => SortOrderSchema).optional(),
+  fuel_surcharge: z.lazy(() => SortOrderSchema).optional(),
+  meet_and_greet: z.lazy(() => SortOrderSchema).optional(),
+  parking: z.lazy(() => SortOrderSchema).optional(),
+  gratuity: z.lazy(() => SortOrderSchema).optional(),
+  admin_fee: z.lazy(() => SortOrderSchema).optional(),
+  ETR: z.lazy(() => SortOrderSchema).optional(),
+  airport_tol: z.lazy(() => SortOrderSchema).optional(),
+  toll_charge: z.lazy(() => SortOrderSchema).optional(),
+  discount: z.lazy(() => SortOrderSchema).optional(),
+  per_pass: z.lazy(() => SortOrderSchema).optional(),
+  tax: z.lazy(() => SortOrderSchema).optional(),
+  flat: z.lazy(() => SortOrderSchema).optional(),
+  trip_total: z.lazy(() => SortOrderSchema).optional(),
+  payment_date: z.lazy(() => SortOrderSchema).optional(),
+  pu_date_and_time: z.lazy(() => SortOrderSchema).optional(),
+  payment_method: z.lazy(() => SortOrderSchema).optional(),
+  transaction_type: z.lazy(() => SortOrderSchema).optional(),
+  other: z.lazy(() => SortOrderSchema).optional(),
+  payment_id: z.lazy(() => SortOrderSchema).optional(),
+  notes: z.lazy(() => SortOrderSchema).optional(),
+  amount: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const LAOrdersWhereUniqueInputSchema: z.ZodType<Prisma.LAOrdersWhereUniqueInput> = z.object({
+  conf_num: z.number().int().optional()
+}).strict();
+
+export const LAOrdersOrderByWithAggregationInputSchema: z.ZodType<Prisma.LAOrdersOrderByWithAggregationInput> = z.object({
+  created_at: z.lazy(() => SortOrderSchema).optional(),
+  conf_num: z.lazy(() => SortOrderSchema).optional(),
+  type: z.lazy(() => SortOrderSchema).optional(),
+  pu_date: z.lazy(() => SortOrderSchema).optional(),
+  pu_time: z.lazy(() => SortOrderSchema).optional(),
+  do_time: z.lazy(() => SortOrderSchema).optional(),
+  duration: z.lazy(() => SortOrderSchema).optional(),
+  account_num: z.lazy(() => SortOrderSchema).optional(),
+  agent_first_name: z.lazy(() => SortOrderSchema).optional(),
+  agent_last_name: z.lazy(() => SortOrderSchema).optional(),
+  alias: z.lazy(() => SortOrderSchema).optional(),
+  o_res_alias: z.lazy(() => SortOrderSchema).optional(),
+  affiliate_first_name: z.lazy(() => SortOrderSchema).optional(),
+  affiliate_last_name: z.lazy(() => SortOrderSchema).optional(),
+  billing_contact: z.lazy(() => SortOrderSchema).optional(),
+  booking_contact: z.lazy(() => SortOrderSchema).optional(),
+  passenger_first_name: z.lazy(() => SortOrderSchema).optional(),
+  passenger_last_name: z.lazy(() => SortOrderSchema).optional(),
+  passenger_email: z.lazy(() => SortOrderSchema).optional(),
+  ref_num: z.lazy(() => SortOrderSchema).optional(),
+  company: z.lazy(() => SortOrderSchema).optional(),
+  routing_details: z.lazy(() => SortOrderSchema).optional(),
+  pax_num: z.lazy(() => SortOrderSchema).optional(),
+  driver: z.lazy(() => SortOrderSchema).optional(),
+  car: z.lazy(() => SortOrderSchema).optional(),
+  vehicle_type: z.lazy(() => SortOrderSchema).optional(),
+  service_type: z.lazy(() => SortOrderSchema).optional(),
+  res_by: z.lazy(() => SortOrderSchema).optional(),
+  date_time_created: z.lazy(() => SortOrderSchema).optional(),
+  status: z.lazy(() => SortOrderSchema).optional(),
+  pmt_method: z.lazy(() => SortOrderSchema).optional(),
+  pmt_status: z.lazy(() => SortOrderSchema).optional(),
+  payments_deposits_excluding_auth_only: z.lazy(() => SortOrderSchema).optional(),
+  pre_authorizations_auth_only: z.lazy(() => SortOrderSchema).optional(),
+  flat_rate: z.lazy(() => SortOrderSchema).optional(),
+  misc_fee: z.lazy(() => SortOrderSchema).optional(),
+  wait_time: z.lazy(() => SortOrderSchema).optional(),
+  per_hour: z.lazy(() => SortOrderSchema).optional(),
+  per_unit: z.lazy(() => SortOrderSchema).optional(),
+  base_rate: z.lazy(() => SortOrderSchema).optional(),
+  cleaning_fee: z.lazy(() => SortOrderSchema).optional(),
+  extra_hrs: z.lazy(() => SortOrderSchema).optional(),
+  extra_stops: z.lazy(() => SortOrderSchema).optional(),
+  reimbursement_for_supplies: z.lazy(() => SortOrderSchema).optional(),
+  fuel_surcharge: z.lazy(() => SortOrderSchema).optional(),
+  meet_and_greet: z.lazy(() => SortOrderSchema).optional(),
+  parking: z.lazy(() => SortOrderSchema).optional(),
+  gratuity: z.lazy(() => SortOrderSchema).optional(),
+  admin_fee: z.lazy(() => SortOrderSchema).optional(),
+  ETR: z.lazy(() => SortOrderSchema).optional(),
+  airport_tol: z.lazy(() => SortOrderSchema).optional(),
+  toll_charge: z.lazy(() => SortOrderSchema).optional(),
+  discount: z.lazy(() => SortOrderSchema).optional(),
+  per_pass: z.lazy(() => SortOrderSchema).optional(),
+  tax: z.lazy(() => SortOrderSchema).optional(),
+  flat: z.lazy(() => SortOrderSchema).optional(),
+  trip_total: z.lazy(() => SortOrderSchema).optional(),
+  payment_date: z.lazy(() => SortOrderSchema).optional(),
+  pu_date_and_time: z.lazy(() => SortOrderSchema).optional(),
+  payment_method: z.lazy(() => SortOrderSchema).optional(),
+  transaction_type: z.lazy(() => SortOrderSchema).optional(),
+  other: z.lazy(() => SortOrderSchema).optional(),
+  payment_id: z.lazy(() => SortOrderSchema).optional(),
+  notes: z.lazy(() => SortOrderSchema).optional(),
+  amount: z.lazy(() => SortOrderSchema).optional(),
+  _count: z.lazy(() => LAOrdersCountOrderByAggregateInputSchema).optional(),
+  _avg: z.lazy(() => LAOrdersAvgOrderByAggregateInputSchema).optional(),
+  _max: z.lazy(() => LAOrdersMaxOrderByAggregateInputSchema).optional(),
+  _min: z.lazy(() => LAOrdersMinOrderByAggregateInputSchema).optional(),
+  _sum: z.lazy(() => LAOrdersSumOrderByAggregateInputSchema).optional()
+}).strict();
+
+export const LAOrdersScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.LAOrdersScalarWhereWithAggregatesInput> = z.object({
+  AND: z.union([ z.lazy(() => LAOrdersScalarWhereWithAggregatesInputSchema),z.lazy(() => LAOrdersScalarWhereWithAggregatesInputSchema).array() ]).optional(),
+  OR: z.lazy(() => LAOrdersScalarWhereWithAggregatesInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => LAOrdersScalarWhereWithAggregatesInputSchema),z.lazy(() => LAOrdersScalarWhereWithAggregatesInputSchema).array() ]).optional(),
+  created_at: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
+  conf_num: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  type: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  pu_date: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  pu_time: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  do_time: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  duration: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  account_num: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  agent_first_name: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  agent_last_name: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  alias: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  o_res_alias: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  affiliate_first_name: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  affiliate_last_name: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  billing_contact: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  booking_contact: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  passenger_first_name: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  passenger_last_name: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  passenger_email: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  ref_num: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  company: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  routing_details: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  pax_num: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  driver: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  car: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  vehicle_type: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  service_type: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  res_by: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  date_time_created: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  status: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  pmt_method: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  pmt_status: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  payments_deposits_excluding_auth_only: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  pre_authorizations_auth_only: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  flat_rate: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  misc_fee: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  wait_time: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  per_hour: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  per_unit: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  base_rate: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  cleaning_fee: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  extra_hrs: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  extra_stops: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  reimbursement_for_supplies: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  fuel_surcharge: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  meet_and_greet: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  parking: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  gratuity: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  admin_fee: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  ETR: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  airport_tol: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  toll_charge: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  discount: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  per_pass: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  tax: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  flat: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  trip_total: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  payment_date: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  pu_date_and_time: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  payment_method: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  transaction_type: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  other: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  payment_id: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  notes: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  amount: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+}).strict();
+
 export const AccountCreateInputSchema: z.ZodType<Prisma.AccountCreateInput> = z.object({
   id: z.string().uuid().optional(),
   number: z.number().int().optional(),
@@ -2918,7 +3469,8 @@ export const UserCreateInputSchema: z.ZodType<Prisma.UserCreateInput> = z.object
   sessions: z.lazy(() => SessionCreateNestedManyWithoutUserInputSchema).optional(),
   quotes: z.lazy(() => QuoteCreateNestedManyWithoutUserInputSchema).optional(),
   account: z.lazy(() => AccountCreateNestedOneWithoutUsersInputSchema).optional(),
-  conversion: z.lazy(() => ConversionCreateNestedManyWithoutUserInputSchema).optional()
+  conversion: z.lazy(() => ConversionCreateNestedManyWithoutUserInputSchema).optional(),
+  messages: z.lazy(() => MessageCreateNestedManyWithoutUserInputSchema).optional()
 }).strict();
 
 export const UserUncheckedCreateInputSchema: z.ZodType<Prisma.UserUncheckedCreateInput> = z.object({
@@ -2941,7 +3493,8 @@ export const UserUncheckedCreateInputSchema: z.ZodType<Prisma.UserUncheckedCreat
   image: z.string().optional().nullable(),
   sessions: z.lazy(() => SessionUncheckedCreateNestedManyWithoutUserInputSchema).optional(),
   quotes: z.lazy(() => QuoteUncheckedCreateNestedManyWithoutUserInputSchema).optional(),
-  conversion: z.lazy(() => ConversionUncheckedCreateNestedManyWithoutUserInputSchema).optional()
+  conversion: z.lazy(() => ConversionUncheckedCreateNestedManyWithoutUserInputSchema).optional(),
+  messages: z.lazy(() => MessageUncheckedCreateNestedManyWithoutUserInputSchema).optional()
 }).strict();
 
 export const UserUpdateInputSchema: z.ZodType<Prisma.UserUpdateInput> = z.object({
@@ -2964,7 +3517,8 @@ export const UserUpdateInputSchema: z.ZodType<Prisma.UserUpdateInput> = z.object
   sessions: z.lazy(() => SessionUpdateManyWithoutUserNestedInputSchema).optional(),
   quotes: z.lazy(() => QuoteUpdateManyWithoutUserNestedInputSchema).optional(),
   account: z.lazy(() => AccountUpdateOneWithoutUsersNestedInputSchema).optional(),
-  conversion: z.lazy(() => ConversionUpdateManyWithoutUserNestedInputSchema).optional()
+  conversion: z.lazy(() => ConversionUpdateManyWithoutUserNestedInputSchema).optional(),
+  messages: z.lazy(() => MessageUpdateManyWithoutUserNestedInputSchema).optional()
 }).strict();
 
 export const UserUncheckedUpdateInputSchema: z.ZodType<Prisma.UserUncheckedUpdateInput> = z.object({
@@ -2987,7 +3541,8 @@ export const UserUncheckedUpdateInputSchema: z.ZodType<Prisma.UserUncheckedUpdat
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   sessions: z.lazy(() => SessionUncheckedUpdateManyWithoutUserNestedInputSchema).optional(),
   quotes: z.lazy(() => QuoteUncheckedUpdateManyWithoutUserNestedInputSchema).optional(),
-  conversion: z.lazy(() => ConversionUncheckedUpdateManyWithoutUserNestedInputSchema).optional()
+  conversion: z.lazy(() => ConversionUncheckedUpdateManyWithoutUserNestedInputSchema).optional(),
+  messages: z.lazy(() => MessageUncheckedUpdateManyWithoutUserNestedInputSchema).optional()
 }).strict();
 
 export const UserCreateManyInputSchema: z.ZodType<Prisma.UserCreateManyInput> = z.object({
@@ -3047,6 +3602,75 @@ export const UserUncheckedUpdateManyInputSchema: z.ZodType<Prisma.UserUncheckedU
   full_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   email_verified: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+}).strict();
+
+export const MessageCreateInputSchema: z.ZodType<Prisma.MessageCreateInput> = z.object({
+  id: z.string().uuid().optional(),
+  created_at: z.coerce.date().optional(),
+  updated_at: z.coerce.date().optional(),
+  message: z.string(),
+  subject: z.string(),
+  is_read: z.boolean().optional(),
+  user: z.lazy(() => UserCreateNestedOneWithoutMessagesInputSchema)
+}).strict();
+
+export const MessageUncheckedCreateInputSchema: z.ZodType<Prisma.MessageUncheckedCreateInput> = z.object({
+  id: z.string().uuid().optional(),
+  created_at: z.coerce.date().optional(),
+  updated_at: z.coerce.date().optional(),
+  message: z.string(),
+  subject: z.string(),
+  user_id: z.string(),
+  is_read: z.boolean().optional()
+}).strict();
+
+export const MessageUpdateInputSchema: z.ZodType<Prisma.MessageUpdateInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  message: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  subject: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  is_read: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  user: z.lazy(() => UserUpdateOneRequiredWithoutMessagesNestedInputSchema).optional()
+}).strict();
+
+export const MessageUncheckedUpdateInputSchema: z.ZodType<Prisma.MessageUncheckedUpdateInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  message: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  subject: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  user_id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  is_read: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict();
+
+export const MessageCreateManyInputSchema: z.ZodType<Prisma.MessageCreateManyInput> = z.object({
+  id: z.string().uuid().optional(),
+  created_at: z.coerce.date().optional(),
+  updated_at: z.coerce.date().optional(),
+  message: z.string(),
+  subject: z.string(),
+  user_id: z.string(),
+  is_read: z.boolean().optional()
+}).strict();
+
+export const MessageUpdateManyMutationInputSchema: z.ZodType<Prisma.MessageUpdateManyMutationInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  message: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  subject: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  is_read: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict();
+
+export const MessageUncheckedUpdateManyInputSchema: z.ZodType<Prisma.MessageUncheckedUpdateManyInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  message: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  subject: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  user_id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  is_read: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const AffiliateCreateInputSchema: z.ZodType<Prisma.AffiliateCreateInput> = z.object({
@@ -4720,6 +5344,479 @@ export const AirportUncheckedUpdateManyInputSchema: z.ZodType<Prisma.AirportUnch
   icao: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
+export const LAOrdersCreateInputSchema: z.ZodType<Prisma.LAOrdersCreateInput> = z.object({
+  created_at: z.coerce.date().optional(),
+  type: z.string().optional().nullable(),
+  pu_date: z.string().optional().nullable(),
+  pu_time: z.string().optional().nullable(),
+  do_time: z.string().optional().nullable(),
+  duration: z.string().optional().nullable(),
+  account_num: z.number().int().optional().nullable(),
+  agent_first_name: z.string().optional().nullable(),
+  agent_last_name: z.string().optional().nullable(),
+  alias: z.string().optional().nullable(),
+  o_res_alias: z.string().optional().nullable(),
+  affiliate_first_name: z.string().optional().nullable(),
+  affiliate_last_name: z.string().optional().nullable(),
+  billing_contact: z.string().optional().nullable(),
+  booking_contact: z.string().optional().nullable(),
+  passenger_first_name: z.string().optional().nullable(),
+  passenger_last_name: z.string().optional().nullable(),
+  passenger_email: z.string().optional().nullable(),
+  ref_num: z.string().optional().nullable(),
+  company: z.string().optional().nullable(),
+  routing_details: z.string().optional().nullable(),
+  pax_num: z.number().optional().nullable(),
+  driver: z.string().optional().nullable(),
+  car: z.string().optional().nullable(),
+  vehicle_type: z.string().optional().nullable(),
+  service_type: z.string().optional().nullable(),
+  res_by: z.string().optional().nullable(),
+  date_time_created: z.string().optional().nullable(),
+  status: z.string().optional().nullable(),
+  pmt_method: z.string().optional().nullable(),
+  pmt_status: z.string().optional().nullable(),
+  payments_deposits_excluding_auth_only: z.number().optional().nullable(),
+  pre_authorizations_auth_only: z.number().optional().nullable(),
+  flat_rate: z.number().optional().nullable(),
+  misc_fee: z.number().optional().nullable(),
+  wait_time: z.number().optional().nullable(),
+  per_hour: z.number().optional().nullable(),
+  per_unit: z.number().optional().nullable(),
+  base_rate: z.number().optional().nullable(),
+  cleaning_fee: z.number().optional().nullable(),
+  extra_hrs: z.number().int().optional().nullable(),
+  extra_stops: z.number().int().optional().nullable(),
+  reimbursement_for_supplies: z.number().optional().nullable(),
+  fuel_surcharge: z.number().optional().nullable(),
+  meet_and_greet: z.number().optional().nullable(),
+  parking: z.number().optional().nullable(),
+  gratuity: z.number().optional().nullable(),
+  admin_fee: z.number().optional().nullable(),
+  ETR: z.number().optional().nullable(),
+  airport_tol: z.number().optional().nullable(),
+  toll_charge: z.number().optional().nullable(),
+  discount: z.number().optional().nullable(),
+  per_pass: z.number().optional().nullable(),
+  tax: z.number().optional().nullable(),
+  flat: z.number().optional().nullable(),
+  trip_total: z.number().optional().nullable(),
+  payment_date: z.string().optional().nullable(),
+  pu_date_and_time: z.string().optional().nullable(),
+  payment_method: z.string().optional().nullable(),
+  transaction_type: z.string().optional().nullable(),
+  other: z.string().optional().nullable(),
+  payment_id: z.string().optional().nullable(),
+  notes: z.string().optional().nullable(),
+  amount: z.string().optional().nullable()
+}).strict();
+
+export const LAOrdersUncheckedCreateInputSchema: z.ZodType<Prisma.LAOrdersUncheckedCreateInput> = z.object({
+  created_at: z.coerce.date().optional(),
+  conf_num: z.number().int().optional(),
+  type: z.string().optional().nullable(),
+  pu_date: z.string().optional().nullable(),
+  pu_time: z.string().optional().nullable(),
+  do_time: z.string().optional().nullable(),
+  duration: z.string().optional().nullable(),
+  account_num: z.number().int().optional().nullable(),
+  agent_first_name: z.string().optional().nullable(),
+  agent_last_name: z.string().optional().nullable(),
+  alias: z.string().optional().nullable(),
+  o_res_alias: z.string().optional().nullable(),
+  affiliate_first_name: z.string().optional().nullable(),
+  affiliate_last_name: z.string().optional().nullable(),
+  billing_contact: z.string().optional().nullable(),
+  booking_contact: z.string().optional().nullable(),
+  passenger_first_name: z.string().optional().nullable(),
+  passenger_last_name: z.string().optional().nullable(),
+  passenger_email: z.string().optional().nullable(),
+  ref_num: z.string().optional().nullable(),
+  company: z.string().optional().nullable(),
+  routing_details: z.string().optional().nullable(),
+  pax_num: z.number().optional().nullable(),
+  driver: z.string().optional().nullable(),
+  car: z.string().optional().nullable(),
+  vehicle_type: z.string().optional().nullable(),
+  service_type: z.string().optional().nullable(),
+  res_by: z.string().optional().nullable(),
+  date_time_created: z.string().optional().nullable(),
+  status: z.string().optional().nullable(),
+  pmt_method: z.string().optional().nullable(),
+  pmt_status: z.string().optional().nullable(),
+  payments_deposits_excluding_auth_only: z.number().optional().nullable(),
+  pre_authorizations_auth_only: z.number().optional().nullable(),
+  flat_rate: z.number().optional().nullable(),
+  misc_fee: z.number().optional().nullable(),
+  wait_time: z.number().optional().nullable(),
+  per_hour: z.number().optional().nullable(),
+  per_unit: z.number().optional().nullable(),
+  base_rate: z.number().optional().nullable(),
+  cleaning_fee: z.number().optional().nullable(),
+  extra_hrs: z.number().int().optional().nullable(),
+  extra_stops: z.number().int().optional().nullable(),
+  reimbursement_for_supplies: z.number().optional().nullable(),
+  fuel_surcharge: z.number().optional().nullable(),
+  meet_and_greet: z.number().optional().nullable(),
+  parking: z.number().optional().nullable(),
+  gratuity: z.number().optional().nullable(),
+  admin_fee: z.number().optional().nullable(),
+  ETR: z.number().optional().nullable(),
+  airport_tol: z.number().optional().nullable(),
+  toll_charge: z.number().optional().nullable(),
+  discount: z.number().optional().nullable(),
+  per_pass: z.number().optional().nullable(),
+  tax: z.number().optional().nullable(),
+  flat: z.number().optional().nullable(),
+  trip_total: z.number().optional().nullable(),
+  payment_date: z.string().optional().nullable(),
+  pu_date_and_time: z.string().optional().nullable(),
+  payment_method: z.string().optional().nullable(),
+  transaction_type: z.string().optional().nullable(),
+  other: z.string().optional().nullable(),
+  payment_id: z.string().optional().nullable(),
+  notes: z.string().optional().nullable(),
+  amount: z.string().optional().nullable()
+}).strict();
+
+export const LAOrdersUpdateInputSchema: z.ZodType<Prisma.LAOrdersUpdateInput> = z.object({
+  created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pu_date: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pu_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  do_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  duration: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  account_num: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  agent_first_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  agent_last_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  alias: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  o_res_alias: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  affiliate_first_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  affiliate_last_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  billing_contact: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  booking_contact: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  passenger_first_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  passenger_last_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  passenger_email: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  ref_num: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  company: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  routing_details: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pax_num: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  driver: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  car: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  vehicle_type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  service_type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  res_by: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  date_time_created: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pmt_method: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pmt_status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  payments_deposits_excluding_auth_only: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pre_authorizations_auth_only: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  flat_rate: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  misc_fee: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  wait_time: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  per_hour: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  per_unit: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  base_rate: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  cleaning_fee: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  extra_hrs: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  extra_stops: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  reimbursement_for_supplies: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  fuel_surcharge: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  meet_and_greet: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  parking: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  gratuity: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  admin_fee: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  ETR: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  airport_tol: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  toll_charge: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  discount: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  per_pass: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  tax: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  flat: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  trip_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  payment_date: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pu_date_and_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  payment_method: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  transaction_type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  other: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  payment_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  amount: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+}).strict();
+
+export const LAOrdersUncheckedUpdateInputSchema: z.ZodType<Prisma.LAOrdersUncheckedUpdateInput> = z.object({
+  created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  conf_num: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pu_date: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pu_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  do_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  duration: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  account_num: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  agent_first_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  agent_last_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  alias: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  o_res_alias: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  affiliate_first_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  affiliate_last_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  billing_contact: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  booking_contact: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  passenger_first_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  passenger_last_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  passenger_email: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  ref_num: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  company: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  routing_details: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pax_num: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  driver: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  car: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  vehicle_type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  service_type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  res_by: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  date_time_created: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pmt_method: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pmt_status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  payments_deposits_excluding_auth_only: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pre_authorizations_auth_only: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  flat_rate: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  misc_fee: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  wait_time: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  per_hour: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  per_unit: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  base_rate: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  cleaning_fee: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  extra_hrs: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  extra_stops: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  reimbursement_for_supplies: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  fuel_surcharge: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  meet_and_greet: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  parking: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  gratuity: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  admin_fee: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  ETR: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  airport_tol: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  toll_charge: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  discount: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  per_pass: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  tax: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  flat: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  trip_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  payment_date: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pu_date_and_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  payment_method: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  transaction_type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  other: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  payment_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  amount: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+}).strict();
+
+export const LAOrdersCreateManyInputSchema: z.ZodType<Prisma.LAOrdersCreateManyInput> = z.object({
+  created_at: z.coerce.date().optional(),
+  conf_num: z.number().int().optional(),
+  type: z.string().optional().nullable(),
+  pu_date: z.string().optional().nullable(),
+  pu_time: z.string().optional().nullable(),
+  do_time: z.string().optional().nullable(),
+  duration: z.string().optional().nullable(),
+  account_num: z.number().int().optional().nullable(),
+  agent_first_name: z.string().optional().nullable(),
+  agent_last_name: z.string().optional().nullable(),
+  alias: z.string().optional().nullable(),
+  o_res_alias: z.string().optional().nullable(),
+  affiliate_first_name: z.string().optional().nullable(),
+  affiliate_last_name: z.string().optional().nullable(),
+  billing_contact: z.string().optional().nullable(),
+  booking_contact: z.string().optional().nullable(),
+  passenger_first_name: z.string().optional().nullable(),
+  passenger_last_name: z.string().optional().nullable(),
+  passenger_email: z.string().optional().nullable(),
+  ref_num: z.string().optional().nullable(),
+  company: z.string().optional().nullable(),
+  routing_details: z.string().optional().nullable(),
+  pax_num: z.number().optional().nullable(),
+  driver: z.string().optional().nullable(),
+  car: z.string().optional().nullable(),
+  vehicle_type: z.string().optional().nullable(),
+  service_type: z.string().optional().nullable(),
+  res_by: z.string().optional().nullable(),
+  date_time_created: z.string().optional().nullable(),
+  status: z.string().optional().nullable(),
+  pmt_method: z.string().optional().nullable(),
+  pmt_status: z.string().optional().nullable(),
+  payments_deposits_excluding_auth_only: z.number().optional().nullable(),
+  pre_authorizations_auth_only: z.number().optional().nullable(),
+  flat_rate: z.number().optional().nullable(),
+  misc_fee: z.number().optional().nullable(),
+  wait_time: z.number().optional().nullable(),
+  per_hour: z.number().optional().nullable(),
+  per_unit: z.number().optional().nullable(),
+  base_rate: z.number().optional().nullable(),
+  cleaning_fee: z.number().optional().nullable(),
+  extra_hrs: z.number().int().optional().nullable(),
+  extra_stops: z.number().int().optional().nullable(),
+  reimbursement_for_supplies: z.number().optional().nullable(),
+  fuel_surcharge: z.number().optional().nullable(),
+  meet_and_greet: z.number().optional().nullable(),
+  parking: z.number().optional().nullable(),
+  gratuity: z.number().optional().nullable(),
+  admin_fee: z.number().optional().nullable(),
+  ETR: z.number().optional().nullable(),
+  airport_tol: z.number().optional().nullable(),
+  toll_charge: z.number().optional().nullable(),
+  discount: z.number().optional().nullable(),
+  per_pass: z.number().optional().nullable(),
+  tax: z.number().optional().nullable(),
+  flat: z.number().optional().nullable(),
+  trip_total: z.number().optional().nullable(),
+  payment_date: z.string().optional().nullable(),
+  pu_date_and_time: z.string().optional().nullable(),
+  payment_method: z.string().optional().nullable(),
+  transaction_type: z.string().optional().nullable(),
+  other: z.string().optional().nullable(),
+  payment_id: z.string().optional().nullable(),
+  notes: z.string().optional().nullable(),
+  amount: z.string().optional().nullable()
+}).strict();
+
+export const LAOrdersUpdateManyMutationInputSchema: z.ZodType<Prisma.LAOrdersUpdateManyMutationInput> = z.object({
+  created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pu_date: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pu_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  do_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  duration: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  account_num: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  agent_first_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  agent_last_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  alias: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  o_res_alias: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  affiliate_first_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  affiliate_last_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  billing_contact: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  booking_contact: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  passenger_first_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  passenger_last_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  passenger_email: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  ref_num: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  company: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  routing_details: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pax_num: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  driver: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  car: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  vehicle_type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  service_type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  res_by: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  date_time_created: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pmt_method: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pmt_status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  payments_deposits_excluding_auth_only: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pre_authorizations_auth_only: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  flat_rate: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  misc_fee: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  wait_time: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  per_hour: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  per_unit: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  base_rate: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  cleaning_fee: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  extra_hrs: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  extra_stops: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  reimbursement_for_supplies: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  fuel_surcharge: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  meet_and_greet: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  parking: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  gratuity: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  admin_fee: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  ETR: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  airport_tol: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  toll_charge: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  discount: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  per_pass: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  tax: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  flat: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  trip_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  payment_date: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pu_date_and_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  payment_method: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  transaction_type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  other: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  payment_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  amount: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+}).strict();
+
+export const LAOrdersUncheckedUpdateManyInputSchema: z.ZodType<Prisma.LAOrdersUncheckedUpdateManyInput> = z.object({
+  created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  conf_num: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pu_date: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pu_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  do_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  duration: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  account_num: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  agent_first_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  agent_last_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  alias: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  o_res_alias: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  affiliate_first_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  affiliate_last_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  billing_contact: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  booking_contact: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  passenger_first_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  passenger_last_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  passenger_email: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  ref_num: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  company: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  routing_details: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pax_num: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  driver: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  car: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  vehicle_type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  service_type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  res_by: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  date_time_created: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pmt_method: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pmt_status: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  payments_deposits_excluding_auth_only: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pre_authorizations_auth_only: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  flat_rate: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  misc_fee: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  wait_time: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  per_hour: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  per_unit: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  base_rate: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  cleaning_fee: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  extra_hrs: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  extra_stops: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  reimbursement_for_supplies: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  fuel_surcharge: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  meet_and_greet: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  parking: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  gratuity: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  admin_fee: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  ETR: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  airport_tol: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  toll_charge: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  discount: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  per_pass: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  tax: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  flat: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  trip_total: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  payment_date: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pu_date_and_time: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  payment_method: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  transaction_type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  other: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  payment_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  amount: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+}).strict();
+
 export const StringFilterSchema: z.ZodType<Prisma.StringFilter> = z.object({
   equals: z.union([ z.string(),z.lazy(() => StringFieldRefInputSchema) ]).optional(),
   in: z.string().array().optional(),
@@ -4971,6 +6068,12 @@ export const ConversionListRelationFilterSchema: z.ZodType<Prisma.ConversionList
   none: z.lazy(() => ConversionWhereInputSchema).optional()
 }).strict();
 
+export const MessageListRelationFilterSchema: z.ZodType<Prisma.MessageListRelationFilter> = z.object({
+  every: z.lazy(() => MessageWhereInputSchema).optional(),
+  some: z.lazy(() => MessageWhereInputSchema).optional(),
+  none: z.lazy(() => MessageWhereInputSchema).optional()
+}).strict();
+
 export const SessionOrderByRelationAggregateInputSchema: z.ZodType<Prisma.SessionOrderByRelationAggregateInput> = z.object({
   _count: z.lazy(() => SortOrderSchema).optional()
 }).strict();
@@ -4980,6 +6083,10 @@ export const QuoteOrderByRelationAggregateInputSchema: z.ZodType<Prisma.QuoteOrd
 }).strict();
 
 export const ConversionOrderByRelationAggregateInputSchema: z.ZodType<Prisma.ConversionOrderByRelationAggregateInput> = z.object({
+  _count: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const MessageOrderByRelationAggregateInputSchema: z.ZodType<Prisma.MessageOrderByRelationAggregateInput> = z.object({
   _count: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
@@ -5080,6 +6187,36 @@ export const DateTimeNullableWithAggregatesFilterSchema: z.ZodType<Prisma.DateTi
   _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
   _min: z.lazy(() => NestedDateTimeNullableFilterSchema).optional(),
   _max: z.lazy(() => NestedDateTimeNullableFilterSchema).optional()
+}).strict();
+
+export const MessageCountOrderByAggregateInputSchema: z.ZodType<Prisma.MessageCountOrderByAggregateInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  created_at: z.lazy(() => SortOrderSchema).optional(),
+  updated_at: z.lazy(() => SortOrderSchema).optional(),
+  message: z.lazy(() => SortOrderSchema).optional(),
+  subject: z.lazy(() => SortOrderSchema).optional(),
+  user_id: z.lazy(() => SortOrderSchema).optional(),
+  is_read: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const MessageMaxOrderByAggregateInputSchema: z.ZodType<Prisma.MessageMaxOrderByAggregateInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  created_at: z.lazy(() => SortOrderSchema).optional(),
+  updated_at: z.lazy(() => SortOrderSchema).optional(),
+  message: z.lazy(() => SortOrderSchema).optional(),
+  subject: z.lazy(() => SortOrderSchema).optional(),
+  user_id: z.lazy(() => SortOrderSchema).optional(),
+  is_read: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const MessageMinOrderByAggregateInputSchema: z.ZodType<Prisma.MessageMinOrderByAggregateInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  created_at: z.lazy(() => SortOrderSchema).optional(),
+  updated_at: z.lazy(() => SortOrderSchema).optional(),
+  message: z.lazy(() => SortOrderSchema).optional(),
+  subject: z.lazy(() => SortOrderSchema).optional(),
+  user_id: z.lazy(() => SortOrderSchema).optional(),
+  is_read: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const AffiliateCountOrderByAggregateInputSchema: z.ZodType<Prisma.AffiliateCountOrderByAggregateInput> = z.object({
@@ -6185,6 +7322,272 @@ export const AirportSumOrderByAggregateInputSchema: z.ZodType<Prisma.AirportSumO
   lng: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
+export const LAOrdersCountOrderByAggregateInputSchema: z.ZodType<Prisma.LAOrdersCountOrderByAggregateInput> = z.object({
+  created_at: z.lazy(() => SortOrderSchema).optional(),
+  conf_num: z.lazy(() => SortOrderSchema).optional(),
+  type: z.lazy(() => SortOrderSchema).optional(),
+  pu_date: z.lazy(() => SortOrderSchema).optional(),
+  pu_time: z.lazy(() => SortOrderSchema).optional(),
+  do_time: z.lazy(() => SortOrderSchema).optional(),
+  duration: z.lazy(() => SortOrderSchema).optional(),
+  account_num: z.lazy(() => SortOrderSchema).optional(),
+  agent_first_name: z.lazy(() => SortOrderSchema).optional(),
+  agent_last_name: z.lazy(() => SortOrderSchema).optional(),
+  alias: z.lazy(() => SortOrderSchema).optional(),
+  o_res_alias: z.lazy(() => SortOrderSchema).optional(),
+  affiliate_first_name: z.lazy(() => SortOrderSchema).optional(),
+  affiliate_last_name: z.lazy(() => SortOrderSchema).optional(),
+  billing_contact: z.lazy(() => SortOrderSchema).optional(),
+  booking_contact: z.lazy(() => SortOrderSchema).optional(),
+  passenger_first_name: z.lazy(() => SortOrderSchema).optional(),
+  passenger_last_name: z.lazy(() => SortOrderSchema).optional(),
+  passenger_email: z.lazy(() => SortOrderSchema).optional(),
+  ref_num: z.lazy(() => SortOrderSchema).optional(),
+  company: z.lazy(() => SortOrderSchema).optional(),
+  routing_details: z.lazy(() => SortOrderSchema).optional(),
+  pax_num: z.lazy(() => SortOrderSchema).optional(),
+  driver: z.lazy(() => SortOrderSchema).optional(),
+  car: z.lazy(() => SortOrderSchema).optional(),
+  vehicle_type: z.lazy(() => SortOrderSchema).optional(),
+  service_type: z.lazy(() => SortOrderSchema).optional(),
+  res_by: z.lazy(() => SortOrderSchema).optional(),
+  date_time_created: z.lazy(() => SortOrderSchema).optional(),
+  status: z.lazy(() => SortOrderSchema).optional(),
+  pmt_method: z.lazy(() => SortOrderSchema).optional(),
+  pmt_status: z.lazy(() => SortOrderSchema).optional(),
+  payments_deposits_excluding_auth_only: z.lazy(() => SortOrderSchema).optional(),
+  pre_authorizations_auth_only: z.lazy(() => SortOrderSchema).optional(),
+  flat_rate: z.lazy(() => SortOrderSchema).optional(),
+  misc_fee: z.lazy(() => SortOrderSchema).optional(),
+  wait_time: z.lazy(() => SortOrderSchema).optional(),
+  per_hour: z.lazy(() => SortOrderSchema).optional(),
+  per_unit: z.lazy(() => SortOrderSchema).optional(),
+  base_rate: z.lazy(() => SortOrderSchema).optional(),
+  cleaning_fee: z.lazy(() => SortOrderSchema).optional(),
+  extra_hrs: z.lazy(() => SortOrderSchema).optional(),
+  extra_stops: z.lazy(() => SortOrderSchema).optional(),
+  reimbursement_for_supplies: z.lazy(() => SortOrderSchema).optional(),
+  fuel_surcharge: z.lazy(() => SortOrderSchema).optional(),
+  meet_and_greet: z.lazy(() => SortOrderSchema).optional(),
+  parking: z.lazy(() => SortOrderSchema).optional(),
+  gratuity: z.lazy(() => SortOrderSchema).optional(),
+  admin_fee: z.lazy(() => SortOrderSchema).optional(),
+  ETR: z.lazy(() => SortOrderSchema).optional(),
+  airport_tol: z.lazy(() => SortOrderSchema).optional(),
+  toll_charge: z.lazy(() => SortOrderSchema).optional(),
+  discount: z.lazy(() => SortOrderSchema).optional(),
+  per_pass: z.lazy(() => SortOrderSchema).optional(),
+  tax: z.lazy(() => SortOrderSchema).optional(),
+  flat: z.lazy(() => SortOrderSchema).optional(),
+  trip_total: z.lazy(() => SortOrderSchema).optional(),
+  payment_date: z.lazy(() => SortOrderSchema).optional(),
+  pu_date_and_time: z.lazy(() => SortOrderSchema).optional(),
+  payment_method: z.lazy(() => SortOrderSchema).optional(),
+  transaction_type: z.lazy(() => SortOrderSchema).optional(),
+  other: z.lazy(() => SortOrderSchema).optional(),
+  payment_id: z.lazy(() => SortOrderSchema).optional(),
+  notes: z.lazy(() => SortOrderSchema).optional(),
+  amount: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const LAOrdersAvgOrderByAggregateInputSchema: z.ZodType<Prisma.LAOrdersAvgOrderByAggregateInput> = z.object({
+  conf_num: z.lazy(() => SortOrderSchema).optional(),
+  account_num: z.lazy(() => SortOrderSchema).optional(),
+  pax_num: z.lazy(() => SortOrderSchema).optional(),
+  payments_deposits_excluding_auth_only: z.lazy(() => SortOrderSchema).optional(),
+  pre_authorizations_auth_only: z.lazy(() => SortOrderSchema).optional(),
+  flat_rate: z.lazy(() => SortOrderSchema).optional(),
+  misc_fee: z.lazy(() => SortOrderSchema).optional(),
+  wait_time: z.lazy(() => SortOrderSchema).optional(),
+  per_hour: z.lazy(() => SortOrderSchema).optional(),
+  per_unit: z.lazy(() => SortOrderSchema).optional(),
+  base_rate: z.lazy(() => SortOrderSchema).optional(),
+  cleaning_fee: z.lazy(() => SortOrderSchema).optional(),
+  extra_hrs: z.lazy(() => SortOrderSchema).optional(),
+  extra_stops: z.lazy(() => SortOrderSchema).optional(),
+  reimbursement_for_supplies: z.lazy(() => SortOrderSchema).optional(),
+  fuel_surcharge: z.lazy(() => SortOrderSchema).optional(),
+  meet_and_greet: z.lazy(() => SortOrderSchema).optional(),
+  parking: z.lazy(() => SortOrderSchema).optional(),
+  gratuity: z.lazy(() => SortOrderSchema).optional(),
+  admin_fee: z.lazy(() => SortOrderSchema).optional(),
+  ETR: z.lazy(() => SortOrderSchema).optional(),
+  airport_tol: z.lazy(() => SortOrderSchema).optional(),
+  toll_charge: z.lazy(() => SortOrderSchema).optional(),
+  discount: z.lazy(() => SortOrderSchema).optional(),
+  per_pass: z.lazy(() => SortOrderSchema).optional(),
+  tax: z.lazy(() => SortOrderSchema).optional(),
+  flat: z.lazy(() => SortOrderSchema).optional(),
+  trip_total: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const LAOrdersMaxOrderByAggregateInputSchema: z.ZodType<Prisma.LAOrdersMaxOrderByAggregateInput> = z.object({
+  created_at: z.lazy(() => SortOrderSchema).optional(),
+  conf_num: z.lazy(() => SortOrderSchema).optional(),
+  type: z.lazy(() => SortOrderSchema).optional(),
+  pu_date: z.lazy(() => SortOrderSchema).optional(),
+  pu_time: z.lazy(() => SortOrderSchema).optional(),
+  do_time: z.lazy(() => SortOrderSchema).optional(),
+  duration: z.lazy(() => SortOrderSchema).optional(),
+  account_num: z.lazy(() => SortOrderSchema).optional(),
+  agent_first_name: z.lazy(() => SortOrderSchema).optional(),
+  agent_last_name: z.lazy(() => SortOrderSchema).optional(),
+  alias: z.lazy(() => SortOrderSchema).optional(),
+  o_res_alias: z.lazy(() => SortOrderSchema).optional(),
+  affiliate_first_name: z.lazy(() => SortOrderSchema).optional(),
+  affiliate_last_name: z.lazy(() => SortOrderSchema).optional(),
+  billing_contact: z.lazy(() => SortOrderSchema).optional(),
+  booking_contact: z.lazy(() => SortOrderSchema).optional(),
+  passenger_first_name: z.lazy(() => SortOrderSchema).optional(),
+  passenger_last_name: z.lazy(() => SortOrderSchema).optional(),
+  passenger_email: z.lazy(() => SortOrderSchema).optional(),
+  ref_num: z.lazy(() => SortOrderSchema).optional(),
+  company: z.lazy(() => SortOrderSchema).optional(),
+  routing_details: z.lazy(() => SortOrderSchema).optional(),
+  pax_num: z.lazy(() => SortOrderSchema).optional(),
+  driver: z.lazy(() => SortOrderSchema).optional(),
+  car: z.lazy(() => SortOrderSchema).optional(),
+  vehicle_type: z.lazy(() => SortOrderSchema).optional(),
+  service_type: z.lazy(() => SortOrderSchema).optional(),
+  res_by: z.lazy(() => SortOrderSchema).optional(),
+  date_time_created: z.lazy(() => SortOrderSchema).optional(),
+  status: z.lazy(() => SortOrderSchema).optional(),
+  pmt_method: z.lazy(() => SortOrderSchema).optional(),
+  pmt_status: z.lazy(() => SortOrderSchema).optional(),
+  payments_deposits_excluding_auth_only: z.lazy(() => SortOrderSchema).optional(),
+  pre_authorizations_auth_only: z.lazy(() => SortOrderSchema).optional(),
+  flat_rate: z.lazy(() => SortOrderSchema).optional(),
+  misc_fee: z.lazy(() => SortOrderSchema).optional(),
+  wait_time: z.lazy(() => SortOrderSchema).optional(),
+  per_hour: z.lazy(() => SortOrderSchema).optional(),
+  per_unit: z.lazy(() => SortOrderSchema).optional(),
+  base_rate: z.lazy(() => SortOrderSchema).optional(),
+  cleaning_fee: z.lazy(() => SortOrderSchema).optional(),
+  extra_hrs: z.lazy(() => SortOrderSchema).optional(),
+  extra_stops: z.lazy(() => SortOrderSchema).optional(),
+  reimbursement_for_supplies: z.lazy(() => SortOrderSchema).optional(),
+  fuel_surcharge: z.lazy(() => SortOrderSchema).optional(),
+  meet_and_greet: z.lazy(() => SortOrderSchema).optional(),
+  parking: z.lazy(() => SortOrderSchema).optional(),
+  gratuity: z.lazy(() => SortOrderSchema).optional(),
+  admin_fee: z.lazy(() => SortOrderSchema).optional(),
+  ETR: z.lazy(() => SortOrderSchema).optional(),
+  airport_tol: z.lazy(() => SortOrderSchema).optional(),
+  toll_charge: z.lazy(() => SortOrderSchema).optional(),
+  discount: z.lazy(() => SortOrderSchema).optional(),
+  per_pass: z.lazy(() => SortOrderSchema).optional(),
+  tax: z.lazy(() => SortOrderSchema).optional(),
+  flat: z.lazy(() => SortOrderSchema).optional(),
+  trip_total: z.lazy(() => SortOrderSchema).optional(),
+  payment_date: z.lazy(() => SortOrderSchema).optional(),
+  pu_date_and_time: z.lazy(() => SortOrderSchema).optional(),
+  payment_method: z.lazy(() => SortOrderSchema).optional(),
+  transaction_type: z.lazy(() => SortOrderSchema).optional(),
+  other: z.lazy(() => SortOrderSchema).optional(),
+  payment_id: z.lazy(() => SortOrderSchema).optional(),
+  notes: z.lazy(() => SortOrderSchema).optional(),
+  amount: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const LAOrdersMinOrderByAggregateInputSchema: z.ZodType<Prisma.LAOrdersMinOrderByAggregateInput> = z.object({
+  created_at: z.lazy(() => SortOrderSchema).optional(),
+  conf_num: z.lazy(() => SortOrderSchema).optional(),
+  type: z.lazy(() => SortOrderSchema).optional(),
+  pu_date: z.lazy(() => SortOrderSchema).optional(),
+  pu_time: z.lazy(() => SortOrderSchema).optional(),
+  do_time: z.lazy(() => SortOrderSchema).optional(),
+  duration: z.lazy(() => SortOrderSchema).optional(),
+  account_num: z.lazy(() => SortOrderSchema).optional(),
+  agent_first_name: z.lazy(() => SortOrderSchema).optional(),
+  agent_last_name: z.lazy(() => SortOrderSchema).optional(),
+  alias: z.lazy(() => SortOrderSchema).optional(),
+  o_res_alias: z.lazy(() => SortOrderSchema).optional(),
+  affiliate_first_name: z.lazy(() => SortOrderSchema).optional(),
+  affiliate_last_name: z.lazy(() => SortOrderSchema).optional(),
+  billing_contact: z.lazy(() => SortOrderSchema).optional(),
+  booking_contact: z.lazy(() => SortOrderSchema).optional(),
+  passenger_first_name: z.lazy(() => SortOrderSchema).optional(),
+  passenger_last_name: z.lazy(() => SortOrderSchema).optional(),
+  passenger_email: z.lazy(() => SortOrderSchema).optional(),
+  ref_num: z.lazy(() => SortOrderSchema).optional(),
+  company: z.lazy(() => SortOrderSchema).optional(),
+  routing_details: z.lazy(() => SortOrderSchema).optional(),
+  pax_num: z.lazy(() => SortOrderSchema).optional(),
+  driver: z.lazy(() => SortOrderSchema).optional(),
+  car: z.lazy(() => SortOrderSchema).optional(),
+  vehicle_type: z.lazy(() => SortOrderSchema).optional(),
+  service_type: z.lazy(() => SortOrderSchema).optional(),
+  res_by: z.lazy(() => SortOrderSchema).optional(),
+  date_time_created: z.lazy(() => SortOrderSchema).optional(),
+  status: z.lazy(() => SortOrderSchema).optional(),
+  pmt_method: z.lazy(() => SortOrderSchema).optional(),
+  pmt_status: z.lazy(() => SortOrderSchema).optional(),
+  payments_deposits_excluding_auth_only: z.lazy(() => SortOrderSchema).optional(),
+  pre_authorizations_auth_only: z.lazy(() => SortOrderSchema).optional(),
+  flat_rate: z.lazy(() => SortOrderSchema).optional(),
+  misc_fee: z.lazy(() => SortOrderSchema).optional(),
+  wait_time: z.lazy(() => SortOrderSchema).optional(),
+  per_hour: z.lazy(() => SortOrderSchema).optional(),
+  per_unit: z.lazy(() => SortOrderSchema).optional(),
+  base_rate: z.lazy(() => SortOrderSchema).optional(),
+  cleaning_fee: z.lazy(() => SortOrderSchema).optional(),
+  extra_hrs: z.lazy(() => SortOrderSchema).optional(),
+  extra_stops: z.lazy(() => SortOrderSchema).optional(),
+  reimbursement_for_supplies: z.lazy(() => SortOrderSchema).optional(),
+  fuel_surcharge: z.lazy(() => SortOrderSchema).optional(),
+  meet_and_greet: z.lazy(() => SortOrderSchema).optional(),
+  parking: z.lazy(() => SortOrderSchema).optional(),
+  gratuity: z.lazy(() => SortOrderSchema).optional(),
+  admin_fee: z.lazy(() => SortOrderSchema).optional(),
+  ETR: z.lazy(() => SortOrderSchema).optional(),
+  airport_tol: z.lazy(() => SortOrderSchema).optional(),
+  toll_charge: z.lazy(() => SortOrderSchema).optional(),
+  discount: z.lazy(() => SortOrderSchema).optional(),
+  per_pass: z.lazy(() => SortOrderSchema).optional(),
+  tax: z.lazy(() => SortOrderSchema).optional(),
+  flat: z.lazy(() => SortOrderSchema).optional(),
+  trip_total: z.lazy(() => SortOrderSchema).optional(),
+  payment_date: z.lazy(() => SortOrderSchema).optional(),
+  pu_date_and_time: z.lazy(() => SortOrderSchema).optional(),
+  payment_method: z.lazy(() => SortOrderSchema).optional(),
+  transaction_type: z.lazy(() => SortOrderSchema).optional(),
+  other: z.lazy(() => SortOrderSchema).optional(),
+  payment_id: z.lazy(() => SortOrderSchema).optional(),
+  notes: z.lazy(() => SortOrderSchema).optional(),
+  amount: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const LAOrdersSumOrderByAggregateInputSchema: z.ZodType<Prisma.LAOrdersSumOrderByAggregateInput> = z.object({
+  conf_num: z.lazy(() => SortOrderSchema).optional(),
+  account_num: z.lazy(() => SortOrderSchema).optional(),
+  pax_num: z.lazy(() => SortOrderSchema).optional(),
+  payments_deposits_excluding_auth_only: z.lazy(() => SortOrderSchema).optional(),
+  pre_authorizations_auth_only: z.lazy(() => SortOrderSchema).optional(),
+  flat_rate: z.lazy(() => SortOrderSchema).optional(),
+  misc_fee: z.lazy(() => SortOrderSchema).optional(),
+  wait_time: z.lazy(() => SortOrderSchema).optional(),
+  per_hour: z.lazy(() => SortOrderSchema).optional(),
+  per_unit: z.lazy(() => SortOrderSchema).optional(),
+  base_rate: z.lazy(() => SortOrderSchema).optional(),
+  cleaning_fee: z.lazy(() => SortOrderSchema).optional(),
+  extra_hrs: z.lazy(() => SortOrderSchema).optional(),
+  extra_stops: z.lazy(() => SortOrderSchema).optional(),
+  reimbursement_for_supplies: z.lazy(() => SortOrderSchema).optional(),
+  fuel_surcharge: z.lazy(() => SortOrderSchema).optional(),
+  meet_and_greet: z.lazy(() => SortOrderSchema).optional(),
+  parking: z.lazy(() => SortOrderSchema).optional(),
+  gratuity: z.lazy(() => SortOrderSchema).optional(),
+  admin_fee: z.lazy(() => SortOrderSchema).optional(),
+  ETR: z.lazy(() => SortOrderSchema).optional(),
+  airport_tol: z.lazy(() => SortOrderSchema).optional(),
+  toll_charge: z.lazy(() => SortOrderSchema).optional(),
+  discount: z.lazy(() => SortOrderSchema).optional(),
+  per_pass: z.lazy(() => SortOrderSchema).optional(),
+  tax: z.lazy(() => SortOrderSchema).optional(),
+  flat: z.lazy(() => SortOrderSchema).optional(),
+  trip_total: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
 export const UserCreateNestedManyWithoutAccountInputSchema: z.ZodType<Prisma.UserCreateNestedManyWithoutAccountInput> = z.object({
   create: z.union([ z.lazy(() => UserCreateWithoutAccountInputSchema),z.lazy(() => UserCreateWithoutAccountInputSchema).array(),z.lazy(() => UserUncheckedCreateWithoutAccountInputSchema),z.lazy(() => UserUncheckedCreateWithoutAccountInputSchema).array() ]).optional(),
   connectOrCreate: z.union([ z.lazy(() => UserCreateOrConnectWithoutAccountInputSchema),z.lazy(() => UserCreateOrConnectWithoutAccountInputSchema).array() ]).optional(),
@@ -6288,6 +7691,13 @@ export const ConversionCreateNestedManyWithoutUserInputSchema: z.ZodType<Prisma.
   connect: z.union([ z.lazy(() => ConversionWhereUniqueInputSchema),z.lazy(() => ConversionWhereUniqueInputSchema).array() ]).optional(),
 }).strict();
 
+export const MessageCreateNestedManyWithoutUserInputSchema: z.ZodType<Prisma.MessageCreateNestedManyWithoutUserInput> = z.object({
+  create: z.union([ z.lazy(() => MessageCreateWithoutUserInputSchema),z.lazy(() => MessageCreateWithoutUserInputSchema).array(),z.lazy(() => MessageUncheckedCreateWithoutUserInputSchema),z.lazy(() => MessageUncheckedCreateWithoutUserInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => MessageCreateOrConnectWithoutUserInputSchema),z.lazy(() => MessageCreateOrConnectWithoutUserInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => MessageCreateManyUserInputEnvelopeSchema).optional(),
+  connect: z.union([ z.lazy(() => MessageWhereUniqueInputSchema),z.lazy(() => MessageWhereUniqueInputSchema).array() ]).optional(),
+}).strict();
+
 export const SessionUncheckedCreateNestedManyWithoutUserInputSchema: z.ZodType<Prisma.SessionUncheckedCreateNestedManyWithoutUserInput> = z.object({
   create: z.union([ z.lazy(() => SessionCreateWithoutUserInputSchema),z.lazy(() => SessionCreateWithoutUserInputSchema).array(),z.lazy(() => SessionUncheckedCreateWithoutUserInputSchema),z.lazy(() => SessionUncheckedCreateWithoutUserInputSchema).array() ]).optional(),
   connectOrCreate: z.union([ z.lazy(() => SessionCreateOrConnectWithoutUserInputSchema),z.lazy(() => SessionCreateOrConnectWithoutUserInputSchema).array() ]).optional(),
@@ -6307,6 +7717,13 @@ export const ConversionUncheckedCreateNestedManyWithoutUserInputSchema: z.ZodTyp
   connectOrCreate: z.union([ z.lazy(() => ConversionCreateOrConnectWithoutUserInputSchema),z.lazy(() => ConversionCreateOrConnectWithoutUserInputSchema).array() ]).optional(),
   createMany: z.lazy(() => ConversionCreateManyUserInputEnvelopeSchema).optional(),
   connect: z.union([ z.lazy(() => ConversionWhereUniqueInputSchema),z.lazy(() => ConversionWhereUniqueInputSchema).array() ]).optional(),
+}).strict();
+
+export const MessageUncheckedCreateNestedManyWithoutUserInputSchema: z.ZodType<Prisma.MessageUncheckedCreateNestedManyWithoutUserInput> = z.object({
+  create: z.union([ z.lazy(() => MessageCreateWithoutUserInputSchema),z.lazy(() => MessageCreateWithoutUserInputSchema).array(),z.lazy(() => MessageUncheckedCreateWithoutUserInputSchema),z.lazy(() => MessageUncheckedCreateWithoutUserInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => MessageCreateOrConnectWithoutUserInputSchema),z.lazy(() => MessageCreateOrConnectWithoutUserInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => MessageCreateManyUserInputEnvelopeSchema).optional(),
+  connect: z.union([ z.lazy(() => MessageWhereUniqueInputSchema),z.lazy(() => MessageWhereUniqueInputSchema).array() ]).optional(),
 }).strict();
 
 export const BoolFieldUpdateOperationsInputSchema: z.ZodType<Prisma.BoolFieldUpdateOperationsInput> = z.object({
@@ -6369,6 +7786,20 @@ export const ConversionUpdateManyWithoutUserNestedInputSchema: z.ZodType<Prisma.
   deleteMany: z.union([ z.lazy(() => ConversionScalarWhereInputSchema),z.lazy(() => ConversionScalarWhereInputSchema).array() ]).optional(),
 }).strict();
 
+export const MessageUpdateManyWithoutUserNestedInputSchema: z.ZodType<Prisma.MessageUpdateManyWithoutUserNestedInput> = z.object({
+  create: z.union([ z.lazy(() => MessageCreateWithoutUserInputSchema),z.lazy(() => MessageCreateWithoutUserInputSchema).array(),z.lazy(() => MessageUncheckedCreateWithoutUserInputSchema),z.lazy(() => MessageUncheckedCreateWithoutUserInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => MessageCreateOrConnectWithoutUserInputSchema),z.lazy(() => MessageCreateOrConnectWithoutUserInputSchema).array() ]).optional(),
+  upsert: z.union([ z.lazy(() => MessageUpsertWithWhereUniqueWithoutUserInputSchema),z.lazy(() => MessageUpsertWithWhereUniqueWithoutUserInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => MessageCreateManyUserInputEnvelopeSchema).optional(),
+  set: z.union([ z.lazy(() => MessageWhereUniqueInputSchema),z.lazy(() => MessageWhereUniqueInputSchema).array() ]).optional(),
+  disconnect: z.union([ z.lazy(() => MessageWhereUniqueInputSchema),z.lazy(() => MessageWhereUniqueInputSchema).array() ]).optional(),
+  delete: z.union([ z.lazy(() => MessageWhereUniqueInputSchema),z.lazy(() => MessageWhereUniqueInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => MessageWhereUniqueInputSchema),z.lazy(() => MessageWhereUniqueInputSchema).array() ]).optional(),
+  update: z.union([ z.lazy(() => MessageUpdateWithWhereUniqueWithoutUserInputSchema),z.lazy(() => MessageUpdateWithWhereUniqueWithoutUserInputSchema).array() ]).optional(),
+  updateMany: z.union([ z.lazy(() => MessageUpdateManyWithWhereWithoutUserInputSchema),z.lazy(() => MessageUpdateManyWithWhereWithoutUserInputSchema).array() ]).optional(),
+  deleteMany: z.union([ z.lazy(() => MessageScalarWhereInputSchema),z.lazy(() => MessageScalarWhereInputSchema).array() ]).optional(),
+}).strict();
+
 export const SessionUncheckedUpdateManyWithoutUserNestedInputSchema: z.ZodType<Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput> = z.object({
   create: z.union([ z.lazy(() => SessionCreateWithoutUserInputSchema),z.lazy(() => SessionCreateWithoutUserInputSchema).array(),z.lazy(() => SessionUncheckedCreateWithoutUserInputSchema),z.lazy(() => SessionUncheckedCreateWithoutUserInputSchema).array() ]).optional(),
   connectOrCreate: z.union([ z.lazy(() => SessionCreateOrConnectWithoutUserInputSchema),z.lazy(() => SessionCreateOrConnectWithoutUserInputSchema).array() ]).optional(),
@@ -6409,6 +7840,34 @@ export const ConversionUncheckedUpdateManyWithoutUserNestedInputSchema: z.ZodTyp
   update: z.union([ z.lazy(() => ConversionUpdateWithWhereUniqueWithoutUserInputSchema),z.lazy(() => ConversionUpdateWithWhereUniqueWithoutUserInputSchema).array() ]).optional(),
   updateMany: z.union([ z.lazy(() => ConversionUpdateManyWithWhereWithoutUserInputSchema),z.lazy(() => ConversionUpdateManyWithWhereWithoutUserInputSchema).array() ]).optional(),
   deleteMany: z.union([ z.lazy(() => ConversionScalarWhereInputSchema),z.lazy(() => ConversionScalarWhereInputSchema).array() ]).optional(),
+}).strict();
+
+export const MessageUncheckedUpdateManyWithoutUserNestedInputSchema: z.ZodType<Prisma.MessageUncheckedUpdateManyWithoutUserNestedInput> = z.object({
+  create: z.union([ z.lazy(() => MessageCreateWithoutUserInputSchema),z.lazy(() => MessageCreateWithoutUserInputSchema).array(),z.lazy(() => MessageUncheckedCreateWithoutUserInputSchema),z.lazy(() => MessageUncheckedCreateWithoutUserInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => MessageCreateOrConnectWithoutUserInputSchema),z.lazy(() => MessageCreateOrConnectWithoutUserInputSchema).array() ]).optional(),
+  upsert: z.union([ z.lazy(() => MessageUpsertWithWhereUniqueWithoutUserInputSchema),z.lazy(() => MessageUpsertWithWhereUniqueWithoutUserInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => MessageCreateManyUserInputEnvelopeSchema).optional(),
+  set: z.union([ z.lazy(() => MessageWhereUniqueInputSchema),z.lazy(() => MessageWhereUniqueInputSchema).array() ]).optional(),
+  disconnect: z.union([ z.lazy(() => MessageWhereUniqueInputSchema),z.lazy(() => MessageWhereUniqueInputSchema).array() ]).optional(),
+  delete: z.union([ z.lazy(() => MessageWhereUniqueInputSchema),z.lazy(() => MessageWhereUniqueInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => MessageWhereUniqueInputSchema),z.lazy(() => MessageWhereUniqueInputSchema).array() ]).optional(),
+  update: z.union([ z.lazy(() => MessageUpdateWithWhereUniqueWithoutUserInputSchema),z.lazy(() => MessageUpdateWithWhereUniqueWithoutUserInputSchema).array() ]).optional(),
+  updateMany: z.union([ z.lazy(() => MessageUpdateManyWithWhereWithoutUserInputSchema),z.lazy(() => MessageUpdateManyWithWhereWithoutUserInputSchema).array() ]).optional(),
+  deleteMany: z.union([ z.lazy(() => MessageScalarWhereInputSchema),z.lazy(() => MessageScalarWhereInputSchema).array() ]).optional(),
+}).strict();
+
+export const UserCreateNestedOneWithoutMessagesInputSchema: z.ZodType<Prisma.UserCreateNestedOneWithoutMessagesInput> = z.object({
+  create: z.union([ z.lazy(() => UserCreateWithoutMessagesInputSchema),z.lazy(() => UserUncheckedCreateWithoutMessagesInputSchema) ]).optional(),
+  connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutMessagesInputSchema).optional(),
+  connect: z.lazy(() => UserWhereUniqueInputSchema).optional()
+}).strict();
+
+export const UserUpdateOneRequiredWithoutMessagesNestedInputSchema: z.ZodType<Prisma.UserUpdateOneRequiredWithoutMessagesNestedInput> = z.object({
+  create: z.union([ z.lazy(() => UserCreateWithoutMessagesInputSchema),z.lazy(() => UserUncheckedCreateWithoutMessagesInputSchema) ]).optional(),
+  connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutMessagesInputSchema).optional(),
+  upsert: z.lazy(() => UserUpsertWithoutMessagesInputSchema).optional(),
+  connect: z.lazy(() => UserWhereUniqueInputSchema).optional(),
+  update: z.union([ z.lazy(() => UserUpdateWithoutMessagesInputSchema),z.lazy(() => UserUncheckedUpdateWithoutMessagesInputSchema) ]).optional(),
 }).strict();
 
 export const UserCreateNestedOneWithoutConversionInputSchema: z.ZodType<Prisma.UserCreateNestedOneWithoutConversionInput> = z.object({
@@ -7475,7 +8934,8 @@ export const UserCreateWithoutAccountInputSchema: z.ZodType<Prisma.UserCreateWit
   image: z.string().optional().nullable(),
   sessions: z.lazy(() => SessionCreateNestedManyWithoutUserInputSchema).optional(),
   quotes: z.lazy(() => QuoteCreateNestedManyWithoutUserInputSchema).optional(),
-  conversion: z.lazy(() => ConversionCreateNestedManyWithoutUserInputSchema).optional()
+  conversion: z.lazy(() => ConversionCreateNestedManyWithoutUserInputSchema).optional(),
+  messages: z.lazy(() => MessageCreateNestedManyWithoutUserInputSchema).optional()
 }).strict();
 
 export const UserUncheckedCreateWithoutAccountInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutAccountInput> = z.object({
@@ -7497,7 +8957,8 @@ export const UserUncheckedCreateWithoutAccountInputSchema: z.ZodType<Prisma.User
   image: z.string().optional().nullable(),
   sessions: z.lazy(() => SessionUncheckedCreateNestedManyWithoutUserInputSchema).optional(),
   quotes: z.lazy(() => QuoteUncheckedCreateNestedManyWithoutUserInputSchema).optional(),
-  conversion: z.lazy(() => ConversionUncheckedCreateNestedManyWithoutUserInputSchema).optional()
+  conversion: z.lazy(() => ConversionUncheckedCreateNestedManyWithoutUserInputSchema).optional(),
+  messages: z.lazy(() => MessageUncheckedCreateNestedManyWithoutUserInputSchema).optional()
 }).strict();
 
 export const UserCreateOrConnectWithoutAccountInputSchema: z.ZodType<Prisma.UserCreateOrConnectWithoutAccountInput> = z.object({
@@ -7568,7 +9029,8 @@ export const UserCreateWithoutSessionsInputSchema: z.ZodType<Prisma.UserCreateWi
   image: z.string().optional().nullable(),
   quotes: z.lazy(() => QuoteCreateNestedManyWithoutUserInputSchema).optional(),
   account: z.lazy(() => AccountCreateNestedOneWithoutUsersInputSchema).optional(),
-  conversion: z.lazy(() => ConversionCreateNestedManyWithoutUserInputSchema).optional()
+  conversion: z.lazy(() => ConversionCreateNestedManyWithoutUserInputSchema).optional(),
+  messages: z.lazy(() => MessageCreateNestedManyWithoutUserInputSchema).optional()
 }).strict();
 
 export const UserUncheckedCreateWithoutSessionsInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutSessionsInput> = z.object({
@@ -7590,7 +9052,8 @@ export const UserUncheckedCreateWithoutSessionsInputSchema: z.ZodType<Prisma.Use
   email_verified: z.coerce.date().optional().nullable(),
   image: z.string().optional().nullable(),
   quotes: z.lazy(() => QuoteUncheckedCreateNestedManyWithoutUserInputSchema).optional(),
-  conversion: z.lazy(() => ConversionUncheckedCreateNestedManyWithoutUserInputSchema).optional()
+  conversion: z.lazy(() => ConversionUncheckedCreateNestedManyWithoutUserInputSchema).optional(),
+  messages: z.lazy(() => MessageUncheckedCreateNestedManyWithoutUserInputSchema).optional()
 }).strict();
 
 export const UserCreateOrConnectWithoutSessionsInputSchema: z.ZodType<Prisma.UserCreateOrConnectWithoutSessionsInput> = z.object({
@@ -7622,7 +9085,8 @@ export const UserUpdateWithoutSessionsInputSchema: z.ZodType<Prisma.UserUpdateWi
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   quotes: z.lazy(() => QuoteUpdateManyWithoutUserNestedInputSchema).optional(),
   account: z.lazy(() => AccountUpdateOneWithoutUsersNestedInputSchema).optional(),
-  conversion: z.lazy(() => ConversionUpdateManyWithoutUserNestedInputSchema).optional()
+  conversion: z.lazy(() => ConversionUpdateManyWithoutUserNestedInputSchema).optional(),
+  messages: z.lazy(() => MessageUpdateManyWithoutUserNestedInputSchema).optional()
 }).strict();
 
 export const UserUncheckedUpdateWithoutSessionsInputSchema: z.ZodType<Prisma.UserUncheckedUpdateWithoutSessionsInput> = z.object({
@@ -7644,7 +9108,8 @@ export const UserUncheckedUpdateWithoutSessionsInputSchema: z.ZodType<Prisma.Use
   email_verified: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   quotes: z.lazy(() => QuoteUncheckedUpdateManyWithoutUserNestedInputSchema).optional(),
-  conversion: z.lazy(() => ConversionUncheckedUpdateManyWithoutUserNestedInputSchema).optional()
+  conversion: z.lazy(() => ConversionUncheckedUpdateManyWithoutUserNestedInputSchema).optional(),
+  messages: z.lazy(() => MessageUncheckedUpdateManyWithoutUserNestedInputSchema).optional()
 }).strict();
 
 export const SessionCreateWithoutUserInputSchema: z.ZodType<Prisma.SessionCreateWithoutUserInput> = z.object({
@@ -7790,6 +9255,34 @@ export const ConversionCreateManyUserInputEnvelopeSchema: z.ZodType<Prisma.Conve
   skipDuplicates: z.boolean().optional()
 }).strict();
 
+export const MessageCreateWithoutUserInputSchema: z.ZodType<Prisma.MessageCreateWithoutUserInput> = z.object({
+  id: z.string().optional(),
+  created_at: z.coerce.date().optional(),
+  updated_at: z.coerce.date().optional(),
+  message: z.string(),
+  subject: z.string(),
+  is_read: z.boolean().optional()
+}).strict();
+
+export const MessageUncheckedCreateWithoutUserInputSchema: z.ZodType<Prisma.MessageUncheckedCreateWithoutUserInput> = z.object({
+  id: z.string().optional(),
+  created_at: z.coerce.date().optional(),
+  updated_at: z.coerce.date().optional(),
+  message: z.string(),
+  subject: z.string(),
+  is_read: z.boolean().optional()
+}).strict();
+
+export const MessageCreateOrConnectWithoutUserInputSchema: z.ZodType<Prisma.MessageCreateOrConnectWithoutUserInput> = z.object({
+  where: z.lazy(() => MessageWhereUniqueInputSchema),
+  create: z.union([ z.lazy(() => MessageCreateWithoutUserInputSchema),z.lazy(() => MessageUncheckedCreateWithoutUserInputSchema) ]),
+}).strict();
+
+export const MessageCreateManyUserInputEnvelopeSchema: z.ZodType<Prisma.MessageCreateManyUserInputEnvelope> = z.object({
+  data: z.union([ z.lazy(() => MessageCreateManyUserInputSchema),z.lazy(() => MessageCreateManyUserInputSchema).array() ]),
+  skipDuplicates: z.boolean().optional()
+}).strict();
+
 export const SessionUpsertWithWhereUniqueWithoutUserInputSchema: z.ZodType<Prisma.SessionUpsertWithWhereUniqueWithoutUserInput> = z.object({
   where: z.lazy(() => SessionWhereUniqueInputSchema),
   update: z.union([ z.lazy(() => SessionUpdateWithoutUserInputSchema),z.lazy(() => SessionUncheckedUpdateWithoutUserInputSchema) ]),
@@ -7916,6 +9409,137 @@ export const ConversionScalarWhereInputSchema: z.ZodType<Prisma.ConversionScalar
   user_id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
 }).strict();
 
+export const MessageUpsertWithWhereUniqueWithoutUserInputSchema: z.ZodType<Prisma.MessageUpsertWithWhereUniqueWithoutUserInput> = z.object({
+  where: z.lazy(() => MessageWhereUniqueInputSchema),
+  update: z.union([ z.lazy(() => MessageUpdateWithoutUserInputSchema),z.lazy(() => MessageUncheckedUpdateWithoutUserInputSchema) ]),
+  create: z.union([ z.lazy(() => MessageCreateWithoutUserInputSchema),z.lazy(() => MessageUncheckedCreateWithoutUserInputSchema) ]),
+}).strict();
+
+export const MessageUpdateWithWhereUniqueWithoutUserInputSchema: z.ZodType<Prisma.MessageUpdateWithWhereUniqueWithoutUserInput> = z.object({
+  where: z.lazy(() => MessageWhereUniqueInputSchema),
+  data: z.union([ z.lazy(() => MessageUpdateWithoutUserInputSchema),z.lazy(() => MessageUncheckedUpdateWithoutUserInputSchema) ]),
+}).strict();
+
+export const MessageUpdateManyWithWhereWithoutUserInputSchema: z.ZodType<Prisma.MessageUpdateManyWithWhereWithoutUserInput> = z.object({
+  where: z.lazy(() => MessageScalarWhereInputSchema),
+  data: z.union([ z.lazy(() => MessageUpdateManyMutationInputSchema),z.lazy(() => MessageUncheckedUpdateManyWithoutMessagesInputSchema) ]),
+}).strict();
+
+export const MessageScalarWhereInputSchema: z.ZodType<Prisma.MessageScalarWhereInput> = z.object({
+  AND: z.union([ z.lazy(() => MessageScalarWhereInputSchema),z.lazy(() => MessageScalarWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => MessageScalarWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => MessageScalarWhereInputSchema),z.lazy(() => MessageScalarWhereInputSchema).array() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  created_at: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
+  updated_at: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
+  message: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  subject: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  user_id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  is_read: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
+}).strict();
+
+export const UserCreateWithoutMessagesInputSchema: z.ZodType<Prisma.UserCreateWithoutMessagesInput> = z.object({
+  id: z.string().optional(),
+  created_at: z.coerce.date().optional(),
+  updated_at: z.coerce.date().optional(),
+  first_name: z.string(),
+  last_name: z.string(),
+  email_address: z.string(),
+  phone_number: z.string(),
+  phone_number_country: z.string().optional().nullable(),
+  stripe_customer_id: z.string().optional().nullable(),
+  is_customer: z.boolean().optional(),
+  notes: z.string().optional().nullable(),
+  payment_method: z.string().optional().nullable(),
+  meta_data: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
+  full_name: z.string().optional().nullable(),
+  email_verified: z.coerce.date().optional().nullable(),
+  image: z.string().optional().nullable(),
+  sessions: z.lazy(() => SessionCreateNestedManyWithoutUserInputSchema).optional(),
+  quotes: z.lazy(() => QuoteCreateNestedManyWithoutUserInputSchema).optional(),
+  account: z.lazy(() => AccountCreateNestedOneWithoutUsersInputSchema).optional(),
+  conversion: z.lazy(() => ConversionCreateNestedManyWithoutUserInputSchema).optional()
+}).strict();
+
+export const UserUncheckedCreateWithoutMessagesInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutMessagesInput> = z.object({
+  id: z.string().optional(),
+  created_at: z.coerce.date().optional(),
+  updated_at: z.coerce.date().optional(),
+  first_name: z.string(),
+  last_name: z.string(),
+  email_address: z.string(),
+  phone_number: z.string(),
+  phone_number_country: z.string().optional().nullable(),
+  stripe_customer_id: z.string().optional().nullable(),
+  is_customer: z.boolean().optional(),
+  account_id: z.string().optional().nullable(),
+  notes: z.string().optional().nullable(),
+  payment_method: z.string().optional().nullable(),
+  meta_data: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
+  full_name: z.string().optional().nullable(),
+  email_verified: z.coerce.date().optional().nullable(),
+  image: z.string().optional().nullable(),
+  sessions: z.lazy(() => SessionUncheckedCreateNestedManyWithoutUserInputSchema).optional(),
+  quotes: z.lazy(() => QuoteUncheckedCreateNestedManyWithoutUserInputSchema).optional(),
+  conversion: z.lazy(() => ConversionUncheckedCreateNestedManyWithoutUserInputSchema).optional()
+}).strict();
+
+export const UserCreateOrConnectWithoutMessagesInputSchema: z.ZodType<Prisma.UserCreateOrConnectWithoutMessagesInput> = z.object({
+  where: z.lazy(() => UserWhereUniqueInputSchema),
+  create: z.union([ z.lazy(() => UserCreateWithoutMessagesInputSchema),z.lazy(() => UserUncheckedCreateWithoutMessagesInputSchema) ]),
+}).strict();
+
+export const UserUpsertWithoutMessagesInputSchema: z.ZodType<Prisma.UserUpsertWithoutMessagesInput> = z.object({
+  update: z.union([ z.lazy(() => UserUpdateWithoutMessagesInputSchema),z.lazy(() => UserUncheckedUpdateWithoutMessagesInputSchema) ]),
+  create: z.union([ z.lazy(() => UserCreateWithoutMessagesInputSchema),z.lazy(() => UserUncheckedCreateWithoutMessagesInputSchema) ]),
+}).strict();
+
+export const UserUpdateWithoutMessagesInputSchema: z.ZodType<Prisma.UserUpdateWithoutMessagesInput> = z.object({
+  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  first_name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  last_name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email_address: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  phone_number: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  phone_number_country: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  stripe_customer_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  is_customer: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  payment_method: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  meta_data: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
+  full_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  email_verified: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  sessions: z.lazy(() => SessionUpdateManyWithoutUserNestedInputSchema).optional(),
+  quotes: z.lazy(() => QuoteUpdateManyWithoutUserNestedInputSchema).optional(),
+  account: z.lazy(() => AccountUpdateOneWithoutUsersNestedInputSchema).optional(),
+  conversion: z.lazy(() => ConversionUpdateManyWithoutUserNestedInputSchema).optional()
+}).strict();
+
+export const UserUncheckedUpdateWithoutMessagesInputSchema: z.ZodType<Prisma.UserUncheckedUpdateWithoutMessagesInput> = z.object({
+  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  first_name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  last_name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  email_address: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  phone_number: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  phone_number_country: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  stripe_customer_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  is_customer: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  account_id: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  notes: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  payment_method: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  meta_data: z.union([ z.lazy(() => NullableJsonNullValueInputSchema),InputJsonValue ]).optional(),
+  full_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  email_verified: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  sessions: z.lazy(() => SessionUncheckedUpdateManyWithoutUserNestedInputSchema).optional(),
+  quotes: z.lazy(() => QuoteUncheckedUpdateManyWithoutUserNestedInputSchema).optional(),
+  conversion: z.lazy(() => ConversionUncheckedUpdateManyWithoutUserNestedInputSchema).optional()
+}).strict();
+
 export const UserCreateWithoutConversionInputSchema: z.ZodType<Prisma.UserCreateWithoutConversionInput> = z.object({
   id: z.string().optional(),
   created_at: z.coerce.date().optional(),
@@ -7935,7 +9559,8 @@ export const UserCreateWithoutConversionInputSchema: z.ZodType<Prisma.UserCreate
   image: z.string().optional().nullable(),
   sessions: z.lazy(() => SessionCreateNestedManyWithoutUserInputSchema).optional(),
   quotes: z.lazy(() => QuoteCreateNestedManyWithoutUserInputSchema).optional(),
-  account: z.lazy(() => AccountCreateNestedOneWithoutUsersInputSchema).optional()
+  account: z.lazy(() => AccountCreateNestedOneWithoutUsersInputSchema).optional(),
+  messages: z.lazy(() => MessageCreateNestedManyWithoutUserInputSchema).optional()
 }).strict();
 
 export const UserUncheckedCreateWithoutConversionInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutConversionInput> = z.object({
@@ -7957,7 +9582,8 @@ export const UserUncheckedCreateWithoutConversionInputSchema: z.ZodType<Prisma.U
   email_verified: z.coerce.date().optional().nullable(),
   image: z.string().optional().nullable(),
   sessions: z.lazy(() => SessionUncheckedCreateNestedManyWithoutUserInputSchema).optional(),
-  quotes: z.lazy(() => QuoteUncheckedCreateNestedManyWithoutUserInputSchema).optional()
+  quotes: z.lazy(() => QuoteUncheckedCreateNestedManyWithoutUserInputSchema).optional(),
+  messages: z.lazy(() => MessageUncheckedCreateNestedManyWithoutUserInputSchema).optional()
 }).strict();
 
 export const UserCreateOrConnectWithoutConversionInputSchema: z.ZodType<Prisma.UserCreateOrConnectWithoutConversionInput> = z.object({
@@ -7989,7 +9615,8 @@ export const UserUpdateWithoutConversionInputSchema: z.ZodType<Prisma.UserUpdate
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   sessions: z.lazy(() => SessionUpdateManyWithoutUserNestedInputSchema).optional(),
   quotes: z.lazy(() => QuoteUpdateManyWithoutUserNestedInputSchema).optional(),
-  account: z.lazy(() => AccountUpdateOneWithoutUsersNestedInputSchema).optional()
+  account: z.lazy(() => AccountUpdateOneWithoutUsersNestedInputSchema).optional(),
+  messages: z.lazy(() => MessageUpdateManyWithoutUserNestedInputSchema).optional()
 }).strict();
 
 export const UserUncheckedUpdateWithoutConversionInputSchema: z.ZodType<Prisma.UserUncheckedUpdateWithoutConversionInput> = z.object({
@@ -8011,7 +9638,8 @@ export const UserUncheckedUpdateWithoutConversionInputSchema: z.ZodType<Prisma.U
   email_verified: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   sessions: z.lazy(() => SessionUncheckedUpdateManyWithoutUserNestedInputSchema).optional(),
-  quotes: z.lazy(() => QuoteUncheckedUpdateManyWithoutUserNestedInputSchema).optional()
+  quotes: z.lazy(() => QuoteUncheckedUpdateManyWithoutUserNestedInputSchema).optional(),
+  messages: z.lazy(() => MessageUncheckedUpdateManyWithoutUserNestedInputSchema).optional()
 }).strict();
 
 export const PriceCreateWithoutQuoteInputSchema: z.ZodType<Prisma.PriceCreateWithoutQuoteInput> = z.object({
@@ -8135,7 +9763,8 @@ export const UserCreateWithoutQuotesInputSchema: z.ZodType<Prisma.UserCreateWith
   image: z.string().optional().nullable(),
   sessions: z.lazy(() => SessionCreateNestedManyWithoutUserInputSchema).optional(),
   account: z.lazy(() => AccountCreateNestedOneWithoutUsersInputSchema).optional(),
-  conversion: z.lazy(() => ConversionCreateNestedManyWithoutUserInputSchema).optional()
+  conversion: z.lazy(() => ConversionCreateNestedManyWithoutUserInputSchema).optional(),
+  messages: z.lazy(() => MessageCreateNestedManyWithoutUserInputSchema).optional()
 }).strict();
 
 export const UserUncheckedCreateWithoutQuotesInputSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutQuotesInput> = z.object({
@@ -8157,7 +9786,8 @@ export const UserUncheckedCreateWithoutQuotesInputSchema: z.ZodType<Prisma.UserU
   email_verified: z.coerce.date().optional().nullable(),
   image: z.string().optional().nullable(),
   sessions: z.lazy(() => SessionUncheckedCreateNestedManyWithoutUserInputSchema).optional(),
-  conversion: z.lazy(() => ConversionUncheckedCreateNestedManyWithoutUserInputSchema).optional()
+  conversion: z.lazy(() => ConversionUncheckedCreateNestedManyWithoutUserInputSchema).optional(),
+  messages: z.lazy(() => MessageUncheckedCreateNestedManyWithoutUserInputSchema).optional()
 }).strict();
 
 export const UserCreateOrConnectWithoutQuotesInputSchema: z.ZodType<Prisma.UserCreateOrConnectWithoutQuotesInput> = z.object({
@@ -8450,7 +10080,8 @@ export const UserUpdateWithoutQuotesInputSchema: z.ZodType<Prisma.UserUpdateWith
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   sessions: z.lazy(() => SessionUpdateManyWithoutUserNestedInputSchema).optional(),
   account: z.lazy(() => AccountUpdateOneWithoutUsersNestedInputSchema).optional(),
-  conversion: z.lazy(() => ConversionUpdateManyWithoutUserNestedInputSchema).optional()
+  conversion: z.lazy(() => ConversionUpdateManyWithoutUserNestedInputSchema).optional(),
+  messages: z.lazy(() => MessageUpdateManyWithoutUserNestedInputSchema).optional()
 }).strict();
 
 export const UserUncheckedUpdateWithoutQuotesInputSchema: z.ZodType<Prisma.UserUncheckedUpdateWithoutQuotesInput> = z.object({
@@ -8472,7 +10103,8 @@ export const UserUncheckedUpdateWithoutQuotesInputSchema: z.ZodType<Prisma.UserU
   email_verified: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   sessions: z.lazy(() => SessionUncheckedUpdateManyWithoutUserNestedInputSchema).optional(),
-  conversion: z.lazy(() => ConversionUncheckedUpdateManyWithoutUserNestedInputSchema).optional()
+  conversion: z.lazy(() => ConversionUncheckedUpdateManyWithoutUserNestedInputSchema).optional(),
+  messages: z.lazy(() => MessageUncheckedUpdateManyWithoutUserNestedInputSchema).optional()
 }).strict();
 
 export const SalesTaxUpsertWithoutQuotesInputSchema: z.ZodType<Prisma.SalesTaxUpsertWithoutQuotesInput> = z.object({
@@ -10272,7 +11904,8 @@ export const UserUpdateWithoutAccountInputSchema: z.ZodType<Prisma.UserUpdateWit
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   sessions: z.lazy(() => SessionUpdateManyWithoutUserNestedInputSchema).optional(),
   quotes: z.lazy(() => QuoteUpdateManyWithoutUserNestedInputSchema).optional(),
-  conversion: z.lazy(() => ConversionUpdateManyWithoutUserNestedInputSchema).optional()
+  conversion: z.lazy(() => ConversionUpdateManyWithoutUserNestedInputSchema).optional(),
+  messages: z.lazy(() => MessageUpdateManyWithoutUserNestedInputSchema).optional()
 }).strict();
 
 export const UserUncheckedUpdateWithoutAccountInputSchema: z.ZodType<Prisma.UserUncheckedUpdateWithoutAccountInput> = z.object({
@@ -10294,7 +11927,8 @@ export const UserUncheckedUpdateWithoutAccountInputSchema: z.ZodType<Prisma.User
   image: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   sessions: z.lazy(() => SessionUncheckedUpdateManyWithoutUserNestedInputSchema).optional(),
   quotes: z.lazy(() => QuoteUncheckedUpdateManyWithoutUserNestedInputSchema).optional(),
-  conversion: z.lazy(() => ConversionUncheckedUpdateManyWithoutUserNestedInputSchema).optional()
+  conversion: z.lazy(() => ConversionUncheckedUpdateManyWithoutUserNestedInputSchema).optional(),
+  messages: z.lazy(() => MessageUncheckedUpdateManyWithoutUserNestedInputSchema).optional()
 }).strict();
 
 export const UserUncheckedUpdateManyWithoutUsersInputSchema: z.ZodType<Prisma.UserUncheckedUpdateManyWithoutUsersInput> = z.object({
@@ -10352,6 +11986,15 @@ export const ConversionCreateManyUserInputSchema: z.ZodType<Prisma.ConversionCre
   gclid: z.string().optional().nullable(),
   source: z.string().optional().nullable(),
   conversion_name: z.string().optional().nullable()
+}).strict();
+
+export const MessageCreateManyUserInputSchema: z.ZodType<Prisma.MessageCreateManyUserInput> = z.object({
+  id: z.string().uuid().optional(),
+  created_at: z.coerce.date().optional(),
+  updated_at: z.coerce.date().optional(),
+  message: z.string(),
+  subject: z.string(),
+  is_read: z.boolean().optional()
 }).strict();
 
 export const SessionUpdateWithoutUserInputSchema: z.ZodType<Prisma.SessionUpdateWithoutUserInput> = z.object({
@@ -10473,6 +12116,33 @@ export const ConversionUncheckedUpdateManyWithoutConversionInputSchema: z.ZodTyp
   gclid: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   source: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   conversion_name: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+}).strict();
+
+export const MessageUpdateWithoutUserInputSchema: z.ZodType<Prisma.MessageUpdateWithoutUserInput> = z.object({
+  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  message: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  subject: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  is_read: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict();
+
+export const MessageUncheckedUpdateWithoutUserInputSchema: z.ZodType<Prisma.MessageUncheckedUpdateWithoutUserInput> = z.object({
+  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  message: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  subject: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  is_read: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict();
+
+export const MessageUncheckedUpdateManyWithoutMessagesInputSchema: z.ZodType<Prisma.MessageUncheckedUpdateManyWithoutMessagesInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  created_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updated_at: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  message: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  subject: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  is_read: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const PriceCreateManyQuoteInputSchema: z.ZodType<Prisma.PriceCreateManyQuoteInput> = z.object({
@@ -11346,6 +13016,68 @@ export const UserFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.UserFindUniqueOrT
   select: UserSelectSchema.optional(),
   include: UserIncludeSchema.optional(),
   where: UserWhereUniqueInputSchema,
+}).strict()
+
+export const MessageFindFirstArgsSchema: z.ZodType<Prisma.MessageFindFirstArgs> = z.object({
+  select: MessageSelectSchema.optional(),
+  include: MessageIncludeSchema.optional(),
+  where: MessageWhereInputSchema.optional(),
+  orderBy: z.union([ MessageOrderByWithRelationInputSchema.array(),MessageOrderByWithRelationInputSchema ]).optional(),
+  cursor: MessageWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+  distinct: MessageScalarFieldEnumSchema.array().optional(),
+}).strict()
+
+export const MessageFindFirstOrThrowArgsSchema: z.ZodType<Prisma.MessageFindFirstOrThrowArgs> = z.object({
+  select: MessageSelectSchema.optional(),
+  include: MessageIncludeSchema.optional(),
+  where: MessageWhereInputSchema.optional(),
+  orderBy: z.union([ MessageOrderByWithRelationInputSchema.array(),MessageOrderByWithRelationInputSchema ]).optional(),
+  cursor: MessageWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+  distinct: MessageScalarFieldEnumSchema.array().optional(),
+}).strict()
+
+export const MessageFindManyArgsSchema: z.ZodType<Prisma.MessageFindManyArgs> = z.object({
+  select: MessageSelectSchema.optional(),
+  include: MessageIncludeSchema.optional(),
+  where: MessageWhereInputSchema.optional(),
+  orderBy: z.union([ MessageOrderByWithRelationInputSchema.array(),MessageOrderByWithRelationInputSchema ]).optional(),
+  cursor: MessageWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+  distinct: MessageScalarFieldEnumSchema.array().optional(),
+}).strict()
+
+export const MessageAggregateArgsSchema: z.ZodType<Prisma.MessageAggregateArgs> = z.object({
+  where: MessageWhereInputSchema.optional(),
+  orderBy: z.union([ MessageOrderByWithRelationInputSchema.array(),MessageOrderByWithRelationInputSchema ]).optional(),
+  cursor: MessageWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+}).strict()
+
+export const MessageGroupByArgsSchema: z.ZodType<Prisma.MessageGroupByArgs> = z.object({
+  where: MessageWhereInputSchema.optional(),
+  orderBy: z.union([ MessageOrderByWithAggregationInputSchema.array(),MessageOrderByWithAggregationInputSchema ]).optional(),
+  by: MessageScalarFieldEnumSchema.array(),
+  having: MessageScalarWhereWithAggregatesInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+}).strict()
+
+export const MessageFindUniqueArgsSchema: z.ZodType<Prisma.MessageFindUniqueArgs> = z.object({
+  select: MessageSelectSchema.optional(),
+  include: MessageIncludeSchema.optional(),
+  where: MessageWhereUniqueInputSchema,
+}).strict()
+
+export const MessageFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.MessageFindUniqueOrThrowArgs> = z.object({
+  select: MessageSelectSchema.optional(),
+  include: MessageIncludeSchema.optional(),
+  where: MessageWhereUniqueInputSchema,
 }).strict()
 
 export const AffiliateFindFirstArgsSchema: z.ZodType<Prisma.AffiliateFindFirstArgs> = z.object({
@@ -12382,6 +14114,63 @@ export const AirportFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.AirportFindUni
   where: AirportWhereUniqueInputSchema,
 }).strict()
 
+export const LAOrdersFindFirstArgsSchema: z.ZodType<Prisma.LAOrdersFindFirstArgs> = z.object({
+  select: LAOrdersSelectSchema.optional(),
+  where: LAOrdersWhereInputSchema.optional(),
+  orderBy: z.union([ LAOrdersOrderByWithRelationInputSchema.array(),LAOrdersOrderByWithRelationInputSchema ]).optional(),
+  cursor: LAOrdersWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+  distinct: LAOrdersScalarFieldEnumSchema.array().optional(),
+}).strict()
+
+export const LAOrdersFindFirstOrThrowArgsSchema: z.ZodType<Prisma.LAOrdersFindFirstOrThrowArgs> = z.object({
+  select: LAOrdersSelectSchema.optional(),
+  where: LAOrdersWhereInputSchema.optional(),
+  orderBy: z.union([ LAOrdersOrderByWithRelationInputSchema.array(),LAOrdersOrderByWithRelationInputSchema ]).optional(),
+  cursor: LAOrdersWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+  distinct: LAOrdersScalarFieldEnumSchema.array().optional(),
+}).strict()
+
+export const LAOrdersFindManyArgsSchema: z.ZodType<Prisma.LAOrdersFindManyArgs> = z.object({
+  select: LAOrdersSelectSchema.optional(),
+  where: LAOrdersWhereInputSchema.optional(),
+  orderBy: z.union([ LAOrdersOrderByWithRelationInputSchema.array(),LAOrdersOrderByWithRelationInputSchema ]).optional(),
+  cursor: LAOrdersWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+  distinct: LAOrdersScalarFieldEnumSchema.array().optional(),
+}).strict()
+
+export const LAOrdersAggregateArgsSchema: z.ZodType<Prisma.LAOrdersAggregateArgs> = z.object({
+  where: LAOrdersWhereInputSchema.optional(),
+  orderBy: z.union([ LAOrdersOrderByWithRelationInputSchema.array(),LAOrdersOrderByWithRelationInputSchema ]).optional(),
+  cursor: LAOrdersWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+}).strict()
+
+export const LAOrdersGroupByArgsSchema: z.ZodType<Prisma.LAOrdersGroupByArgs> = z.object({
+  where: LAOrdersWhereInputSchema.optional(),
+  orderBy: z.union([ LAOrdersOrderByWithAggregationInputSchema.array(),LAOrdersOrderByWithAggregationInputSchema ]).optional(),
+  by: LAOrdersScalarFieldEnumSchema.array(),
+  having: LAOrdersScalarWhereWithAggregatesInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+}).strict()
+
+export const LAOrdersFindUniqueArgsSchema: z.ZodType<Prisma.LAOrdersFindUniqueArgs> = z.object({
+  select: LAOrdersSelectSchema.optional(),
+  where: LAOrdersWhereUniqueInputSchema,
+}).strict()
+
+export const LAOrdersFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.LAOrdersFindUniqueOrThrowArgs> = z.object({
+  select: LAOrdersSelectSchema.optional(),
+  where: LAOrdersWhereUniqueInputSchema,
+}).strict()
+
 export const AccountCreateArgsSchema: z.ZodType<Prisma.AccountCreateArgs> = z.object({
   select: AccountSelectSchema.optional(),
   include: AccountIncludeSchema.optional(),
@@ -12503,6 +14292,47 @@ export const UserUpdateManyArgsSchema: z.ZodType<Prisma.UserUpdateManyArgs> = z.
 
 export const UserDeleteManyArgsSchema: z.ZodType<Prisma.UserDeleteManyArgs> = z.object({
   where: UserWhereInputSchema.optional(),
+}).strict()
+
+export const MessageCreateArgsSchema: z.ZodType<Prisma.MessageCreateArgs> = z.object({
+  select: MessageSelectSchema.optional(),
+  include: MessageIncludeSchema.optional(),
+  data: z.union([ MessageCreateInputSchema,MessageUncheckedCreateInputSchema ]),
+}).strict()
+
+export const MessageUpsertArgsSchema: z.ZodType<Prisma.MessageUpsertArgs> = z.object({
+  select: MessageSelectSchema.optional(),
+  include: MessageIncludeSchema.optional(),
+  where: MessageWhereUniqueInputSchema,
+  create: z.union([ MessageCreateInputSchema,MessageUncheckedCreateInputSchema ]),
+  update: z.union([ MessageUpdateInputSchema,MessageUncheckedUpdateInputSchema ]),
+}).strict()
+
+export const MessageCreateManyArgsSchema: z.ZodType<Prisma.MessageCreateManyArgs> = z.object({
+  data: z.union([ MessageCreateManyInputSchema,MessageCreateManyInputSchema.array() ]),
+  skipDuplicates: z.boolean().optional(),
+}).strict()
+
+export const MessageDeleteArgsSchema: z.ZodType<Prisma.MessageDeleteArgs> = z.object({
+  select: MessageSelectSchema.optional(),
+  include: MessageIncludeSchema.optional(),
+  where: MessageWhereUniqueInputSchema,
+}).strict()
+
+export const MessageUpdateArgsSchema: z.ZodType<Prisma.MessageUpdateArgs> = z.object({
+  select: MessageSelectSchema.optional(),
+  include: MessageIncludeSchema.optional(),
+  data: z.union([ MessageUpdateInputSchema,MessageUncheckedUpdateInputSchema ]),
+  where: MessageWhereUniqueInputSchema,
+}).strict()
+
+export const MessageUpdateManyArgsSchema: z.ZodType<Prisma.MessageUpdateManyArgs> = z.object({
+  data: z.union([ MessageUpdateManyMutationInputSchema,MessageUncheckedUpdateManyInputSchema ]),
+  where: MessageWhereInputSchema.optional(),
+}).strict()
+
+export const MessageDeleteManyArgsSchema: z.ZodType<Prisma.MessageDeleteManyArgs> = z.object({
+  where: MessageWhereInputSchema.optional(),
 }).strict()
 
 export const AffiliateCreateArgsSchema: z.ZodType<Prisma.AffiliateCreateArgs> = z.object({
@@ -13184,4 +15014,41 @@ export const AirportUpdateManyArgsSchema: z.ZodType<Prisma.AirportUpdateManyArgs
 
 export const AirportDeleteManyArgsSchema: z.ZodType<Prisma.AirportDeleteManyArgs> = z.object({
   where: AirportWhereInputSchema.optional(),
+}).strict()
+
+export const LAOrdersCreateArgsSchema: z.ZodType<Prisma.LAOrdersCreateArgs> = z.object({
+  select: LAOrdersSelectSchema.optional(),
+  data: z.union([ LAOrdersCreateInputSchema,LAOrdersUncheckedCreateInputSchema ]),
+}).strict()
+
+export const LAOrdersUpsertArgsSchema: z.ZodType<Prisma.LAOrdersUpsertArgs> = z.object({
+  select: LAOrdersSelectSchema.optional(),
+  where: LAOrdersWhereUniqueInputSchema,
+  create: z.union([ LAOrdersCreateInputSchema,LAOrdersUncheckedCreateInputSchema ]),
+  update: z.union([ LAOrdersUpdateInputSchema,LAOrdersUncheckedUpdateInputSchema ]),
+}).strict()
+
+export const LAOrdersCreateManyArgsSchema: z.ZodType<Prisma.LAOrdersCreateManyArgs> = z.object({
+  data: z.union([ LAOrdersCreateManyInputSchema,LAOrdersCreateManyInputSchema.array() ]),
+  skipDuplicates: z.boolean().optional(),
+}).strict()
+
+export const LAOrdersDeleteArgsSchema: z.ZodType<Prisma.LAOrdersDeleteArgs> = z.object({
+  select: LAOrdersSelectSchema.optional(),
+  where: LAOrdersWhereUniqueInputSchema,
+}).strict()
+
+export const LAOrdersUpdateArgsSchema: z.ZodType<Prisma.LAOrdersUpdateArgs> = z.object({
+  select: LAOrdersSelectSchema.optional(),
+  data: z.union([ LAOrdersUpdateInputSchema,LAOrdersUncheckedUpdateInputSchema ]),
+  where: LAOrdersWhereUniqueInputSchema,
+}).strict()
+
+export const LAOrdersUpdateManyArgsSchema: z.ZodType<Prisma.LAOrdersUpdateManyArgs> = z.object({
+  data: z.union([ LAOrdersUpdateManyMutationInputSchema,LAOrdersUncheckedUpdateManyInputSchema ]),
+  where: LAOrdersWhereInputSchema.optional(),
+}).strict()
+
+export const LAOrdersDeleteManyArgsSchema: z.ZodType<Prisma.LAOrdersDeleteManyArgs> = z.object({
+  where: LAOrdersWhereInputSchema.optional(),
 }).strict()

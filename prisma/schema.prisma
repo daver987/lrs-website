@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fieldReference"]
+  previewFeatures = ["fieldReference", "jsonProtocol"]
 }
 
 generator zod {
@@ -59,8 +59,22 @@ model User {
   quotes               Quote[]
   account              Account?     @relation(fields: [account_id], references: [id])
   conversion           Conversion[]
+  messages             Message[]
 
   @@index([account_id])
+}
+
+model Message {
+  id         String   @id @unique @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  message    String
+  subject    String
+  user       User     @relation(fields: [user_id], references: [id])
+  user_id    String
+  is_read    Boolean  @default(value: false)
+
+  @@index([user_id])
 }
 
 model Affiliate {

@@ -1,38 +1,35 @@
 <script setup lang="ts">
 import { toTypedSchema } from '@vee-validate/zod'
 import { useForm, ErrorMessage, Field } from 'vee-validate'
-import { z } from 'zod'
+import { ContactFormSchema } from '~/schema/contactFormSchema'
 import { ref } from '#imports'
+import { useUserStore } from '~/stores/useUserStore'
+import { storeToRefs } from 'pinia'
 
-const formSchema = z.object({
-  first_name: z.string(),
-  last_name: z.string(),
-  email_address: z.string().email(),
-  phone_number: z.string(),
-  subject: z.string(),
-  message: z.string(),
-})
+const userStore = useUserStore()
+const { user_id } = storeToRefs(userStore)
 
-const schema = toTypedSchema(formSchema)
-type ValidationSchema = z.infer<typeof formSchema>
+const schema = toTypedSchema(ContactFormSchema)
 const { handleSubmit, errors, resetForm } = useForm({
   validationSchema: schema,
 })
 
 const isShown = ref(false)
 const loading = ref(false)
-const onSubmit = handleSubmit(async (values: ValidationSchema) => {
+const onSubmit = handleSubmit(async (values: ContactFormSchema) => {
   try {
     loading.value = true
-    const { data } = await useFetch('/api/post-contact', {
-      method: 'POST',
-      body: values,
+    console.log('Form Values', values)
+    const formDataResponse = await useTrpc().user.userForm.mutate({
+      ...values,
+      userId: user_id.value,
     })
+    console.log('Contact Form:', formDataResponse)
     setTimeout(() => {
       isShown.value = true
       loading.value = false
       resetForm()
-    }, 1500)
+    }, 2500)
     setTimeout(() => {
       isShown.value = false
     }, 7500)
