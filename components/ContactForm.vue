@@ -50,11 +50,9 @@ const onSubmit = handleSubmit(async (values: ContactFormSchema) => {
             <h2 id="contact-heading" class="sr-only">Contact us</h2>
 
             <div class="grid grid-cols-1 lg:grid-cols-3">
-              <!-- Contact information -->
               <div
                 class="relative overflow-hidden bg-gradient-to-b from-brand to-brand-600 px-6 py-10 sm:px-10 xl:p-12"
               >
-                <!-- Decorative angle backgrounds -->
                 <div
                   class="pointer-events-none absolute inset-0 sm:hidden"
                   aria-hidden="true"
