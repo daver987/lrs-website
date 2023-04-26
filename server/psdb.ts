@@ -2,8 +2,8 @@ import { Client } from '@planetscale/database'
 
 const client = new Client({
   host: 'aws.connect.psdb.cloud',
-  username: '8piyh335n914ex0gh12j',
-  password: 'pscale_pw_ytC9Ahn2dBMBZLvSP2AFULYlwsbUMREgBUvAa2obIB6',
+  username: useRuntimeConfig().PLANETSCALE_USERNAME,
+  password: useRuntimeConfig().PLANETSCALE_PASSWORD,
 })
 
 export async function createPSContext() {

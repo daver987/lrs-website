@@ -127,6 +127,8 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
+    PLANETSCALE_PASSWORD: process.env.PLANETSCALE_PASSWORD,
+    PLANETSCALE_USERNAME: process.env.PLANETSCALE_USERNAME,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     TWILIO_MESSAGING_SID: process.env.TWILIO_MESSAGING_SID,
     TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID,
