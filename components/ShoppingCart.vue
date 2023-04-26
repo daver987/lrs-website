@@ -3,11 +3,24 @@ import { useCartStore } from '~/stores/useCartStore'
 import { storeToRefs } from 'pinia'
 import { useStripeStore } from '~/stores/useStripeStore'
 import { format } from 'date-fns'
-import { ref } from '#imports'
+import { ref, useTrpc } from '#imports'
+import chalk from 'chalk'
 
+const quote = ref(null)
 const quoteNumberAsString = useRoute().query.quote_number as string
-const quote = await getQuote(quoteNumberAsString)
-const quoteNumber = ref(quote?.quote_number)
+
+if (quoteNumberAsString) {
+  const { data: quoteData } = await useTrpc().quote.get.useQuery({
+    quote_number: parseInt(quoteNumberAsString),
+  })
+  quote.value = quoteData.value
+  console.log('[GET_QUOTE:]success')
+} else {
+  console.log('[GET_QUOTE]:failed')
+  await navigateTo('/')
+}
+
+const quoteNumber = ref(quote?.value.quote_number)
 const cartStore = useCartStore()
 const stripeStore = useStripeStore()
 const { addedToCart, loading } = storeToRefs(cartStore)
@@ -19,7 +32,7 @@ const createBooking = async () => {
   try {
     const { setupIntent, stripeId, statusCode } =
       await useTrpc().stripe.createSetup.mutate({
-        userId: quote!.user.id,
+        userId: quote!.value.user.id,
         quoteNumber: quoteNumber.value as number,
       })
 
