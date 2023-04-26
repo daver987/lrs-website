@@ -3,7 +3,6 @@ definePageMeta({
   title: 'Cart',
   layout: 'default',
   colorMode: 'dark',
-  middleware: ['quotecheck'],
 })
 </script>
 
