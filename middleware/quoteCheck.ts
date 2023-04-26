@@ -1,4 +1,6 @@
 import { addDays, isBefore } from 'date-fns'
+import { useNuxtApp } from '#app'
+import chalk from 'chalk'
 
 interface QuoteResult {
   created_at?: Date | null
@@ -6,38 +8,43 @@ interface QuoteResult {
 }
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
+  const useTrpc = () => useNuxtApp().$client
   const quoteNumberAsString = to.query.quote_number
-  console.log('Quote Number as String:', quoteNumberAsString)
+  console.log('[MIDDLEWARE]Quote Number as String:', quoteNumberAsString)
   const sevenDaysFromToday = addDays(new Date(), 7)
 
-  if (typeof quoteNumberAsString === 'string') {
-    try {
-      const quoteNumber = parseInt(quoteNumberAsString)
-      const { data: quoteResult } = await useTrpc().quote.getCreatedAt.useQuery(
-        {
-          quote_number: quoteNumber,
-        }
-      )
+  if (typeof quoteNumberAsString !== 'string') {
+    return abortNavigation('Invalid quote number')
+  }
 
-      const result = quoteResult.value
-      console.log('Middleware Result:', result)
+  try {
+    const quoteNumber = parseInt(quoteNumberAsString)
+    const { data: quoteResult } = await useTrpc().quote.getCreatedAt.useQuery({
+      quote_number: quoteNumber,
+    })
 
-      if (result && result.created_at instanceof Date) {
-        const isQuoteExpired = isBefore(sevenDaysFromToday, result.created_at)
-        console.log('isQuoteExpired:', isQuoteExpired)
-        console.log('result.is_booked:', result.is_booked)
+    const result = quoteResult.value
+    console.log(chalk.magenta('[MIDDLEWARE]:checkQuote'), result)
 
-        if (isQuoteExpired || result.is_booked) {
-          await navigateTo('/')
-        }
-      } else {
-        await navigateTo('/')
-      }
-    } catch (error) {
-      console.error('Error fetching quote:', error)
-      await navigateTo('/')
+    if (!result || !(result.created_at instanceof Date)) {
+      return abortNavigation("Quote doesn't exist")
     }
-  } else {
-    await navigateTo('/')
+
+    const isQuoteExpired = isBefore(sevenDaysFromToday, result.created_at)
+    console.log(
+      chalk.magenta('[MIDDLEWARE]result.is_booked:'),
+      result.is_booked
+    )
+
+    if (isQuoteExpired) {
+      return abortNavigation('Ooops! Your quote has expired.')
+    }
+
+    if (result.is_booked) {
+      return abortNavigation("You can't book an already booked quote.")
+    }
+  } catch (error) {
+    console.error(chalk.redBright('[MIDDLEWARE]:Error fetching quote:'), error)
+    return abortNavigation('Error fetching quote details')
   }
 })

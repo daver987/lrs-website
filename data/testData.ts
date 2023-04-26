@@ -1,3 +1,5 @@
+import { publicProcedure, router } from '~/server/trpc/trpc'
+
 interface LineItem {
   label: string
   total: number
@@ -211,3 +213,34 @@ const quoteData = {
     },
   ],
 }
+export const salesTaxRouter = router({
+  get: publicProcedure.query(async ({ ctx }) => {
+    const results = await ctx.conn.execute('SELECT * FROM SalesTax')
+    return results.rows
+  }),
+})
+
+export const lineItemsRouter = router({
+  get: publicProcedure.query(async ({ ctx }) => {
+    const results = await ctx.conn.execute('SELECT * FROM LineItem')
+    return results.rows
+  }),
+})
+
+export const serviceRouter = router({
+  get: publicProcedure.query(async ({ ctx }) => {
+    const results = await ctx.conn.execute(
+      'SELECT * FROM Service ORDER BY service_number ASC'
+    )
+    return results.rows
+  }),
+})
+
+export const vehicleRouter = router({
+  get: publicProcedure.query(async ({ ctx }) => {
+    const results = await ctx.conn.execute(
+      'SELECT * FROM Vehicle ORDER BY vehicle_number ASC'
+    )
+    return results.rows
+  }),
+})

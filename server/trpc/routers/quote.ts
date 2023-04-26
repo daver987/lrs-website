@@ -62,6 +62,7 @@ export const quoteRouter = router({
             select: {
               label: true,
               vehicle_image: true,
+              fasttrak_id: true,
             },
           },
           service: {
@@ -151,6 +152,7 @@ export const quoteRouter = router({
               vehicle_image: true,
               max_luggage: true,
               vehicle_number: true,
+              fasttrak_id: true,
             },
           },
           service: {

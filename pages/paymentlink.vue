@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from '#imports'
+import { ref, useRuntimeConfig } from '#imports'
 
 definePageMeta({
   name: 'paymentlink',
@@ -66,42 +66,16 @@ const {
   publicKey,
 } = stripeClient
 
-fullName.value = user.full_name!
-emailAddress.value = user.email_address
-phoneNumber.value = user.phone_number
-clientSecret.value = useRoute().query.client_secret as string
-quoteNumber.value = quote_number
-websiteURL.value = useRuntimeConfig().public.WEBSITE_URL
+const priceTest = 1000
 publicKey.value = useRuntimeConfig().public.STRIPE_PUBLISHABLE_KEY
 
 onMounted(() => {
   nextTick(async () => {
-    await stripeClient.initStripeElements()
+    await stripeClient.initStripePaymentRequestButton()
   })
 })
 
-const totalPrice = quote_total.toFixed(2)
 const isLoading = ref(false)
-
-const submitOrder = async () => {
-  try {
-    isLoading.value = true
-    setEnhancedTracking(emailAddress.value, phoneNumber.value, quote?.id!)
-    triggerEvent(quote_total)
-
-    const stripeResponse = await stripeClient.submitHandler()
-    console.log('Stripe Response', stripeResponse)
-
-    if (typeof stripeResponse?.success === 'number') {
-      isLoading.value = false
-    } else {
-      throw new Error('Stripe submission failed.')
-    }
-  } catch (error) {
-    console.error('An error occurred while processing the booking:', error)
-    throw new Error('Booking failed.')
-  }
-}
 
 //todo: add in the creation of draft invoice in stripe
 //todo: add region functionality for auto tax calculation for out of town trips

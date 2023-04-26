@@ -10,6 +10,46 @@ import {
   UserSchema,
 } from '~/prisma/generated/zod'
 
+// const booleanOrInt = z.union([z.boolean(), z.number()])
+
+// export const booleanFromInt = booleanOrInt
+//   .refine((value) => typeof value === 'boolean' || value === 0 || value === 1, {
+//     message: 'Value must be a boolean, 0, or 1',
+//   })
+//   .transform((value) => {
+//     if (typeof value === 'number') {
+//       return value === 1
+//     }
+//     return value
+//   })
+
+// const modifySchema = (schema, fieldsToModify) => {
+//   const shape = schema._def.shape
+//   const newShape = {}
+//
+//   for (const key in shape) {
+//     if (fieldsToModify.includes(key) && shape[key] instanceof z.ZodBoolean) {
+//       newShape[key] = booleanFromInt
+//     } else {
+//       newShape[key] = shape[key]
+//     }
+//   }
+//
+//   return z.object(newShape)
+// }
+
+// const newVehicleSchema = modifySchema(VehicleSchema, [
+//   'is_active',
+//   'anotherBoolean',
+// ])
+// const newServiceSchema = modifySchema(ServiceSchema, ['is_active', 'is_hourly'])
+// const newLineItemsSchema = modifySchema(LineItemSchema, [
+//   'is_percentage',
+//   'is_taxable',
+//   'is_active',
+// ])
+// const newSalesTaxSchema = modifySchema(SalesTaxSchema, ['is_active'])
+
 const QuoteSchemaPicked = QuoteSchema.pick({
   quote_number: true,
   selected_hours: true,

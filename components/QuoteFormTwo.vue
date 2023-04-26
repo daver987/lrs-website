@@ -4,10 +4,10 @@ import { VueTelInput } from 'vue-tel-input'
 import { sha256 } from 'js-sha256'
 import { useUserStore } from '~/stores/useUserStore'
 import { useQuoteStore } from '~/stores/useQuoteStore'
-import { ref, useTrpc, isAirport } from '#imports'
+import { ref, useTrpc, isAirport, useFetch, useQuery } from '#imports'
 import { storeToRefs } from 'pinia'
 import { useGtm } from '@gtm-support/vue-gtm'
-import type { LineItem, SalesTax, Service, Vehicle } from '@prisma/client'
+// import type { LineItem, SalesTax, Service, Vehicle } from '@prisma/client'
 import type { FormValue } from '~/utils/formUtils'
 import type { Place } from '~/schema/placeSchema'
 import type { Ref, WatchCallback } from 'vue'
@@ -22,10 +22,10 @@ const { user_id } = storeToRefs(userStore)
 const message = useMessage()
 const loadingBar = useLoadingBar()
 
-const service = (await getService()) as Ref<Service[]>
-const vehicle = (await getVehicle()) as Ref<Vehicle[]>
-const lineItem = (await getLineItems()) as Ref<LineItem[]>
-const salesTax = (await getSalesTax()) as SalesTax[]
+const { data: vehicle } = await useTrpc().vehicle.get.useQuery()
+const { data: service } = await useTrpc().service.get.useQuery()
+const { data: lineItem } = await useTrpc().lineItem.get.useQuery()
+const { data: salesTax } = await useTrpc().salesTax.get.useQuery()
 
 const vehicleOptions = computed(() => {
   return computeVehicleOptions(vehicle.value)
@@ -300,9 +300,10 @@ async function onSubmit() {
   }
 }
 
-function handleValidateButtonClick(e: MouseEvent) {
+async function handleValidateButtonClick(e: MouseEvent) {
   e.preventDefault()
-  formRef.value?.validate(async (errors) => {
+  try {
+    const errors = await formRef.value?.validate()
     if (errors) {
       console.log(errors)
       message.error('Please correct the errors on the form')
@@ -313,7 +314,12 @@ function handleValidateButtonClick(e: MouseEvent) {
         'You will receive a copy of the quote to the email address provided'
       )
     }
-  })
+  } catch (error) {
+    console.error('Error during form validation:', error)
+    message.error('An error occurred. Please try again.')
+  } finally {
+    loadingBar.finish()
+  }
 }
 
 function disablePreviousDate(ts: number) {

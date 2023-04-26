@@ -43,11 +43,8 @@ export function useStripe() {
   let stripe: Stripe | null
   let elements: StripeElements
 
-  const initStripePaymentRequestButton = async (
-    stripe: Stripe,
-    amountInCents: number
-  ) => {
-    return stripe.paymentRequest({
+  const initStripePaymentRequestButton = async (amountInCents: number) => {
+    return $stripe?.paymentRequest({
       country: 'CA',
       currency: 'cad',
       total: {
@@ -163,6 +160,7 @@ export function useStripe() {
   }
 
   return {
+    initStripePaymentRequestButton,
     submitHandler,
     initStripeElements,
     checkSetupIntent,

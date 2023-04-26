@@ -1,57 +1,51 @@
-import { useTrpc } from '~/composables/useTrpc'
-import { useQuery } from '@tanstack/vue-query'
+import { useTrpc, useQuery } from '#imports'
 import _ from 'lodash'
 
 export async function getSalesTax() {
-  const getSalesTax = () => useTrpc().salesTax.get.query()
-
   const { data, suspense } = useQuery({
     queryKey: ['salesTax'],
-    queryFn: getSalesTax,
+    queryFn: () => useTrpc().salesTax.get.query(),
   })
   await suspense()
   return data.value
 }
-export async function getLineItems() {
-  const getLineItems = () => useTrpc().lineItem.get.query()
 
+export async function getLineItems() {
   const { data, suspense } = useQuery({
     queryKey: ['lineItem'],
-    queryFn: getLineItems,
+    queryFn: () => useTrpc().lineItem.get.query(),
   })
   await suspense()
   return data
 }
-export async function getVehicle() {
-  const getVehicle = () => useTrpc().vehicle.get.query()
 
+export async function getVehicle() {
   const { data, suspense } = useQuery({
     queryKey: ['vehicle'],
-    queryFn: getVehicle,
+    queryFn: async () => await useTrpc().vehicle.get.query(),
   })
   await suspense()
   return data
 }
-export async function getService() {
-  const getService = () => useTrpc().service.get.query()
 
+export async function getService() {
   const { data, suspense } = useQuery({
     queryKey: ['service'],
-    queryFn: getService,
+    queryFn: () => useTrpc().service.get.query(),
   })
   await suspense()
   return data
 }
+
 export async function getQuote(quoteNumber: string) {
-  const routeQuoteNumber = _.toNumber(quoteNumber)
-  const getQuote = () =>
-    useTrpc().quote.get.query({
-      quote_number: routeQuoteNumber,
-    })
+  const routeQuoteNumber = parseInt(quoteNumber)
 
   const { data, suspense } = useQuery({
     queryKey: ['quote'],
-    queryFn: getQuote,
+    queryFn: () =>
+      useTrpc().quote.get.query({
+        quote_number: routeQuoteNumber,
+      }),
   })
   await suspense()
   return data.value
