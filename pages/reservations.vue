@@ -20,6 +20,9 @@ const nav = navigation
 
 const open = ref<boolean>(false)
 const src = '/images/hpl-logo-dark.png'
+useScriptTag(
+  'https://embed.evertransit.com/schedule.html?theme=default&api_key=d1966e57408430a9f1ef27738da11530ef1053b766334b82da016e6436c8cd765f'
+)
 </script>
 
 <template>
@@ -209,5 +212,12 @@ const src = '/images/hpl-logo-dark.png'
         </div>
       </nav>
     </header>
+    <div class="w-full">
+      <iframe
+        src="https://embed.evertransit.com/schedule.html?theme=default&api_key=d1966e57408430a9f1ef27738da11530ef1053b766334b82da016e6436c8cd765f"
+        height="750px"
+        width="100%"
+      ></iframe>
+    </div>
   </div>
 </template>

@@ -3,7 +3,7 @@ import { useRuntimeConfig } from '#app'
 
 export default defineNuxtPlugin((nuxtApp) => {
   const gtmId = useRuntimeConfig().public.GTM_ID
-  const isEnabled = useRuntimeConfig().public.TAG_MANAGER_ENABLED
+  const isEnabled = useRuntimeConfig().public.TAG_MANAGER_ENABLED === 'true'
   const router = useRouter()
   nuxtApp.vueApp.use(
     createGtm({
