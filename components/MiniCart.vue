@@ -8,15 +8,19 @@ import { ref } from '#imports'
 const cartStore = useCartStore()
 const { addedToCart } = storeToRefs(cartStore)
 
-const quoteNumberAsString = useRoute().query.quote_number as string
+const quoteNumberAsString = useRoute().query.quote_number
 const quote = ref<null | QuoteFormReturn>(null)
 const vehicleImage = ref('')
 const vehicleLabel = ref('')
 const serviceLabel = ref('')
+const loading = ref(false)
 
-onBeforeMount(async () => {
-  if (quoteNumberAsString) {
-    const fetchedQuote = await getQuote(quoteNumberAsString)
+onMounted(async () => {
+  if (typeof quoteNumberAsString === 'string') {
+    const { data: fetchedQuote, isLoading } = await useTrpc().quote.useQuery(
+      quoteNumberAsString
+    )
+    loading.value = isLoading.value
     quote.value = fetchedQuote
     vehicleImage.value = fetchedQuote.vehicle.vehicle_image!
     vehicleLabel.value = fetchedQuote.vehicle.label
