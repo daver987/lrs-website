@@ -120,7 +120,7 @@ export const quoteRouter = router({
   get: publicProcedure
     .input(
       z.object({
-        quote_number: z.number(),
+        quote_number: z.number().optional(),
       })
     )
     .query(async ({ ctx, input }) => {
@@ -338,6 +338,7 @@ export const quoteRouter = router({
         updateShortLink(prisma, quote, shortLink.value),
         sendTwilioSms(twilioClient, first_name, phone_number, shortLink.value),
       ])
+      await useStorage().setItem('quote', quote)
       return quote
     }),
 })

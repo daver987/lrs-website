@@ -26,6 +26,7 @@ export default defineNuxtConfig({
     'nuxt-icon',
     'nuxt-icons',
     'nuxt-lodash',
+    '@nuxt/devtools',
     '@huntersofbook/naive-ui-nuxt',
     [
       '@pinia/nuxt',
@@ -41,6 +42,24 @@ export default defineNuxtConfig({
 
   nitro: {
     preset: 'netlify',
+    // storage: {
+    //   redis: {
+    //     driver: 'redis',
+    //     /* redis connector options */
+    //     port: 6379, // Redis port
+    //     host: '127.0.0.1', // Redis host
+    //     username: '', // needs Redis >= 6
+    //     password: '',
+    //     db: 0, // Defaults to 0
+    //     tls: {}, // tls/ssl
+    //   },
+    // },
+    // devStorage: {
+    //   db: {
+    //     driver: 'fs',
+    //     base: './data/db',
+    //   },
+    // },
   },
 
   colorMode: {
@@ -161,4 +180,6 @@ export default defineNuxtConfig({
       alias: { '.prisma/client/index-browser': `@prisma/client/index-browser` },
     },
   },
+  //@ts-ignore
+  devtools: true,
 })

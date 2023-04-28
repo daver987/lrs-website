@@ -200,9 +200,9 @@ const open = ref(false)
               </div>
             </div>
             <!-- Cart -->
-            <div class="ml-4 flow-root lg:ml-6">
-              <MiniCart />
-            </div>
+            <!--            <div class="ml-4 flow-root lg:ml-6">-->
+            <!--              <MiniCart />-->
+            <!--            </div>-->
           </div>
         </div>
       </div>
