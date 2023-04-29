@@ -13,6 +13,7 @@
     "postinstall": "prisma generate"
   },
   "devDependencies": {
+    "@clerk/clerk-sdk-node": "^4.8.6",
     "@googlemaps/js-api-loader": "^1.15.1",
     "@gtm-support/vue-gtm": "^2.0.0",
     "@headlessui/tailwindcss": "^0.1.3",
