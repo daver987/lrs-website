@@ -1,6 +1,6 @@
 import { ref, Ref } from 'vue'
 import { z } from 'zod'
-import { LineItemSchema } from '~/prisma/generated/zod'
+import { LineItemSchema } from '~/schema/prismaSchemas'
 import type { Vehicle, Service, LineItem, SalesTax } from '@prisma/client'
 import {
   DirectionsSchema,

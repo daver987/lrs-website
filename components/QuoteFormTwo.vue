@@ -4,9 +4,9 @@ import { VueTelInput } from 'vue-tel-input'
 import { sha256 } from 'js-sha256'
 import { useUserStore } from '~/stores/useUserStore'
 import { useQuoteStore } from '~/stores/useQuoteStore'
-import { ref, useTrpc, isAirport, useFetch, useQuery } from '#imports'
 import { storeToRefs } from 'pinia'
 import { useGtm } from '@gtm-support/vue-gtm'
+// import type { LineItem, SalesTax, Service, Vehicle } from '@prisma/client'
 import type { FormValue } from '~/utils/formUtils'
 import type { Place } from '~/schema/placeSchema'
 import type { Ref, WatchCallback } from 'vue'
@@ -275,6 +275,7 @@ async function onSubmit() {
   try {
     loading.value = true
     const quoteData = await useTrpc().quote.postQuote.mutate(formValue.value)
+    quoteStore.setQuote(quoteData)
     setTimeout(async () => {
       setEnhancedTracking(
         formValue.value.email_address,
@@ -302,7 +303,6 @@ async function handleValidateButtonClick(e: MouseEvent) {
   e.preventDefault()
   try {
     const errors = await formRef.value?.validate()
-    console.log('[VALIDATION]:formRef')
     if (errors) {
       console.log(errors)
       message.error('Please correct the errors on the form')
@@ -587,9 +587,6 @@ function disablePreviousDate(ts: number) {
           </n-form>
         </div>
       </n-grid-item>
-      <!--      <n-grid-item>-->
-      <!--        <pre class="text-white">{{ formValue }}</pre>-->
-      <!--      </n-grid-item>-->
     </n-grid>
   </n-config-provider>
 </template>

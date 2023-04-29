@@ -6,7 +6,6 @@ import {
   TransitionRoot,
 } from '@headlessui/vue'
 import { navigation, NavigationItem } from '~/data/navigation'
-import { ref } from '#imports'
 
 defineProps({
   linkClasses: {

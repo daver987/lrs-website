@@ -1,4 +1,3 @@
-import { ref } from '#imports'
 import type { Ref } from 'vue'
 import {
   Stripe,
@@ -7,7 +6,6 @@ import {
   StripePaymentElement,
   StripePaymentRequestButtonElement,
 } from '@stripe/stripe-js'
-import { useNuxtApp } from '#app'
 
 const appearance = {
   theme: 'stripe',

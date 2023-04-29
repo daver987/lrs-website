@@ -3,8 +3,7 @@ import { useCartStore } from '~/stores/useCartStore'
 import { storeToRefs } from 'pinia'
 import { useStripeStore } from '~/stores/useStripeStore'
 import { format } from 'date-fns'
-import { ref, useTrpc } from '#imports'
-import chalk from 'chalk'
+// import chalk from 'chalk'
 import { storage } from 'nitropack/dist/runtime/virtual/storage'
 
 const { data: storedQuote } = await useTrpc().quote.get.useQuery()

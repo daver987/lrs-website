@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ref, watchEffect } from '#imports'
-
 const images = [
   '/images/premium_sedan-3.png',
   '/images/premium_suv-2.png',

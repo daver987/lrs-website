@@ -1,12 +1,16 @@
 import { publicProcedure, router } from '../trpc'
 import { z } from 'zod'
-import { formatAddress } from '~/utils/formatAddress'
-import { usePricingEngine } from '~/composables/usePricingEngine'
-import { sendQuoteEmail } from '~/server/utils/sendGridEmail'
-import { createAircallContact } from '~/server/utils/createAircallContact'
-import { sendTwilioSms } from '~/server/utils/sendTwilioSms'
-import { createQuoteFromForm, updateShortLink } from '~/server/utils/trpcUtils'
-import { useLinkShortener } from '~/composables/useLinkShortener'
+import { formatAddress } from '~/utils'
+import {
+  sendTwilioSms,
+  createAircallContact,
+  sendQuoteEmail,
+} from '~/server/utils'
+import { usePricingEngine, useLinkShortener } from '~/composables'
+import {
+  createQuoteFromForm,
+  updateShortLink,
+} from '~/server/utils/helpers/trpcUtils'
 import {
   quoteFormReturnSchema,
   QuoteFormSchema,
@@ -196,6 +200,7 @@ export const quoteRouter = router({
 
   postQuote: publicProcedure
     .input(QuoteFormSchema)
+    .output(quoteFormReturnSchema)
     .mutation(async ({ ctx, input }) => {
       const {
         id: user_id,

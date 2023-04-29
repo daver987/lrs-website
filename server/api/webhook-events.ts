@@ -1,9 +1,3 @@
-import { stripe } from '~/server/utils/stripeInit'
-import {
-  handleCustomerCreated,
-  handleSetupIntentSucceeded,
-} from '~/server/utils/stripeHandlers'
-
 export default defineEventHandler(async (event) => {
   const messagingSid = useRuntimeConfig().TWILIO_MESSAGING_SID
   const twilioClient = event.context.twilioClient

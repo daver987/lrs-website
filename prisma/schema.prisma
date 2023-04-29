@@ -3,11 +3,6 @@ generator client {
   previewFeatures = ["fieldReference", "jsonProtocol"]
 }
 
-generator zod {
-  provider           = "zod-prisma-types"
-  createPartialTypes = "true"
-}
-
 datasource db {
   provider     = "mysql"
   url          = env("DATABASE_URL")

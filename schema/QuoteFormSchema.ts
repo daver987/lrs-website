@@ -8,7 +8,7 @@ import {
   TripSchema,
   LocationSchema,
   UserSchema,
-} from '~/prisma/generated/zod'
+} from './prismaSchemas'
 
 const QuoteSchemaPicked = QuoteSchema.pick({
   quote_number: true,

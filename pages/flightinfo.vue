@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref, computed, useTrpc } from '#imports'
 import { buildLuggageOptions } from '~/composables/useBuildOptions'
 import { FormRules } from 'naive-ui'
 import { Ref } from 'vue'

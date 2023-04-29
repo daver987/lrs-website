@@ -1,4 +1,4 @@
-import { createEvent, DateArray, EventStatus } from 'ics'
+import { DateArray, EventStatus } from 'ics'
 import * as ics from 'ics'
 import { Ref, ref } from 'vue'
 

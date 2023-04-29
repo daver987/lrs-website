@@ -1,5 +1,4 @@
 import { loadStripe } from '@stripe/stripe-js'
-import { useRuntimeConfig } from '#imports'
 
 export default defineNuxtPlugin(async (nuxtApp) => {
   const publicKey = useRuntimeConfig().public.STRIPE_PUBLISHABLE_KEY

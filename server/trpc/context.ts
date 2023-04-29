@@ -1,7 +1,7 @@
 import { inferAsyncReturnType } from '@trpc/server'
 import type { H3Event } from 'h3'
 import { prismaDb } from '~/server/prismadb'
-import { stripe } from '~/server/utils/stripeInit'
+import { stripe } from '~/server/utils/services/stripeInit'
 import openai from 'openai'
 import { createPSContext } from '~/server/psdb'
 
