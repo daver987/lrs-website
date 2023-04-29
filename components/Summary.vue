@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useTrpc, ref, generatePdf } from '#imports'
 import { ArrowBackIcon } from 'naive-ui/es/_internal/icons'
 
 const quoteNumberAsString = useRoute().query.quote_number as string

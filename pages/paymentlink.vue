@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ref, useRuntimeConfig } from '#imports'
-
 definePageMeta({
   name: 'paymentlink',
   layout: 'store',

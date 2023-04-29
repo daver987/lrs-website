@@ -1,5 +1,5 @@
 // Import the function to test
-import { combineLineItemsTwo } from '~/utils/combineLineItems'
+import { combineLineItemsTwo } from '~/utils/general/combineLineItems'
 import { expect, describe, it } from 'vitest'
 
 // Test suite for combineLineItems function

@@ -20,7 +20,7 @@ export async function updateShortLink(
   }
 }
 
-export const createQuoteFromForm = (quotes: {
+export function createQuoteFromForm(quotes: {
   selected_hours: number
   selected_passengers: number
   is_round_trip: boolean
@@ -71,7 +71,7 @@ export const createQuoteFromForm = (quotes: {
   lineItemsIdOne: string
   lineItemsIdTwo: string
   lineItemsIdThree: string
-}) => {
+}) {
   return Prisma.validator<Prisma.QuoteCreateInput>()({
     selected_hours: quotes.selected_hours,
     selected_passengers: quotes.selected_passengers,

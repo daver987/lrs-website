@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from '#imports'
 import { Ref } from 'vue'
 import { useGtm } from '@gtm-support/vue-gtm'
 import { sha256 } from 'js-sha256'

@@ -6,7 +6,6 @@ import {
   TransitionRoot,
 } from '@headlessui/vue'
 import { navigation } from '~/data/navigation'
-import { ref } from '#imports'
 
 definePageMeta({
   title: 'Sign In',
