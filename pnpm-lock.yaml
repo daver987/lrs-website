@@ -129,9 +129,6 @@ devDependencies:
   ics:
     specifier: ^3.1.0
     version: 3.1.0
-  js-sha256:
-    specifier: ^0.9.0
-    version: 0.9.0
   nuxt:
     specifier: ^3.4.3
     version: 3.4.3(@planetscale/database@1.7.0)(@types/node@18.16.2)(typescript@5.0.4)
@@ -192,6 +189,9 @@ devDependencies:
   vue-tel-input:
     specifier: ^8.1.1
     version: 8.1.1
+  vue3-headless-tel-input:
+    specifier: ^0.0.16
+    version: 0.0.16
 
 packages:
 
@@ -2135,6 +2135,18 @@ packages:
       - vue
     dev: true
 
+  /@vueuse/core@9.13.0(vue@3.2.47):
+    resolution: {integrity: sha512-pujnclbeHWxxPRqXWmdkKV5OX4Wk4YeK7wusHqRwU0Q7EFusHoqNA/aPhB6KCh9hEqJkLAJo7bb0Lh9b+OIVzw==}
+    dependencies:
+      '@types/web-bluetooth': 0.0.16
+      '@vueuse/metadata': 9.13.0
+      '@vueuse/shared': 9.13.0(vue@3.2.47)
+      vue-demi: 0.14.0(vue@3.2.47)
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - vue
+    dev: true
+
   /@vueuse/math@10.1.0(vue@3.2.47):
     resolution: {integrity: sha512-CXrrJl7AJbB41+gCnQSx1fclvxf1SwKTh4LVnwiUleyYheHJh1pp2XmH22UEXanY4FCxtdKTkYyRBuYhmyw1kw==}
     dependencies:
@@ -2147,6 +2159,10 @@ packages:
 
   /@vueuse/metadata@10.1.0:
     resolution: {integrity: sha512-cM28HjDEw5FIrPE9rgSPFZvQ0ZYnOLAOr8hl1XM6tFl80U3WAR5ROdnAqiYybniwP5gt9MKKAJAqd/ab2aHkqg==}
+    dev: true
+
+  /@vueuse/metadata@9.13.0:
+    resolution: {integrity: sha512-gdU7TKNAUVlXXLbaF+ZCfte8BjRJQWPCa2J55+7/h+yDtzw3vOoGQDRXzI6pyKyo6bXFT5/QoPE4hAknExjRLQ==}
     dev: true
 
   /@vueuse/nuxt@10.1.0(nuxt@3.4.3)(vue@3.2.47):
@@ -2169,6 +2185,15 @@ packages:
 
   /@vueuse/shared@10.1.0(vue@3.2.47):
     resolution: {integrity: sha512-2X52ogu12i9DkKOQ01yeb/BKg9UO87RNnpm5sXkQvyORlbq8ONS5l39MYkjkeVWWjdT0teJru7a2S41dmHmqjQ==}
+    dependencies:
+      vue-demi: 0.14.0(vue@3.2.47)
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - vue
+    dev: true
+
+  /@vueuse/shared@9.13.0(vue@3.2.47):
+    resolution: {integrity: sha512-UrnhU+Cnufu4S6JLCPZnkWh0WwZGUp72ktOF2DFptMlOs3TOdVv8xJN53zhHGARmVOsz5KqOls09+J1NR6sBKw==}
     dependencies:
       vue-demi: 0.14.0(vue@3.2.47)
     transitivePeerDependencies:
@@ -4553,6 +4578,11 @@ packages:
     engines: {node: '>=10.18.0'}
     dev: true
 
+  /imask@6.6.1:
+    resolution: {integrity: sha512-3JfLZVYABpNUGZpObu92/+3ptwwNIHXWNYqCfS+OaHBmMhLKBAAnGa2oNJWLbx5r3EyWxnkFNb2bX5Dz4wLkuA==}
+    engines: {npm: '>=4.0.0'}
+    dev: true
+
   /import-fresh@3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==}
     engines: {node: '>=6'}
@@ -4902,10 +4932,6 @@ packages:
       editorconfig: 0.15.3
       glob: 8.1.0
       nopt: 6.0.0
-    dev: true
-
-  /js-sha256@0.9.0:
-    resolution: {integrity: sha512-sga3MHh9sgQN2+pJ9VYZ+1LPwXOxuBJBA5nrR5/ofPfuiJBE2hnjsaN8se8JznOmGLN2p49Pe5U/ttafcs/apA==}
     dev: true
 
   /js-string-escape@1.0.1:
@@ -8857,6 +8883,17 @@ packages:
     dependencies:
       libphonenumber-js: 1.10.28
       vue: 3.2.47
+    dev: true
+
+  /vue3-headless-tel-input@0.0.16:
+    resolution: {integrity: sha512-j3FwNLGTov/Ub1ulvbNcKid/loIpGxinW5JR7Tv0aG7mc4vYjLWCNpW7qXBKDLedxKdh8dXZ3+ng5RIuiGFWLw==}
+    dependencies:
+      '@vueuse/core': 9.13.0(vue@3.2.47)
+      imask: 6.6.1
+      libphonenumber-js: 1.10.28
+      vue: 3.2.47
+    transitivePeerDependencies:
+      - '@vue/composition-api'
     dev: true
 
   /vue@2.7.14:

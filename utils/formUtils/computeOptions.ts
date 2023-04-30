@@ -1,7 +1,12 @@
 import type { SelectOption } from 'naive-ui'
 import { Vehicle, Service } from '@prisma/client'
 
-export function computeVehicleOptions(array: Vehicle[]): SelectOption[] {
+export function computeVehicleOptions(
+  array: Vehicle[] | null
+): SelectOption[] | null {
+  if (array === null) {
+    return null
+  }
   return array.map((item) => {
     return {
       label: item.label,
@@ -11,7 +16,12 @@ export function computeVehicleOptions(array: Vehicle[]): SelectOption[] {
   })
 }
 
-export function computeServiceOptions(array: Service[]): SelectOption[] {
+export function computeServiceOptions(
+  array: Service[] | null
+): SelectOption[] | null {
+  if (array === null) {
+    return null
+  }
   return array.map((item) => {
     return {
       label: item.label,
