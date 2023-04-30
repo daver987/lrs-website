@@ -26,7 +26,6 @@ export default defineNuxtConfig({
     'nuxt-icon',
     'nuxt-icons',
     'nuxt-lodash',
-    '@vue-macros/nuxt',
     '@huntersofbook/naive-ui-nuxt',
     [
       '@pinia/nuxt',
