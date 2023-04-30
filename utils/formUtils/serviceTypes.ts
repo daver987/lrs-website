@@ -3,9 +3,13 @@ import { Place } from '~/schema/placeSchema'
 import { isAirport } from '~/utils/formUtils/isAirport'
 
 export function getServiceTypeByNumber(
-  serviceTypes: Service[],
+  serviceTypes: Service[] | null,
   serviceNumber: number
 ): Service | null {
+  if (serviceTypes === null) {
+    return null
+  }
+
   return (
     serviceTypes.find(
       (serviceType) => serviceType.service_number === serviceNumber
@@ -14,9 +18,12 @@ export function getServiceTypeByNumber(
 }
 
 export function getVehicleTypeByNumber(
-  vehicleTypes: Vehicle[],
+  vehicleTypes: Vehicle[] | null,
   vehicleNumber: number
 ): Vehicle | null {
+  if (vehicleTypes === null) {
+    return null
+  }
   return (
     vehicleTypes.find(
       (vehicleType) => vehicleType.vehicle_number === vehicleNumber

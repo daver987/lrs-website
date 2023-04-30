@@ -7,5 +7,12 @@
   },
   "exclude": ["node_modules"],
   "extends": "./.nuxt/tsconfig.json",
-  "types": ["@pinia/nuxt", "@types/ip", "naive-ui/volar"]
+  "types": ["@pinia/nuxt", "@types/ip", "naive-ui/volar"],
+  "vueCompilerOptions": {
+    "target": 3,
+    "plugins": ["@vue-macros/volar/define-models"],
+    "defineModels": {
+      "unified": true
+    }
+  }
 }

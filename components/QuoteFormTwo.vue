@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { useMessage, useLoadingBar } from 'naive-ui'
 import { VueTelInput } from 'vue-tel-input'
-import { sha256 } from 'js-sha256'
 import { useUserStore } from '~/stores/useUserStore'
 import { useQuoteStore } from '~/stores/useQuoteStore'
 import { storeToRefs } from 'pinia'
 import { useGtm } from '@gtm-support/vue-gtm'
-// import type { LineItem, SalesTax, Service, Vehicle } from '@prisma/client'
 import type { FormValue } from '~/utils/formUtils'
 import type { Place } from '~/schema/placeSchema'
 import type { Ref, WatchCallback } from 'vue'
@@ -26,7 +24,7 @@ const { data: service } = await useTrpc().service.get.useQuery()
 const { data: lineItem } = await useTrpc().lineItem.get.useQuery()
 const { data: salesTax } = await useTrpc().salesTax.get.useQuery()
 
-const vehicleOptions = computed(() => {
+const vehicleOptions: ComputedRef<SelectOption[] | null> = computed(() => {
   return computeVehicleOptions(vehicle.value)
 })
 const serviceOptions = computed(() => {
@@ -39,6 +37,7 @@ const hoursOptions = computed(() => {
 const route = useRoute()
 const gtmValues = route.query
 
+//@ts-expect-error
 const formValue: Ref<FormValue> = ref({
   id: user_id.value,
   first_name: '',
@@ -73,7 +72,7 @@ formValue.value.vehicle = computed(() => {
 })
 
 const maxPassengers = computed(() => {
-  const vehicleType = vehicleOptions.value.find(
+  const vehicleType = vehicleOptions.value?.find(
     (type: SelectOption) => type.value === formValue.value.vehicle_number
   )
   return vehicleType ? vehicleType.max_passengers : 3
@@ -93,7 +92,8 @@ const isDisabled = ref(true)
 watch(
   () => formValue.value.service,
   () => {
-    if (formValue.value.service.is_hourly) {
+    //@ts-ignore
+    if (formValue.value.service?.is_hourly) {
       isDisabled.value = false
     } else {
       isDisabled.value = true
@@ -251,13 +251,13 @@ function setEnhancedTracking(
   userId: string
 ) {
   const formattedPhoneNumber: string = phone.replace(/\s+/g, '')
-  const hashedEmail = sha256(email)
-  const hashedPhone = sha256(formattedPhoneNumber)
+  // const hashedEmail = sha256(email)
+  // const hashedPhone = sha256(formattedPhoneNumber)
 
   gtm?.trackEvent({
     set: 'user_data',
-    email: [hashedEmail],
-    phone_number: [hashedPhone],
+    email: email,
+    phone_number: formattedPhoneNumber,
   })
 
   gtm?.trackEvent({
@@ -274,6 +274,7 @@ function setEnhancedTracking(
 async function onSubmit() {
   try {
     loading.value = true
+    //@ts-expect-error
     const quoteData = await useTrpc().quote.postQuote.mutate(formValue.value)
     quoteStore.setQuote(quoteData)
     setTimeout(async () => {
@@ -331,9 +332,9 @@ function disablePreviousDate(ts: number) {
     <n-grid :cols="1" responsive="self">
       <n-grid-item :span="1">
         <div
-          class="border-1 rounded border border-white bg-black p-4 sm:mx-auto sm:w-full sm:max-w-2xl sm:overflow-hidden sm:rounded-lg"
+          class="p-4 bg-black border border-white rounded border-1 sm:mx-auto sm:w-full sm:max-w-2xl sm:overflow-hidden sm:rounded-lg"
         >
-          <h2 class="mb-4 mt-2 text-center text-3xl uppercase text-white">
+          <h2 class="mt-2 mb-4 text-3xl text-center text-white uppercase">
             Instant Quote
           </h2>
           <n-form
@@ -419,7 +420,7 @@ function disablePreviousDate(ts: number) {
                   path="dateTime.return_date"
                 >
                   <n-date-picker
-                    v-model:value="formValue.return_date"
+                    v-model:value="formValue.return_date as any"
                     type="date"
                     placeholder="Select Return Date"
                     :default-value="Date.now()"
@@ -434,7 +435,7 @@ function disablePreviousDate(ts: number) {
                   path="dateTime.return_time"
                 >
                   <n-time-picker
-                    v-model:value="formValue.return_time"
+                    v-model:value="formValue.return_time as any"
                     format="h:mm a"
                     :clearable="true"
                     use12-hours
@@ -452,11 +453,11 @@ function disablePreviousDate(ts: number) {
               >
                 <n-select
                   v-model:value="formValue.service_number"
-                  :options="serviceOptions"
+                  :options="serviceOptions as SelectOption[]"
                   placeholder="Select Service Type..."
                   :input-props="{
-                    id: 'service_type',
-                  }"
+                      id: 'service_type',
+                    }"
                 />
               </n-form-item-gi>
 
@@ -468,11 +469,11 @@ function disablePreviousDate(ts: number) {
               >
                 <n-select
                   v-model:value="formValue.vehicle_number"
-                  :options="vehicleOptions"
+                  :options="vehicleOptions as SelectOption[]"
                   placeholder="Select Vehicle Type..."
                   :input-props="{
-                    id: 'vehicle_type',
-                  }"
+                      id: 'vehicle_type',
+                    }"
                 />
               </n-form-item-gi>
 
@@ -487,8 +488,8 @@ function disablePreviousDate(ts: number) {
                   :options="passengerOptions as SelectOption[]"
                   placeholder="Select Passengers..."
                   :input-props="{
-                    id: 'passengers',
-                  }"
+                      id: 'passengers',
+                    }"
                 />
               </n-form-item-gi>
 
@@ -504,8 +505,8 @@ function disablePreviousDate(ts: number) {
                   placeholder="For Hourly Service..."
                   :disabled="isDisabled"
                   :input-props="{
-                    id: 'hours',
-                  }"
+                      id: 'hours',
+                    }"
                 />
               </n-form-item-gi>
 
@@ -519,9 +520,9 @@ function disablePreviousDate(ts: number) {
                   v-model:value="formValue.first_name"
                   placeholder="Enter First Name..."
                   :input-props="{
-                    id: 'first_name',
-                    type: 'text',
-                  }"
+                      id: 'first_name',
+                      type: 'text',
+                    }"
                 />
               </n-form-item-gi>
 
@@ -535,9 +536,9 @@ function disablePreviousDate(ts: number) {
                   v-model:value="formValue.last_name"
                   placeholder="Enter Last Name..."
                   :input-props="{
-                    id: 'last_name',
-                    type: 'text',
-                  }"
+                      id: 'last_name',
+                      type: 'text',
+                    }"
                 />
               </n-form-item-gi>
 
@@ -551,9 +552,9 @@ function disablePreviousDate(ts: number) {
                   v-model:value="formValue.email_address"
                   placeholder="Enter Email Address..."
                   :input-props="{
-                    id: 'email_address',
-                    type: 'email',
-                  }"
+                      id: 'email_address',
+                      type: 'email',
+                    }"
                 />
               </n-form-item-gi>
 

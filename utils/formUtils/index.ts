@@ -12,10 +12,10 @@ export interface FormValue {
   email_address: string
   phone_number: string
   selected_passengers: null | number
-  pickup_date: string | null
-  pickup_time: string | null
-  return_date: string | null
-  return_time: string | null
+  pickup_date: string | null | undefined
+  pickup_time: string | null | undefined
+  return_date: string | null | undefined
+  return_time: string | null | undefined
   selected_hours: null | number
   vehicle_number: null | number
   service_number: null | number
