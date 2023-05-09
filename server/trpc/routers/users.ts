@@ -27,12 +27,9 @@ export const userRouter = router({
   userForm: publicProcedure
     .input(extendedForm)
     .mutation(async ({ ctx, input }) => {
-      // Find the existing user by email address
       let user = await ctx.prisma.user.findUnique({
         where: { email_address: input.email_address },
       })
-
-      // If the user doesn't exist, create a new user
       if (!user) {
         user = await ctx.prisma.user.create({
           data: {

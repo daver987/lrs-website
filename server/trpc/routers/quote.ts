@@ -15,6 +15,7 @@ import {
   quoteFormReturnSchema,
   QuoteFormSchema,
 } from '~/schema/QuoteFormSchema'
+import chalk from 'chalk'
 
 export const quoteRouter = router({
   getFiltered: publicProcedure
@@ -124,62 +125,66 @@ export const quoteRouter = router({
   get: publicProcedure
     .input(
       z.object({
-        quote_number: z.number().optional(),
+        quote_number: z.number().optional().default(3000),
       })
     )
     .query(async ({ ctx, input }) => {
-      return await ctx.prisma.quote.findUnique({
-        where: { quote_number: input.quote_number },
-        select: {
-          id: true,
-          quote_number: true,
-          selected_hours: true,
-          selected_passengers: true,
-          is_round_trip: true,
-          combined_line_items: true,
-          quote_total: true,
-          quote_subtotal: true,
-          quote_tax_total: true,
-          user: {
-            select: {
-              id: true,
-              first_name: true,
-              last_name: true,
-              phone_number: true,
-              email_address: true,
-              full_name: true,
+      if (input.quote_number === 3000) {
+        return { status: 'NO_QUOTE' }
+      } else {
+        return await ctx.prisma.quote.findUnique({
+          where: { quote_number: input.quote_number },
+          select: {
+            id: true,
+            quote_number: true,
+            selected_hours: true,
+            selected_passengers: true,
+            is_round_trip: true,
+            combined_line_items: true,
+            quote_total: true,
+            quote_subtotal: true,
+            quote_tax_total: true,
+            user: {
+              select: {
+                id: true,
+                first_name: true,
+                last_name: true,
+                phone_number: true,
+                email_address: true,
+                full_name: true,
+              },
             },
-          },
-          vehicle: {
-            select: {
-              label: true,
-              vehicle_image: true,
-              max_luggage: true,
-              vehicle_number: true,
-              fasttrak_id: true,
+            vehicle: {
+              select: {
+                label: true,
+                vehicle_image: true,
+                max_luggage: true,
+                vehicle_number: true,
+                fasttrak_id: true,
+              },
             },
-          },
-          service: {
-            select: {
-              label: true,
+            service: {
+              select: {
+                label: true,
+              },
             },
-          },
-          trips: {
-            orderBy: {
-              trip_order: 'asc',
-            },
-            include: {
-              price: true,
-              payment: true,
-              locations: {
-                orderBy: {
-                  route_order: 'asc',
+            trips: {
+              orderBy: {
+                trip_order: 'asc',
+              },
+              include: {
+                price: true,
+                payment: true,
+                locations: {
+                  orderBy: {
+                    route_order: 'asc',
+                  },
                 },
               },
             },
           },
-        },
-      })
+        })
+      }
     }),
 
   postShortLink: publicProcedure
@@ -336,6 +341,20 @@ export const quoteRouter = router({
         },
       })
       const quote = quoteFormReturnSchema.parse(data)
+      let newObj = JSON.parse(JSON.stringify(quote))
+      newObj.combined_line_items = newObj.combined_line_items.filter(
+        (item) => item.label !== 'Total' && item.label !== 'HST'
+      )
+
+      console.log(chalk.green('[ZAPIER_QUOTE]', JSON.stringify(newObj)))
+      const zapier = await $fetch(
+        'https://hooks.zapier.com/hooks/catch/11745690/340edjn/',
+        {
+          method: 'POST',
+          body: { newObj },
+        }
+      )
+      console.log(chalk.red('[ZAPIER]', JSON.stringify(zapier)))
       shortLink.value = createShortLink(quote.quote_number)
       await Promise.all([
         sendQuoteEmail(quote, sendGridKey, shortLink.value),
