@@ -343,7 +343,7 @@ export const quoteRouter = router({
       const quote = quoteFormReturnSchema.parse(data)
       let newObj = JSON.parse(JSON.stringify(quote))
       newObj.combined_line_items = newObj.combined_line_items.filter(
-        (item) => item.label !== 'Total' && item.label !== 'HST'
+        (item: any) => item.label !== 'Total' && item.label !== 'HST'
       )
 
       console.log(chalk.green('[ZAPIER_QUOTE]', JSON.stringify(newObj)))
