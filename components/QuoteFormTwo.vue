@@ -5,9 +5,10 @@ import { useUserStore } from '~/stores/useUserStore'
 import { useQuoteStore } from '~/stores/useQuoteStore'
 import { storeToRefs } from 'pinia'
 import { useGtm } from '@gtm-support/vue-gtm'
+import { ref } from '#imports'
 import type { FormValue } from '~/utils/formUtils'
 import type { Place } from '~/schema/placeSchema'
-import type { Ref, WatchCallback } from 'vue'
+import type { ComputedRef, Ref, WatchCallback } from 'vue'
 import type { FormInst, FormRules, SelectOption } from 'naive-ui'
 
 const formRef = ref<FormInst | null>(null)
@@ -72,8 +73,10 @@ formValue.value.vehicle = computed(() => {
 })
 
 const maxPassengers = computed(() => {
+  //@ts-ignore
   const vehicleType = vehicleOptions.value?.find(
-    (type: SelectOption) => type.value === formValue.value.vehicle_number
+    (type: SelectOption) =>
+      type.value === (formValue.value.vehicle_number as number)
   )
   return vehicleType ? vehicleType.max_passengers : 3
 })
@@ -248,11 +251,10 @@ function setEnhancedTracking(
   email: string,
   phone: string,
   quoteNumber: number,
-  userId: string
+  userId: string,
+  value: number
 ) {
   const formattedPhoneNumber: string = phone.replace(/\s+/g, '')
-  // const hashedEmail = sha256(email)
-  // const hashedPhone = sha256(formattedPhoneNumber)
 
   gtm?.trackEvent({
     set: 'user_data',
@@ -269,12 +271,16 @@ function setEnhancedTracking(
     set: 'user_id',
     user_id: userId,
   })
+
+  gtm?.trackEvent({
+    set: 'value',
+    value: value,
+  })
 }
 
 async function onSubmit() {
   try {
     loading.value = true
-    //@ts-expect-error
     const quoteData = await useTrpc().quote.postQuote.mutate(formValue.value)
     quoteStore.setQuote(quoteData)
     setTimeout(async () => {
@@ -282,7 +288,8 @@ async function onSubmit() {
         formValue.value.email_address,
         formValue.value.phone_number,
         quoteData.quote_number,
-        user_id.value
+        user_id.value,
+        quoteData.quote_total
       )
       triggerEvent(quoteData.quote_total)
       await navigateTo({
@@ -332,9 +339,9 @@ function disablePreviousDate(ts: number) {
     <n-grid :cols="1" responsive="self">
       <n-grid-item :span="1">
         <div
-          class="p-4 bg-black border border-white rounded border-1 sm:mx-auto sm:w-full sm:max-w-2xl sm:overflow-hidden sm:rounded-lg"
+          class="border-1 rounded border border-white bg-black p-4 sm:mx-auto sm:w-full sm:max-w-2xl sm:overflow-hidden sm:rounded-lg"
         >
-          <h2 class="mt-2 mb-4 text-3xl text-center text-white uppercase">
+          <h2 class="mb-4 mt-2 text-center text-3xl uppercase text-white">
             Instant Quote
           </h2>
           <n-form
@@ -377,7 +384,7 @@ function disablePreviousDate(ts: number) {
                 label="Pickup Date"
               >
                 <n-date-picker
-                  v-model:formatted-value="formValue.pickup_date"
+                  v-model:formatted-value="formValue.pickup_date as string"
                   type="date"
                   placeholder="Select Pickup Date..."
                   :default-value="Date.now()"
@@ -394,7 +401,7 @@ function disablePreviousDate(ts: number) {
               >
                 <n-space justify="space-between">
                   <n-time-picker
-                    v-model:formatted-value="formValue.pickup_time"
+                    v-model:formatted-value="formValue.pickup_time as string"
                     format="h:mm a"
                     :clearable="true"
                     use12-hours
@@ -456,8 +463,8 @@ function disablePreviousDate(ts: number) {
                   :options="serviceOptions as SelectOption[]"
                   placeholder="Select Service Type..."
                   :input-props="{
-                      id: 'service_type',
-                    }"
+                    id: 'service_type',
+                  }"
                 />
               </n-form-item-gi>
 
@@ -472,8 +479,8 @@ function disablePreviousDate(ts: number) {
                   :options="vehicleOptions as SelectOption[]"
                   placeholder="Select Vehicle Type..."
                   :input-props="{
-                      id: 'vehicle_type',
-                    }"
+                    id: 'vehicle_type',
+                  }"
                 />
               </n-form-item-gi>
 
@@ -488,8 +495,8 @@ function disablePreviousDate(ts: number) {
                   :options="passengerOptions as SelectOption[]"
                   placeholder="Select Passengers..."
                   :input-props="{
-                      id: 'passengers',
-                    }"
+                    id: 'passengers',
+                  }"
                 />
               </n-form-item-gi>
 
@@ -505,8 +512,8 @@ function disablePreviousDate(ts: number) {
                   placeholder="For Hourly Service..."
                   :disabled="isDisabled"
                   :input-props="{
-                      id: 'hours',
-                    }"
+                    id: 'hours',
+                  }"
                 />
               </n-form-item-gi>
 
@@ -520,9 +527,9 @@ function disablePreviousDate(ts: number) {
                   v-model:value="formValue.first_name"
                   placeholder="Enter First Name..."
                   :input-props="{
-                      id: 'first_name',
-                      type: 'text',
-                    }"
+                    id: 'first_name',
+                    type: 'text',
+                  }"
                 />
               </n-form-item-gi>
 
@@ -536,9 +543,9 @@ function disablePreviousDate(ts: number) {
                   v-model:value="formValue.last_name"
                   placeholder="Enter Last Name..."
                   :input-props="{
-                      id: 'last_name',
-                      type: 'text',
-                    }"
+                    id: 'last_name',
+                    type: 'text',
+                  }"
                 />
               </n-form-item-gi>
 
@@ -552,9 +559,9 @@ function disablePreviousDate(ts: number) {
                   v-model:value="formValue.email_address"
                   placeholder="Enter Email Address..."
                   :input-props="{
-                      id: 'email_address',
-                      type: 'email',
-                    }"
+                    id: 'email_address',
+                    type: 'email',
+                  }"
                 />
               </n-form-item-gi>
 
