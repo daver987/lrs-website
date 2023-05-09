@@ -103,14 +103,14 @@ export async function createConfirmationEmail(
       quote.trips[0].pickup_time!
     )
     console.log('Combine Date and Time', startTime)
-
+    const webUrl = useRuntimeConfig().public.WEBSITE_URL
     const eventData = {
       start: startTime,
       duration: tripDuration,
       title: 'High Park Livery Booking!',
       description: `Booking for ${quote.user.first_name} ${quote.user.last_name}`,
       location: quote.trips[0].locations[0].full_name!,
-      url: 'https://highparklivey.com',
+      url: webUrl,
       geo: {
         lat: quote.trips[0].locations[0].lat,
         lon: quote.trips[0].locations[0].lng,

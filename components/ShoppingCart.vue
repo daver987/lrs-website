@@ -4,9 +4,9 @@ import { storeToRefs } from 'pinia'
 import { useStripeStore } from '~/stores/useStripeStore'
 import { format } from 'date-fns'
 // import chalk from 'chalk'
-import { storage } from 'nitropack/dist/runtime/virtual/storage'
+// import { storage } from 'nitropack/dist/runtime/virtual/storage'
 
-const { data: storedQuote } = await useTrpc().quote.get.useQuery()
+// const { data: storedQuote } = await useTrpc().quote.get.useQuery()
 const quote = ref(null)
 const quoteNumberAsString = useRoute().query.quote_number as string
 
