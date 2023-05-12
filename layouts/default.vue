@@ -33,6 +33,7 @@ const footerData = {
   companyName: 'High Park Livery',
   companyEmail: 'info@highparklivery.com',
   companyPhone: '+16473609631',
+  companyPhoneDisplay: '647.360.9631',
   companyLogo: '/images/HPL-Logo-White.png',
 }
 </script>

@@ -5,6 +5,7 @@ interface CompanyData {
   companyName: string
   companyEmail: string
   companyPhone: string
+  companyPhoneDisplay: string
   companyLogo: string
 }
 interface Props {
@@ -43,7 +44,7 @@ const props = defineProps<Props>()
             <NuxtLink
               :href="`tel:${companyData.companyPhone}`"
               class="cursor-pointer tracking-wider text-neutral-200 hover:text-brand dark:text-neutral-400"
-              >{{ companyData.companyPhone }}
+              >{{ companyData.companyPhoneDisplay }}
             </NuxtLink>
           </div>
           <div class="flex flex-row justify-items-center">
