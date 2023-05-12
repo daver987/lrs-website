@@ -22,7 +22,7 @@ defineProps({
 <template>
   <div class="p-6 sm:flex">
     <div class="mb-4 flex-shrink-0 sm:mb-0 sm:mr-4">
-      <img :alt="altText" :src="`/icons/${image}.svg`" class="w-10" />
+      <img :alt="altText" :src="`/icons/${image}`" class="w-10 text-white" />
     </div>
     <div>
       <h3

@@ -199,6 +199,5 @@ const qualities = [
         </div>
       </BaseContainer>
     </BaseSection>
-    <AppFooter />
   </div>
 </template>
