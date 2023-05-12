@@ -127,6 +127,5 @@ const tabs = [
         </TabPanel>
       </TabPanels>
     </TabGroup>
-    <AppFooter />
   </div>
 </template>

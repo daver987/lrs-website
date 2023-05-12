@@ -3,18 +3,35 @@ import { servicesHome } from '~/data/servicesHome'
 import { features } from '~/data/features'
 
 definePageMeta({
-  title: 'High Park Livery - Premium Black Car Service in Greater Toronto',
-  description:
-    'High Park Livery offers top-quality black car services in the Greater Toronto Area. Book a ride for airport transfers, corporate travel, or special events.',
   name: 'Home',
   layout: 'default',
   colorMode: 'dark',
+})
+useHead({
+  htmlAttrs: {
+    lang: 'en',
+  },
+  link: [
+    {
+      rel: 'icon',
+      type: 'image/png',
+      href: '/favicon.png',
+    },
+  ],
+  meta: [
+    {
+      name: 'description',
+      content:
+        'High Park Livery offers top-quality black car services in the Greater Toronto Area. Book a ride for airport transfers, corporate travel, or special events.',
+    },
+  ],
+  title: 'High Park Livery - Premium Black Car Service in Greater Toronto',
 })
 
 const color = useColorMode()
 const iconColor = color.value === 'light' ? '#fff' : '#737373'
 const $img = useImage()
-const backgroundImage = ref('/icons/gradient-background.svg')
+const backgroundImage = ref('/images/gradient-background.svg')
 const fleetBackgroundImage = ref('/images/premium_suv-1.jpg')
 const bgImg = useBackgroundImage($img, backgroundImage)
 const fleetBackgroundImg = useBackgroundImage($img, fleetBackgroundImage)
@@ -126,7 +143,7 @@ const fleetBackgroundImg = useBackgroundImage($img, fleetBackgroundImage)
           </p>
         </div>
         <div class="flex w-full place-items-center justify-center p-6">
-          <nuxt-icon name="24-hours" :color="iconColor" />
+          <nuxt-icon name="24-hours.svg" class="text-brand" />
         </div>
       </BaseContainer>
     </BaseSection>
@@ -221,6 +238,5 @@ const fleetBackgroundImg = useBackgroundImage($img, fleetBackgroundImage)
       </BaseContainer>
       <TheLogoCloud />
     </BaseSection>
-    <AppFooter />
   </div>
 </template>

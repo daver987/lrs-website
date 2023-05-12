@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 export async function getSalesTax() {
   const { data, suspense } = useQuery({
     queryKey: ['salesTax'],

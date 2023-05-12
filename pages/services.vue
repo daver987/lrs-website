@@ -144,6 +144,5 @@ const headerInfo = {
         />
       </BaseContainer>
     </BaseSection>
-    <AppFooter />
   </div>
 </template>

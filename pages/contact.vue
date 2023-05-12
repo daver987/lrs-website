@@ -27,6 +27,5 @@ const headerInfo = {
       <ContactForm />
     </BaseSection>
     <Notification :show="false" />
-    <AppFooter />
   </div>
 </template>

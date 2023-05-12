@@ -1,5 +1,3 @@
-// import '@total-typescript/ts-reset'
-
 export default defineNuxtConfig({
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },
@@ -23,9 +21,11 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@nuxt/image-edge',
     '@nuxtjs/color-mode',
+    '@nuxt/devtools',
     'nuxt-icon',
     'nuxt-icons',
     'nuxt-lodash',
+    '@vue-macros/nuxt',
     '@huntersofbook/naive-ui-nuxt',
     [
       '@pinia/nuxt',
@@ -161,4 +161,6 @@ export default defineNuxtConfig({
       alias: { '.prisma/client/index-browser': `@prisma/client/index-browser` },
     },
   },
+  //@ts-ignore
+  devtools: true,
 })

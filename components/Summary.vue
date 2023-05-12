@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ArrowBackIcon } from 'naive-ui/es/_internal/icons'
+import { ref } from '#imports'
 
 const quoteNumberAsString = useRoute().query.quote_number as string
 const quote = await getQuote(quoteNumberAsString)

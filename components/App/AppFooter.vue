@@ -1,18 +1,24 @@
 <script setup lang="ts">
-import { navigation, NavigationItem } from '~/data/navigation'
+import { NavigationItem } from '~/data/navigation'
 
-const companyName = 'High Park Livery'
-const companyEmail = 'info@highparklivery.com'
-const companyPhone = '647.360.9631'
-const companyLogo = '/images/HPL-Logo-White.png'
+interface CompanyData {
+  companyName: string
+  companyEmail: string
+  companyPhone: string
+  companyLogo: string
+}
+interface Props {
+  companyData: CompanyData
+  navigation: NavigationItem[]
+}
 
-const nav = navigation as NavigationItem[]
+const props = defineProps<Props>()
 </script>
 
 <template>
   <footer>
     <div class="px-6 lg:px-10">
-      <FooterCta />
+      <slot name="footer-cta"> </slot>
     </div>
     <div
       class="w-full bg-neutral-800 px-6 pb-8 pt-24 dark:bg-neutral-900 lg:px-10 lg:pb-4 lg:pt-16"
@@ -23,8 +29,8 @@ const nav = navigation as NavigationItem[]
         <div class="my-8 space-y-10">
           <NuxtLink to="/" class="block max-w-[125px]">
             <NuxtPicture
-              :alt="companyName"
-              :src="companyLogo"
+              :alt="companyData.companyName"
+              :src="companyData.companyLogo"
               :img-attrs="{
                 class: 'object-contain object-center w-full',
               }"
@@ -35,17 +41,17 @@ const nav = navigation as NavigationItem[]
           <div class="flex flex-row justify-items-center">
             <Icon class="mr-8 text-3xl text-brand" name="zmdi:phone" />
             <NuxtLink
-              :href="`tel:${companyPhone}`"
+              :href="`tel:${companyData.companyPhone}`"
               class="cursor-pointer tracking-wider text-neutral-200 hover:text-brand dark:text-neutral-400"
-              >{{ companyPhone }}
+              >{{ companyData.companyPhone }}
             </NuxtLink>
           </div>
           <div class="flex flex-row justify-items-center">
             <Icon class="mr-8 text-4xl text-brand" name="ic:outline-mail" />
             <NuxtLink
-              :href="`mailto:${companyEmail}`"
+              :href="`mailto:${companyData.companyEmail}`"
               class="cursor-pointer tracking-widest text-neutral-200 hover:text-brand dark:text-neutral-400"
-              >{{ companyEmail }}
+              >{{ companyData.companyEmail }}
             </NuxtLink>
           </div>
         </div>
@@ -59,13 +65,13 @@ const nav = navigation as NavigationItem[]
             <ul
               class="flex flex-col space-y-2 font-brand-subheading uppercase tracking-widest text-neutral-200 dark:text-neutral-400"
             >
-              <li v-for="myNavigation in nav" :key="myNavigation.id">
+              <li v-for="nav in navigation" :key="nav.id">
                 <NuxtLink
-                  :to="myNavigation.href"
+                  :to="nav.href"
                   active-class="text-brand hover:text-brand-600"
                   class="hover:text-brand"
                 >
-                  {{ myNavigation.name }}
+                  {{ nav.name }}
                 </NuxtLink>
               </li>
             </ul>
@@ -78,7 +84,7 @@ const nav = navigation as NavigationItem[]
           >
             Sign Up
           </label>
-          <EmailInput />
+          <slot name="email-input"> </slot>
           <BaseButton
             button
             kind="btn-solid"
@@ -88,7 +94,7 @@ const nav = navigation as NavigationItem[]
           <p
             class="text-center uppercase tracking-wider text-neutral-200 dark:text-neutral-400"
           >
-            Socialize With {{ companyName }}
+            Socialize With {{ companyData.companyName }}
           </p>
           <div class="max-w-40 mx-auto flex flex-row justify-center gap-8">
             <Icon class="text-3xl text-brand" name="zmdi:facebook" />
@@ -98,6 +104,6 @@ const nav = navigation as NavigationItem[]
         </div>
       </div>
     </div>
-    <SubFooter />
+    <slot name="sub-footer"></slot>
   </footer>
 </template>
