@@ -16,22 +16,19 @@ const headerInfo = {
 const qualities = [
   {
     id: 1,
-    image: 'crown',
-    altText: 'Crown',
+    iconName: 'ph:crown',
     title: 'Exceptional Quality',
     body: "High Park Livery is committed to providing a top-quality fleet of vehicles in Toronto because our customers deserve nothing less than the best. We exclusively utilize the latest, meticulously maintained vehicles, ensuring a comfortable and enjoyable ride. Our professional and courteous drivers guarantee your satisfaction, whether you're heading to the airport or simply require transportation around town. Contact us today to book your exceptional journey with High Park Livery!",
   },
   {
     id: 2,
-    image: 'diamond',
-    altText: 'Diamond',
+    iconName: 'mdi-light:diamond',
     title: 'Unparalleled Luxury',
     body: 'Experience the luxury you deserve with High Park Livery. Our opulent vehicles cater to those seeking a stylish and sophisticated ride, perfect for weddings, business functions, or any special occasion. Our expert drivers offer unrivaled comfort and convenience, ensuring your safe and timely arrival at your destination. Choose High Park Livery to elevate your special occasion to extraordinary heights.',
   },
   {
     id: 3,
-    image: 'armchair',
-    altText: 'Comfort',
+    iconName: 'material-symbols:chair-outline-sharp',
     title: 'Ultimate Comfort',
     body: "At High Park Livery, your comfort is our top priority. Our vehicles are carefully selected to provide the utmost relaxation, featuring luxurious leather seats and ample legroom. Our hand-picked, rigorously trained drivers are dedicated to delivering the highest level of service, ensuring you're in good hands when you choose High Park Livery. We are devoted to providing a consistently comfortable and enjoyable ride for our clients.",
   },
@@ -118,9 +115,8 @@ const qualities = [
           <IconBlockAbout
             v-for="quality in qualities"
             :key="quality.id"
-            :altText="quality.altText"
             :body="quality.body"
-            :image="quality.image"
+            :iconName="quality.iconName"
             :title="quality.title"
           />
         </div>

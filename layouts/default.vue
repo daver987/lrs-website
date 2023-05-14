@@ -36,6 +36,7 @@ const footerData = {
   companyPhoneDisplay: '647.360.9631',
   companyLogo: '/images/HPL-Logo-White.png',
 }
+//todo fix icon colors and icons on services page
 </script>
 
 <template>

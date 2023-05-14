@@ -174,6 +174,9 @@ devDependencies:
   typescript:
     specifier: ^5.0.4
     version: 5.0.4
+  unimport:
+    specifier: ^3.0.6
+    version: 3.0.6(rollup@3.21.0)
   uuid:
     specifier: ^9.0.0
     version: 9.0.0
@@ -6051,8 +6054,8 @@ packages:
     dependencies:
       acorn: 8.8.2
       pathe: 1.1.0
-      pkg-types: 1.0.2
-      ufo: 1.1.1
+      pkg-types: 1.0.3
+      ufo: 1.1.2
     dev: true
 
   /mri@1.2.0:
@@ -8799,7 +8802,7 @@ packages:
       magic-string: 0.30.0
       mlly: 1.2.0
       pathe: 1.1.0
-      pkg-types: 1.0.2
+      pkg-types: 1.0.3
       scule: 1.0.0
       strip-literal: 1.0.1
       unplugin: 1.3.1
