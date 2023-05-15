@@ -1,28 +1,16 @@
 <script setup lang="ts">
-defineProps({
-  image: {
-    type: String,
-    required: true,
-  },
-  altText: {
-    type: String,
-    required: true,
-  },
-  title: {
-    type: String,
-    required: true,
-  },
-  body: {
-    type: String,
-    required: true,
-  },
-})
+interface Props {
+  iconName: string
+  title: string
+  body: string
+}
+defineProps<Props>()
 </script>
 
 <template>
   <div class="p-6 sm:flex">
     <div class="mb-4 flex-shrink-0 sm:mb-0 sm:mr-4">
-      <img :alt="altText" :src="`/icons/${image}`" class="w-10 text-white" />
+      <Icon :name="iconName" size="48" class="text-neutral-400" />
     </div>
     <div>
       <h3

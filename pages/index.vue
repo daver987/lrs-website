@@ -143,7 +143,7 @@ const fleetBackgroundImg = useBackgroundImage($img, fleetBackgroundImage)
           </p>
         </div>
         <div class="flex w-full place-items-center justify-center p-6">
-          <nuxt-icon name="24-hours.svg" class="text-brand" />
+          <icon name="ri:24-hours-line" size="256" class="text-neutral-400" />
         </div>
       </BaseContainer>
     </BaseSection>
@@ -214,10 +214,9 @@ const fleetBackgroundImg = useBackgroundImage($img, fleetBackgroundImage)
       >
         <IconBlockAbout
           v-for="service in servicesHome"
-          :key="service.title"
-          :alt-text="service.altText"
+          :key="service.id"
           :body="service.body"
-          :image="service.image"
+          :icon-name="service.iconName"
           :title="service.title"
           class="shadow-none"
         />

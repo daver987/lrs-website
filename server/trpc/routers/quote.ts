@@ -1,21 +1,35 @@
 import { publicProcedure, router } from '../trpc'
 import { z } from 'zod'
-import { formatAddress } from '~/utils'
 import {
   sendTwilioSms,
   createAircallContact,
   sendQuoteEmail,
-} from '~/server/utils'
-import { usePricingEngine, useLinkShortener } from '~/composables'
-import {
   createQuoteFromForm,
   updateShortLink,
-} from '~/server/utils/helpers/trpcUtils'
+  formatAddress,
+} from '~/utils'
+import { usePricingEngine, useLinkShortener } from '~/composables'
 import {
   quoteFormReturnSchema,
   QuoteFormSchema,
 } from '~/schema/QuoteFormSchema'
 import chalk from 'chalk'
+import { Prisma } from '@prisma/client'
+
+type QuoteWithRelations = Prisma.QuoteGetPayload<{
+  include: {
+    user: true
+    vehicle: true
+    service: true
+    trips: {
+      include: {
+        price: true
+        payment: true
+        locations: true
+      }
+    }
+  }
+}>
 
 export const quoteRouter = router({
   getFiltered: publicProcedure
@@ -128,64 +142,72 @@ export const quoteRouter = router({
         quote_number: z.number().optional().default(3000),
       })
     )
-    .query(async ({ ctx, input }) => {
-      if (input.quote_number === 3000) {
-        return { status: 'NO_QUOTE' }
-      } else {
-        return await ctx.prisma.quote.findUnique({
-          where: { quote_number: input.quote_number },
-          select: {
-            id: true,
-            quote_number: true,
-            selected_hours: true,
-            selected_passengers: true,
-            is_round_trip: true,
-            combined_line_items: true,
-            quote_total: true,
-            quote_subtotal: true,
-            quote_tax_total: true,
-            user: {
-              select: {
-                id: true,
-                first_name: true,
-                last_name: true,
-                phone_number: true,
-                email_address: true,
-                full_name: true,
+    .query(
+      async ({
+        ctx,
+        input,
+      }): Promise<QuoteWithRelations | { status: 'NO_QUOTE' }> => {
+        if (input.quote_number === 3000) {
+          return { status: 'NO_QUOTE' }
+        } else {
+          const quote = await ctx.prisma.quote.findUnique({
+            where: { quote_number: input.quote_number },
+            select: {
+              id: true,
+              quote_number: true,
+              selected_hours: true,
+              selected_passengers: true,
+              is_round_trip: true,
+              combined_line_items: true,
+              quote_total: true,
+              quote_subtotal: true,
+              quote_tax_total: true,
+              user: {
+                select: {
+                  id: true,
+                  first_name: true,
+                  last_name: true,
+                  phone_number: true,
+                  email_address: true,
+                  full_name: true,
+                  stripe_customer_id: true,
+                },
               },
-            },
-            vehicle: {
-              select: {
-                label: true,
-                vehicle_image: true,
-                max_luggage: true,
-                vehicle_number: true,
-                fasttrak_id: true,
+              vehicle: {
+                select: {
+                  label: true,
+                  vehicle_image: true,
+                  max_luggage: true,
+                  vehicle_number: true,
+                  fasttrak_id: true,
+                },
               },
-            },
-            service: {
-              select: {
-                label: true,
+              service: {
+                select: {
+                  label: true,
+                },
               },
-            },
-            trips: {
-              orderBy: {
-                trip_order: 'asc',
-              },
-              include: {
-                price: true,
-                payment: true,
-                locations: {
-                  orderBy: {
-                    route_order: 'asc',
+              trips: {
+                orderBy: {
+                  trip_order: 'asc',
+                },
+                include: {
+                  price: true,
+                  payment: true,
+                  locations: {
+                    orderBy: {
+                      route_order: 'asc',
+                    },
                   },
                 },
               },
             },
-          },
-        })
+          })
+          console.log('[RETURNED_QUOTE]', quote)
+          return quote as QuoteWithRelations
+        }
       }
-    }),
+    ),
 
   postShortLink: publicProcedure
     .input(

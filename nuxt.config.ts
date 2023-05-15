@@ -1,3 +1,5 @@
+import Unimport from 'unimport/dist/unplugin'
+
 export default defineNuxtConfig({
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },
@@ -23,7 +25,6 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@nuxt/devtools',
     'nuxt-icon',
-    'nuxt-icons',
     'nuxt-lodash',
     '@vue-macros/nuxt',
     '@huntersofbook/naive-ui-nuxt',

@@ -136,10 +136,9 @@ const headerInfo = {
       >
         <IconBlockAbout
           v-for="tour in tours"
-          :key="tour.title"
-          :alt-text="tour.altText"
+          :key="tour.id"
           :body="tour.body"
-          :image="tour.image"
+          :iconName="tour.iconName"
           :title="tour.title"
         />
       </BaseContainer>
