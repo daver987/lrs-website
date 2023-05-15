@@ -101,24 +101,28 @@ const qualities = [
     </BaseSection>
     <BaseSection>
       <BaseContainer class="place-items-center md:grid md:grid-cols-2">
-        <NuxtPicture
-          :img-attrs="{
-            class:
-              'object-center object-cover w-full min-h-[18rem] self-center md:object-left',
-          }"
-          alt="Tesla-S-Back-Seat"
-          loading="lazy"
-          src="/images/tesla-s-4.jpg"
-          width="814"
-        />
-        <div class="bg-white shadow-xl dark:bg-neutral-700">
-          <IconBlockAbout
-            v-for="quality in qualities"
-            :key="quality.id"
-            :body="quality.body"
-            :iconName="quality.iconName"
-            :title="quality.title"
+        <div class="w-full max-w-xl">
+          <NuxtPicture
+            :img-attrs="{
+              class:
+                'object-center object-cover w-full min-h-[18rem] self-center md:object-left',
+            }"
+            alt="Tesla-S-Back-Seat"
+            loading="lazy"
+            src="/images/tesla-s-4.jpg"
+            width="814"
           />
+        </div>
+        <div class="w-full max-w-xl">
+          <div class="bg-white shadow-xl dark:bg-neutral-700">
+            <IconBlockAbout
+              v-for="quality in qualities"
+              :key="quality.id"
+              :body="quality.body"
+              :iconName="quality.iconName"
+              :title="quality.title"
+            />
+          </div>
         </div>
       </BaseContainer>
     </BaseSection>
