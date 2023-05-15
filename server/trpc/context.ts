@@ -1,14 +1,8 @@
 import { inferAsyncReturnType } from '@trpc/server'
 import type { H3Event } from 'h3'
 import { prismaDb } from '~/server/prismadb'
-import { stripe } from '~/server/utils/services/stripeInit'
-import openai from 'openai'
+import { stripe } from '~/utils/'
 import { createPSContext } from '~/server/psdb'
-
-const apiKey = useRuntimeConfig().OPENAI_API_KEY
-const { Configuration, OpenAIApi } = openai
-const configuration = new Configuration({ apiKey })
-const openAI = new OpenAIApi(configuration)
 
 /**
  * Creates context for an incoming request
@@ -27,7 +21,6 @@ export async function createContext(_event: H3Event) {
     prisma: prismaDb,
     twilioClient: _event.context.twilioClient,
     stripe: stripe,
-    openai: openAI,
   }
 }
 

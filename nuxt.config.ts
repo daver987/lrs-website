@@ -25,7 +25,6 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@nuxt/devtools',
     'nuxt-icon',
-    'nuxt-icons',
     'nuxt-lodash',
     '@vue-macros/nuxt',
     '@huntersofbook/naive-ui-nuxt',
@@ -162,15 +161,6 @@ export default defineNuxtConfig({
     resolve: {
       alias: { '.prisma/client/index-browser': `@prisma/client/index-browser` },
     },
-    plugins: [
-      Unimport.vite({
-        include: [/\.[tj]sx?$/, /\.vue$/, /\.vue\?vue/],
-        presets: ['vue'],
-        addons: {
-          vueTemplate: true,
-        },
-      }),
-    ],
   },
   //@ts-ignore
   devtools: true,
