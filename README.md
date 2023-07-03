@@ -19,7 +19,7 @@ This is a modern website for the High Park Livery, a black car service. The webs
 
 ## Hosting
 
-- Hosted on Netlify https://highparklivery.com
+- Hosted on Netlify https://high-park-livery.netlify.app
 
 ## Setup & Installation
 
