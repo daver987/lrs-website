@@ -35,6 +35,10 @@ export default defineNuxtConfig({
     ],
   ],
 
+  image: {
+    provider: 'netlify',
+  },
+
   nitro: {
     preset: 'netlify',
   },
