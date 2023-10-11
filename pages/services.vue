@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { services } from '~/data/services'
 import { ourTours } from '~/data/tours'
 
@@ -15,7 +15,7 @@ const $img = useImage()
 
 const backgroundImage = computed(() => {
   const imgUrl = $img('images/toronto-9.jpg', {
-    width: '100%',
+    width: 100,
     style: 'filter: greyscale(100%)',
   })
   return { backgroundImage: `url('${imgUrl}')` }
@@ -68,17 +68,17 @@ const headerInfo = {
     <BaseSection>
       <BaseContainer class="grid grid-cols-1 md:grid md:grid-cols-2 md:gap-4">
         <div
-          :class="service.boxPosition"
           v-for="service in services"
           :key="service.title"
+          :class="service.boxPosition"
         >
           <div :class="service.imagePosition">
             <NuxtPicture
               :alt="service.altText"
-              :src="service.image"
               :img-attrs="{
                 class: 'object-cover object-center w-full',
               }"
+              :src="service.image"
             />
           </div>
           <div :class="service.infoPosition" class="flex">
@@ -102,11 +102,11 @@ const headerInfo = {
                 {{ service.body }}
               </p>
               <BaseButton
+                :nuxtLink="true"
                 class="mt-8"
                 kind="btn-brand"
                 label="Contact Us"
                 to="/contact"
-                :nuxtLink="true"
               />
             </div>
           </div>
@@ -114,8 +114,8 @@ const headerInfo = {
       </BaseContainer>
     </BaseSection>
     <BaseSection
-      class="space-y-3 bg-cover bg-center bg-no-repeat"
       :style="backgroundImage"
+      class="space-y-3 bg-cover bg-center bg-no-repeat"
     >
       <div class="w-full">
         <p

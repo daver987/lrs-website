@@ -5,13 +5,13 @@
     >
     <div class="relative max-w-xl">
       <input
-        :name="name"
         :id="id"
-        :type="type"
-        class="w-full rounded-none font-brand-body input input-bordered input-sm placeholder:font-brand-body"
-        :placeholder="placeholder"
         v-model="inputValue"
+        :name="name"
+        :placeholder="placeholder"
         :required="required"
+        :type="type"
+        class="input input-bordered input-sm w-full rounded-none font-brand-body placeholder:font-brand-body"
       />
     </div>
     <span v-show="validation" class="label-text text-error">
@@ -20,7 +20,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 const {
   inputValue,
   id,
@@ -37,7 +37,7 @@ const {
   id: string
   name?: string
   label?: string
-  type: string,
+  type: string
   placeholder?: string
   required?: boolean
   validation?: boolean

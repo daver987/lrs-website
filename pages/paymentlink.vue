@@ -1,8 +1,19 @@
-<script setup lang="ts">
+<script lang="ts" setup>
+import { OpenAI } from 'langchain/llms/openai'
+import { PromptTemplate } from 'langchain/prompts'
+import vehicle from '~/components/Vehicle.vue'
+
 definePageMeta({
   name: 'paymentlink',
   layout: 'store',
   colorMode: 'dark',
+})
+
+const model = new OpenAI({ temperature: 0.9 })
+const template = 'What is a good name for a company that makes {product}?'
+const prompt = new PromptTemplate({
+  template: template,
+  inputVariables: ['product'],
 })
 
 // type CombinedLineItems = {
@@ -69,7 +80,7 @@ publicKey.value = useRuntimeConfig().public.STRIPE_PUBLISHABLE_KEY
 
 onMounted(() => {
   nextTick(async () => {
-    await stripeClient.initStripePaymentRequestButton()
+    await stripeClient.initStripePaymentRequestButton(1000)
   })
 })
 
@@ -84,26 +95,26 @@ const isLoading = ref(false)
   <div class="h-screen w-full">
     <!-- Background color split screen for large screens -->
     <div
-      class="fixed left-0 top-0 hidden h-full w-1/2 bg-neutral-100 lg:block"
       aria-hidden="true"
+      class="fixed left-0 top-0 hidden h-full w-1/2 bg-neutral-100 lg:block"
     />
     <div
-      class="fixed right-0 top-0 hidden h-full w-1/2 bg-brand-900 lg:block"
       aria-hidden="true"
+      class="fixed right-0 top-0 hidden h-full w-1/2 bg-brand-900 lg:block"
     />
 
     <header
       class="relative mx-auto max-w-7xl bg-brand-900 py-6 lg:grid lg:grid-cols-2 lg:gap-x-16 lg:bg-transparent lg:px-8 lg:pb-10 lg:pt-16"
     >
       <div class="mx-auto flex max-w-2xl px-4 lg:w-full lg:max-w-lg lg:px-0">
-        <NuxtLink to="/" class="self-center">
+        <NuxtLink class="self-center" to="/">
           <span class="sr-only">High Park Livery</span>
           <NuxtPicture
             :img-attrs="{
               class: 'w-auto h-12 lg:h-14',
             }"
-            src="/images/HPL-Logo-White.png"
             alt="High Park Livery Logo"
+            src="/images/HPL-Logo-White.png"
             width="1920"
           />
         </NuxtLink>
@@ -133,8 +144,8 @@ const isLoading = ref(false)
             </dl>
 
             <ul
-              role="list"
               class="divide-y divide-neutral-200 text-sm font-medium"
+              role="list"
             >
               <li
                 v-for="trip in trips"
@@ -142,12 +153,12 @@ const isLoading = ref(false)
                 class="flex items-start space-x-4 py-6"
               >
                 <NuxtPicture
+                  :alt="vehicle.label"
                   :img-attrs="{
                     class:
                       'h-32 w-32 flex-none rounded-md object-contain object-center',
                   }"
                   :src="vehicle.vehicle_image!"
-                  :alt="vehicle.label"
                 />
                 <div class="flex-auto space-y-1">
                   <h3 class="text-brand-900">{{ service.label }}</h3>
@@ -212,11 +223,11 @@ const isLoading = ref(false)
                 class="mt-2 flex justify-end border-t border-neutral-200 pt-6"
               >
                 <button
-                  type="submit"
                   id="submit"
                   class="w-full rounded-md border border-transparent bg-brand-600 px-4 py-2 text-sm font-medium uppercase text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-neutral-50"
+                  type="submit"
                 >
-                  <div class="spinner hidden" id="spinner"></div>
+                  <div id="spinner" class="spinner hidden"></div>
                   <span v-if="isLoading" id="button-text"
                     >Processing......</span
                   >

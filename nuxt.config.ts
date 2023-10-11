@@ -1,5 +1,3 @@
-import Unimport from 'unimport/dist/unplugin'
-
 export default defineNuxtConfig({
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },
@@ -18,10 +16,11 @@ export default defineNuxtConfig({
   css: ['vue-tel-input/vue-tel-input.css'],
 
   modules: [
+    '@zadigetvoltaire/nuxt-gtm',
     '@vueuse/nuxt',
     '@nuxtjs/robots',
     '@nuxtjs/tailwindcss',
-    '@nuxt/image-edge',
+    '@nuxt/image',
     '@nuxtjs/color-mode',
     '@nuxt/devtools',
     'nuxt-icon',
@@ -36,10 +35,6 @@ export default defineNuxtConfig({
     ],
   ],
 
-  image: {
-    provider: 'netlify',
-  },
-
   nitro: {
     preset: 'netlify',
   },
@@ -53,7 +48,7 @@ export default defineNuxtConfig({
   },
 
   typescript: {
-    shim: true,
+    shim: false,
   },
 
   naiveUI: {
@@ -142,6 +137,14 @@ export default defineNuxtConfig({
     AIRCALL_API_ID: process.env.AIRCALL_API_ID,
     SENDGRID_API_KEY: process.env.SENDGRID_API_KEY,
     public: {
+      gtm: {
+        id: process.env.GTM_ID as string,
+        defer: false,
+        enabled: process.env.TAG_MANAGER_ENABLED === 'true',
+        debug: true,
+        loadScript: true,
+        devtools: true,
+      },
       GA4_SEND_TO: process.env.GA4_SEND_TO,
       G_ADS_QUOTE_SUBMIT_CONVERSION: process.env.G_ADS_QUOTE_SUBMIT_CONVERSION,
       G_ADS_QUOTE_SUBMIT_CONVERSION_LABEL:

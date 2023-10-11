@@ -138,7 +138,7 @@ import { navigation } from '~/data/navigation'
       </div>
 
       <DisclosurePanel class="sm:hidden">
-        <div class="space-y-1 pt-2 pb-3">
+        <div class="space-y-1 pb-3 pt-2">
           <!-- Current: "bg-brand-50 border-brand text-brand-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" -->
           <DisclosureButton
             as="a"
@@ -169,7 +169,7 @@ import { navigation } from '~/data/navigation'
             Calendar
           </DisclosureButton>
         </div>
-        <div class="border-t border-gray-200 pt-4 pb-3">
+        <div class="border-t border-gray-200 pb-3 pt-4">
           <div class="flex items-center px-4">
             <div class="flex-shrink-0">
               <img

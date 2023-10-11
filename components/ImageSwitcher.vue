@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 const images = [
   '/images/premium_sedan-3.png',
   '/images/premium_suv-2.png',
@@ -23,7 +23,7 @@ watchEffect((onInvalidate) => {
 
 <template>
   <div class="image-container">
-    <transition name="crossfade" mode="out-in">
+    <transition mode="out-in" name="crossfade">
       <img
         :key="images[currentImageIndex]"
         :src="images[currentImageIndex]"

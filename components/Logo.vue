@@ -1,29 +1,29 @@
 <template>
   <NuxtLink to="/">
-    <div class="logo" :class="[size, shape]">
+    <div :class="[size, shape]" class="logo">
       <NuxtPicture
         v-if="shape === 'round'"
         :src="logoRound"
-        alt="Company Logo"
         :width="imageWidth"
+        alt="Company Logo"
       />
       <NuxtPicture
         v-else-if="lettersOnly"
         :src="logoLetters"
-        alt="Company Logo"
         :width="imageWidth"
+        alt="Company Logo"
       />
       <NuxtPicture
         v-else
         :src="logoDefault"
-        alt="Company Logo"
         :width="imageWidth"
+        alt="Company Logo"
       />
     </div>
   </NuxtLink>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 const props = defineProps({
   size: {
     type: String,

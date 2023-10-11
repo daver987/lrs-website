@@ -9,7 +9,7 @@
         </h2>
       </div>
       <div>
-        <NuxtPicture src="/images/tesla-s-1.png" alt="Tesla S" width="1083" />
+        <NuxtPicture alt="Tesla S" src="/images/tesla-s-1.png" width="1083" />
       </div>
     </div>
     <div class="mb-12 grid grid-cols-1 place-items-center md:grid-cols-2">
@@ -28,23 +28,23 @@
         </p>
       </BaseCard>
       <div>
-        <NuxtPicture src="/images/tesla-s-3.jpg" alt="Tesla S" width="828" />
+        <NuxtPicture alt="Tesla S" src="/images/tesla-s-3.jpg" width="828" />
       </div>
     </div>
     <div class="mb-12 grid grid-cols-1 gap-4">
       <div class="col-span-1">
         <NuxtPicture
-          src="/images/tesla-s-2.jpg"
-          alt="Tesla S"
           :img-attrs="{
             class: 'object-cover object-center w-full md:max-w-5xl',
           }"
+          alt="Tesla S"
+          src="/images/tesla-s-2.jpg"
           width="2760"
         />
       </div>
     </div>
     <div class="flex w-full flex-row justify-end">
-      <Luggage :peopleAmount="3" :luggageAmount="3" class="md:-mt-48" />
+      <Luggage :luggageAmount="3" :peopleAmount="3" class="md:-mt-48" />
     </div>
   </div>
 </template>

@@ -1,5 +1,5 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import { Vehicle, Service, LineItem, SalesTax } from '~/prisma/generated/zod'
+import { Vehicle, Service, LineItem, SalesTax } from '~/schema/prismaSchemas'
 
 export const useDataStore = defineStore('data', {
   state: () => {
@@ -28,6 +28,5 @@ export const useDataStore = defineStore('data', {
 })
 
 if (import.meta.hot) {
-  // @ts-ignore
   import.meta.hot.accept(acceptHMRUpdate(useDataStore, import.meta.hot))
 }

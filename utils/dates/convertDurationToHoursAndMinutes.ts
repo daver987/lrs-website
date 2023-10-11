@@ -18,7 +18,7 @@ type DateAndTime = [
   month: number,
   day: number,
   hours: number,
-  minutes: number
+  minutes: number,
 ]
 export function combineDateAndTime(
   dateTimestamp: number,

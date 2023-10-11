@@ -32,6 +32,103 @@ type QuoteWithRelations = Prisma.QuoteGetPayload<{
 }>
 
 export const quoteRouter = router({
+  get: publicProcedure
+    .input(
+      z.object({
+        quote_number: z.number().optional().default(3000),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      if (input.quote_number === 3000) {
+        return { status: 'NO_QUOTE' }
+      } else {
+        const quote = await ctx.prisma.quote.findUnique({
+          where: { quote_number: input.quote_number },
+          select: {
+            id: true,
+            quote_number: true,
+            selected_hours: true,
+            selected_passengers: true,
+            is_round_trip: true,
+            combined_line_items: true,
+            quote_total: true,
+            quote_subtotal: true,
+            quote_tax_total: true,
+            user: {
+              select: {
+                id: true,
+                first_name: true,
+                last_name: true,
+                phone_number: true,
+                email_address: true,
+                full_name: true,
+                stripe_customer_id: true,
+              },
+            },
+            vehicle: {
+              select: {
+                label: true,
+                vehicle_image: true,
+                max_luggage: true,
+                vehicle_number: true,
+                fasttrak_id: true,
+              },
+            },
+            service: {
+              select: {
+                label: true,
+              },
+            },
+            trips: {
+              orderBy: {
+                trip_order: 'asc',
+              },
+              include: {
+                price: true,
+                payment: true,
+                locations: {
+                  orderBy: {
+                    route_order: 'asc',
+                  },
+                },
+              },
+            },
+          },
+        })
+        console.log('[RETURNED_QUOTE]', quote)
+        return { status: 'FOUND_QUOTE', quote }
+      }
+    }),
+
+  getCreatedAt: publicProcedure
+    .input(
+      z.object({
+        quote_number: z.number(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const result = await ctx.prisma.quote.findUnique({
+        where: {
+          quote_number: input.quote_number,
+        },
+        select: {
+          created_at: true,
+          is_booked: true,
+        },
+      })
+      console.log('Server Result:', result)
+
+      if (!result) {
+        console.log("Quote doesn't exist")
+        return result
+      } else {
+        return {
+          created_at: result.created_at,
+          is_booked: result.is_booked,
+        }
+      }
+    }),
+
   getFiltered: publicProcedure
     .input(
       z.object({
@@ -105,124 +202,6 @@ export const quoteRouter = router({
       })
       console.log(quoteReturn)
       return quoteReturn[0]
-    }),
-
-  getCreatedAt: publicProcedure
-    .input(
-      z.object({
-        quote_number: z.number(),
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      const result = await ctx.prisma.quote.findUnique({
-        where: {
-          quote_number: input.quote_number,
-        },
-        select: {
-          created_at: true,
-          is_booked: true,
-        },
-      })
-      console.log('Server Result:', result)
-
-      if (!result) {
-        console.log("Quote doesn't exist")
-        return result
-      } else {
-        return {
-          created_at: result.created_at,
-          is_booked: result.is_booked,
-        }
-      }
-    }),
-
-  get: publicProcedure
-    .input(
-      z.object({
-        quote_number: z.number().optional().default(3000),
-      })
-    )
-    .query(
-      async ({
-        ctx,
-        input,
-      }): Promise<QuoteWithRelations | { status: 'NO_QUOTE' }> => {
-        if (input.quote_number === 3000) {
-          return { status: 'NO_QUOTE' }
-        } else {
-          const quote = await ctx.prisma.quote.findUnique({
-            where: { quote_number: input.quote_number },
-            select: {
-              id: true,
-              quote_number: true,
-              selected_hours: true,
-              selected_passengers: true,
-              is_round_trip: true,
-              combined_line_items: true,
-              quote_total: true,
-              quote_subtotal: true,
-              quote_tax_total: true,
-              user: {
-                select: {
-                  id: true,
-                  first_name: true,
-                  last_name: true,
-                  phone_number: true,
-                  email_address: true,
-                  full_name: true,
-                  stripe_customer_id: true,
-                },
-              },
-              vehicle: {
-                select: {
-                  label: true,
-                  vehicle_image: true,
-                  max_luggage: true,
-                  vehicle_number: true,
-                  fasttrak_id: true,
-                },
-              },
-              service: {
-                select: {
-                  label: true,
-                },
-              },
-              trips: {
-                orderBy: {
-                  trip_order: 'asc',
-                },
-                include: {
-                  price: true,
-                  payment: true,
-                  locations: {
-                    orderBy: {
-                      route_order: 'asc',
-                    },
-                  },
-                },
-              },
-            },
-          })
-          console.log('[RETURNED_QUOTE]', quote)
-          return quote as QuoteWithRelations
-        }
-      }
-    ),
-
-  postShortLink: publicProcedure
-    .input(
-      z.object({
-        quote_number: z.number(),
-        short_link: z.string(),
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      return await ctx.prisma.quote.update({
-        where: { quote_number: input.quote_number },
-        data: {
-          short_link: input.short_link,
-        },
-      })
     }),
 
   postQuote: publicProcedure
@@ -386,5 +365,21 @@ export const quoteRouter = router({
       ])
       await useStorage().setItem('quote', quote)
       return quote
+    }),
+
+  postShortLink: publicProcedure
+    .input(
+      z.object({
+        quote_number: z.number(),
+        short_link: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.quote.update({
+        where: { quote_number: input.quote_number },
+        data: {
+          short_link: input.short_link,
+        },
+      })
     }),
 })

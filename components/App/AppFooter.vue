@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { NavigationItem } from '~/data/navigation'
 
 interface CompanyData {
@@ -8,6 +8,7 @@ interface CompanyData {
   companyPhoneDisplay: string
   companyLogo: string
 }
+
 interface Props {
   companyData: CompanyData
   navigation: NavigationItem[]
@@ -19,7 +20,7 @@ const props = defineProps<Props>()
 <template>
   <footer>
     <div class="px-6 lg:px-10">
-      <slot name="footer-cta"> </slot>
+      <slot name="footer-cta"></slot>
     </div>
     <div
       class="w-full bg-neutral-800 px-6 pb-8 pt-24 dark:bg-neutral-900 lg:px-10 lg:pb-4 lg:pt-16"
@@ -28,13 +29,13 @@ const props = defineProps<Props>()
         class="mx-auto grid max-w-7xl grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:gap-8"
       >
         <div class="my-8 space-y-10">
-          <NuxtLink to="/" class="block max-w-[125px]">
+          <NuxtLink class="block max-w-[125px]" to="/">
             <NuxtPicture
               :alt="companyData.companyName"
-              :src="companyData.companyLogo"
               :img-attrs="{
                 class: 'object-contain object-center w-full',
               }"
+              :src="companyData.companyLogo"
               width="1920"
             />
           </NuxtLink>
@@ -80,16 +81,16 @@ const props = defineProps<Props>()
         </div>
         <div class="my-8 space-y-6 lg:space-y-4">
           <label
-            for="email"
             class="font-subheading uppercase leading-relaxed tracking-[0.5em] text-brand md:text-lg"
+            for="email"
           >
             Sign Up
           </label>
-          <slot name="email-input"> </slot>
+          <slot name="email-input"></slot>
           <BaseButton
             button
-            kind="btn-solid"
             class="w-full"
+            kind="btn-solid"
             label="Subscribe"
           />
           <p

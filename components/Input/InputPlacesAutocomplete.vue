@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { Loader } from '@googlemaps/js-api-loader'
 
 const props = defineProps({
@@ -66,10 +66,10 @@ const getAutocompleteComponents = () => {
   console.log('Returned place components:', place.value)
   const { place_id } = place.value
   console.log(place_id)
-  emit('change', place.value)
+  emit(['change'], place.value)
   return place_id
 }
-const emit = defineEmits('update:modelValue')
+const emit = defineEmits(['update:modelValue'])
 const handleInput = (event: Event) => {
   const target = event.target as HTMLInputElement
   emit('update:modelValue', target.value)
@@ -89,12 +89,12 @@ const modelValue = ref('')
       label
     }}</label>
     <input
+      :id="name"
       ref="inputField"
       :aria-label="label"
       :name="name"
-      :id="name"
-      type="text"
       class="autocomplete-input"
+      type="text"
       @input="handleInput"
     />
   </div>

@@ -1,0 +1,29 @@
+# Nuxt dev/build outputs
+.output
+.nuxt
+# Node dependencies
+node_modules
+
+# Logs
+logs
+# Misc
+.DS_Store
+.fleet
+.idea
+README.md
+
+
+# Local env files
+.env
+.env.*
+!.env.example
+.github
+.netlify
+.vscode
+public
+pnpm-lock.yaml
+.npmrc
+.lfsconfig
+.gitattributes
+.gitignore
+data

@@ -17,14 +17,17 @@ const loading = ref(false)
 
 onMounted(async () => {
   if (typeof quoteNumberAsString === 'string') {
-    const { data: fetchedQuote, isLoading } = await useTrpc().quote.useQuery(
-      quoteNumberAsString
-    )
-    loading.value = isLoading.value
-    quote.value = fetchedQuote
-    vehicleImage.value = fetchedQuote.vehicle.vehicle_image!
-    vehicleLabel.value = fetchedQuote.vehicle.label
-    serviceLabel.value = fetchedQuote.service.label
+    const quoteNumber = parseInt(quoteNumberAsString)
+    const data = await useTrpc().quote.get.query({
+      quote_number: quoteNumber,
+    })
+    if (data.status === 'NO_QUOTE') {
+      return
+    } else if (data.status === 'FOUND_QUOTE' && data.quote) {
+      vehicleImage.value = data.quote.vehicle.vehicle_image!
+      vehicleLabel.value = data.quote.vehicle.label
+      serviceLabel.value = data.quote.service.label
+    }
   }
 })
 

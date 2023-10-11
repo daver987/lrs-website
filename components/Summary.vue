@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { ArrowBackIcon } from 'naive-ui/es/_internal/icons'
 import { ref } from '#imports'
 
@@ -6,6 +6,7 @@ const quoteNumberAsString = useRoute().query.quote_number as string
 const quote = await getQuote(quoteNumberAsString)
 
 const orderSummary = ref(null)
+//      ^?
 
 async function sendConfirmation(quoteData) {
   await useTrpc().book.confirmOrder.mutate(quoteData)
@@ -27,28 +28,29 @@ const goHome = async () => {
 <template>
   <div class="mx-auto max-w-6xl px-6 pb-6">
     <div class="flex w-full justify-between py-1 uppercase">
-      <n-button @click="goHome" color="#A57C52" text
-        ><template #icon>
+      <n-button color="#A57C52" text @click="goHome">
+        <template #icon>
           <n-icon>
             <ArrowBackIcon />
-          </n-icon> </template
-        >DONE</n-button
-      >
+          </n-icon>
+        </template>
+        DONE
+      </n-button>
       <button
-        @click="saveOrderSummary"
-        type="button"
         class="hover:bg-brand-500 rounded-md bg-brand-600 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
+        type="button"
+        @click="saveOrderSummary"
       >
         Save as PDF
       </button>
     </div>
-    <div class="bg-white p-4 md:p-8" id="order-summary" ref="orderSummary">
+    <div id="order-summary" ref="orderSummary" class="bg-white p-4 md:p-8">
       <div class="mx-auto w-full md:max-w-4xl">
         <div class="mb-6 flex items-center justify-between">
           <NuxtPicture
+            alt="Logo"
             class="h-auto w-32"
             src="/images/hpl-logo-dark.png"
-            alt="Logo"
           />
           <div class="text-right">
             <h1 class="text-xl font-bold">Summary</h1>
@@ -82,9 +84,9 @@ const goHome = async () => {
               {{ quote.vehicle.label }}
             </p>
             <img
-              class="mt-2 h-auto w-48"
               :src="quote.vehicle.vehicle_image!"
               alt="Vehicle Image"
+              class="mt-2 h-auto w-48"
             />
           </div>
         </div>

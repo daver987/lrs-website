@@ -1,5 +1,6 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { useField } from 'vee-validate'
+
 const props = defineProps({
   type: {
     type: String,
@@ -44,14 +45,14 @@ const {
       label
     }}</label>
     <input
+      :id="name"
       :aria-label="label"
       :name="name"
-      :id="name"
       :placeholder="placeholder"
       :type="type"
-      @input="handleChange"
       :value="inputValue"
       class="-mt-1 block w-full border-0 p-0 pb-0.5 text-gray-900 placeholder-gray-400 focus:ring-0 sm:text-sm"
+      @input="handleChange"
     />
     <!--    <div v-if="!showError" class="flex">-->
     <!--      <div class="block text-xs text-red-700">-->

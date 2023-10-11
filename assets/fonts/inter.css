@@ -1,5 +1,3 @@
-
-
 /* -------------------------------------------------------
 Variable font.
 Usage:
@@ -15,7 +13,7 @@ Usage:
   font-display: swap;
   font-style: normal;
   font-named-instance: 'Regular';
-  src: url("Inter-roman.var.woff2?v=3.19") format("woff2");
+  src: url('Inter-roman.var.woff2?v=3.19') format('woff2');
 }
 @font-face {
   font-family: 'Inter var';
@@ -23,9 +21,8 @@ Usage:
   font-display: swap;
   font-style: italic;
   font-named-instance: 'Italic';
-  src: url("Inter-italic.var.woff2?v=3.19") format("woff2");
+  src: url('Inter-italic.var.woff2?v=3.19') format('woff2');
 }
-
 
 /* --------------------------------------------------------------------------
 [EXPERIMENTAL] Multi-axis, single variable font.
@@ -45,5 +42,5 @@ explicitly, e.g.
   font-weight: 100 900;
   font-display: swap;
   font-style: oblique 0deg 10deg;
-  src: url("Inter.var.woff2?v=3.19") format("woff2");
+  src: url('Inter.var.woff2?v=3.19') format('woff2');
 }

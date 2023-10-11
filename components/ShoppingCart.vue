@@ -1,22 +1,22 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { useCartStore } from '~/stores/useCartStore'
 import { storeToRefs } from 'pinia'
 import { useStripeStore } from '~/stores/useStripeStore'
 import { format } from 'date-fns'
 import { ref } from '#imports'
-import { Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import { z } from 'zod'
 
 type QuoteWithRelations = Prisma.QuoteGetPayload<{
   include: {
-    user: true,
-    vehicle: true,
-    service: true,
+    user: true
+    vehicle: true
+    service: true
     trips: {
       include: {
-        price: true,
-        payment: true,
-        locations: true,
+        price: true
+        payment: true
+        locations: true
       }
     }
   }
@@ -25,7 +25,7 @@ type QuoteWithRelations = Prisma.QuoteGetPayload<{
 const combinedLineItemsSchema = z.object({
   total: z.number(),
   label: z.string(),
-  amount: z.number()
+  amount: z.number(),
 })
 
 type CombinedLineItems = z.infer<typeof combinedLineItemsSchema>
@@ -39,8 +39,9 @@ if (typeof quoteNumberAsString === 'string') {
   const { data: quoteData } = await useTrpc().quote.get.useQuery({
     quote_number: parseInt(quoteNumberAsString),
   })
-  quote.value = quoteData.value as QuoteWithRelations
-  combinedLineItems.value = quote.value.combined_line_items as CombinedLineItems[]
+  quote.value = quoteData.value
+  combinedLineItems.value = quote.value
+    .combined_line_items as CombinedLineItems[]
   userId.value = quote.value.user.id
   console.log('[GET_QUOTE:]:success', quoteData.value)
 } else {
@@ -58,7 +59,6 @@ const checkoutLoading = ref(false)
 const createBooking = async () => {
   checkoutLoading.value = true
   try {
-    console.log('userId', userId.value)
     const { setupIntent, stripeId, statusCode } =
       await useTrpc().stripe.createSetup.mutate({
         userId: userId.value,
@@ -87,7 +87,7 @@ const createBooking = async () => {
 </script>
 
 <template>
-  <main class="max-w-2xl px-4 pt-6 pb-8 mx-auto sm:px-6 lg:max-w-7xl lg:px-8">
+  <main class="mx-auto max-w-2xl px-4 pb-8 pt-6 sm:px-6 lg:max-w-7xl lg:px-8">
     <h1
       class="text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100"
     >
@@ -98,8 +98,8 @@ const createBooking = async () => {
       <dl class="flex">
         <dt class="text-neutral-500 dark:text-neutral-100">
           {{ addedToCart ? 'Order' : 'Quote' }} Number&nbsp;<span
-            class="mx-2 text-neutral-400 dark:text-neutral-100"
             aria-hidden="true"
+            class="mx-2 text-neutral-400 dark:text-neutral-100"
             >&middot;</span
           >
         </dt>
@@ -109,8 +109,8 @@ const createBooking = async () => {
         <dt>
           <span class="sr-only">Date</span>
           <span
-            class="mx-2 text-neutral-400 dark:text-neutral-100"
             aria-hidden="true"
+            class="mx-2 text-neutral-400 dark:text-neutral-100"
             >&middot;</span
           >
         </dt>
@@ -119,7 +119,7 @@ const createBooking = async () => {
         </dd>
       </dl>
       <div class="mt-4 sm:mt-0">
-        <NuxtLink to="/" class="font-medium text-brand-600 hover:text-brand">
+        <NuxtLink class="font-medium text-brand-600 hover:text-brand" to="/">
           Continue Browsing
           <span aria-hidden="true"> &rarr;</span>
         </NuxtLink>
@@ -131,8 +131,8 @@ const createBooking = async () => {
       <section aria-labelledby="cart-heading" class="lg:col-span-7">
         <h2 id="cart-heading" class="sr-only">Items in your shopping cart</h2>
         <ul
+          class="divide-y divide-neutral-200 border-b border-t border-neutral-200"
           role="list"
-          class="border-t border-b divide-y divide-neutral-200 border-neutral-200"
         >
           <li
             v-for="(trip, index) in quote!.trips"
@@ -141,31 +141,31 @@ const createBooking = async () => {
           >
             <div class="flex-shrink-0">
               <NuxtPicture
-                :src="quote!.vehicle?.vehicle_image!"
                 :alt="quote!.vehicle.label"
                 :img-attrs="{
-                    class:
-                      'object-contain object-center w-24 h-24 rounded-md sm:h-48 sm:w-48',
-                  }"
+                  class:
+                    'object-contain object-center w-24 h-24 rounded-md sm:h-48 sm:w-48',
+                }"
+                :src="quote!.vehicle?.vehicle_image!"
               />
             </div>
 
-            <div class="flex flex-col justify-between flex-1 ml-4 sm:ml-6">
+            <div class="ml-4 flex flex-1 flex-col justify-between sm:ml-6">
               <div
                 class="relative pr-9 sm:grid sm:grid-cols-1 sm:gap-x-6 sm:pr-0"
               >
                 <div>
-                  <div class="flex justify-between mb-2">
+                  <div class="mb-2 flex justify-between">
                     <h3 class="text-base">
                       <NuxtLink
-                        to="/"
                         class="font-medium text-neutral-700 hover:text-neutral-800 dark:text-neutral-200 dark:hover:text-neutral-200"
+                        to="/"
                       >
                         {{ quote!.service.label }}
                       </NuxtLink>
                     </h3>
                   </div>
-                  <div class="flex flex-col mt-2 space-y-1 text-sm">
+                  <div class="mt-2 flex flex-col space-y-1 text-sm">
                     <p class="text-neutral-500 dark:text-neutral-100">
                       <span class="text-brand-400">Date: </span
                       >{{ trip.pickup_date }}
@@ -196,16 +196,16 @@ const createBooking = async () => {
                 </div>
 
                 <div class="mt-4 sm:mt-0 sm:pr-9">
-                  <div v-if="false" class="absolute top-0 right-0">
+                  <div v-if="false" class="absolute right-0 top-0">
                     <button
+                      class="-m-2 inline-flex p-2 text-neutral-400 hover:text-neutral-500"
                       type="button"
-                      class="inline-flex p-2 -m-2 text-neutral-400 hover:text-neutral-500"
                     >
                       <span class="sr-only">Remove</span>
                       <Icon
-                        name="heroicons:x-mark-20-solid"
-                        class="w-5 h-5"
                         aria-hidden="true"
+                        class="h-5 w-5"
+                        name="heroicons:x-mark-20-solid"
                       />
                     </button>
                   </div>
@@ -213,27 +213,27 @@ const createBooking = async () => {
               </div>
 
               <p
-                class="flex mt-4 space-x-2 text-sm text-neutral-700 dark:text-neutral-200"
+                class="mt-4 flex space-x-2 text-sm text-neutral-700 dark:text-neutral-200"
               >
                 <Icon
-                  name="heroicons:check-20-solid"
                   v-if="quote!.is_round_trip"
-                  class="flex-shrink-0 w-5 h-5 text-green-500"
                   aria-hidden="true"
+                  class="h-5 w-5 flex-shrink-0 text-green-500"
+                  name="heroicons:check-20-solid"
                 />
                 <Icon
-                  name="heroicons:clock-20-solid"
                   v-else
-                  class="flex-shrink-0 w-5 h-5 text-neutral-300"
                   aria-hidden="true"
+                  class="h-5 w-5 flex-shrink-0 text-neutral-300"
+                  name="heroicons:clock-20-solid"
                 />
                 <span>
                   {{
                     quote!.is_round_trip
-                    ? index === 0
-                      ? 'One Way Trip'
-                      : 'Return Trip'
-                    : 'One Way Trip'
+                      ? index === 0
+                        ? 'One Way Trip'
+                        : 'Return Trip'
+                      : 'One Way Trip'
                   }}
                 </span>
               </p>
@@ -245,7 +245,7 @@ const createBooking = async () => {
       <!-- Order summary -->
       <section
         aria-labelledby="summary-heading"
-        class="px-4 py-6 mt-16 rounded-lg bg-neutral-100 dark:bg-neutral-900 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8"
+        class="mt-16 rounded-lg bg-neutral-100 px-4 py-6 dark:bg-neutral-900 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8"
       >
         <h2
           id="summary-heading"
@@ -256,25 +256,25 @@ const createBooking = async () => {
 
         <dl class="mt-6 space-y-4">
           <div
-            class="flex items-center justify-between pt-4 border-t border-neutral-200"
             v-for="item in combinedLineItems"
             :key="item.label"
+            class="flex items-center justify-between border-t border-neutral-200 pt-4"
           >
             <dt
               class="flex items-center text-sm text-neutral-600 dark:text-neutral-300"
             >
               <span>{{ item.label }}</span>
               <a
+                class="ml-2 flex-shrink-0 text-neutral-400 hover:text-neutral-500"
                 href="#"
-                class="flex-shrink-0 ml-2 text-neutral-400 hover:text-neutral-500"
               >
                 <span class="sr-only"
                   >Learn more about how {{ item.label }} is calculated</span
                 >
                 <Icon
-                  name="heroicons:question-mark-circle-20-solid"
-                  class="w-5 h-5"
                   aria-hidden="true"
+                  class="h-5 w-5"
+                  name="heroicons:question-mark-circle-20-solid"
                 />
               </a>
             </dt>
@@ -289,17 +289,17 @@ const createBooking = async () => {
         <div class="mt-6">
           <button
             v-if="!addedToCart"
-            @click="cartStore.addToCart()"
+            class="w-full rounded-md border border-transparent bg-red-600 px-4 py-3 text-base font-medium uppercase text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-neutral-50"
             type="button"
-            class="w-full px-4 py-3 text-base font-medium text-white uppercase bg-red-600 border border-transparent rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-neutral-50"
+            @click="cartStore.addToCart()"
           >
             {{ loading ? 'Adding To Cart...' : 'Add To Cart' }}
           </button>
           <button
             v-else
-            @click="createBooking"
+            class="w-full rounded-md border border-transparent bg-red-600 px-4 py-3 text-base font-medium uppercase text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-neutral-50"
             type="button"
-            class="w-full px-4 py-3 text-base font-medium text-white uppercase bg-red-600 border border-transparent rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-neutral-50"
+            @click="createBooking"
           >
             {{ checkoutLoading ? 'Loading...' : 'Book Now' }}
           </button>

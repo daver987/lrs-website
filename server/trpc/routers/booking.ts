@@ -4,6 +4,14 @@ import { createConfirmationEmail } from '~/utils/services/sendGridEmail'
 import { quoteFormReturnSchema } from '~/schema/QuoteFormSchema'
 
 export const bookingRouter = router({
+  confirmOrder: publicProcedure
+    .input(quoteFormReturnSchema)
+    .mutation(async ({ input }) => {
+      const sendGridKey = useRuntimeConfig().SENDGRID_API_KEY
+      console.log('Booking Information', input)
+      await createConfirmationEmail(input, sendGridKey)
+    }),
+
   update: publicProcedure
     .input(
       z.object({
@@ -58,13 +66,5 @@ export const bookingRouter = router({
         ...data,
         status: 200,
       }
-    }),
-
-  confirmOrder: publicProcedure
-    .input(quoteFormReturnSchema)
-    .mutation(async ({ input }) => {
-      const sendGridKey = useRuntimeConfig().SENDGRID_API_KEY
-      console.log('Booking Information', input)
-      await createConfirmationEmail(input, sendGridKey)
     }),
 })

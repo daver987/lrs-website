@@ -11,10 +11,10 @@
     </div>
     <div class="self-center">
       <BaseButton
+        :nuxt-link="true"
         kind="btn-dark"
         label="Reserve Now"
         to="/reservations"
-        :nuxt-link="true"
       />
     </div>
   </div>

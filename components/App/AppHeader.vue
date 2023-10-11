@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 const props = defineProps({
   aboveHeading: {
     type: String,
@@ -30,19 +30,24 @@ const props = defineProps({
 
 const $img = useImage()
 const backgroundImage = computed(() => {
-  const imgUrl = $img('/images/gradient-background.svg', { width: '100%' })
+  const imgUrl = $img('/images/gradient-background.svg', {
+    fit: '',
+    format: '',
+    height: 0,
+    width: 100,
+  })
   return { backgroundImage: `url('${imgUrl}')` }
 })
 const headerImage = computed(() => {
-  const imgUrl = $img(props.image, { width: '100%' })
+  const imgUrl = $img(props.image as string, { width: '100%' })
   return { backgroundImage: `url('${imgUrl}')` }
 })
 </script>
 
 <template>
   <header
-    class="relative min-h-screen overflow-hidden"
     :style="backgroundImage"
+    class="relative min-h-screen overflow-hidden"
   >
     <AppNavigation />
     <BaseContainer class="relative mt-20 grid grid-cols-1 md:grid-cols-2">
@@ -73,8 +78,8 @@ const headerImage = computed(() => {
               :href="`tel:${companyPhone}`"
               class="text-center font-brand-body text-sm text-neutral-200"
               ><span class="text-brand">CALL :</span>
-              {{ companyPhone }}</NuxtLink
-            >
+              {{ companyPhone }}
+            </NuxtLink>
           </div>
           <div
             class="bottom-1/2 my-1 md:absolute md:-right-36 md:rotate-90 md:transform"

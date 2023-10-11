@@ -131,13 +131,13 @@ const qualities = [
         :img-attrs="{
           class: 'object-cover object-center w-full min-h-[4rem]',
         }"
+        :modifiers="{
+          effect: 'blur:100',
+        }"
         alt="Toronto-evening-skyline"
         loading="lazy"
         src="/images/toronto-7.jpg"
         width="1920"
-        :modifiers="{
-          effect: 'blur:100',
-        }"
       />
       <BaseContainer class="px-4">
         <div

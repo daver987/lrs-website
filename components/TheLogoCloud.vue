@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 const logos = [
   {
     key: 0,
@@ -38,11 +38,11 @@ const logos = [
       >
         <NuxtPicture
           :alt="logo.alt"
-          :src="logo.src"
           :img-attrs="{
             class:
               'object-contain w-full max-w-xs filter grayscale dark:filter dark:grayscale-0 hover:grayscale-0',
           }"
+          :src="logo.src"
           loading="lazy"
         />
       </div>

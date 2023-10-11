@@ -7,7 +7,7 @@ import {
   SalesTaxSchema,
   LocationSchema,
   ConversionPartialSchema,
-} from '~/prisma/generated/zod'
+} from '~/schema/prismaSchemas'
 
 const summaryLineItemsList = z.object({
   label: z.string(),

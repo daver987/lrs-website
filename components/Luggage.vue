@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 defineProps({
   people: {
     type: String,
@@ -22,21 +22,21 @@ defineProps({
 <template>
   <BaseCard class="mb-8 flex w-full justify-center md:max-w-2xl">
     <div class="flex w-full max-w-xl flex-col justify-around md:flex-row">
-      <ItemCount :kind="people" :amount="peopleAmount">
-        <Icon name="bi:people" class="h-auto w-16 text-neutral-400" />
+      <ItemCount :amount="peopleAmount" :kind="people">
+        <Icon class="h-auto w-16 text-neutral-400" name="bi:people" />
       </ItemCount>
-      <ItemCount :kind="luggage" :amount="luggageAmount">
+      <ItemCount :amount="luggageAmount" :kind="luggage">
         <Icon
-          name="fluent:luggage-28-regular"
           class="h-auto w-16 text-neutral-400"
+          name="fluent:luggage-28-regular"
         />
       </ItemCount>
       <div class="flex h-full flex-col items-center justify-center">
         <BaseButton
+          :nuxtLink="true"
           kind="btn-brand"
           label="Reserve"
           to="/reservations"
-          :nuxtLink="true"
         />
       </div>
     </div>

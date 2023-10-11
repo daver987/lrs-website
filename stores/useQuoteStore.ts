@@ -18,6 +18,5 @@ export const useQuoteStore = defineStore('quoteStore', {
 })
 
 if (import.meta.hot) {
-  // @ts-ignore
   import.meta.hot.accept(acceptHMRUpdate(useQuoteStore, import.meta.hot))
 }

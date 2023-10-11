@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { LineItemSchema } from '~/prisma/generated/zod'
+import { LineItemSchema } from '~/schema/prismaSchemas'
 
 export const LineItemExtendedSchema = LineItemSchema.extend({
   tax: z.number().optional(),

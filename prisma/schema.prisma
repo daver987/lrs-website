@@ -1,6 +1,5 @@
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["fieldReference", "jsonProtocol"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -14,8 +13,8 @@ model Account {
   number                 Int      @unique @default(autoincrement())
   created_at             DateTime @default(now())
   updated_at             DateTime @updatedAt
-  company_name           String
-  company_address        String
+  company_name           String?
+  company_address        String?
   company_phone          String?
   company_email          String
   company_account_number Int
@@ -42,6 +41,7 @@ model User {
   phone_number         String
   phone_number_country String?
   stripe_customer_id   String?
+  clerk_id             String?
   is_customer          Boolean      @default(false)
   account_id           String?
   notes                String?
@@ -85,15 +85,36 @@ model Affiliate {
 }
 
 model Driver {
-  id              String   @id @unique @default(uuid())
-  created_at      DateTime @default(now())
-  updated_at      DateTime @updatedAt
-  first_name      String
-  last_name       String?
-  email_address   String?
-  phone_number    String
-  drivers_licence String?
-  notes           String?
+  id            String      @id @unique @default(uuid())
+  created_at    DateTime    @default(now())
+  updated_at    DateTime    @updatedAt
+  display_name  String?
+  employee_id   Int?
+  is_inactive   Boolean     @default(false)
+  company       String?
+  first_name    String
+  last_name     String
+  email_address String
+  phone_number  String
+  notes         String?
+  trips         Trip[]
+  payments      DriverPay[]
+  balance_owed  Float
+}
+
+model DriverPay {
+  id         String   @id @unique @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  Driver     Driver?  @relation(fields: [driverId], references: [id])
+  driverId   String?
+  trip       Trip     @relation(fields: [tripId], references: [id])
+  tripId     String
+  amount     Float
+  is_paid    Boolean
+
+  @@index([tripId])
+  @@index([driverId])
 }
 
 model VerificationToken {
@@ -156,9 +177,9 @@ model Quote {
 }
 
 model Trip {
-  id                  String     @id @unique @default(uuid())
-  created_at          DateTime   @default(now())
-  updated_at          DateTime   @updatedAt()
+  id                  String      @id @unique @default(uuid())
+  created_at          DateTime    @default(now())
+  updated_at          DateTime    @updatedAt()
   pickup_date         String?
   pickup_time         String?
   distance_text       String?
@@ -170,22 +191,26 @@ model Trip {
   service_label       String?
   vehicle_label       String?
   affiliate_payout    Float?
-  is_farmed_out       Boolean    @default(false)
-  is_return           Boolean    @default(false)
+  is_farmed_out       Boolean     @default(false)
+  is_return           Boolean     @default(false)
   notes               String?
-  trip_order          Int?       @default(0)
+  trip_order          Int?        @default(0)
   price_id            String?
-  carry_on_luggage    Int?       @default(0)
-  large_luggage       Int?       @default(0)
+  carry_on_luggage    Int?        @default(0)
+  large_luggage       Int?        @default(0)
   meta_data           Json?
   price               Price?
-  quote               Quote      @relation(fields: [quote_number], references: [quote_number], onDelete: Cascade)
+  quote               Quote       @relation(fields: [quote_number], references: [quote_number], onDelete: Cascade)
   payment             Payment?
   locations           Location[]
-  flight              Flight?
+  flights             Flight[]
+  Driver              Driver?     @relation(fields: [driverId], references: [id])
+  driverId            String?
+  DriverPay           DriverPay[]
 
   @@index([quote_number])
   @@index([price_id])
+  @@index([driverId])
 }
 
 model Location {
@@ -255,17 +280,14 @@ model Flight {
   is_arrived            Boolean  @default(false)
   departure_time_actual String?
   arrival_time_actual   String?
-  trip_id               String?  @unique
+  trip_id               String
   airline_id            Int?
   airport_id            Int?
   departure_time        String?
   arrival_time          String?
-  trip                  Trip?    @relation(fields: [trip_id], references: [id], onDelete: Cascade)
-  airline               Airline? @relation(fields: [airline_id], references: [id], onDelete: Cascade)
-  airport               Airport? @relation(fields: [airport_id], references: [id], onDelete: Cascade)
+  trip                  Trip     @relation(fields: [trip_id], references: [id], onDelete: Cascade)
 
-  @@index([airline_id])
-  @@index([airport_id])
+  @@index([trip_id])
 }
 
 model Service {
@@ -282,7 +304,7 @@ model Service {
 
 model LineItem {
   id            String   @id @unique @default(uuid())
-  item_number   Int      @unique @default(autoincrement())
+  item_number   Int      @unique
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
   label         String
@@ -336,28 +358,11 @@ model LineItemToQuote {
   @@map("_LineItemToQuote")
 }
 
-model Airline {
-  id       Int      @id @unique @default(autoincrement())
-  name     String?
-  iata     String?
-  icao     String?
-  callsign String?
-  country  String?
-  flight   Flight[]
-}
-
-model Airport {
-  id       Int      @id @unique @default(autoincrement())
-  name     String
-  city     String?
-  country  String?
-  lat      Float
-  lng      Float
-  timezone String
-  type     String
-  iata     String?
-  icao     String?
-  flight   Flight[]
+model Fasttrak {
+  id           Int      @id @unique @default(autoincrement())
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  reservations Json
 }
 
 model LAOrders {

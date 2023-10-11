@@ -32,32 +32,3 @@ export default defineEventHandler(async (event) => {
 
   // return 'All good'
 })
-
-//   try {
-//
-//
-//     const result = quoteResult.value
-//     console.log(chalk.magenta('[MIDDLEWARE]:checkQuote'), result)
-//
-//     if (!result || !(result.created_at instanceof Date)) {
-//       return abortNavigation("Quote doesn't exist")
-//     }
-//
-//     const isQuoteExpired = isBefore(sevenDaysFromToday, result.created_at)
-//     console.log(
-//       chalk.magenta('[MIDDLEWARE]result.is_booked:'),
-//       result.is_booked
-//     )
-//
-//     if (isQuoteExpired) {
-//       return abortNavigation('Ooops! Your quote has expired.')
-//     }
-//
-//     if (result.is_booked) {
-//       return abortNavigation("You can't book an already booked quote.")
-//     }
-//   } catch (error) {
-//     console.error(chalk.redBright('[MIDDLEWARE]:Error fetching quote:'), error)
-//     return abortNavigation('Error fetching quote details')
-//   }
-// })

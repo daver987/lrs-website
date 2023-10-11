@@ -6,14 +6,6 @@ interface QuoteResult {
   is_booked?: boolean
 }
 
-// // Implement this function to query the database and return the quote details
-// async function getQuoteFromDatabase(
-//   quoteNumber: number
-// ): Promise<QuoteResult | null> {
-//   // Query the database and return the quote details based on the provided quote_number
-//   // ...
-// }
-
 export default defineEventHandler((event) => {
   const context = event.context
   console.log('Event Context:', context)

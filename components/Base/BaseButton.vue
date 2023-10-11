@@ -69,7 +69,9 @@ const NuxtLink = resolveComponent('nuxt-link')
   background-position: 50%;
   transform: scale(10, 10);
   opacity: 0;
-  transition: transform 0.3s, opacity 0.5s;
+  transition:
+    transform 0.3s,
+    opacity 0.5s;
 }
 
 .ripple:hover::after {

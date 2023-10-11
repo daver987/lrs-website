@@ -28,14 +28,14 @@ defineProps({
       </h2>
       <div class="flex max-w-lg justify-center md:justify-start">
         <BaseButton
+          :nuxtLink="true"
           kind="btn-flat"
           label="View More"
           to="/fleet"
-          :nuxtLink="true"
         >
           <Icon
-            name="ic:twotone-arrow-right-alt"
             class="h-12 w-auto text-brand"
+            name="ic:twotone-arrow-right-alt"
           />
         </BaseButton>
       </div>

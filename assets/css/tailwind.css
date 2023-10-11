@@ -6,7 +6,7 @@
   font-weight: 100 900;
   font-display: swap;
   font-style: oblique 0deg 10deg;
-  src: url("./assets/fonts/Inter.var.woff2?v=3.19") format("woff2");
+  src: url('./assets/fonts/Inter.var.woff2?v=3.19') format('woff2');
 }
 @font-face {
   font-family: "'Inter var'";
@@ -27,7 +27,8 @@
   font-family: 'caviar-dreams';
   font-style: normal;
   font-weight: 400;
-  src: local('caviar-dreams'),
+  src:
+    local('caviar-dreams'),
     url('./assets/fonts/caviar-dreams.woff') format('woff');
 }
 
@@ -35,7 +36,8 @@
   font-family: 'caviar-dreams-bold';
   font-style: normal;
   font-weight: 700;
-  src: local('caviar-dreams-bold'),
+  src:
+    local('caviar-dreams-bold'),
     url('./assets/fonts/caviar-dreams-bold.woff') format('woff');
 }
 
@@ -43,7 +45,8 @@
   font-family: 'campton-light';
   font-style: normal;
   font-weight: 400;
-  src: local('campton-light'),
+  src:
+    local('campton-light'),
     url('./assets/fonts/campton-light.woff') format('woff');
 }
 
@@ -51,7 +54,8 @@
   font-family: 'campton-thin';
   font-style: normal;
   font-weight: 400;
-  src: local('campton-thin'),
+  src:
+    local('campton-thin'),
     url('./assets/fonts/campton-thin.woff') format('woff');
 }
 
@@ -82,12 +86,10 @@
   background-color: var(--n-count-text-color);
 }
 
-
 body {
   background-color: #fafafa;
   min-height: 100dvh;
 }
-
 
 textarea:focus {
   outline: none;
@@ -148,10 +150,4 @@ textarea:focus {
     --n-icon-color-disabled: rgba(255, 255, 255, 0.28);
     --n-suffix-text-color: rgba(255, 255, 255, 0.82);
   }
-
-
-
-
-
 }
-

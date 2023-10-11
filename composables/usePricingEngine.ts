@@ -1,11 +1,11 @@
+import type { LineItem, SalesTax, Service, Vehicle } from '@prisma/client'
 import { ref, Ref } from 'vue'
 import { z } from 'zod'
-import { LineItemSchema } from '~/schema/prismaSchemas'
-import type { Vehicle, Service, LineItem, SalesTax } from '@prisma/client'
 import {
-  DirectionsSchema,
   DirectionsApiResponse,
+  DirectionsSchema,
 } from '~/schema/directionsSchema'
+import { LineItemSchema } from '~/schema/prismaSchemas'
 
 const LineItemExtendedSchema = LineItemSchema.extend({
   tax: z.number().optional(),
@@ -16,10 +16,12 @@ const LineItemsPartialSchema = LineItemExtendedSchema.pick({
   tax: true,
   total: true,
 })
+
 type LineItemsPartial = z.infer<typeof LineItemsPartialSchema>
 type LineItemExtended = z.infer<typeof LineItemExtendedSchema>
 
 const config = useRuntimeConfig().public.GOOGLE_MAPS_API_KEY
+
 export async function calculateDistance(
   origin: string,
   destination: string
@@ -36,7 +38,6 @@ export async function calculateDistance(
   const {
     distance: { value: distanceValue },
   } = validatedData.routes[0].legs[0]
-
   return {
     data: validatedData,
     distance: distanceValue / 1000,
@@ -80,12 +81,10 @@ export function usePricingEngine(
   function updateBaseRate() {
     selectedVehicle.value = vehicle
     selectedService.value = service
-
     if (!selectedVehicle.value || !selectedService.value) {
       baseRate.value = 0
       return
     }
-
     if (selectedService.value.is_hourly) {
       baseRate.value = +(
         selectedHours.value * selectedVehicle.value.per_hour
@@ -110,29 +109,24 @@ export function usePricingEngine(
         return item.applies_to === null || item.applies_to === originRef
       })
       .filter((item) => item.is_active)
-
     const matchingTaxes = selectedTaxesList.value.filter((tax) => tax.is_active)
     const taxRate = matchingTaxes.length > 0 ? matchingTaxes[0].amount : 0
     const baseRateAmount = parseFloat(baseRate.value.toFixed(2))
     const baseRateTax = parseFloat(
       ((baseRateAmount * taxRate) / 100).toFixed(2)
     )
-
     const lineItemDetails = [
       { label: 'Base Rate', tax: baseRateTax, total: baseRateAmount },
       ...filteredLineItems.map((item) => {
         const amount = item.is_percentage
           ? parseFloat((baseRate.value * (item.amount / 100)).toFixed(2))
           : parseFloat(item.amount.toFixed(2))
-
         const tax = item.is_taxable
           ? parseFloat(((amount * taxRate) / 100).toFixed(2))
           : 0
-
         item.label = item.label || ''
         item.tax = tax
         item.total = amount
-
         return { label: item.label, tax: tax, total: amount }
       }),
     ]
@@ -140,7 +134,6 @@ export function usePricingEngine(
     subTotal.value = lineItemDetails.reduce((acc, item) => acc + item.total, 0)
     taxTotal.value = lineItemDetails.reduce((acc, item) => acc + item.tax, 0)
     totalAmount.value = subTotal.value + taxTotal.value
-
     detailedLineItemsWithTotals.value = [
       ...Object.values(lineItemDetails),
       {
@@ -169,25 +162,25 @@ export function usePricingEngine(
   }
 
   return {
-    origin,
-    destination,
-    routeData,
     vehicle,
     service,
     lineItems,
-    selectedLineItemsList,
     salesTaxes,
+    origin,
+    destination,
+    routeData,
     vehicleTypeId,
     serviceTypeId,
     selectedHours,
     selectedVehicle,
     selectedService,
+    selectedLineItemsList,
+    selectedTaxesList,
     distance,
     baseRate,
     subTotal,
     taxTotal,
     totalAmount,
-    selectedTaxesList,
     detailedLineItems,
     detailedLineItemsWithTotals,
     updateDistance,

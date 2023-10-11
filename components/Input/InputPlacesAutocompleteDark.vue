@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { Loader } from '@googlemaps/js-api-loader'
 
 const props = defineProps({
@@ -105,12 +105,12 @@ const modelValue = ref<string | undefined>('')
 
 <template>
   <n-input
+    v-model:value="modelValue"
     :input-props="{
       id: name,
       type: 'text',
     }"
     :placeholder="placeholder"
-    v-model:value="modelValue"
     @ready="initAutocomplete"
   />
 </template>

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 interface Props {
   show: boolean
   message1?: string
@@ -40,9 +40,9 @@ const closeNotification = (): void => {
             <div class="flex items-start">
               <div class="flex-shrink-0">
                 <Icon
-                  name="heroicons-outline:check-circle"
-                  class="h-6 w-6 text-green-400"
                   aria-hidden="true"
+                  class="h-6 w-6 text-green-400"
+                  name="heroicons-outline:check-circle"
                 />
               </div>
               <div class="ml-3 w-0 flex-1 pt-0.5">
@@ -55,15 +55,15 @@ const closeNotification = (): void => {
               </div>
               <div class="ml-4 flex flex-shrink-0">
                 <button
+                  class="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                   type="button"
                   @click="closeNotification"
-                  class="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                 >
                   <span class="sr-only">Close</span>
                   <Icon
-                    name="heroicons:x-circle-20-solid"
-                    class="h-5 w-5"
                     aria-hidden="true"
+                    class="h-5 w-5"
+                    name="heroicons:x-circle-20-solid"
                   />
                 </button>
               </div>

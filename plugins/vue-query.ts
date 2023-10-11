@@ -1,18 +1,17 @@
 /**
  * this files sets up the vue-query client, and takes care of the cache serialization / deserialization between SSR and CSR
  */
-
+import { useState } from '#app'
 import type {
   DehydratedState,
   VueQueryPluginOptions,
 } from '@tanstack/vue-query'
 import {
-  VueQueryPlugin,
-  QueryClient,
-  hydrate,
   dehydrate,
+  hydrate,
+  QueryClient,
+  VueQueryPlugin,
 } from '@tanstack/vue-query'
-import { useState } from '#app'
 
 export default defineNuxtPlugin((nuxt) => {
   const vueQueryState = useState<DehydratedState | null>('vue-query')

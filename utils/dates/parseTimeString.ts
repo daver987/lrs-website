@@ -16,7 +16,7 @@ type DateAndTime = [
   month: number,
   day: number,
   hours: number,
-  minutes: number
+  minutes: number,
 ]
 function parseMonth(monthStr: string) {
   const monthNames = [

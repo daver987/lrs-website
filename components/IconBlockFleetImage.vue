@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 defineProps({
   image: {
     type: String,
@@ -14,11 +14,11 @@ defineProps({
 <template>
   <NuxtPicture
     :alt="altText"
-    :src="image"
     :img-attrs="{
       class: 'md:object-center md:object-cover',
     }"
-    width="1920"
+    :src="image"
     loading="lazy"
+    width="1920"
   />
 </template>
