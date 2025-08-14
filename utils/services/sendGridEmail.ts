@@ -16,6 +16,7 @@ export async function sendQuoteEmail(
     }
     sgMail.setApiKey(apiKey)
 
+    const brand = useAppConfig().brand
     const msg = {
       personalizations: [
         {
@@ -55,14 +56,14 @@ export async function sendQuoteEmail(
         },
       ],
       from: {
-        email: 'info@highparklivery.com',
-        name: 'High Park Livery',
+        email: brand.contact.email,
+        name: brand.name,
       },
       reply_to: {
-        email: 'info@highparklivery.com',
-        name: 'High Park Livery',
+        email: brand.contact.email,
+        name: brand.name,
       },
-      subject: 'High Park Livery Invites you to Complete Your Booking',
+      subject: `${brand.name} Invites you to Complete Your Booking`,
       template_id: 'd-2ce85a8f9e8447ce8e5f43a4c5a45b6e',
       trackingSettings: {
         clickTracking: {
@@ -104,10 +105,11 @@ export async function createConfirmationEmail(
     )
     console.log('Combine Date and Time', startTime)
     const webUrl = useRuntimeConfig().public.WEBSITE_URL
+    const brand = useAppConfig().brand
     const eventData = {
       start: startTime,
       duration: tripDuration,
-      title: 'High Park Livery Booking!',
+      title: `${brand.name} Booking!`,
       description: `Booking for ${quote.user.first_name} ${quote.user.last_name}`,
       location: quote.trips[0].locations[0].full_name!,
       url: webUrl,
@@ -129,7 +131,7 @@ export async function createConfirmationEmail(
               email: quote.user.email_address,
             },
           ],
-          subject: `High Park Livery Booking Confirmation HPL-${quote.quote_number}`,
+          subject: `${brand.name} Booking Confirmation ${brand.orderPrefix}-${quote.quote_number}`,
           dynamic_template_data: {
             first_name: quote.user.first_name,
             last_name: quote.user.last_name,
@@ -160,12 +162,12 @@ export async function createConfirmationEmail(
         },
       ],
       from: {
-        email: 'info@highparklivery.com',
-        name: 'High Park Livery',
+        email: brand.contact.email,
+        name: brand.name,
       },
       reply_to: {
-        email: 'info@highparklivery.com',
-        name: 'High Park Livery',
+        email: brand.contact.email,
+        name: brand.name,
       },
       templateId: 'd-5e5528da9e3e4feab95da93eea0fbacd',
       attachments: [

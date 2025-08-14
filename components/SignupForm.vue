@@ -9,8 +9,11 @@ const color = colorMode.value
       <NuxtLink to="/">
         <NuxtPicture
           :img-attrs="{ class: 'w-auto h-16' }"
-          alt="High Park Livery"
-          src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/406cb8bc-8a88-4aa9-912d-d73155765900/1920"
+          :alt="useAppConfig().brand.name"
+          :src="
+            useAppConfig().brand.assets.logo.dark ||
+            useAppConfig().brand.assets.logo.light
+          "
           width="1920"
         />
       </NuxtLink>
@@ -27,8 +30,8 @@ const color = colorMode.value
           :img-attrs="{
             class: 'w-auto h-16',
           }"
-          alt="High Park Livery"
-          src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/6a0f4d3c-3f6a-4e4e-f86b-1face7a5e400/1920"
+          :alt="useAppConfig().brand.name"
+          :src="useAppConfig().brand.assets.logo.light"
           width="1920"
         />
       </NuxtLink>

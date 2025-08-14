@@ -36,6 +36,9 @@ const displayPhone = computed(
 const displayEmail = computed(
   () => props.companyEmail || appConfig.brand?.contact?.email || ''
 )
+const phoneHref = computed(
+  () => `tel:${appConfig.brand?.contact?.phoneE164 || displayPhone.value}`
+)
 const backgroundImage = computed(() => {
   const imgUrl = $img('/images/gradient-background.svg', {
     fit: '',
@@ -83,7 +86,7 @@ const headerImage = computed(() => {
           >
             <NuxtLink
               class="text-center font-brand-body text-sm text-neutral-200"
-              :href="`tel:${displayPhone}`"
+              :href="phoneHref"
               ><span class="text-brand">CALL :</span>
               {{ displayPhone }}
             </NuxtLink>

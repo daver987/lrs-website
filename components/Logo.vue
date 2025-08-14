@@ -47,11 +47,16 @@ const imageWidth = {
   medium: 100,
   large: 150,
 }[props.size] as number
-const logoDefaultLight = '/images/hpl-logo-white.png'
-const logoDefaultDark = '/images/hpl-logo-dark.png'
-const logoRoundLight = '/images/hpl-logo-white-square.png'
-const logoRoundDark = '/images/hpl-logo-dark-square.png'
-const logoLetters = '/images/hpl-logo-dark.png'
+const appConfig = useAppConfig()
+const logoDefaultLight = appConfig.brand.assets.logo.light
+const logoDefaultDark =
+  appConfig.brand.assets.logo.dark || appConfig.brand.assets.logo.light
+// Fallbacks for shapes if brand doesn't provide specific variants
+const logoRoundLight = appConfig.brand.assets.logo.light
+const logoRoundDark =
+  appConfig.brand.assets.logo.dark || appConfig.brand.assets.logo.light
+const logoLetters =
+  appConfig.brand.assets.logo.dark || appConfig.brand.assets.logo.light
 const logoDefault = props.theme === 'light' ? logoDefaultLight : logoDefaultDark
 const logoRound = props.theme === 'light' ? logoRoundLight : logoRoundDark
 </script>

@@ -17,7 +17,7 @@ definePageMeta({
 const nav = navigation
 
 const open = ref<boolean>(false)
-const src = '/images/hpl-logo-dark.png'
+const appConfig = useAppConfig()
 const url = useRuntimeConfig().public.WEBSITE_URL
 </script>
 
@@ -139,10 +139,13 @@ const url = useRuntimeConfig().public.WEBSITE_URL
               class="ml-2 flex w-full justify-center lg:ml-0 lg:w-auto lg:justify-start"
             >
               <NuxtLink class="self-center" to="/">
-                <span class="sr-only">High Park Livery</span>
+                <span class="sr-only">{{ appConfig.brand.name }}</span>
                 <NuxtPicture
-                  src="hpl-logo-dark.png"
-                  alt="High Park Livery Logo"
+                  :src="
+                    appConfig.brand.assets.logo.dark ||
+                    appConfig.brand.assets.logo.light
+                  "
+                  :alt="`${appConfig.brand.name} Logo`"
                   width="1920"
                   :img-attrs="{
                     class: 'h-12 w-auto lg:h-14',

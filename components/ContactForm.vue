@@ -159,8 +159,9 @@ const onSubmit = handleSubmit(async (values: ContactFormSchema) => {
                 <p
                   class="mt-6 max-w-3xl font-brand-body text-base text-brand-50"
                 >
-                  At High Park Livery, we strive to make your travel experience
-                  as elegant and effortless as possible. Contact us today.
+                  At {{ useAppConfig().brand.name }}, we strive to make your
+                  travel experience as elegant and effortless as possible.
+                  Contact us today.
                 </p>
                 <dl class="mt-8 space-y-6">
                   <dt><span class="sr-only">Phone number</span></dt>
@@ -170,7 +171,9 @@ const onSubmit = handleSubmit(async (values: ContactFormSchema) => {
                       aria-hidden="true"
                       name="heroicons:phone"
                     />
-                    <span class="ml-3">+1 (647) 360-9631</span>
+                    <span class="ml-3">{{
+                      useAppConfig().brand.contact.phoneDisplay
+                    }}</span>
                   </dd>
                   <dt><span class="sr-only">Email</span></dt>
                   <dd class="flex text-base text-brand-50">
@@ -179,7 +182,9 @@ const onSubmit = handleSubmit(async (values: ContactFormSchema) => {
                       aria-hidden="true"
                       name="heroicons:envelope"
                     />
-                    <span class="ml-3">info@highparklivery.com</span>
+                    <span class="ml-3">{{
+                      useAppConfig().brand.contact.email
+                    }}</span>
                   </dd>
                 </dl>
                 <ul class="mt-8 flex space-x-12" role="list">

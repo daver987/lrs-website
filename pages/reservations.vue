@@ -9,11 +9,19 @@ import {
 import { navigation } from '~/data/navigation'
 
 definePageMeta({
-  title: 'Reserve Your High Park Livery Black Car Service in Toronto',
-  description:
-    'Book your next High Park Livery ride online. Ensure a seamless and luxurious transportation experience for airport transfers, corporate travel, and special events.',
   layout: 'auth',
   name: 'reservations',
+})
+
+const appConfig = useAppConfig()
+useHead({
+  title: `Reserve Your ${appConfig.brand.name} Black Car Service in Toronto`,
+  meta: [
+    {
+      name: 'description',
+      content: `Book your next ${appConfig.brand.name} ride online. Ensure a seamless and luxurious transportation experience for airport transfers, corporate travel, and special events.`,
+    },
+  ],
 })
 
 const nav = navigation
@@ -143,10 +151,13 @@ useScriptTag(
               class="ml-2 flex w-full justify-center lg:ml-0 lg:w-auto lg:justify-start"
             >
               <NuxtLink class="self-center" to="/">
-                <span class="sr-only">High Park Livery</span>
+                <span class="sr-only">{{ appConfig.brand.name }}</span>
                 <NuxtPicture
-                  src="/images/hpl-logo-dark.png"
-                  alt="High Park Livery Logo"
+                  :src="
+                    appConfig.brand.assets.logo.dark ||
+                    appConfig.brand.assets.logo.light
+                  "
+                  :alt="`${appConfig.brand.name} Logo`"
                   width="1920"
                   :img-attrs="{
                     class: 'h-12 w-auto lg:h-14',

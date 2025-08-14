@@ -1,16 +1,24 @@
 <script lang="ts" setup>
 definePageMeta({
-  title: "About High Park Livery - Greater Toronto's Black Car Service Experts",
-  description:
-    'Learn about High Park Livery, the trusted provider of black car services in the Greater Toronto Area. Discover our commitment to exceptional service and reliability.',
   layout: 'default',
   colorMode: 'dark',
 })
 
+const appConfig = useAppConfig()
+useHead({
+  title: `About ${appConfig.brand.name} - Greater Toronto's Black Car Service Experts`,
+  meta: [
+    {
+      name: 'description',
+      content: `Learn about ${appConfig.brand.name}, the trusted provider of black car services in the Greater Toronto Area. Discover our commitment to exceptional service and reliability.`,
+    },
+  ],
+})
+
 const headerInfo = {
-  aboveHeading: 'DISCOVER High Park Livery',
+  aboveHeading: `DISCOVER ${appConfig.brand.name}`,
   heading: 'ABOUT US',
-  body: "High Park Livery is here to help you get from place to place. It's our job to provide you with the means of transportation, and we won't stop until it's done right.",
+  body: `${appConfig.brand.name} is here to help you get from place to place. It's our job to provide you with the means of transportation, and we won't stop until it's done right.`,
   image: '/images/misc-8.jpg',
 }
 const qualities = [

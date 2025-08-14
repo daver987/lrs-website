@@ -3,11 +3,19 @@ import { services } from '~/data/services'
 import { ourTours } from '~/data/tours'
 
 definePageMeta({
-  title: 'High Park Livery Services - Quality Black Car Solutions in Toronto',
-  description:
-    "Explore High Park Livery's wide range of black car services in Toronto, including airport transfers, corporate travel, and special event transportation.",
   layout: 'default',
   colorMode: 'dark',
+})
+
+const appConfig = useAppConfig()
+useHead({
+  title: `${appConfig.brand.name} Services - Quality Black Car Solutions in Toronto`,
+  meta: [
+    {
+      name: 'description',
+      content: `Explore ${appConfig.brand.name}'s wide range of black car services in Toronto, including airport transfers, corporate travel, and special event transportation.`,
+    },
+  ],
 })
 
 const tours = ourTours
@@ -25,7 +33,7 @@ const headerInfo = {
   aboveHeading: 'WHAT WE OFFER YOU',
   heading: 'OUR SERVICES',
   image: '/images/toronto-8.jpg',
-  body: "High Park Livery is here to help you get from place to place. It's our job to provide you with the means of transportation, and we won't stop until it's done right.",
+  body: `${appConfig.brand.name} is here to help you get from place to place. It's our job to provide you with the means of transportation, and we won't stop until it's done right.`,
 }
 </script>
 
@@ -49,17 +57,17 @@ const headerInfo = {
               DISCOVER OUR PREMIER SERVICES
             </h2>
             <p class="max-w-[65ch] font-brand-body text-neutral-400">
-              High Park Livery is a leading car service provider in Toronto,
-              dedicated to delivering top-quality service for over a decade. Our
-              fleet of modern, meticulously maintained vehicles is continuously
-              updated to meet the demands of the Toronto GTA market. We aim to
-              provide the finest chauffeur service in Toronto, featuring our
-              safe and luxurious Cadillac XTS, Lincoln Navigator, Cadillac
-              Escalade, and Lincoln Continental vehicles. Our professionally
-              trained drivers are committed to offering exceptional service for
-              even the most discerning clients. As a comprehensive
-              transportation company, we offer a variety of vehicles to
-              accommodate any transportation requirement.
+              {{ appConfig.brand.name }} is a leading car service provider in
+              Toronto, dedicated to delivering top-quality service for over a
+              decade. Our fleet of modern, meticulously maintained vehicles is
+              continuously updated to meet the demands of the Toronto GTA
+              market. We aim to provide the finest chauffeur service in Toronto,
+              featuring our safe and luxurious Cadillac XTS, Lincoln Navigator,
+              Cadillac Escalade, and Lincoln Continental vehicles. Our
+              professionally trained drivers are committed to offering
+              exceptional service for even the most discerning clients. As a
+              comprehensive transportation company, we offer a variety of
+              vehicles to accommodate any transportation requirement.
             </p>
           </div>
         </div>
@@ -121,7 +129,7 @@ const headerInfo = {
         <p
           class="text-center font-brand-subheading uppercase tracking-widest text-brand-400"
         >
-          High Park Livery Tours
+          {{ appConfig.brand.name }} Tours
         </p>
         <h2
           class="text-center font-brand-heading text-4xl uppercase text-neutral-200"

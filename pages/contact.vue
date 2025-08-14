@@ -1,10 +1,18 @@
 <script setup lang="ts">
 definePageMeta({
-  title: 'Contact High Park Livery - Your Toronto Black Car Service Provider',
-  description:
-    'Get in touch with High Park Livery, the leading black car service in the Greater Toronto Area. Reach out for inquiries, support, and booking assistance.',
   layout: 'default',
   colorMode: 'dark',
+})
+
+const appConfig = useAppConfig()
+useHead({
+  title: `Contact ${appConfig.brand.name} - Your Toronto Black Car Service Provider`,
+  meta: [
+    {
+      name: 'description',
+      content: `Get in touch with ${appConfig.brand.name}, the leading black car service in the Greater Toronto Area. Reach out for inquiries, support, and booking assistance.`,
+    },
+  ],
 })
 
 const headerInfo = {

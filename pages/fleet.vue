@@ -3,17 +3,25 @@ import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue'
 import { ref, resolveComponent } from '#imports'
 
 definePageMeta({
-  title: 'High Park Livery Fleet - Luxurious Vehicles for a Premium Experience',
-  description:
-    "Discover High Park Livery's fleet of stylish and comfortable vehicles. Our range of luxury sedans, SUVs, and limousines ensures a premium transportation experience.",
   layout: 'default',
   colorMode: 'dark',
+})
+
+const appConfig = useAppConfig()
+useHead({
+  title: `${appConfig.brand.name} Fleet - Luxurious Vehicles for a Premium Experience`,
+  meta: [
+    {
+      name: 'description',
+      content: `Discover ${appConfig.brand.name}'s fleet of stylish and comfortable vehicles. Our range of luxury sedans, SUVs, and limousines ensures a premium transportation experience.`,
+    },
+  ],
 })
 
 const headerInfo = {
   aboveHeading: 'Discover Our Luxury Vehicles',
   heading: 'OUR FLEET',
-  body: "High Park Livery is here to help you get from place to place. It's our job to provide you with the means of transportation, and we won't stop until it's done right.",
+  body: `${appConfig.brand.name} is here to help you get from place to place. It's our job to provide you with the means of transportation, and we won't stop until it's done right.`,
   image: '/images/premium_suv-11.jpg',
 }
 

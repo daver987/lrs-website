@@ -91,7 +91,7 @@ const createBooking = async () => {
     <h1
       class="text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100"
     >
-      <span class="mr-1">High Park Livery </span>-
+      <span class="mr-1">{{ useAppConfig().brand.name }}</span> -
       <span class="ml-1">{{ addedToCart ? ' Order' : ' Quote' }} Details</span>
     </h1>
     <div class="mt-2 text-sm sm:flex sm:justify-between">
@@ -104,7 +104,11 @@ const createBooking = async () => {
           >
         </dt>
         <dd class="font-medium text-red-600">
-          <span>HPL-{{ quote!.quote_number }}</span>
+          <span
+            >{{ useAppConfig().brand.orderPrefix }}-{{
+              quote!.quote_number
+            }}</span
+          >
         </dd>
         <dt>
           <span class="sr-only">Date</span>

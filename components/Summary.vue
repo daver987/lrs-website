@@ -50,13 +50,20 @@ const goHome = async () => {
           <NuxtPicture
             class="h-auto w-32"
             alt="Logo"
-            src="/images/hpl-logo-dark.png"
+            :src="
+              useAppConfig().brand.assets.logo.dark ||
+              useAppConfig().brand.assets.logo.light
+            "
           />
           <div class="text-right">
             <h1 class="text-xl font-bold">Summary</h1>
             <p>
               Quote Number:
-              <span class="text-red-700"> HPL-{{ quote?.quote_number }}</span>
+              <span class="text-red-700">
+                {{ useAppConfig().brand.orderPrefix }}-{{
+                  quote?.quote_number
+                }}</span
+              >
             </p>
           </div>
         </div>
@@ -158,14 +165,14 @@ const goHome = async () => {
                 Phone:
                 <a
                   class="text-xs text-blue-600 underline"
-                  href="tel:+16473609631"
-                  >647-360-9631.</a
+                  :href="`tel:${useAppConfig().brand.contact.phoneE164}`"
+                  >{{ useAppConfig().brand.contact.phoneDisplay }}.</a
                 ><br />
                 Email:
                 <a
                   class="text-xs text-blue-600 underline"
-                  href="mailto:info@highparklivery.com"
-                  >info@highparklivery.com</a
+                  :href="`mailto:${useAppConfig().brand.contact.email}`"
+                  >{{ useAppConfig().brand.contact.email }}</a
                 >
               </p>
             </div>
