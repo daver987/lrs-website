@@ -41,7 +41,7 @@ const color = colorMode.value
 
     <div class="mt-8">
       <div class="mt-6">
-        <form action="#" class="space-y-6" method="POST">
+        <form class="space-y-6" action="#" method="POST">
           <InputText
             label="First Name"
             name="firstName"
@@ -86,8 +86,8 @@ const color = colorMode.value
           <div class="flex items-center justify-between">
             <div class="flex items-center">
               <input
-                id="remember-me"
                 class="h-4 w-4 rounded border-gray-300 text-brand-600 focus:ring-brand"
+                id="remember-me"
                 name="remember-me"
                 type="checkbox"
               />

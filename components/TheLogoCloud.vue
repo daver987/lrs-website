@@ -32,9 +32,9 @@ const logos = [
   <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
     <div class="grid grid-cols-2 gap-8 md:grid-cols-6 lg:grid-cols-5">
       <div
+        class="col-span-1 flex justify-center md:col-span-2 lg:col-span-1"
         v-for="logo in logos"
         key="logo.key"
-        class="col-span-1 flex justify-center md:col-span-2 lg:col-span-1"
       >
         <NuxtPicture
           :alt="logo.alt"

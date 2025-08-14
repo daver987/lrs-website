@@ -1,16 +1,17 @@
+import { _asyncContext } from 'process'
+import { devtools } from 'vue'
+
 export default defineNuxtConfig({
+  devtools: {
+    enabled: true,
+  },
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },
     layoutTransition: { name: 'layout', mode: 'out-in' },
   },
 
   build: {
-    transpile: [
-      '@headlessui/vue',
-      '@googlemaps/js-api-loader',
-      'trpc-nuxt',
-      '@sendgrid/mail',
-    ],
+    transpile: ['trpc-nuxt', '@sendgrid/mail'],
   },
 
   css: ['vue-tel-input/vue-tel-input.css'],
@@ -23,9 +24,6 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxtjs/color-mode',
     '@nuxt/devtools',
-    'nuxt-icon',
-    'nuxt-lodash',
-    '@vue-macros/nuxt',
     '@huntersofbook/naive-ui-nuxt',
     [
       '@pinia/nuxt',
@@ -33,31 +31,25 @@ export default defineNuxtConfig({
         autoImports: ['defineStore', 'definePiniaStore'],
       },
     ],
+    '@nuxt/icon',
   ],
-
   image: {
     quality: 80,
     format: ['avif', 'webp', 'jpeg', 'png'],
     densities: [1, 2, 3],
-    provider: 'netlify',
   },
-
   nitro: {
     preset: 'netlify',
+    experimental: {
+      asyncContext: true,
+    },
   },
-
+  experimental: {
+    asyncContext: true,
+  },
   colorMode: {
     classSuffix: '',
   },
-
-  lodash: {
-    prefix: '_',
-  },
-
-  typescript: {
-    shim: false,
-  },
-
   naiveUI: {
     themeOverrides: {
       common: {
@@ -128,7 +120,6 @@ export default defineNuxtConfig({
       },
     },
   },
-
   runtimeConfig: {
     PLANETSCALE_PASSWORD: process.env.PLANETSCALE_PASSWORD,
     PLANETSCALE_USERNAME: process.env.PLANETSCALE_USERNAME,
@@ -166,12 +157,9 @@ export default defineNuxtConfig({
       TAG_MANAGER_ENABLED: process.env.TAG_MANAGER_ENABLED,
     },
   },
-
   vite: {
     resolve: {
       alias: { '.prisma/client/index-browser': `@prisma/client/index-browser` },
     },
   },
-  //@ts-ignore
-  devtools: true,
 })

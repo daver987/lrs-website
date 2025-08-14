@@ -95,12 +95,12 @@ const isLoading = ref(false)
   <div class="h-screen w-full">
     <!-- Background color split screen for large screens -->
     <div
-      aria-hidden="true"
       class="fixed left-0 top-0 hidden h-full w-1/2 bg-neutral-100 lg:block"
+      aria-hidden="true"
     />
     <div
-      aria-hidden="true"
       class="fixed right-0 top-0 hidden h-full w-1/2 bg-brand-900 lg:block"
+      aria-hidden="true"
     />
 
     <header
@@ -127,11 +127,11 @@ const isLoading = ref(false)
       <h1 class="sr-only">Checkout</h1>
 
       <section
-        aria-labelledby="summary-heading"
         class="bg-brand-900 pb-12 pt-2 text-brand-300 md:px-10 lg:col-start-2 lg:row-start-1 lg:mx-auto lg:w-full lg:max-w-lg lg:bg-transparent lg:px-0 lg:pb-24 lg:pt-0"
+        aria-labelledby="summary-heading"
       >
         <div class="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0">
-          <h2 id="summary-heading" class="sr-only">Order summary</h2>
+          <h2 class="sr-only" id="summary-heading">Order summary</h2>
 
           <div
             class="rounded-lg bg-white p-6 text-brand-900 shadow-md dark:bg-neutral-400"
@@ -148,9 +148,9 @@ const isLoading = ref(false)
               role="list"
             >
               <li
+                class="flex items-start space-x-4 py-6"
                 v-for="trip in trips"
                 :key="trip.pickup_time as string"
-                class="flex items-start space-x-4 py-6"
               >
                 <NuxtPicture
                   :alt="vehicle.label"
@@ -171,9 +171,9 @@ const isLoading = ref(false)
               class="space-y-6 border-t border-gray-200 pt-8 text-sm font-medium"
             >
               <div
+                class="flex items-center justify-between"
                 v-for="item in combinedLineItems"
                 :key="item.label"
-                class="flex items-center justify-between"
               >
                 <dt v-if="item.label === 'Total' ? '' : item.label">
                   {{ item.label }}
@@ -195,23 +195,23 @@ const isLoading = ref(false)
       </section>
 
       <section
-        aria-labelledby="payment-and-shipping-heading"
         class="py-8 lg:col-start-1 lg:row-start-1 lg:mx-auto lg:w-full lg:max-w-lg lg:pb-24 lg:pt-0"
+        aria-labelledby="payment-and-shipping-heading"
       >
-        <h2 id="payment-and-shipping-heading" class="sr-only">
+        <h2 class="sr-only" id="payment-and-shipping-heading">
           Payment and shipping details
         </h2>
 
         <div class="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0">
           <div>
             <h3
-              id="payment-heading"
               class="text-lg font-medium text-neutral-900"
+              id="payment-heading"
             >
               Payment details
             </h3>
 
-            <form id="payment-form" class="p-6" @submit.prevent="submitOrder">
+            <form class="p-6" id="payment-form" @submit.prevent="submitOrder">
               <div
                 id="link-authentication-element"
                 ref="linkAuthenticationElement"
@@ -223,17 +223,17 @@ const isLoading = ref(false)
                 class="mt-2 flex justify-end border-t border-neutral-200 pt-6"
               >
                 <button
-                  id="submit"
                   class="w-full rounded-md border border-transparent bg-brand-600 px-4 py-2 text-sm font-medium uppercase text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-neutral-50"
+                  id="submit"
                   type="submit"
                 >
-                  <div id="spinner" class="spinner hidden"></div>
-                  <span v-if="isLoading" id="button-text"
+                  <div class="spinner hidden" id="spinner"></div>
+                  <span id="button-text" v-if="isLoading"
                     >Processing......</span
                   >
-                  <span v-else id="button-text">Complete Booking</span>
+                  <span id="button-text" v-else>Complete Booking</span>
                 </button>
-                <div id="payment-message" class="hidden"></div>
+                <div class="hidden" id="payment-message"></div>
               </div>
             </form>
             <div class="my-4 flex flex-col">

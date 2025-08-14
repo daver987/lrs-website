@@ -25,10 +25,10 @@ watchEffect((onInvalidate) => {
   <div class="image-container">
     <transition mode="out-in" name="crossfade">
       <img
+        class="image"
         :key="images[currentImageIndex]"
         :src="images[currentImageIndex]"
         alt="Switching images"
-        class="image"
       />
     </transition>
   </div>

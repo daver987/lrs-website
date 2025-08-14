@@ -24,7 +24,7 @@ const url = useRuntimeConfig().public.WEBSITE_URL
 <template>
   <div class="h-full px-4 lg:px-2">
     <TransitionRoot as="template" :show="open">
-      <Dialog as="div" class="relative z-40 lg:hidden" @close="open = false">
+      <Dialog class="relative z-40 lg:hidden" as="div" @close="open = false">
         <TransitionChild
           as="template"
           enter="transition-opacity ease-linear duration-300"
@@ -52,14 +52,14 @@ const url = useRuntimeConfig().public.WEBSITE_URL
             >
               <div class="flex px-4 pb-2 pt-5">
                 <button
-                  type="button"
                   class="-m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400"
+                  type="button"
                   @click="open = false"
                 >
                   <span class="sr-only">Close menu</span>
                   <Icon
-                    name="heroicons:x-mark"
                     class="h-6 w-6"
+                    name="heroicons:x-mark"
                     aria-hidden="true"
                   />
                 </button>
@@ -69,9 +69,9 @@ const url = useRuntimeConfig().public.WEBSITE_URL
                 <template v-for="page in nav" :key="page.id">
                   <div class="flow-root">
                     <NuxtLink
+                      class="-m-2 block p-2 font-medium capitalize"
                       exact-active-class="dark:text-brand dark:hover:text-brand-600"
                       :to="page.href"
-                      class="-m-2 block p-2 font-medium capitalize"
                       >{{ page.name }}
                     </NuxtLink>
                   </div>
@@ -81,17 +81,17 @@ const url = useRuntimeConfig().public.WEBSITE_URL
               <div class="space-y-6 border-t border-gray-200 px-4 py-6">
                 <div class="flow-root">
                   <NuxtLink
+                    class="-m-2 block p-2 font-medium text-gray-900"
                     exact-active-class="text-brand hover:text-brand-600"
                     to="/signin"
-                    class="-m-2 block p-2 font-medium text-gray-900"
                     >Sign in
                   </NuxtLink>
                 </div>
                 <div class="flow-root">
                   <NuxtLink
+                    class="-m-2 block p-2 font-medium text-gray-900"
                     exact-active-class="text-brand hover:text-brand-600"
                     to="/signup"
-                    class="-m-2 block p-2 font-medium text-gray-900"
                     >Create account
                   </NuxtLink>
                 </div>
@@ -118,18 +118,18 @@ const url = useRuntimeConfig().public.WEBSITE_URL
       </Dialog>
     </TransitionRoot>
     <header class="relative bg-transparent">
-      <nav aria-label="Top" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Top">
         <div class="border-b border-gray-400 py-2">
           <div class="flex h-16 w-full justify-center lg:items-center">
             <button
-              type="button"
               class="flex-shrink-0 rounded bg-transparent p-2 text-gray-400 hover:text-gray-500 lg:hidden"
+              type="button"
               @click="open = true"
             >
               <span class="sr-only">Open menu</span>
               <Icon
-                name="heroicons:bars-3"
                 class="h-6 w-6"
+                name="heroicons:bars-3"
                 aria-hidden="true"
               />
             </button>
@@ -138,7 +138,7 @@ const url = useRuntimeConfig().public.WEBSITE_URL
             <div
               class="ml-2 flex w-full justify-center lg:ml-0 lg:w-auto lg:justify-start"
             >
-              <NuxtLink to="/" class="self-center">
+              <NuxtLink class="self-center" to="/">
                 <span class="sr-only">High Park Livery</span>
                 <NuxtPicture
                   src="hpl-logo-dark.png"
@@ -155,9 +155,9 @@ const url = useRuntimeConfig().public.WEBSITE_URL
               <div class="flex h-full space-x-8">
                 <template v-for="page in nav" :key="page.id">
                   <NuxtLink
+                    class="flex items-center text-sm font-medium capitalize tracking-wider text-gray-900 hover:text-brand"
                     exact-active-class="text-brand hover:text-brand-600"
                     :to="page.href"
-                    class="flex items-center text-sm font-medium capitalize tracking-wider text-gray-900 hover:text-brand"
                     >{{ page.name }}
                   </NuxtLink>
                 </template>
@@ -169,24 +169,24 @@ const url = useRuntimeConfig().public.WEBSITE_URL
                 class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6"
               >
                 <NuxtLink
+                  class="text-sm font-medium text-gray-900 hover:text-brand"
                   to="/signin"
                   exact-active-class="text-brand hover:text-brand-600"
-                  class="text-sm font-medium text-gray-900 hover:text-brand"
                   >Sign in
                 </NuxtLink>
                 <span class="h-6 w-px bg-gray-700" aria-hidden="true" />
                 <NuxtLink
+                  class="text-sm font-medium text-gray-900 hover:text-brand"
                   to="/signup"
                   exact-active-class="text-brand hover:text-brand-600"
-                  class="text-sm font-medium text-gray-900 hover:text-brand"
                   >Create account
                 </NuxtLink>
               </div>
 
               <div class="hidden lg:ml-8 lg:flex">
                 <a
-                  href="#"
                   class="flex items-center text-gray-900 hover:text-brand dark:text-gray-500"
+                  href="#"
                 >
                   <NuxtPicture
                     src="https://tailwindui.com/img/flags/flag-canada.svg"

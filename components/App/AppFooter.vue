@@ -43,16 +43,16 @@ const props = defineProps<Props>()
           <div class="flex flex-row justify-items-center">
             <Icon class="mr-8 text-3xl text-brand" name="zmdi:phone" />
             <NuxtLink
-              :href="`tel:${companyData.companyPhone}`"
               class="cursor-pointer tracking-wider text-neutral-200 hover:text-brand dark:text-neutral-400"
+              :href="`tel:${companyData.companyPhone}`"
               >{{ companyData.companyPhoneDisplay }}
             </NuxtLink>
           </div>
           <div class="flex flex-row justify-items-center">
             <Icon class="mr-8 text-4xl text-brand" name="ic:outline-mail" />
             <NuxtLink
-              :href="`mailto:${companyData.companyEmail}`"
               class="cursor-pointer tracking-widest text-neutral-200 hover:text-brand dark:text-neutral-400"
+              :href="`mailto:${companyData.companyEmail}`"
               >{{ companyData.companyEmail }}
             </NuxtLink>
           </div>
@@ -69,9 +69,9 @@ const props = defineProps<Props>()
             >
               <li v-for="nav in navigation" :key="nav.id">
                 <NuxtLink
+                  class="hover:text-brand"
                   :to="nav.href"
                   active-class="text-brand hover:text-brand-600"
-                  class="hover:text-brand"
                 >
                   {{ nav.name }}
                 </NuxtLink>
@@ -88,8 +88,8 @@ const props = defineProps<Props>()
           </label>
           <slot name="email-input"></slot>
           <BaseButton
-            button
             class="w-full"
+            button
             kind="btn-solid"
             label="Subscribe"
           />

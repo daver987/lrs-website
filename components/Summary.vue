@@ -44,12 +44,12 @@ const goHome = async () => {
         Save as PDF
       </button>
     </div>
-    <div id="order-summary" ref="orderSummary" class="bg-white p-4 md:p-8">
+    <div class="bg-white p-4 md:p-8" id="order-summary" ref="orderSummary">
       <div class="mx-auto w-full md:max-w-4xl">
         <div class="mb-6 flex items-center justify-between">
           <NuxtPicture
-            alt="Logo"
             class="h-auto w-32"
+            alt="Logo"
             src="/images/hpl-logo-dark.png"
           />
           <div class="text-right">
@@ -84,18 +84,18 @@ const goHome = async () => {
               {{ quote.vehicle.label }}
             </p>
             <img
+              class="mt-2 h-auto w-48"
               :src="quote.vehicle.vehicle_image!"
               alt="Vehicle Image"
-              class="mt-2 h-auto w-48"
             />
           </div>
         </div>
         <div class="mb-6">
           <h2 class="mb-4 text-lg font-bold">Trip Details</h2>
           <div
+            class="mb-4 rounded-md border p-4"
             v-for="(trip, index) in quote.trips"
             :key="index"
-            class="mb-4 rounded-md border p-4"
           >
             <p>
               <span class="font-semibold">Pick Up: </span>
@@ -121,9 +121,9 @@ const goHome = async () => {
               <table class="w-full">
                 <tbody>
                   <tr
+                    class="border-t border-gray-200"
                     v-for="(lineItem, itemIndex) in quote.combined_line_items"
                     :key="itemIndex"
-                    class="border-t border-gray-200"
                   >
                     <td class="py-2">{{ lineItem.label }}</td>
                     <td class="py-2 text-right">

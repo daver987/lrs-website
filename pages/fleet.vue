@@ -72,10 +72,10 @@ const tabs = [
       :image="headerInfo.image"
     />
     <TabGroup
+      class="mx-auto max-w-7xl md:-mt-20"
       :selected-index="selectedTab"
       @change="changeTab"
       as="main"
-      class="mx-auto max-w-7xl md:-mt-20"
     >
       <TabList
         class="relative z-10 mx-auto mb-12 grid grid-cols-2 gap-1 md:grid-cols-3 lg:grid-cols-6"
@@ -87,14 +87,14 @@ const tabs = [
           as="template"
         >
           <button
+            class="col-span-1 flex w-full flex-col items-center justify-center space-y-4 px-2 py-16 hover:bg-brand hover:text-neutral-400"
             :class="[
               selected
                 ? 'bg-brand text-neutral-200'
                 : 'bg-white text-neutral-200 dark:bg-neutral-700',
             ]"
-            class="col-span-1 flex w-full flex-col items-center justify-center space-y-4 px-2 py-16 hover:bg-brand hover:text-neutral-400"
           >
-            <img :src="`/icons/${tab.icon}.svg`" alt="icon" class="w-16" />
+            <img class="w-16" :src="`/icons/${tab.icon}.svg`" alt="icon" />
             <span
               class="text-center text-sm uppercase tracking-widest hover:text-neutral-200"
               :class="[

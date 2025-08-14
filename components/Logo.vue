@@ -1,6 +1,6 @@
 <template>
   <NuxtLink to="/">
-    <div :class="[size, shape]" class="logo">
+    <div class="logo" :class="[size, shape]">
       <NuxtPicture
         v-if="shape === 'round'"
         :src="logoRound"

@@ -1,20 +1,20 @@
 <template>
   <div class="w-full">
-    <label v-show="showLabel" :for="name" class="label"
+    <label class="label" v-show="showLabel" :for="name"
       ><span class="label-text">{{ label }}</span></label
     >
     <div class="relative max-w-xl">
       <input
-        :id="id"
+        class="input input-bordered input-sm w-full rounded-none font-brand-body placeholder:font-brand-body"
         v-model="inputValue"
+        :id="id"
         :name="name"
         :placeholder="placeholder"
         :required="required"
         :type="type"
-        class="input input-bordered input-sm w-full rounded-none font-brand-body placeholder:font-brand-body"
       />
     </div>
-    <span v-show="validation" class="label-text text-error">
+    <span class="label-text text-error" v-show="validation">
       {{ validationErrorMessage }}
     </span>
   </div>

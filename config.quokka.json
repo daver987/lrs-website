@@ -1,8 +1,0 @@
-{
-  "nativeEsm": true,
-  "env": {
-    "params": {
-      "runner": "--experimental-specifier-resolution=node"
-    }
-  }
-}

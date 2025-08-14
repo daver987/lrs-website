@@ -54,8 +54,8 @@ export function parseDateTime(dateStr: string, timeStr: string): DateAndTime {
     amPm === 'PM' && hours !== 12
       ? hours + 12
       : hours === 12 && amPm === 'AM'
-      ? 0
-      : hours
+        ? 0
+        : hours
 
   return [year, month, day, adjustedHours, minutes]
 }

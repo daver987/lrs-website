@@ -179,15 +179,15 @@ const submitHandler = async () => {
                   style="width: 100%; min-width: 400px"
                 >
                   <n-form-item-gi
+                    class="flight-info"
                     path="flight_number"
                     feedback="Enter flight number, e.g. AC116"
-                    class="flight-info"
                     label="Flight Number:"
                   >
                     <n-input
-                      type="text"
                       id="flight-number"
                       v-model:value="formValue.flight_number"
+                      type="text"
                       required
                       placeholder="Enter Flight Number.."
                     />

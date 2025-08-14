@@ -43,18 +43,18 @@ const onSubmit = handleSubmit(async (values: ContactFormSchema) => {
 <template>
   <div>
     <main class="overflow-hidden">
-      <section aria-labelledby="contact-heading" class="relative">
+      <section class="relative" aria-labelledby="contact-heading">
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
           <div class="relative bg-white shadow-xl dark:bg-neutral-700">
-            <h2 id="contact-heading" class="sr-only">Contact us</h2>
+            <h2 class="sr-only" id="contact-heading">Contact us</h2>
 
             <div class="grid grid-cols-1 lg:grid-cols-3">
               <div
                 class="relative overflow-hidden bg-gradient-to-b from-brand to-brand-600 px-6 py-10 sm:px-10 xl:p-12"
               >
                 <div
-                  aria-hidden="true"
                   class="pointer-events-none absolute inset-0 sm:hidden"
+                  aria-hidden="true"
                 >
                   <svg
                     class="absolute inset-0 h-full w-full"
@@ -86,8 +86,8 @@ const onSubmit = handleSubmit(async (values: ContactFormSchema) => {
                   </svg>
                 </div>
                 <div
-                  aria-hidden="true"
                   class="pointer-events-none absolute bottom-0 right-0 top-0 hidden w-1/2 sm:block lg:hidden"
+                  aria-hidden="true"
                 >
                   <svg
                     class="absolute inset-0 h-full w-full"
@@ -119,8 +119,8 @@ const onSubmit = handleSubmit(async (values: ContactFormSchema) => {
                   </svg>
                 </div>
                 <div
-                  aria-hidden="true"
                   class="pointer-events-none absolute bottom-0 right-0 top-0 hidden w-1/2 lg:block"
+                  aria-hidden="true"
                 >
                   <svg
                     class="absolute inset-0 h-full w-full"
@@ -166,8 +166,8 @@ const onSubmit = handleSubmit(async (values: ContactFormSchema) => {
                   <dt><span class="sr-only">Phone number</span></dt>
                   <dd class="flex text-base text-brand-50">
                     <icon
-                      aria-hidden="true"
                       class="h-6 w-6 flex-shrink-0 text-brand-200"
+                      aria-hidden="true"
                       name="heroicons:phone"
                     />
                     <span class="ml-3">+1 (647) 360-9631</span>
@@ -175,8 +175,8 @@ const onSubmit = handleSubmit(async (values: ContactFormSchema) => {
                   <dt><span class="sr-only">Email</span></dt>
                   <dd class="flex text-base text-brand-50">
                     <Icon
-                      aria-hidden="true"
                       class="h-6 w-6 flex-shrink-0 text-brand-200"
+                      aria-hidden="true"
                       name="heroicons:envelope"
                     />
                     <span class="ml-3">info@highparklivery.com</span>
@@ -187,8 +187,8 @@ const onSubmit = handleSubmit(async (values: ContactFormSchema) => {
                     <a class="text-brand-200 hover:text-brand-100" href="#">
                       <span class="sr-only">Facebook</span>
                       <svg
-                        aria-hidden="true"
                         class="h-7 w-7"
+                        aria-hidden="true"
                         fill="currentColor"
                         viewBox="0 0 24 24"
                       >
@@ -204,8 +204,8 @@ const onSubmit = handleSubmit(async (values: ContactFormSchema) => {
                     <a class="text-brand-200 hover:text-brand-100" href="#">
                       <span class="sr-only">GitHub</span>
                       <svg
-                        aria-hidden="true"
                         class="h-7 w-7"
+                        aria-hidden="true"
                         fill="currentColor"
                         viewBox="0 0 24 24"
                       >
@@ -221,8 +221,8 @@ const onSubmit = handleSubmit(async (values: ContactFormSchema) => {
                     <a class="text-brand-200 hover:text-brand-100" href="#">
                       <span class="sr-only">Twitter</span>
                       <svg
-                        aria-hidden="true"
                         class="h-7 w-7"
+                        aria-hidden="true"
                         fill="currentColor"
                         viewBox="0 0 24 24"
                       >
@@ -295,20 +295,20 @@ const onSubmit = handleSubmit(async (values: ContactFormSchema) => {
                         >Message</label
                       >
                       <span
-                        id="message-max"
                         class="text-sm text-neutral-500 dark:text-neutral-400"
+                        id="message-max"
                         >Max. 500 characters</span
                       >
                     </div>
                     <div class="mt-1">
                       <Field v-slot="{ field, errorMessage }" name="message">
                         <textarea
-                          id="message"
-                          aria-describedby="message-max"
                           class="block w-full rounded-md border-neutral-300 px-4 py-3 shadow-sm focus:border-brand focus:ring-brand dark:bg-neutral-200"
+                          id="message"
+                          v-bind="field"
+                          aria-describedby="message-max"
                           placeholder="Send Us a Message...."
                           rows="4"
-                          v-bind="field"
                         />
                         <ErrorMessage class="red-700" name="message" />
                       </Field>

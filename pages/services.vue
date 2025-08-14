@@ -81,10 +81,10 @@ const headerInfo = {
               :src="service.image"
             />
           </div>
-          <div :class="service.infoPosition" class="flex">
+          <div class="flex" :class="service.infoPosition">
             <div
-              :class="service.infoBoxPosition"
               class="space-y-4 px-5 py-7 md:px-10 md:py-12"
+              :class="service.infoBoxPosition"
             >
               <h2
                 class="font-brand-subheading uppercase tracking-widest text-brand"
@@ -102,8 +102,8 @@ const headerInfo = {
                 {{ service.body }}
               </p>
               <BaseButton
-                :nuxtLink="true"
                 class="mt-8"
+                :nuxtLink="true"
                 kind="btn-brand"
                 label="Contact Us"
                 to="/contact"
@@ -114,8 +114,8 @@ const headerInfo = {
       </BaseContainer>
     </BaseSection>
     <BaseSection
-      :style="backgroundImage"
       class="space-y-3 bg-cover bg-center bg-no-repeat"
+      :style="backgroundImage"
     >
       <div class="w-full">
         <p

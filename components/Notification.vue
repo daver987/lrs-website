@@ -20,8 +20,8 @@ const closeNotification = (): void => {
 
 <template>
   <div
-    aria-live="assertive"
     class="pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-start sm:p-6"
+    aria-live="assertive"
   >
     <div class="flex w-full flex-col items-center space-y-4 sm:items-end">
       <transition
@@ -33,15 +33,15 @@ const closeNotification = (): void => {
         leave-to-class="opacity-0"
       >
         <div
-          v-if="showNotification"
           class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5"
+          v-if="showNotification"
         >
           <div class="p-4">
             <div class="flex items-start">
               <div class="flex-shrink-0">
                 <Icon
-                  aria-hidden="true"
                   class="h-6 w-6 text-green-400"
+                  aria-hidden="true"
                   name="heroicons-outline:check-circle"
                 />
               </div>
@@ -61,8 +61,8 @@ const closeNotification = (): void => {
                 >
                   <span class="sr-only">Close</span>
                   <Icon
-                    aria-hidden="true"
                     class="h-5 w-5"
+                    aria-hidden="true"
                     name="heroicons:x-circle-20-solid"
                   />
                 </button>

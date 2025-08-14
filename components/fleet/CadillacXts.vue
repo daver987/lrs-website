@@ -62,7 +62,7 @@
       </div>
     </div>
     <div class="flex w-full flex-row justify-end">
-      <Luggage :peopleAmount="3" :luggageAmount="3" class="md:-mt-48" />
+      <Luggage class="md:-mt-48" :peopleAmount="3" :luggageAmount="3" />
     </div>
   </div>
 </template>

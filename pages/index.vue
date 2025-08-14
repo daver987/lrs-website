@@ -143,7 +143,7 @@ const fleetBackgroundImg = useBackgroundImage($img, fleetBackgroundImage)
           </p>
         </div>
         <div class="flex w-full place-items-center justify-center p-6">
-          <icon name="ri:24-hours-line" size="256" class="text-neutral-400" />
+          <icon class="text-neutral-400" name="ri:24-hours-line" size="256" />
         </div>
       </BaseContainer>
     </BaseSection>
@@ -153,13 +153,13 @@ const fleetBackgroundImg = useBackgroundImage($img, fleetBackgroundImage)
         class="mx-auto mb-8 flex max-w-4xl flex-col md:mb-4 md:grid md:flex-none md:grid-cols-2 md:grid-rows-1 md:items-stretch lg:max-w-7xl"
       >
         <IconBlockFleet
-          heading="Cadillac XTS"
           class="order-1 md:order-first md:col-span-1 md:col-start-1 md:w-full md:self-center"
+          heading="Cadillac XTS"
         />
         <IconBlockFleetImage
+          class="md:col-span-1 md:col-start-2"
           altText="XTS Interior"
           image="/images/standard_sedan-4.jpg"
-          class="md:col-span-1 md:col-start-2"
         />
       </BaseContainer>
       <BaseContainer
@@ -170,8 +170,8 @@ const fleetBackgroundImg = useBackgroundImage($img, fleetBackgroundImage)
           heading="Cadillac Escalade"
         />
         <IconBlockFleetImage
-          altText="Escalade Interior"
           class="order-1 md:col-span-1 md:col-start-1 md:row-start-1 md:row-end-2 md:mb-0 md:self-end"
+          altText="Escalade Interior"
           image="/images/premium_suv-1.jpg"
         />
         <IconBlockFleet
@@ -179,8 +179,8 @@ const fleetBackgroundImg = useBackgroundImage($img, fleetBackgroundImage)
           heading="Lincoln Continental"
         />
         <IconBlockFleetImage
-          altText="Continental Interior"
           class="order-3 md:col-start-2 md:row-start-2 md:-mt-8"
+          altText="Continental Interior"
           image="/images/premium_sedan-1.jpg"
         />
       </BaseContainer>
@@ -213,12 +213,12 @@ const fleetBackgroundImg = useBackgroundImage($img, fleetBackgroundImage)
         class="mx-auto -mt-8 grid max-w-7xl grid-cols-1 gap-4 bg-white p-6 shadow-xl @container dark:bg-neutral-700 lg:grid-cols-2"
       >
         <IconBlockAbout
+          class="shadow-none"
           v-for="service in servicesHome"
           :key="service.id"
           :body="service.body"
           :icon-name="service.iconName"
           :title="service.title"
-          class="shadow-none"
         />
       </div>
     </BaseSection>

@@ -9,8 +9,8 @@ definePageMeta({
 
 <template>
   <div
-    style="min-height: 100dvh"
     class="flex flex-col justify-between bg-neutral-800"
+    style="min-height: 100dvh"
   >
     <AppNavigation />
     <Summary />

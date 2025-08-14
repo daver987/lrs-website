@@ -41,12 +41,13 @@ const {
 <template>
   <div>
     <label
-      :for="name"
       class="block text-sm font-medium text-neutral-700 dark:text-neutral-200"
+      :for="name"
       >{{ label }}</label
     >
     <div class="relative mt-1 rounded-md shadow-sm">
       <input
+        class="block w-full rounded-md dark:bg-neutral-200 sm:text-sm"
         :id="name"
         :aria-describedby="name"
         :aria-errormessage="errorMessage"
@@ -59,22 +60,21 @@ const {
         :placeholder="placeholder"
         :type="type"
         :value="inputValue"
-        class="block w-full rounded-md dark:bg-neutral-200 sm:text-sm"
         @blur="handleBlur"
         @input="handleChange"
       />
       <div
-        v-show="errorMessage"
         class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3"
+        v-show="errorMessage"
       >
         <Icon
-          aria-hidden="true"
           class="h-5 w-5 text-red-500"
+          aria-hidden="true"
           name="heroicons:exclamation-circle-solid"
         />
       </div>
     </div>
-    <p v-show="errorMessage" :id="name" class="mt-2 text-sm text-red-600">
+    <p class="mt-2 text-sm text-red-600" v-show="errorMessage" :id="name">
       {{ errorMessage }}
     </p>
   </div>

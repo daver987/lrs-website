@@ -11,7 +11,7 @@ defineProps<Props>()
 <template>
   <div class="p-6 sm:flex">
     <div class="mb-4 flex-shrink-0 sm:mb-0 sm:mr-4">
-      <Icon :name="iconName" class="text-neutral-400" size="48" />
+      <Icon class="text-neutral-400" :name="iconName" size="48" />
     </div>
     <div>
       <h3

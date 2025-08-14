@@ -46,14 +46,14 @@ const headerImage = computed(() => {
 
 <template>
   <header
-    :style="backgroundImage"
     class="relative min-h-screen overflow-hidden"
+    :style="backgroundImage"
   >
     <AppNavigation />
     <BaseContainer class="relative mt-20 grid grid-cols-1 md:grid-cols-2">
       <div
-        :style="headerImage"
         class="relative bg-black bg-opacity-60 bg-cover bg-center bg-no-repeat py-32 bg-blend-darken md:col-span-2 md:px-10"
+        :style="headerImage"
       >
         <div class="space-y-4 text-center md:text-left">
           <p
@@ -75,8 +75,8 @@ const headerImage = computed(() => {
             class="bottom-1/2 tracking-wide md:absolute md:-left-20 md:-rotate-90 md:transform"
           >
             <NuxtLink
-              :href="`tel:${companyPhone}`"
               class="text-center font-brand-body text-sm text-neutral-200"
+              :href="`tel:${companyPhone}`"
               ><span class="text-brand">CALL :</span>
               {{ companyPhone }}
             </NuxtLink>
@@ -85,8 +85,8 @@ const headerImage = computed(() => {
             class="bottom-1/2 my-1 md:absolute md:-right-36 md:rotate-90 md:transform"
           >
             <NuxtLink
-              :href="`mailto:${companyEmail}`"
               class="text-center font-brand-body text-sm uppercase tracking-wide text-neutral-200"
+              :href="`mailto:${companyEmail}`"
               ><span class="text-brand">EMAIL :</span>
               {{ companyEmail }}
             </NuxtLink>

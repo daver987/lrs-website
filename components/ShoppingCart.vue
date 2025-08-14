@@ -98,8 +98,8 @@ const createBooking = async () => {
       <dl class="flex">
         <dt class="text-neutral-500 dark:text-neutral-100">
           {{ addedToCart ? 'Order' : 'Quote' }} Number&nbsp;<span
-            aria-hidden="true"
             class="mx-2 text-neutral-400 dark:text-neutral-100"
+            aria-hidden="true"
             >&middot;</span
           >
         </dt>
@@ -109,8 +109,8 @@ const createBooking = async () => {
         <dt>
           <span class="sr-only">Date</span>
           <span
-            aria-hidden="true"
             class="mx-2 text-neutral-400 dark:text-neutral-100"
+            aria-hidden="true"
             >&middot;</span
           >
         </dt>
@@ -128,16 +128,16 @@ const createBooking = async () => {
     <form
       class="mt-8 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16"
     >
-      <section aria-labelledby="cart-heading" class="lg:col-span-7">
-        <h2 id="cart-heading" class="sr-only">Items in your shopping cart</h2>
+      <section class="lg:col-span-7" aria-labelledby="cart-heading">
+        <h2 class="sr-only" id="cart-heading">Items in your shopping cart</h2>
         <ul
           class="divide-y divide-neutral-200 border-b border-t border-neutral-200"
           role="list"
         >
           <li
+            class="flex py-6 sm:py-8"
             v-for="(trip, index) in quote!.trips"
             :key="trip.trip_order!"
-            class="flex py-6 sm:py-8"
           >
             <div class="flex-shrink-0">
               <NuxtPicture
@@ -196,15 +196,15 @@ const createBooking = async () => {
                 </div>
 
                 <div class="mt-4 sm:mt-0 sm:pr-9">
-                  <div v-if="false" class="absolute right-0 top-0">
+                  <div class="absolute right-0 top-0" v-if="false">
                     <button
                       class="-m-2 inline-flex p-2 text-neutral-400 hover:text-neutral-500"
                       type="button"
                     >
                       <span class="sr-only">Remove</span>
                       <Icon
-                        aria-hidden="true"
                         class="h-5 w-5"
+                        aria-hidden="true"
                         name="heroicons:x-mark-20-solid"
                       />
                     </button>
@@ -216,15 +216,15 @@ const createBooking = async () => {
                 class="mt-4 flex space-x-2 text-sm text-neutral-700 dark:text-neutral-200"
               >
                 <Icon
+                  class="h-5 w-5 flex-shrink-0 text-green-500"
                   v-if="quote!.is_round_trip"
                   aria-hidden="true"
-                  class="h-5 w-5 flex-shrink-0 text-green-500"
                   name="heroicons:check-20-solid"
                 />
                 <Icon
+                  class="h-5 w-5 flex-shrink-0 text-neutral-300"
                   v-else
                   aria-hidden="true"
-                  class="h-5 w-5 flex-shrink-0 text-neutral-300"
                   name="heroicons:clock-20-solid"
                 />
                 <span>
@@ -244,21 +244,21 @@ const createBooking = async () => {
 
       <!-- Order summary -->
       <section
-        aria-labelledby="summary-heading"
         class="mt-16 rounded-lg bg-neutral-100 px-4 py-6 dark:bg-neutral-900 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8"
+        aria-labelledby="summary-heading"
       >
         <h2
-          id="summary-heading"
           class="text-lg font-medium text-neutral-900 dark:text-neutral-100"
+          id="summary-heading"
         >
           {{ addedToCart ? 'Order' : 'Quote' }} Summary
         </h2>
 
         <dl class="mt-6 space-y-4">
           <div
+            class="flex items-center justify-between border-t border-neutral-200 pt-4"
             v-for="item in combinedLineItems"
             :key="item.label"
-            class="flex items-center justify-between border-t border-neutral-200 pt-4"
           >
             <dt
               class="flex items-center text-sm text-neutral-600 dark:text-neutral-300"
@@ -272,8 +272,8 @@ const createBooking = async () => {
                   >Learn more about how {{ item.label }} is calculated</span
                 >
                 <Icon
-                  aria-hidden="true"
                   class="h-5 w-5"
+                  aria-hidden="true"
                   name="heroicons:question-mark-circle-20-solid"
                 />
               </a>
@@ -288,16 +288,16 @@ const createBooking = async () => {
 
         <div class="mt-6">
           <button
-            v-if="!addedToCart"
             class="w-full rounded-md border border-transparent bg-red-600 px-4 py-3 text-base font-medium uppercase text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-neutral-50"
+            v-if="!addedToCart"
             type="button"
             @click="cartStore.addToCart()"
           >
             {{ loading ? 'Adding To Cart...' : 'Add To Cart' }}
           </button>
           <button
-            v-else
             class="w-full rounded-md border border-transparent bg-red-600 px-4 py-3 text-base font-medium uppercase text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-neutral-50"
+            v-else
             type="button"
             @click="createBooking"
           >

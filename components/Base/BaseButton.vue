@@ -33,9 +33,9 @@ const NuxtLink = resolveComponent('nuxt-link')
 </script>
 <template>
   <component
+    v-if="button || nuxtLink || link"
     :class="['ripple', btnStyle]"
     @click="$emit('click')"
-    v-if="button || nuxtLink || link"
     :to="to"
     :href="href"
     :is="button ? 'button' : nuxtLink ? NuxtLink : 'a'"

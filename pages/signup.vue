@@ -23,7 +23,7 @@ const src = 'hpl-logo-dark.png'
 <template>
   <div class="h-full px-4 lg:px-2">
     <TransitionRoot :show="open" as="template">
-      <Dialog as="div" class="relative z-40 lg:hidden" @close="open = false">
+      <Dialog class="relative z-40 lg:hidden" as="div" @close="open = false">
         <TransitionChild
           as="template"
           enter="transition-opacity ease-linear duration-300"
@@ -57,8 +57,8 @@ const src = 'hpl-logo-dark.png'
                 >
                   <span class="sr-only">Close menu</span>
                   <Icon
-                    aria-hidden="true"
                     class="h-6 w-6"
+                    aria-hidden="true"
                     name="heroicons:x-mark"
                   />
                 </button>
@@ -68,8 +68,8 @@ const src = 'hpl-logo-dark.png'
                 <template v-for="page in nav" :key="page.id">
                   <div class="flow-root">
                     <NuxtLink
-                      :to="page.href"
                       class="-m-2 block p-2 font-medium capitalize"
+                      :to="page.href"
                       exact-active-class="dark:text-brand dark:hover:text-brand-600"
                       >{{ page.name }}
                     </NuxtLink>
@@ -117,7 +117,7 @@ const src = 'hpl-logo-dark.png'
       </Dialog>
     </TransitionRoot>
     <header class="relative bg-transparent">
-      <nav aria-label="Top" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Top">
         <div class="border-b border-gray-400 py-2">
           <div class="flex h-16 w-full justify-center lg:items-center">
             <button
@@ -127,8 +127,8 @@ const src = 'hpl-logo-dark.png'
             >
               <span class="sr-only">Open menu</span>
               <Icon
-                aria-hidden="true"
                 class="h-6 w-6"
+                aria-hidden="true"
                 name="heroicons:bars-3"
               />
             </button>
@@ -154,8 +154,8 @@ const src = 'hpl-logo-dark.png'
               <div class="flex h-full space-x-8">
                 <template v-for="page in nav" :key="page.id">
                   <NuxtLink
-                    :to="page.href"
                     class="flex items-center text-sm font-medium capitalize tracking-wider text-gray-900 hover:text-brand"
+                    :to="page.href"
                     exact-active-class="text-brand hover:text-brand-600"
                     >{{ page.name }}
                   </NuxtLink>
@@ -173,7 +173,7 @@ const src = 'hpl-logo-dark.png'
                   to="/signin"
                   >Sign in
                 </NuxtLink>
-                <span aria-hidden="true" class="h-6 w-px bg-gray-700" />
+                <span class="h-6 w-px bg-gray-700" aria-hidden="true" />
                 <NuxtLink
                   class="text-sm font-medium text-gray-900 hover:text-brand"
                   exact-active-class="text-brand hover:text-brand-600"

@@ -40,17 +40,17 @@ const itemsInCart = computed(() =>
   <Popover class="ml-4 flow-root text-sm lg:relative lg:ml-8">
     <PopoverButton class="group -m-2 flex items-center p-2">
       <Icon
-        name="heroicons:shopping-bag"
         class="h-6 w-6 flex-shrink-0 text-neutral-400 group-hover:text-neutral-500"
+        name="heroicons:shopping-bag"
         aria-hidden="true"
       />
       <span
+        class="ml-2 text-sm font-medium"
         :class="[
           addedToCart
             ? 'text-neutral-700 group-hover:text-neutral-800 dark:text-neutral-300 dark:group-hover:text-neutral-400'
             : 'text-brand-600 group-hover:text-brand-700',
         ]"
-        class="ml-2 text-sm font-medium"
         >{{ itemsInCart }}</span
       >
       <span class="sr-only">items in cart, view bag</span>
@@ -69,11 +69,11 @@ const itemsInCart = computed(() =>
         <h2 class="sr-only">Shopping Cart</h2>
 
         <form class="mx-auto max-w-2xl px-4" @submit.prevent>
-          <ul role="list" class="divide-y divide-neutral-200">
+          <ul class="divide-y divide-neutral-200" role="list">
             <li class="flex items-center py-6" v-if="!addedToCart">
               <Icon
-                name="teenyicons:mood-sad-outline"
                 class="h-16 w-16 flex-none rounded-md"
+                name="teenyicons:mood-sad-outline"
               />
               <div class="ml-4 flex-auto">
                 <h3
@@ -83,7 +83,7 @@ const itemsInCart = computed(() =>
                 </h3>
               </div>
             </li>
-            <li v-else class="flex items-center py-6">
+            <li class="flex items-center py-6" v-else>
               <NuxtPicture
                 :src="vehicleImage"
                 alt="Vehicle"
@@ -103,17 +103,17 @@ const itemsInCart = computed(() =>
             </li>
           </ul>
           <button
+            class="w-full rounded-md border border-transparent bg-brand-600 px-4 py-2 font-brand-body text-sm font-medium uppercase tracking-wider text-neutral-100 shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-neutral-50"
             v-if="addedToCart"
             type="submit"
-            class="w-full rounded-md border border-transparent bg-brand-600 px-4 py-2 font-brand-body text-sm font-medium uppercase tracking-wider text-neutral-100 shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-neutral-50"
           >
             Book Now
           </button>
 
-          <p v-if="addedToCart" class="mt-6 text-center">
+          <p class="mt-6 text-center" v-if="addedToCart">
             <button
-              @click="cartStore.removeFromCart"
               class="font-brand-body text-sm font-medium text-brand-600 hover:text-brand"
+              @click="cartStore.removeFromCart"
             >
               Remove From Cart
             </button>

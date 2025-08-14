@@ -77,8 +77,8 @@ const qualities = [
           </div>
           <div class="flex justify-center px-4 py-4 sm:px-6">
             <BaseButton
-              :nuxtLink="true"
               class="self-center"
+              :nuxtLink="true"
               kind="btn-brand"
               label="Reserve Now"
               to="/reservations"

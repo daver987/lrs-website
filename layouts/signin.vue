@@ -13,7 +13,7 @@ import { navigation } from '~/data/navigation'
 
 <template>
   <div class="min-h-screen">
-    <Disclosure as="nav" v-slot="{ open }">
+    <Disclosure v-slot="{ open }" as="nav">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="h-18 flex justify-between">
           <div class="flex">
@@ -36,30 +36,30 @@ import { navigation } from '~/data/navigation'
             <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
               <!-- Current: "border-brand text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" -->
               <NuxtLink
+                class="inline-flex items-center border-transparent font-sans text-sm font-medium capitalize text-gray-500 hover:border-gray-300 hover:text-gray-700"
                 v-for="link in navigation"
                 :key="link.id"
                 :to="link.href"
                 exact-active-class="border-brand text-gray-900"
-                class="inline-flex items-center border-transparent font-sans text-sm font-medium capitalize text-gray-500 hover:border-gray-300 hover:text-gray-700"
                 >{{ link.name }}</NuxtLink
               >
             </div>
           </div>
-          <div v-show="false" class="hidden sm:ml-6 sm:flex sm:items-center">
+          <div class="hidden sm:ml-6 sm:flex sm:items-center" v-show="false">
             <button
-              type="button"
               class="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
+              type="button"
             >
               <span class="sr-only">View notifications</span>
-              <Icon name="heroicons:bell" class="h-6 w-6" aria-hidden="true" />
+              <Icon class="h-6 w-6" name="heroicons:bell" aria-hidden="true" />
             </button>
 
             <!-- Profile dropdown -->
-            <Menu as="div" class="relative ml-3">
+            <Menu class="relative ml-3" as="div">
               <div>
                 <MenuButton
-                  v-show="false"
                   class="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
+                  v-show="false"
                 >
                   <span class="sr-only">Open user menu</span>
                   <img
@@ -121,15 +121,15 @@ import { navigation } from '~/data/navigation'
             >
               <span class="sr-only">Open main menu</span>
               <Icon
-                name="heroicons:bars-3"
-                v-if="!open"
                 class="block h-6 w-6"
+                v-if="!open"
+                name="heroicons:bars-3"
                 aria-hidden="true"
               />
               <Icon
-                name="heroicons:x-mark"
-                v-else
                 class="block h-6 w-6"
+                v-else
+                name="heroicons:x-mark"
                 aria-hidden="true"
               />
             </DisclosureButton>
@@ -141,30 +141,30 @@ import { navigation } from '~/data/navigation'
         <div class="space-y-1 pb-3 pt-2">
           <!-- Current: "bg-brand-50 border-brand text-brand-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" -->
           <DisclosureButton
+            class="block border-l-4 border-brand bg-brand-50 py-2 pl-3 pr-4 text-base font-medium text-brand-700"
             as="a"
             href="#"
-            class="block border-l-4 border-brand bg-brand-50 py-2 pl-3 pr-4 text-base font-medium text-brand-700"
           >
             Dashboard
           </DisclosureButton>
           <DisclosureButton
+            class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
             as="a"
             href="#"
-            class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
           >
             Team
           </DisclosureButton>
           <DisclosureButton
+            class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
             as="a"
             href="#"
-            class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
           >
             Projects
           </DisclosureButton>
           <DisclosureButton
+            class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
             as="a"
             href="#"
-            class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
           >
             Calendar
           </DisclosureButton>
@@ -185,32 +185,32 @@ import { navigation } from '~/data/navigation'
               </div>
             </div>
             <button
-              type="button"
               class="ml-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
+              type="button"
             >
               <span class="sr-only">View notifications</span>
-              <Icon name="heroicons:bell" class="h-6 w-6" aria-hidden="true" />
+              <Icon class="h-6 w-6" name="heroicons:bell" aria-hidden="true" />
             </button>
           </div>
           <div class="mt-3 space-y-1">
             <DisclosureButton
+              class="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
               as="a"
               href="#"
-              class="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
             >
               Your Profile
             </DisclosureButton>
             <DisclosureButton
+              class="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
               as="a"
               href="#"
-              class="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
             >
               Settings
             </DisclosureButton>
             <DisclosureButton
+              class="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
               as="a"
               href="#"
-              class="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
             >
               Sign out
             </DisclosureButton>
