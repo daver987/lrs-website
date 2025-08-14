@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-defineProps({
+const props = defineProps({
   iconName: {
     type: String,
     required: true,
@@ -17,6 +17,9 @@ defineProps({
     required: true,
   },
 })
+
+const subtitleText = computed(() => useBrandifyText(props.subtitle))
+const bodyText = computed(() => useBrandifyText(props.body))
 </script>
 
 <template>
@@ -28,9 +31,9 @@ defineProps({
       <h4
         class="font-brand-subheading text-base uppercase tracking-wide text-brand"
       >
-        {{ subtitle }}
+        {{ subtitleText }}
       </h4>
-      <p class="mt-1 font-brand-body text-neutral-400">{{ body }}</p>
+      <p class="mt-1 font-brand-body text-neutral-400">{{ bodyText }}</p>
     </div>
   </div>
 </template>

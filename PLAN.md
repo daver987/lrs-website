@@ -1,5 +1,29 @@
 # Action plan and finding's for Black Car Service Website
 
+## Progress Update — 2025-08-14
+
+Completed
+
+- Brand config baseline: Centralized brand in `app.config.ts`; added `plugins/brand-theme.client.ts` to emit CSS vars; mapped Tailwind and Naive UI to vars.
+- Branding sweep: Replaced hard-coded branding across `layouts/default.vue`, `app.vue`, `components` (nav, header, footer, logo, signup/signin, cart, summary, contact form), and key pages (`index`, `about`, `contact`, `services`, `fleet`, `checkout`, `paymentlink`, `reservations`); short-link domain now reads from brand config.
+- Runtime brandify: Added `composables/useBrandify.ts` and applied in `IconBlockAbout` and `IconBlockServices` so data-driven copy reflects configured brand without editing data files.
+- Analytics dedupe: Removed Nuxt GTM module; using `plugins/gtmvue.ts` with IDs/flags from runtime config to avoid duplicate pageviews.
+
+In Progress / Next
+
+- Stripe service refactor (Step 4): Implement a `stripeService` with clear methods (getOrCreateCustomer, createSetupIntent), idempotency keys, and unified webhook handler with signature verification and event logging.
+- Integration toggles (Step 5): Move any remaining inline integration targets (e.g., Twilio destination numbers, Aircall toggles, Zapier URL) fully into config with per‑env enable/disable flags.
+- Quote flow hardening (Step 6): Merge validation stubs into a single route or tRPC procedure with clear outcomes (exists/expired/booked) and typed schemas.
+- Maps proxy (Step 7): Add a server proxy for Google Directions; restrict client key usage.
+- Data modularity (Step 8): Optionally move brand‑specific marketing content into `data/brand/<slug>/` with types; current runtime brandify covers UI.
+- Security/logging (Step 9): Add runtime config validation (zod), structured logger, and scrub PII.
+- Docs & cleanup (Step 10): Create a short Brand Pack guide; remove dead code and align scripts. AGENTS.md added (see repo root).
+
+Notes
+
+- Remaining mentions of the legacy brand exist in `data/*.ts` for historical copy; UI replaces them at render time via `useBrandifyText`. We can migrate these to brand-aware data later without blocking other work.
+- Verify GTM in the environment after deploy to ensure a single event stream.
+
 ## **Key Findings**
 
 - Hard-coded branding: name, logos, colors, copy appear across `pages`, `layouts

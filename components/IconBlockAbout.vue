@@ -5,7 +5,8 @@ interface Props {
   body: string
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
+const bodyText = computed(() => useBrandifyText(props.body))
 </script>
 
 <template>
@@ -19,7 +20,7 @@ defineProps<Props>()
       >
         {{ title }}
       </h3>
-      <p class="mt-1 font-brand-body text-neutral-400">{{ body }}</p>
+      <p class="mt-1 font-brand-body text-neutral-400">{{ bodyText }}</p>
     </div>
   </div>
 </template>

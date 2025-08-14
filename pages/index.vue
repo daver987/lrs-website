@@ -122,7 +122,7 @@ const fleetBackgroundImg = useBackgroundImage($img, fleetBackgroundImage)
           <p class="font-brand-body text-sm">
             Upgrade your travel experience with
             <span class="font-brand-subheading text-sm uppercase text-brand"
-              >High Park Livery's</span
+              >{{ appConfig.brand.name }}'s</span
             >
             exceptional car service in Toronto. Our carefully curated fleet
             showcases the finest in luxury transportation, ensuring that every
@@ -130,16 +130,17 @@ const fleetBackgroundImg = useBackgroundImage($img, fleetBackgroundImage)
             vehicles, including the Cadillac XTS, Lincoln Navigator SUV,
             Cadillac Escalade SUV, and Lincoln Continental, all designed to
             cater to the discerning tastes of our clientele.<br /><br />
-            For over a decade, High Park Livery has provided unparalleled
-            chauffeur service to the Toronto GTA market. Our expert drivers are
-            dedicated to delivering top-notch service, ensuring a smooth and
-            comfortable ride. As a comprehensive transportation provider, we
-            cater to diverse travel requirements with our versatile fleet,
-            offering specialty vehicles for larger groups and customized
+            For over a decade, {{ appConfig.brand.name }} has provided
+            unparalleled chauffeur service to the Toronto GTA market. Our expert
+            drivers are dedicated to delivering top-notch service, ensuring a
+            smooth and comfortable ride. As a comprehensive transportation
+            provider, we cater to diverse travel requirements with our versatile
+            fleet, offering specialty vehicles for larger groups and customized
             tours.<br /><br />
-            Discover the exceptional options available with High Park Livery's
-            limo service. Contact us to learn more about our distinguished fleet
-            and experience the ultimate in luxury transportation.
+            Discover the exceptional options available with
+            {{ appConfig.brand.name }}'s limo service. Contact us to learn more
+            about our distinguished fleet and experience the ultimate in luxury
+            transportation.
           </p>
         </div>
         <div class="flex w-full place-items-center justify-center p-6">
@@ -227,7 +228,7 @@ const fleetBackgroundImg = useBackgroundImage($img, fleetBackgroundImage)
         <p
           class="text-center font-brand-subheading uppercase tracking-[0.4em] text-brand"
         >
-          High Park Livery PARTNERS
+          {{ appConfig.brand.name }} PARTNERS
         </p>
         <h2
           class="text-center font-brand-heading text-4xl uppercase dark:text-neutral-400 lg:text-5xl"
