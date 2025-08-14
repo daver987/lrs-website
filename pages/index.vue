@@ -7,6 +7,7 @@ definePageMeta({
   layout: 'default',
   colorMode: 'dark',
 })
+const appConfig = useAppConfig()
 useHead({
   htmlAttrs: {
     lang: 'en',
@@ -21,18 +22,17 @@ useHead({
   meta: [
     {
       name: 'description',
-      content:
-        'High Park Livery offers top-quality black car services in the Greater Toronto Area. Book a ride for airport transfers, corporate travel, or special events.',
+      content: appConfig.brand.seo.description,
     },
   ],
-  title: 'High Park Livery - Premium Black Car Service in Greater Toronto',
+  title: appConfig.brand.seo.title,
 })
 
 const color = useColorMode()
 const iconColor = color.value === 'light' ? '#fff' : '#737373'
 const $img = useImage()
-const backgroundImage = ref('/images/gradient-background.svg')
-const fleetBackgroundImage = ref('/images/premium_suv-1.jpg')
+const backgroundImage = ref(appConfig.brand.assets.images.heroBackground)
+const fleetBackgroundImage = ref(appConfig.brand.assets.images.fleetBackground)
 const bgImg = useBackgroundImage($img, backgroundImage)
 const fleetBackgroundImg = useBackgroundImage($img, fleetBackgroundImage)
 </script>
@@ -57,7 +57,7 @@ const fleetBackgroundImg = useBackgroundImage($img, fleetBackgroundImage)
                   <p
                     class="text-center font-brand-subheading uppercase tracking-widest text-brand md:text-left"
                   >
-                    High Park Livery
+                    {{ appConfig.brand.name }}
                   </p>
                   <ImageSwitcher />
                 </div>
@@ -201,7 +201,7 @@ const fleetBackgroundImg = useBackgroundImage($img, fleetBackgroundImage)
         <p
           class="text-center font-brand-subheading uppercase tracking-[0.4em] text-brand"
         >
-          WHAT High Park Livery OFFERS YOU
+          WHAT {{ appConfig.brand.name }} OFFERS YOU
         </p>
         <h2
           class="mt-4 text-center font-brand-heading text-4xl uppercase text-neutral-400 dark:text-neutral-300 lg:text-5xl"

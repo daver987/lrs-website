@@ -7,16 +7,24 @@ import {
 } from '@headlessui/vue'
 import { navigation, NavigationItem } from '~/data/navigation'
 
-defineProps({
+const props = defineProps({
   linkClasses: {
     required: false,
     default: 'text-white',
   },
   src: {
-    require: false,
-    default: '/images/HPL-Logo-White.png',
+    required: false,
+    default: undefined,
   },
 })
+
+const appConfig = useAppConfig()
+const logoSrc = computed(
+  () =>
+    props.src ||
+    appConfig.brand?.assets?.logo?.light ||
+    '/images/HPL-Logo-White.png'
+)
 
 const nav = navigation as NavigationItem[]
 
@@ -136,10 +144,10 @@ const open = ref(false)
             class="ml-2 flex w-full justify-center lg:ml-0 lg:w-auto lg:justify-start"
           >
             <NuxtLink class="self-center" to="/">
-              <span class="sr-only">High Park Livery</span>
+              <span class="sr-only">{{ appConfig.brand?.name }}</span>
               <NuxtPicture
-                :src="src"
-                alt="High Park Livery Logo"
+                :src="logoSrc"
+                :alt="`${appConfig.brand?.name} Logo`"
                 width="1920"
                 :img-attrs="{ class: 'h-12 w-auto lg:h-14' }"
               />

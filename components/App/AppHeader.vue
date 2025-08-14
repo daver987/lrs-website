@@ -19,16 +19,23 @@ const props = defineProps({
   companyPhone: {
     type: String,
     required: false,
-    default: '647.360.9631',
+    default: undefined,
   },
   companyEmail: {
     type: String,
     required: false,
-    default: 'info@highparklivery.com',
+    default: undefined,
   },
 })
 
 const $img = useImage()
+const appConfig = useAppConfig()
+const displayPhone = computed(
+  () => props.companyPhone || appConfig.brand?.contact?.phoneDisplay || ''
+)
+const displayEmail = computed(
+  () => props.companyEmail || appConfig.brand?.contact?.email || ''
+)
 const backgroundImage = computed(() => {
   const imgUrl = $img('/images/gradient-background.svg', {
     fit: '',
@@ -76,9 +83,9 @@ const headerImage = computed(() => {
           >
             <NuxtLink
               class="text-center font-brand-body text-sm text-neutral-200"
-              :href="`tel:${companyPhone}`"
+              :href="`tel:${displayPhone}`"
               ><span class="text-brand">CALL :</span>
-              {{ companyPhone }}
+              {{ displayPhone }}
             </NuxtLink>
           </div>
           <div
@@ -86,9 +93,9 @@ const headerImage = computed(() => {
           >
             <NuxtLink
               class="text-center font-brand-body text-sm uppercase tracking-wide text-neutral-200"
-              :href="`mailto:${companyEmail}`"
+              :href="`mailto:${displayEmail}`"
               ><span class="text-brand">EMAIL :</span>
-              {{ companyEmail }}
+              {{ displayEmail }}
             </NuxtLink>
           </div>
         </div>

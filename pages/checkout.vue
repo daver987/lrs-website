@@ -120,13 +120,16 @@ const submitOrder = async () => {
     >
       <div class="mx-auto flex max-w-2xl px-4 lg:w-full lg:max-w-lg lg:px-0">
         <NuxtLink class="self-center" to="/">
-          <span class="sr-only">High Park Livery</span>
+          <span class="sr-only">{{ useAppConfig().brand.name }}</span>
           <NuxtPicture
             :img-attrs="{
               class: 'w-auto h-12 lg:h-14',
             }"
-            alt="High Park Livery Logo"
-            src="/images/HPL-Logo-Dark.png"
+            :alt="`${useAppConfig().brand.name} Logo`"
+            :src="
+              useAppConfig().brand.assets.logo.dark ||
+              useAppConfig().brand.assets.logo.light
+            "
             width="1920"
           />
         </NuxtLink>

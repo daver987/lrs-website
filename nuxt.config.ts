@@ -1,7 +1,9 @@
-import { _asyncContext } from 'process'
-import { devtools } from 'vue'
+import AutoImport from 'unplugin-auto-import/vite'
+import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
+import Components from 'unplugin-vue-components/vite'
 
 export default defineNuxtConfig({
+  compatibilityDate: '2025-08-14',
   devtools: {
     enabled: true,
   },
@@ -11,26 +13,20 @@ export default defineNuxtConfig({
   },
 
   build: {
-    transpile: ['trpc-nuxt', '@sendgrid/mail'],
+    transpile: ['trpc-nuxt'],
   },
 
   css: ['vue-tel-input/vue-tel-input.css'],
 
   modules: [
-    '@zadigetvoltaire/nuxt-gtm',
     '@vueuse/nuxt',
     '@nuxtjs/robots',
     '@nuxtjs/tailwindcss',
     '@nuxt/image',
     '@nuxtjs/color-mode',
     '@nuxt/devtools',
-    '@huntersofbook/naive-ui-nuxt',
-    [
-      '@pinia/nuxt',
-      {
-        autoImports: ['defineStore', 'definePiniaStore'],
-      },
-    ],
+    'nuxtjs-naive-ui',
+    '@pinia/nuxt',
     '@nuxt/icon',
   ],
   image: {
@@ -39,7 +35,6 @@ export default defineNuxtConfig({
     densities: [1, 2, 3],
   },
   nitro: {
-    preset: 'netlify',
     experimental: {
       asyncContext: true,
     },
@@ -50,13 +45,13 @@ export default defineNuxtConfig({
   colorMode: {
     classSuffix: '',
   },
-  naiveUI: {
+  'naive-ui': {
     themeOverrides: {
       common: {
-        primaryColor: '#A57C52FF',
-        primaryColorSuppl: 'rgba(165, 124, 82, 1)',
-        primaryColorHover: '#BD9975FF',
-        primaryColorPressed: '#8A6642FF',
+        primaryColor: 'var(--brand-500)',
+        primaryColorSuppl: 'rgb(var(--brand-500-rgb) / 1)',
+        primaryColorHover: 'var(--brand-400)',
+        primaryColorPressed: 'var(--brand-600)',
         bodyColor: 'rgba(64, 64, 64, 1)',
         cardColor: 'rgba(82, 82, 82, 1)',
         modalColor: 'rgba(64, 64, 64, 1)',
@@ -121,8 +116,6 @@ export default defineNuxtConfig({
     },
   },
   runtimeConfig: {
-    PLANETSCALE_PASSWORD: process.env.PLANETSCALE_PASSWORD,
-    PLANETSCALE_USERNAME: process.env.PLANETSCALE_USERNAME,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     TWILIO_MESSAGING_SID: process.env.TWILIO_MESSAGING_SID,
     TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID,
@@ -158,6 +151,23 @@ export default defineNuxtConfig({
     },
   },
   vite: {
+    plugins: [
+      AutoImport({
+        imports: [
+          {
+            'naive-ui': [
+              'useDialog',
+              'useMessage',
+              'useNotification',
+              'useLoadingBar',
+            ],
+          },
+        ],
+      }),
+      Components({
+        resolvers: [NaiveUiResolver()],
+      }),
+    ],
     resolve: {
       alias: { '.prisma/client/index-browser': `@prisma/client/index-browser` },
     },

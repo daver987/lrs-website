@@ -1,40 +1,27 @@
 <script lang="ts" setup>
 import { navigation } from '~/data/navigation'
 
+const appConfig = useAppConfig()
+
 useHead({
   meta: [
     { property: 'og:type', content: 'website' },
-    {
-      property: 'og:title',
-      content:
-        'High Park Livery - Premium Black Car Service in Greater Toronto',
-    },
-    {
-      property: 'og:description',
-      content:
-        'High Park Livery offers top-quality black car services in the Greater Toronto Area. Book a ride for airport transfers, corporate travel, or special events.',
-    },
-    { property: 'og:image', content: 'images/HPL-Logo-White.png' },
-    { property: 'og:url', content: 'https://highparklivery.com' },
-    { name: 'twitter:card', content: 'images/HPL-Logo-White.png' },
-    {
-      name: 'twitter:title',
-      content: 'High Park Livery - Black Car Service in Greater Toronto Area',
-    },
-    {
-      name: 'twitter:description',
-      content:
-        'High Park Livery offers premium black car services in the Greater Toronto Area. Experience luxury transportation for airport transfers, special events, and more.',
-    },
-    { name: 'twitter:image', content: 'images/HPL-Logo-White.png' },
+    { property: 'og:title', content: appConfig.brand.seo.title },
+    { property: 'og:description', content: appConfig.brand.seo.description },
+    { property: 'og:image', content: appConfig.brand.seo.ogImage },
+    { property: 'og:url', content: appConfig.brand.domain },
+    { name: 'twitter:card', content: appConfig.brand.seo.twitterImage },
+    { name: 'twitter:title', content: appConfig.brand.seo.title },
+    { name: 'twitter:description', content: appConfig.brand.seo.description },
+    { name: 'twitter:image', content: appConfig.brand.seo.twitterImage },
   ],
 })
 const footerData = {
-  companyName: 'High Park Livery',
-  companyEmail: 'info@highparklivery.com',
-  companyPhone: '+16473609631',
-  companyPhoneDisplay: '647.360.9631',
-  companyLogo: '/images/HPL-Logo-White.png',
+  companyName: appConfig.brand.name,
+  companyEmail: appConfig.brand.contact.email,
+  companyPhone: appConfig.brand.contact.phoneE164,
+  companyPhoneDisplay: appConfig.brand.contact.phoneDisplay,
+  companyLogo: appConfig.brand.assets.logo.light,
 }
 </script>
 

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 const route = useRoute().params.slug[0]
-const { decode } = useLinkShortener('https://highparklivery.com')
+const appConfig = useAppConfig()
+const { decode } = useLinkShortener(appConfig.brand?.domain || '')
 const quoteNumber = decode(route)
 
 function isValidQuoteNumber(quoteNumber: number) {

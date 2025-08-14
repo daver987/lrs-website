@@ -11,7 +11,9 @@ useHead({
 })
 
 const userStore = useUserStore()
-const user_id = useStorage('hpl_user_id', userStore.getUserId())
+const appConfig = useAppConfig()
+const storageKey = `${appConfig.brand?.slug || 'brand'}_user_id`
+const user_id = useStorage(storageKey, userStore.getUserId())
 
 userStore.setUserId(user_id.value)
 </script>
