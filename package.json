@@ -7,7 +7,9 @@
   "license": "MIT",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "nuxt:dev": "nuxt dev",
+    "prisma:dev": "prisma dev",
+    "dev": "sh -c 'pnpm prisma:dev & pnpm nuxt:dev'",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "prisma generate",
@@ -79,7 +81,8 @@
     "vite-node": "^3.2.4",
     "vitest": "^3.2.4",
     "vue": "^3.5.18",
-    "vue-tel-input": "^9.3.0"
+    "vue-tel-input": "^9.3.0",
+    "@nuxt/fonts": "^0.11.0"
   },
   "dependencies": {
     "@formkit/auto-animate": "1.0.0-beta.6",

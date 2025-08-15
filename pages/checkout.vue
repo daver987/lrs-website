@@ -173,7 +173,8 @@ const submitOrder = async () => {
                     class:
                       'h-32 w-32 flex-none rounded-md object-contain object-center',
                   }"
-                  :src="vehicle.vehicle_image!"
+                  :src="$img(vehicle.vehicle_image! as string)"
+                  placeholder
                 />
                 <div class="flex-auto space-y-1">
                   <h3 class="text-brand-900">{{ service.label }}</h3>

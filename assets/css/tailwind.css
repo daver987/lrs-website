@@ -12,9 +12,9 @@
   --font-sans: 'Inter var', caviar-dreams;
   --font-brand: caviar-dreams;
   --font-brand-heading: campton-thin;
-  --font-brand-subheading: caviar-dreams-bold;
+  --font-brand-subheading: caviar-dreams;
   --font-brand-body: campton-light;
-  --font-subheading: caviar-dreams-bold;
+  --font-subheading: caviar-dreams;
   --font-heading: campton-thin;
   --font-body: campton-light;
 
@@ -85,29 +85,28 @@
   }
 }
 
-@layer utilities {
+@layer base {
   @font-face {
-    font-family: "'Inter var'";
+    font-family: 'Inter var';
     font-weight: 100 900;
     font-display: swap;
     font-style: oblique 0deg 10deg;
     src: url('./assets/fonts/Inter.var.woff2?v=3.19') format('woff2');
   }
   @font-face {
-    font-family: "'Inter var'";
+    font-family: 'Inter var';
     font-weight: 100 900;
     font-display: swap;
     font-style: normal;
-    src: url('./assets/fonts/Inter-roman.var.woff2?v=3.19') format('woff2');
+    src: url('./assets/fonts/Inter.var.woff2?v=3.19') format('woff2');
   }
   @font-face {
-    font-family: "'Inter var'";
+    font-family: 'Inter var';
     font-weight: 100 900;
     font-display: swap;
     font-style: italic;
-    src: url('./assets/fonts/Inter-italic.var.woff2?v=3.19') format('woff2');
+    src: url('./assets/fonts/Inter.var.woff2?v=3.19') format('woff2');
   }
-
   @font-face {
     font-family: 'caviar-dreams';
     font-style: normal;
@@ -116,16 +115,6 @@
       local('caviar-dreams'),
       url('./assets/fonts/caviar-dreams.woff') format('woff');
   }
-
-  @font-face {
-    font-family: 'caviar-dreams-bold';
-    font-style: normal;
-    font-weight: 700;
-    src:
-      local('caviar-dreams-bold'),
-      url('./assets/fonts/caviar-dreams-bold.woff') format('woff');
-  }
-
   @font-face {
     font-family: 'campton-light';
     font-style: normal;
@@ -134,7 +123,6 @@
       local('campton-light'),
       url('./assets/fonts/campton-light.woff') format('woff');
   }
-
   @font-face {
     font-family: 'campton-thin';
     font-style: normal;
@@ -143,7 +131,9 @@
       local('campton-thin'),
       url('./assets/fonts/campton-thin.woff') format('woff');
   }
+}
 
+@layer utilities {
   .vue-tel-input {
     border-radius: var(--n-border-radius) !important;
     border: 1px solid transparent !important;

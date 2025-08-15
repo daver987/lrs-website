@@ -85,12 +85,13 @@ const itemsInCart = computed(() =>
             </li>
             <li class="flex items-center py-6" v-else>
               <NuxtPicture
-                :src="vehicleImage"
+                :src="$img(vehicleImage as string)"
                 alt="Vehicle"
                 :img-attrs="{
                   class:
                     'h-16 w-16 flex-none rounded-md border object-contain border-neutral-200',
                 }"
+                placeholder
               />
               <div class="ml-4 flex-auto">
                 <h3 class="font-brand-body font-medium text-neutral-900">

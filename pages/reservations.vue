@@ -154,10 +154,13 @@ useScriptTag(
                 <span class="sr-only">{{ appConfig.brand.name }}</span>
                 <NuxtPicture
                   :src="
-                    appConfig.brand.assets.logo.dark ||
-                    appConfig.brand.assets.logo.light
+                    $img(
+                      (appConfig.brand.assets.logo.dark ||
+                        appConfig.brand.assets.logo.light) as string
+                    )
                   "
                   :alt="`${appConfig.brand.name} Logo`"
+                  placeholder
                   width="1920"
                   :img-attrs="{
                     class: 'h-12 w-auto lg:h-14',

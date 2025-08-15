@@ -42,7 +42,8 @@ const logos = [
             class:
               'object-contain w-full max-w-xs filter grayscale dark:filter dark:grayscale-0 hover:grayscale-0',
           }"
-          :src="logo.src"
+          :src="$img(logo.src as string)"
+          placeholder
           loading="lazy"
         />
       </div>

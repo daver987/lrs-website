@@ -1,5 +1,5 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import { QuoteFormReturn } from '~~/schema/QuoteFormSchema'
+import type { QuoteFormReturn } from '~~/schema/QuoteFormSchema'
 
 interface State {
   quote: QuoteFormReturn | null

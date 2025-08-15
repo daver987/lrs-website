@@ -19,3 +19,4 @@ prisma/generated
 ehthumbs.db
 Thumbs.db
 .claude
+.data

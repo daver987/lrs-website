@@ -17,7 +17,8 @@ defineProps({
     :img-attrs="{
       class: 'md:object-center md:object-cover',
     }"
-    :src="image"
+    :src="$img(image as string)"
+    placeholder
     loading="lazy"
     width="1920"
   />

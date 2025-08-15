@@ -3,19 +3,22 @@
     <div class="logo" :class="[size, shape]">
       <NuxtPicture
         v-if="shape === 'round'"
-        :src="logoRound"
+        :src="$img(logoRound as string)"
+        placeholder
         :width="imageWidth"
         alt="Company Logo"
       />
       <NuxtPicture
         v-else-if="lettersOnly"
-        :src="logoLetters"
+        :src="$img(logoLetters as string)"
+        placeholder
         :width="imageWidth"
         alt="Company Logo"
       />
       <NuxtPicture
         v-else
-        :src="logoDefault"
+        :src="$img(logoDefault as string)"
+        placeholder
         :width="imageWidth"
         alt="Company Logo"
       />

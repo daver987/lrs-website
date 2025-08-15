@@ -147,7 +147,8 @@ const open = ref(false)
             <NuxtLink class="self-center" to="/">
               <span class="sr-only">{{ appConfig.brand?.name }}</span>
               <NuxtPicture
-                :src="logoSrc"
+                :src="$img(logoSrc as string)"
+                placeholder
                 :alt="`${appConfig.brand?.name} Logo`"
                 width="1920"
                 :img-attrs="{ class: 'h-12 w-auto lg:h-14' }"

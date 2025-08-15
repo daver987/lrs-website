@@ -19,6 +19,7 @@ export default defineNuxtConfig({
   modules: [
     '@vueuse/nuxt',
     '@nuxtjs/robots',
+    '@nuxt/fonts',
     '@nuxt/image',
     '@nuxtjs/color-mode',
     '@nuxt/devtools',
@@ -27,9 +28,11 @@ export default defineNuxtConfig({
     '@nuxt/icon',
   ],
   image: {
+    inject: true,
     quality: 80,
     format: ['avif', 'webp', 'jpeg', 'png'],
-    densities: [1, 2, 3],
+    domains: ['imagedelivery.net'],
+    densities: [1, 2],
   },
   nitro: {
     experimental: {

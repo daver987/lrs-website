@@ -90,10 +90,11 @@ const goHome = async () => {
               <span class="font-semibold">Type: </span>
               {{ quote.vehicle.label }}
             </p>
-            <img
+            <NuxtImg
               class="mt-2 h-auto w-48"
-              :src="quote.vehicle.vehicle_image!"
+              :src="$img(quote.vehicle.vehicle_image! as string)"
               alt="Vehicle Image"
+              placeholder
             />
           </div>
         </div>

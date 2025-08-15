@@ -114,7 +114,8 @@ const isLoading = ref(false)
               class: 'w-auto h-12 lg:h-14',
             }"
             :alt="`${useAppConfig().brand.name} Logo`"
-            :src="useAppConfig().brand.assets.logo.light"
+            :src="$img(useAppConfig().brand.assets.logo.light as string)"
+            placeholder
             width="1920"
           />
         </NuxtLink>
@@ -158,7 +159,8 @@ const isLoading = ref(false)
                     class:
                       'h-32 w-32 flex-none rounded-md object-contain object-center',
                   }"
-                  :src="vehicle.vehicle_image!"
+                  :src="$img(vehicle.vehicle_image! as string)"
+                  placeholder
                 />
                 <div class="flex-auto space-y-1">
                   <h3 class="text-brand-900">{{ service.label }}</h3>

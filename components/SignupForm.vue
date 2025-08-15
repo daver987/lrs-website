@@ -11,9 +11,12 @@ const color = colorMode.value
           :img-attrs="{ class: 'w-auto h-16' }"
           :alt="useAppConfig().brand.name"
           :src="
-            useAppConfig().brand.assets.logo.dark ||
-            useAppConfig().brand.assets.logo.light
+            $img(
+              (useAppConfig().brand.assets.logo.dark ||
+                useAppConfig().brand.assets.logo.light) as string
+            )
           "
+          placeholder
           width="1920"
         />
       </NuxtLink>
@@ -31,7 +34,8 @@ const color = colorMode.value
             class: 'w-auto h-16',
           }"
           :alt="useAppConfig().brand.name"
-          :src="useAppConfig().brand.assets.logo.light"
+          :src="$img(useAppConfig().brand.assets.logo.light as string)"
+          placeholder
           width="1920"
         />
       </NuxtLink>

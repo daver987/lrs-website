@@ -329,268 +329,263 @@ function disablePreviousDate(ts: number) {
 </script>
 
 <template>
-  <n-config-provider>
-    <n-grid :cols="1" responsive="self">
-      <n-grid-item :span="1">
-        <div
-          class="border rounded-sm border border-white bg-black p-4 sm:mx-auto sm:w-full sm:max-w-2xl sm:overflow-hidden sm:rounded-lg"
+  <n-grid :cols="1" responsive="self">
+    <n-grid-item :span="1">
+      <div
+        class="border rounded-sm border border-white bg-black p-4 sm:mx-auto sm:w-full sm:max-w-2xl sm:overflow-hidden sm:rounded-lg"
+      >
+        <h2 class="mb-4 mt-2 text-center text-3xl uppercase text-white">
+          Instant Quote
+        </h2>
+        <n-form
+          id="quote_form"
+          ref="formRef"
+          :label-width="80"
+          :model="formValue"
+          :rules="rules"
         >
-          <h2 class="mb-4 mt-2 text-center text-3xl uppercase text-white">
-            Instant Quote
-          </h2>
-          <n-form
-            id="quote_form"
-            ref="formRef"
-            :label-width="80"
-            :model="formValue"
-            :rules="rules"
-          >
-            <n-grid :cols="4" :x-gap="12" item-responsive>
-              <n-form-item-gi
-                :show-label="false"
-                :span="4"
-                label="Pickup Location"
-                path="origin"
-              >
-                <InputPlacesAutocompleteDark
-                  name="origin"
-                  placeholder="Enter Pickup Location...."
-                  @change="handleChangeOrigin"
-                />
-              </n-form-item-gi>
+          <n-grid :cols="4" :x-gap="12" item-responsive>
+            <n-form-item-gi
+              :show-label="false"
+              :span="4"
+              label="Pickup Location"
+              path="origin"
+            >
+              <InputPlacesAutocompleteDark
+                name="origin"
+                placeholder="Enter Pickup Location...."
+                @change="handleChangeOrigin"
+              />
+            </n-form-item-gi>
 
-              <n-form-item-gi
-                :show-label="false"
-                :span="4"
-                label="Drop-off Location"
-                path="destination"
-              >
-                <InputPlacesAutocompleteDark
-                  name="destination"
-                  placeholder="Enter Drop-off Location...."
-                  @change="handleChangeDestination"
-                />
-              </n-form-item-gi>
-              <n-form-item-gi
-                :show-label="false"
-                :span="2"
-                label="Pickup Date"
-                path="pickup_date"
-              >
-                <n-date-picker
-                  v-model:formatted-value="formValue.pickup_date as string"
-                  :default-value="Date.now()"
-                  :is-date-disabled="disablePreviousDate"
+            <n-form-item-gi
+              :show-label="false"
+              :span="4"
+              label="Drop-off Location"
+              path="destination"
+            >
+              <InputPlacesAutocompleteDark
+                name="destination"
+                placeholder="Enter Drop-off Location...."
+                @change="handleChangeDestination"
+              />
+            </n-form-item-gi>
+            <n-form-item-gi
+              :show-label="false"
+              :span="2"
+              label="Pickup Date"
+              path="pickup_date"
+            >
+              <n-date-picker
+                v-model:formatted-value="formValue.pickup_date as string"
+                :default-value="Date.now()"
+                :is-date-disabled="disablePreviousDate"
+                input-readonly
+                placeholder="Select Pickup Date..."
+                type="date"
+                value-format="PPP"
+              />
+            </n-form-item-gi>
+            <n-form-item-gi
+              :show-label="false"
+              :span="2"
+              label="Pickup Date and Time"
+              path="pickup_time"
+            >
+              <n-space justify="space-between">
+                <n-time-picker
+                  v-model:formatted-value="formValue.pickup_time as string"
+                  :clearable="true"
+                  format="h:mm a"
                   input-readonly
-                  placeholder="Select Pickup Date..."
-                  type="date"
-                  value-format="PPP"
+                  use12-hours
+                  value-format="p"
                 />
-              </n-form-item-gi>
-              <n-form-item-gi
-                :show-label="false"
-                :span="2"
-                label="Pickup Date and Time"
-                path="pickup_time"
-              >
-                <n-space justify="space-between">
-                  <n-time-picker
-                    v-model:formatted-value="formValue.pickup_time as string"
-                    :clearable="true"
-                    format="h:mm a"
-                    input-readonly
-                    use12-hours
-                    value-format="p"
-                  />
-                  <n-switch
-                    v-if="false"
-                    v-model:value="formValue.is_round_trip"
-                  >
-                    <template #checked> Round</template>
-                    <template #unchecked> One Way</template>
-                  </n-switch>
-                </n-space>
-              </n-form-item-gi>
-            </n-grid>
-            <n-collapse-transition v-if="false" :show="formValue.is_round_trip">
-              <n-grid :cols="2" :x-gap="12" item-responsive>
-                <n-form-item-gi
-                  :show-label="false"
-                  :span="1"
-                  label="Return Date"
-                  path="dateTime.return_date"
-                >
-                  <n-date-picker
-                    v-model:value="formValue.return_date as any"
-                    :default-value="Date.now()"
-                    :is-date-disabled="disablePreviousDate"
-                    input-readonly
-                    placeholder="Select Return Date"
-                    type="date"
-                  />
-                </n-form-item-gi>
-                <n-form-item-gi
-                  :show-label="false"
-                  :span="1"
-                  label="Return Time"
-                  path="dateTime.return_time"
-                >
-                  <n-time-picker
-                    v-model:value="formValue.return_time as any"
-                    :clearable="true"
-                    format="h:mm a"
-                    input-readonly
-                    use12-hours
-                  />
-                </n-form-item-gi>
-              </n-grid>
-            </n-collapse-transition>
+                <n-switch v-if="false" v-model:value="formValue.is_round_trip">
+                  <template #checked> Round</template>
+                  <template #unchecked> One Way</template>
+                </n-switch>
+              </n-space>
+            </n-form-item-gi>
+          </n-grid>
+          <n-collapse-transition v-if="false" :show="formValue.is_round_trip">
             <n-grid :cols="2" :x-gap="12" item-responsive>
               <n-form-item-gi
                 :show-label="false"
-                label="Service Type"
-                path="service_number"
-                span="0:2 500:1"
+                :span="1"
+                label="Return Date"
+                path="dateTime.return_date"
               >
-                <n-select
-                  v-model:value="formValue.service_number"
-                  :input-props="{
-                    id: 'service_type',
-                  }"
-                  :options="serviceOptions as SelectOption[]"
-                  placeholder="Select Service Type..."
+                <n-date-picker
+                  v-model:value="formValue.return_date as any"
+                  :default-value="Date.now()"
+                  :is-date-disabled="disablePreviousDate"
+                  input-readonly
+                  placeholder="Select Return Date"
+                  type="date"
                 />
               </n-form-item-gi>
-
               <n-form-item-gi
                 :show-label="false"
-                label="Vehicle Type"
-                path="vehicle_number"
-                span="0:2 500:1"
+                :span="1"
+                label="Return Time"
+                path="dateTime.return_time"
               >
-                <n-select
-                  v-model:value="formValue.vehicle_number"
-                  :input-props="{
-                    id: 'vehicle_type',
-                  }"
-                  :options="vehicleOptions as SelectOption[]"
-                  placeholder="Select Vehicle Type..."
-                />
-              </n-form-item-gi>
-
-              <n-form-item-gi
-                :show-label="false"
-                label="Passengers"
-                path="selected_passengers"
-                span="0:2 500:1"
-              >
-                <n-select
-                  v-model:value="formValue.selected_passengers"
-                  :input-props="{
-                    id: 'passengers',
-                  }"
-                  :options="passengerOptions as SelectOption[]"
-                  placeholder="Select Passengers..."
-                />
-              </n-form-item-gi>
-
-              <n-form-item-gi
-                :show-label="false"
-                label="Hours"
-                path="selected_hours"
-                span="0:2 500:1"
-              >
-                <n-select
-                  v-model:value="formValue.selected_hours"
-                  :disabled="isDisabled"
-                  :input-props="{
-                    id: 'hours',
-                  }"
-                  :options="hoursOptions"
-                  placeholder="For Hourly Service..."
-                />
-              </n-form-item-gi>
-
-              <n-form-item-gi
-                :show-label="false"
-                label="First Name"
-                path="first_name"
-                span="0:2 500:1"
-              >
-                <n-input
-                  v-model:value="formValue.first_name"
-                  :input-props="{
-                    id: 'first_name',
-                    type: 'text',
-                  }"
-                  placeholder="Enter First Name..."
-                />
-              </n-form-item-gi>
-
-              <n-form-item-gi
-                :show-label="false"
-                label="Last Name"
-                path="last_name"
-                span="0:2 500:1"
-              >
-                <n-input
-                  v-model:value="formValue.last_name"
-                  :input-props="{
-                    id: 'last_name',
-                    type: 'text',
-                  }"
-                  placeholder="Enter Last Name..."
-                />
-              </n-form-item-gi>
-
-              <n-form-item-gi
-                :show-label="false"
-                label="Email Address"
-                path="email_address"
-                span="0:2 500:1"
-              >
-                <n-input
-                  v-model:value="formValue.email_address"
-                  :input-props="{
-                    id: 'email_address',
-                    type: 'email',
-                  }"
-                  placeholder="Enter Email Address..."
-                />
-              </n-form-item-gi>
-
-              <n-form-item-gi
-                :show-label="false"
-                label="Phone Number"
-                path="phone_number"
-                required
-                span="0:2 500:1"
-              >
-                <VueTelInput
-                  id="phone_number"
-                  v-model="formValue.phone_number"
-                  :dropdown-options="dropdownOptions"
-                  :input-options="inputOptions"
-                  aria-label="phone input"
-                  invalidMsg="Please Enter In A Phone Number"
+                <n-time-picker
+                  v-model:value="formValue.return_time as any"
+                  :clearable="true"
+                  format="h:mm a"
+                  input-readonly
+                  use12-hours
                 />
               </n-form-item-gi>
             </n-grid>
-            <n-button
-              :loading="loading"
-              color="#b91c1c"
-              size="large"
-              style="
-                width: 100%;
-                text-transform: uppercase;
-                background-color: #b91c1c;
-              "
-              @click="handleValidateButtonClick"
-              >Get Prices & Availability
-            </n-button>
-          </n-form>
-        </div>
-      </n-grid-item>
-    </n-grid>
-  </n-config-provider>
+          </n-collapse-transition>
+          <n-grid :cols="2" :x-gap="12" item-responsive>
+            <n-form-item-gi
+              :show-label="false"
+              label="Service Type"
+              path="service_number"
+              span="0:2 500:1"
+            >
+              <n-select
+                v-model:value="formValue.service_number"
+                :input-props="{
+                  id: 'service_type',
+                }"
+                :options="serviceOptions as SelectOption[]"
+                placeholder="Select Service Type..."
+              />
+            </n-form-item-gi>
+
+            <n-form-item-gi
+              :show-label="false"
+              label="Vehicle Type"
+              path="vehicle_number"
+              span="0:2 500:1"
+            >
+              <n-select
+                v-model:value="formValue.vehicle_number"
+                :input-props="{
+                  id: 'vehicle_type',
+                }"
+                :options="vehicleOptions as SelectOption[]"
+                placeholder="Select Vehicle Type..."
+              />
+            </n-form-item-gi>
+
+            <n-form-item-gi
+              :show-label="false"
+              label="Passengers"
+              path="selected_passengers"
+              span="0:2 500:1"
+            >
+              <n-select
+                v-model:value="formValue.selected_passengers"
+                :input-props="{
+                  id: 'passengers',
+                }"
+                :options="passengerOptions as SelectOption[]"
+                placeholder="Select Passengers..."
+              />
+            </n-form-item-gi>
+
+            <n-form-item-gi
+              :show-label="false"
+              label="Hours"
+              path="selected_hours"
+              span="0:2 500:1"
+            >
+              <n-select
+                v-model:value="formValue.selected_hours"
+                :disabled="isDisabled"
+                :input-props="{
+                  id: 'hours',
+                }"
+                :options="hoursOptions"
+                placeholder="For Hourly Service..."
+              />
+            </n-form-item-gi>
+
+            <n-form-item-gi
+              :show-label="false"
+              label="First Name"
+              path="first_name"
+              span="0:2 500:1"
+            >
+              <n-input
+                v-model:value="formValue.first_name"
+                :input-props="{
+                  id: 'first_name',
+                  type: 'text',
+                }"
+                placeholder="Enter First Name..."
+              />
+            </n-form-item-gi>
+
+            <n-form-item-gi
+              :show-label="false"
+              label="Last Name"
+              path="last_name"
+              span="0:2 500:1"
+            >
+              <n-input
+                v-model:value="formValue.last_name"
+                :input-props="{
+                  id: 'last_name',
+                  type: 'text',
+                }"
+                placeholder="Enter Last Name..."
+              />
+            </n-form-item-gi>
+
+            <n-form-item-gi
+              :show-label="false"
+              label="Email Address"
+              path="email_address"
+              span="0:2 500:1"
+            >
+              <n-input
+                v-model:value="formValue.email_address"
+                :input-props="{
+                  id: 'email_address',
+                  type: 'email',
+                }"
+                placeholder="Enter Email Address..."
+              />
+            </n-form-item-gi>
+
+            <n-form-item-gi
+              :show-label="false"
+              label="Phone Number"
+              path="phone_number"
+              required
+              span="0:2 500:1"
+            >
+              <VueTelInput
+                id="phone_number"
+                v-model="formValue.phone_number"
+                :dropdown-options="dropdownOptions"
+                :input-options="inputOptions"
+                aria-label="phone input"
+                invalidMsg="Please Enter In A Phone Number"
+              />
+            </n-form-item-gi>
+          </n-grid>
+          <n-button
+            :loading="loading"
+            color="#b91c1c"
+            size="large"
+            style="
+              width: 100%;
+              text-transform: uppercase;
+              background-color: #b91c1c;
+            "
+            @click="handleValidateButtonClick"
+            >Get Prices & Availability
+          </n-button>
+        </n-form>
+      </div>
+    </n-grid-item>
+  </n-grid>
 </template>

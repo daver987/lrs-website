@@ -86,7 +86,8 @@ const headerInfo = {
               :img-attrs="{
                 class: 'object-cover object-center w-full',
               }"
-              :src="service.image"
+              :src="$img(service.image as string)"
+              placeholder
             />
           </div>
           <div class="flex" :class="service.infoPosition">

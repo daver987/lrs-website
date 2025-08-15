@@ -150,7 +150,8 @@ const createBooking = async () => {
                   class:
                     'object-contain object-center w-24 h-24 rounded-md sm:h-48 sm:w-48',
                 }"
-                :src="quote!.vehicle?.vehicle_image!"
+                :src="$img(quote!.vehicle?.vehicle_image! as string)"
+                placeholder
               />
             </div>
 

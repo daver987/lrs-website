@@ -35,7 +35,8 @@ const props = defineProps<Props>()
               :img-attrs="{
                 class: 'object-contain object-center w-full',
               }"
-              :src="companyData.companyLogo"
+              :src="$img(companyData.companyLogo as string)"
+              placeholder
               width="1920"
             />
           </NuxtLink>
