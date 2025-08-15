@@ -17,7 +17,7 @@ import { navigation } from '~/data/navigation'
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="h-18 flex justify-between">
           <div class="flex">
-            <div class="flex flex-shrink-0 items-center">
+            <div class="flex shrink-0 items-center">
               <NuxtLink to="/">
                 <NuxtImg
                   class="mt-2 block h-12 w-auto lg:hidden"
@@ -47,7 +47,7 @@ import { navigation } from '~/data/navigation'
           </div>
           <div class="hidden sm:ml-6 sm:flex sm:items-center" v-show="false">
             <button
-              class="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
+              class="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-hidden focus:ring-2 focus:ring-brand focus:ring-offset-2"
               type="button"
             >
               <span class="sr-only">View notifications</span>
@@ -58,7 +58,7 @@ import { navigation } from '~/data/navigation'
             <Menu class="relative ml-3" as="div">
               <div>
                 <MenuButton
-                  class="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
+                  class="flex rounded-full bg-white text-sm focus:outline-hidden focus:ring-2 focus:ring-brand focus:ring-offset-2"
                   v-show="false"
                 >
                   <span class="sr-only">Open user menu</span>
@@ -78,7 +78,7 @@ import { navigation } from '~/data/navigation'
                 leave-to-class="transform opacity-0 scale-95"
               >
                 <MenuItems
-                  class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                  class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-hidden"
                 >
                   <MenuItem v-slot="{ active }">
                     <a
@@ -117,7 +117,7 @@ import { navigation } from '~/data/navigation'
           <div class="-mr-2 flex items-center sm:hidden">
             <!-- Mobile menu button -->
             <DisclosureButton
-              class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand"
+              class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-hidden focus:ring-2 focus:ring-inset focus:ring-brand"
             >
               <span class="sr-only">Open main menu</span>
               <Icon
@@ -171,7 +171,7 @@ import { navigation } from '~/data/navigation'
         </div>
         <div class="border-t border-gray-200 pb-3 pt-4">
           <div class="flex items-center px-4">
-            <div class="flex-shrink-0">
+            <div class="shrink-0">
               <img
                 class="h-10 w-10 rounded-full"
                 src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
@@ -185,7 +185,7 @@ import { navigation } from '~/data/navigation'
               </div>
             </div>
             <button
-              class="ml-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
+              class="ml-auto shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-hidden focus:ring-2 focus:ring-brand focus:ring-offset-2"
               type="button"
             >
               <span class="sr-only">View notifications</span>

@@ -103,7 +103,7 @@ const qualities = [
           <NuxtPicture
             :img-attrs="{
               class:
-                'object-center object-cover h-64 w-full md:object-left md:min-h-[18rem]',
+                'object-center object-cover h-64 w-full md:object-left md:min-h-72',
             }"
             alt="Chauffeur Service"
             loading="lazy"
@@ -119,7 +119,7 @@ const qualities = [
           <NuxtPicture
             :img-attrs="{
               class:
-                'object-center object-cover w-full min-h-[18rem] self-center md:object-left',
+                'object-center object-cover w-full min-h-72 self-center md:object-left',
             }"
             alt="Tesla-S-Back-Seat"
             loading="lazy"
@@ -143,7 +143,7 @@ const qualities = [
     <BaseSection class="px-0">
       <NuxtPicture
         :img-attrs="{
-          class: 'object-cover object-center w-full min-h-[4rem]',
+          class: 'object-cover object-center w-full min-h-16',
         }"
         :modifiers="{
           effect: 'blur:100',

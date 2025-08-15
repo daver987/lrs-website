@@ -103,7 +103,7 @@ const url = useRuntimeConfig().public.WEBSITE_URL
                     src="https://tailwindui.com/img/flags/flag-canada.svg"
                     alt="Canada flag"
                     :img-attrs="{
-                      class: 'flex-shrink-0 block w-5 h-auto',
+                      class: 'shrink-0 block w-5 h-auto',
                     }"
                   />
                   <span class="ml-3 block text-base font-medium text-brand-600"
@@ -122,7 +122,7 @@ const url = useRuntimeConfig().public.WEBSITE_URL
         <div class="border-b border-gray-400 py-2">
           <div class="flex h-16 w-full justify-center lg:items-center">
             <button
-              class="flex-shrink-0 rounded bg-transparent p-2 text-gray-400 hover:text-gray-500 lg:hidden"
+              class="shrink-0 rounded-sm bg-transparent p-2 text-gray-400 hover:text-gray-500 lg:hidden"
               type="button"
               @click="open = true"
             >
@@ -195,7 +195,7 @@ const url = useRuntimeConfig().public.WEBSITE_URL
                     src="https://tailwindui.com/img/flags/flag-canada.svg"
                     alt="Canada Flag"
                     :img-attrs="{
-                      class: 'flex-shrink-0 block w-5 h-auto',
+                      class: 'shrink-0 block w-5 h-auto',
                     }"
                   />
                   <span class="ml-3 block text-sm font-medium">CAD</span>

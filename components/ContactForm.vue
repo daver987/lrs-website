@@ -50,7 +50,7 @@ const onSubmit = handleSubmit(async (values: ContactFormSchema) => {
 
             <div class="grid grid-cols-1 lg:grid-cols-3">
               <div
-                class="relative overflow-hidden bg-gradient-to-b from-brand to-brand-600 px-6 py-10 sm:px-10 xl:p-12"
+                class="relative overflow-hidden bg-linear-to-b from-brand to-brand-600 px-6 py-10 sm:px-10 xl:p-12"
               >
                 <div
                   class="pointer-events-none absolute inset-0 sm:hidden"
@@ -167,7 +167,7 @@ const onSubmit = handleSubmit(async (values: ContactFormSchema) => {
                   <dt><span class="sr-only">Phone number</span></dt>
                   <dd class="flex text-base text-brand-50">
                     <icon
-                      class="h-6 w-6 flex-shrink-0 text-brand-200"
+                      class="h-6 w-6 shrink-0 text-brand-200"
                       aria-hidden="true"
                       name="heroicons:phone"
                     />
@@ -178,7 +178,7 @@ const onSubmit = handleSubmit(async (values: ContactFormSchema) => {
                   <dt><span class="sr-only">Email</span></dt>
                   <dd class="flex text-base text-brand-50">
                     <Icon
-                      class="h-6 w-6 flex-shrink-0 text-brand-200"
+                      class="h-6 w-6 shrink-0 text-brand-200"
                       aria-hidden="true"
                       name="heroicons:envelope"
                     />
@@ -308,7 +308,7 @@ const onSubmit = handleSubmit(async (values: ContactFormSchema) => {
                     <div class="mt-1">
                       <Field v-slot="{ field, errorMessage }" name="message">
                         <textarea
-                          class="block w-full rounded-md border-neutral-300 px-4 py-3 shadow-sm focus:border-brand focus:ring-brand dark:bg-neutral-200"
+                          class="block w-full rounded-md border-neutral-300 px-4 py-3 shadow-xs focus:border-brand focus:ring-brand dark:bg-neutral-200"
                           id="message"
                           v-bind="field"
                           aria-describedby="message-max"
@@ -321,7 +321,7 @@ const onSubmit = handleSubmit(async (values: ContactFormSchema) => {
                   </div>
                   <div class="sm:col-span-2 sm:flex sm:justify-end">
                     <button
-                      class="mt-2 inline-flex w-full items-center justify-center rounded-md border border-transparent bg-brand px-6 py-2 text-base font-medium uppercase tracking-wider text-white shadow-sm hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 sm:w-auto"
+                      class="mt-2 inline-flex w-full items-center justify-center rounded-md border border-transparent bg-brand px-6 py-2 text-base font-medium uppercase tracking-wider text-white shadow-xs hover:bg-brand-600 focus:outline-hidden focus:ring-2 focus:ring-brand focus:ring-offset-2 sm:w-auto"
                       type="submit"
                     >
                       {{ loading ? 'Submitting....' : 'Submit' }}

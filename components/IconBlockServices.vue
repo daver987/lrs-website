@@ -24,7 +24,7 @@ const bodyText = computed(() => useBrandifyText(props.body))
 
 <template>
   <div class="flex bg-white p-4 shadow-xl @xs:flex-col dark:bg-neutral-700">
-    <div class="mr-4 flex-shrink-0">
+    <div class="mr-4 shrink-0">
       <Icon class="h-10 w-auto text-neutral-400" :name="iconName" />
     </div>
     <div>

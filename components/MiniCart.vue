@@ -40,7 +40,7 @@ const itemsInCart = computed(() =>
   <Popover class="ml-4 flow-root text-sm lg:relative lg:ml-8">
     <PopoverButton class="group -m-2 flex items-center p-2">
       <Icon
-        class="h-6 w-6 flex-shrink-0 text-neutral-400 group-hover:text-neutral-500"
+        class="h-6 w-6 shrink-0 text-neutral-400 group-hover:text-neutral-500"
         name="heroicons:shopping-bag"
         aria-hidden="true"
       />
@@ -103,7 +103,7 @@ const itemsInCart = computed(() =>
             </li>
           </ul>
           <button
-            class="w-full rounded-md border border-transparent bg-brand-600 px-4 py-2 font-brand-body text-sm font-medium uppercase tracking-wider text-neutral-100 shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-neutral-50"
+            class="w-full rounded-md border border-transparent bg-brand-600 px-4 py-2 font-brand-body text-sm font-medium uppercase tracking-wider text-neutral-100 shadow-xs hover:bg-brand-700 focus:outline-hidden focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-neutral-50"
             v-if="addedToCart"
             type="submit"
           >

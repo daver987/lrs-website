@@ -89,7 +89,7 @@ const color = colorMode.value
           <div class="flex items-center justify-between">
             <div class="flex items-center">
               <input
-                class="h-4 w-4 rounded border-gray-300 text-brand-600 focus:ring-brand"
+                class="h-4 w-4 rounded-sm border-gray-300 text-brand-600 focus:ring-brand"
                 id="remember-me"
                 name="remember-me"
                 type="checkbox"
@@ -112,7 +112,7 @@ const color = colorMode.value
 
           <div>
             <button
-              class="flex w-full justify-center rounded-md border border-transparent bg-brand-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
+              class="flex w-full justify-center rounded-md border border-transparent bg-brand-600 px-4 py-2 text-sm font-medium text-white shadow-xs hover:bg-brand-700 focus:outline-hidden focus:ring-2 focus:ring-brand focus:ring-offset-2"
               type="submit"
             >
               Sign Up

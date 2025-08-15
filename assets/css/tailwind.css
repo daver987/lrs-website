@@ -1,98 +1,184 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-@font-face {
-  font-family: "'Inter var'";
-  font-weight: 100 900;
-  font-display: swap;
-  font-style: oblique 0deg 10deg;
-  src: url('./assets/fonts/Inter.var.woff2?v=3.19') format('woff2');
-}
-@font-face {
-  font-family: "'Inter var'";
-  font-weight: 100 900;
-  font-display: swap;
-  font-style: normal;
-  src: url('./assets/fonts/Inter-roman.var.woff2?v=3.19') format('woff2');
-}
-@font-face {
-  font-family: "'Inter var'";
-  font-weight: 100 900;
-  font-display: swap;
-  font-style: italic;
-  src: url('./assets/fonts/Inter-italic.var.woff2?v=3.19') format('woff2');
+@import 'tailwindcss';
+
+@plugin '@headlessui/tailwindcss';
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/aspect-ratio';
+@plugin '@tailwindcss/container-queries';
+@plugin '@tailwindcss/typography';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-sans: 'Inter var', caviar-dreams;
+  --font-brand: caviar-dreams;
+  --font-brand-heading: campton-thin;
+  --font-brand-subheading: caviar-dreams-bold;
+  --font-brand-body: campton-light;
+  --font-subheading: caviar-dreams-bold;
+  --font-heading: campton-thin;
+  --font-body: campton-light;
+
+  --text-xxs: 0.675rem;
+
+  --color-brand-50: rgb(var(--brand-50-rgb));
+  --color-brand-100: rgb(var(--brand-100-rgb));
+  --color-brand-200: rgb(var(--brand-200-rgb));
+  --color-brand-300: rgb(var(--brand-300-rgb));
+  --color-brand-400: rgb(var(--brand-400-rgb));
+  --color-brand-500: rgb(var(--brand-500-rgb));
+  --color-brand-600: rgb(var(--brand-600-rgb));
+  --color-brand-700: rgb(var(--brand-700-rgb));
+  --color-brand-800: rgb(var(--brand-800-rgb));
+  --color-brand-900: rgb(var(--brand-900-rgb));
+  --color-brand: rgb(var(--brand-500-rgb));
+
+  --color-secondary-50: #eef2f7;
+  --color-secondary-100: #dde5ee;
+  --color-secondary-200: #baccde;
+  --color-secondary-300: #98b3cd;
+  --color-secondary-400: #7599bd;
+  --color-secondary-600: #42668a;
+  --color-secondary-700: #324d67;
+  --color-secondary-800: #213345;
+  --color-secondary-900: #111a22;
+  --color-secondary: #537fac;
+
+  --color-grey-100: #999999;
+  --color-grey-200: #888888;
+  --color-grey-300: #777777;
+  --color-grey-400: #666666;
+  --color-grey-600: #444444;
+  --color-grey-700: #333333;
+  --color-grey-800: #222222;
+  --color-grey-900: #111111;
+  --color-grey: #555555;
+
+  --color-body-50: #ebebeb;
+  --color-body-100: #d6d6d6;
+  --color-body-200: #adadad;
+  --color-body-300: #858585;
+  --color-body-400: #5c5c5c;
+  --color-body-600: #262626;
+  --color-body-700: #1f1f1f;
+  --color-body-800: #141414;
+  --color-body-900: #0a0a0a;
+  --color-body: #333333;
+
+  --breakpoint-xs: 480px;
 }
 
-@font-face {
-  font-family: 'caviar-dreams';
-  font-style: normal;
-  font-weight: 400;
-  src:
-    local('caviar-dreams'),
-    url('./assets/fonts/caviar-dreams.woff') format('woff');
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
 }
 
-@font-face {
-  font-family: 'caviar-dreams-bold';
-  font-style: normal;
-  font-weight: 700;
-  src:
-    local('caviar-dreams-bold'),
-    url('./assets/fonts/caviar-dreams-bold.woff') format('woff');
-}
+@layer utilities {
+  @font-face {
+    font-family: "'Inter var'";
+    font-weight: 100 900;
+    font-display: swap;
+    font-style: oblique 0deg 10deg;
+    src: url('./assets/fonts/Inter.var.woff2?v=3.19') format('woff2');
+  }
+  @font-face {
+    font-family: "'Inter var'";
+    font-weight: 100 900;
+    font-display: swap;
+    font-style: normal;
+    src: url('./assets/fonts/Inter-roman.var.woff2?v=3.19') format('woff2');
+  }
+  @font-face {
+    font-family: "'Inter var'";
+    font-weight: 100 900;
+    font-display: swap;
+    font-style: italic;
+    src: url('./assets/fonts/Inter-italic.var.woff2?v=3.19') format('woff2');
+  }
 
-@font-face {
-  font-family: 'campton-light';
-  font-style: normal;
-  font-weight: 400;
-  src:
-    local('campton-light'),
-    url('./assets/fonts/campton-light.woff') format('woff');
-}
+  @font-face {
+    font-family: 'caviar-dreams';
+    font-style: normal;
+    font-weight: 400;
+    src:
+      local('caviar-dreams'),
+      url('./assets/fonts/caviar-dreams.woff') format('woff');
+  }
 
-@font-face {
-  font-family: 'campton-thin';
-  font-style: normal;
-  font-weight: 400;
-  src:
-    local('campton-thin'),
-    url('./assets/fonts/campton-thin.woff') format('woff');
-}
+  @font-face {
+    font-family: 'caviar-dreams-bold';
+    font-style: normal;
+    font-weight: 700;
+    src:
+      local('caviar-dreams-bold'),
+      url('./assets/fonts/caviar-dreams-bold.woff') format('woff');
+  }
 
-.vue-tel-input {
-  border-radius: var(--n-border-radius) !important;
-  border: 1px solid transparent !important;
-  height: var(--n-height) !important;
-  width: 100%;
-}
+  @font-face {
+    font-family: 'campton-light';
+    font-style: normal;
+    font-weight: 400;
+    src:
+      local('campton-light'),
+      url('./assets/fonts/campton-light.woff') format('woff');
+  }
 
-.vti__input {
-  border-radius: 0 3px 3px 0;
-  padding-left: 7px;
-  background-color: var(--n-color);
-  caret-color: var(--n-caret-color);
-  font-size: var(--n-font-size);
-  color: var(--n-text-color);
-}
+  @font-face {
+    font-family: 'campton-thin';
+    font-style: normal;
+    font-weight: 400;
+    src:
+      local('campton-thin'),
+      url('./assets/fonts/campton-thin.woff') format('woff');
+  }
 
-.vue-tel-input:hover {
-  border: var(--n-border-hover) !important;
-}
+  .vue-tel-input {
+    border-radius: var(--n-border-radius) !important;
+    border: 1px solid transparent !important;
+    height: var(--n-height) !important;
+    width: 100%;
+  }
 
-.vti__dropdown {
-  z-index: 1000 !important;
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
-  background-color: var(--n-count-text-color);
-}
+  .vti__input {
+    border-radius: 0 3px 3px 0;
+    padding-left: 7px;
+    background-color: var(--n-color);
+    caret-color: var(--n-caret-color);
+    font-size: var(--n-font-size);
+    color: var(--n-text-color);
+  }
 
-body {
-  background-color: #fafafa;
-  min-height: 100dvh;
-}
+  .vue-tel-input:hover {
+    border: var(--n-border-hover) !important;
+  }
 
-textarea:focus {
-  outline: none;
+  .vti__dropdown {
+    z-index: 1000 !important;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    background-color: var(--n-count-text-color);
+  }
+
+  body {
+    background-color: #fafafa;
+    min-height: 100dvh;
+  }
+
+  textarea:focus {
+    outline: none;
+  }
 }
 
 @layer base {

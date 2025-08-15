@@ -109,69 +109,69 @@ const rules: FormRules = {
     type: 'string',
     required: true,
     message: 'Please enter a pickup date',
-    trigger: ['blur'],
+    trigger: ['blur-sm'],
   },
   pickup_time: {
     type: 'string',
     required: true,
     message: 'Please enter a pickup time',
-    trigger: ['blur'],
+    trigger: ['blur-sm'],
   },
   return_date: {
     type: 'number',
     required: false,
     message: 'Please enter a drop off date',
-    trigger: ['blur'],
+    trigger: ['blur-sm'],
   },
   return_time: {
     type: 'number',
     required: false,
     message: 'Please enter a drop off time',
-    trigger: ['blur'],
+    trigger: ['blur-sm'],
   },
   selected_hours: {
     type: 'number',
     required: false,
     message: 'Please enter in the amount of hours',
-    trigger: ['blur', 'change'],
+    trigger: ['blur-sm', 'change'],
   },
   selected_passengers: {
     type: 'number',
     message: 'Passengers is required',
-    trigger: ['blur', 'change'],
+    trigger: ['blur-sm', 'change'],
     required: true,
   },
   vehicle_number: {
     type: 'number',
-    trigger: ['blur', 'change'],
+    trigger: ['blur-sm', 'change'],
     required: true,
     message: 'Please select a vehicle type',
   },
   service_number: {
     type: 'number',
     message: 'Please select a service type',
-    trigger: ['blur', 'change'],
+    trigger: ['blur-sm', 'change'],
     required: true,
   },
   first_name: {
     required: true,
     message: 'First name is required',
-    trigger: ['blur'],
+    trigger: ['blur-sm'],
   },
   last_name: {
     required: true,
     message: 'Last name is required',
-    trigger: ['blur'],
+    trigger: ['blur-sm'],
   },
   email_address: {
     required: true,
     message: 'Please enter a valid email',
-    trigger: ['blur'],
+    trigger: ['blur-sm'],
   },
   phone_number: {
     required: true,
     message: 'Phone number is required',
-    trigger: ['blur'],
+    trigger: ['blur-sm'],
   },
 }
 
@@ -333,7 +333,7 @@ function disablePreviousDate(ts: number) {
     <n-grid :cols="1" responsive="self">
       <n-grid-item :span="1">
         <div
-          class="border-1 rounded border border-white bg-black p-4 sm:mx-auto sm:w-full sm:max-w-2xl sm:overflow-hidden sm:rounded-lg"
+          class="border rounded-sm border border-white bg-black p-4 sm:mx-auto sm:w-full sm:max-w-2xl sm:overflow-hidden sm:rounded-lg"
         >
           <h2 class="mb-4 mt-2 text-center text-3xl uppercase text-white">
             Instant Quote

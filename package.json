@@ -67,7 +67,7 @@
     "openai": "^5.12.2",
     "prettier": "^3.6.2",
     "prettier-plugin-organize-attributes": "^1.0.0",
-    "prettier-plugin-tailwindcss": "^0.5.14",
+    "prettier-plugin-tailwindcss": "^0.6.14",
     "prisma": "^6.14.0",
     "stripe": "^18.4.0",
     "trpc-nuxt": "^0.10.22",
@@ -89,7 +89,7 @@
     "langchain": "^0.0.165",
     "naive-ui": "^2.42.0",
     "superjson": "^1.13.3",
-    "tailwindcss": "^3.4.17",
+    "tailwindcss": "^4.1.12",
     "trpc-panel": "^1.3.4",
     "vite": "^6.3.5",
     "zod": "^3.25.76"

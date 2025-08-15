@@ -113,7 +113,7 @@ const open = ref(false)
                   src="https://tailwindui.com/img/flags/flag-canada.svg"
                   alt="Canada flag"
                   :img-attrs="{
-                    class: 'flex-shrink-0 block w-5 h-auto',
+                    class: 'shrink-0 block w-5 h-auto',
                   }"
                 />
                 <span class="ml-3 block text-base font-medium text-brand-600"
@@ -132,7 +132,7 @@ const open = ref(false)
       <div class="border-b border-neutral-200/30 py-2">
         <div class="flex h-16 w-full justify-center lg:items-center">
           <button
-            class="flex-shrink-0 rounded bg-transparent p-2 text-neutral-400 hover:text-neutral-500 lg:hidden"
+            class="shrink-0 rounded-sm bg-transparent p-2 text-neutral-400 hover:text-neutral-500 lg:hidden"
             type="button"
             @click="open = true"
           >
@@ -200,7 +200,7 @@ const open = ref(false)
                   src="https://tailwindui.com/img/flags/flag-canada.svg"
                   alt="Canada Flag"
                   :img-attrs="{
-                    class: 'flex-shrink-0 block w-5 h-auto',
+                    class: 'shrink-0 block w-5 h-auto',
                   }"
                 />
                 <span class="ml-3 block text-sm font-medium">CAD</span>

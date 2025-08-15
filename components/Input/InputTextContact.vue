@@ -45,7 +45,7 @@ const {
       :for="name"
       >{{ label }}</label
     >
-    <div class="relative mt-1 rounded-md shadow-sm">
+    <div class="relative mt-1 rounded-md shadow-xs">
       <input
         class="block w-full rounded-md dark:bg-neutral-200 sm:text-sm"
         :id="name"
@@ -53,7 +53,7 @@ const {
         :aria-errormessage="errorMessage"
         :class="[
           errorMessage
-            ? 'border-red-300 pr-10 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500'
+            ? 'border-red-300 pr-10 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-hidden focus:ring-red-500'
             : 'border-gray-300  focus:border-brand focus:ring-brand',
         ]"
         :name="name"

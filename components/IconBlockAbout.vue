@@ -11,7 +11,7 @@ const bodyText = computed(() => useBrandifyText(props.body))
 
 <template>
   <div class="p-6 sm:flex">
-    <div class="mb-4 flex-shrink-0 sm:mb-0 sm:mr-4">
+    <div class="mb-4 shrink-0 sm:mb-0 sm:mr-4">
       <Icon class="text-neutral-400" :name="iconName" size="48" />
     </div>
     <div>

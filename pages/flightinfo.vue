@@ -41,36 +41,36 @@ const rules = {
     type: 'string',
     required: false,
     message: 'Please enter a pickup date',
-    trigger: ['blur'],
+    trigger: ['blur-sm'],
   },
 
   carry_on_luggage: {
     type: 'number',
     required: false,
     message: 'Please enter in the amount of carry on luggage',
-    trigger: ['blur', 'change'],
+    trigger: ['blur-sm', 'change'],
   },
   large_luggage: {
     type: 'number',
     message: 'Please Enter in The Amount of Large Luggage',
-    trigger: ['blur', 'change'],
+    trigger: ['blur-sm', 'change'],
     required: false,
   },
 
   flight_number: {
     required: false,
     message: 'A Flight Number is Required',
-    trigger: 'blur',
+    trigger: 'blur-sm',
   },
   trip_notes: {
     required: false,
     message: 'Enter In Trip Notes',
-    trigger: 'blur',
+    trigger: 'blur-sm',
   },
   quote_number: {
     required: false,
     message: 'Add Quote',
-    trigger: 'blur',
+    trigger: 'blur-sm',
   },
 } as FormRules
 

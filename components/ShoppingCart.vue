@@ -143,7 +143,7 @@ const createBooking = async () => {
             v-for="(trip, index) in quote!.trips"
             :key="trip.trip_order!"
           >
-            <div class="flex-shrink-0">
+            <div class="shrink-0">
               <NuxtPicture
                 :alt="quote!.vehicle.label"
                 :img-attrs="{
@@ -220,13 +220,13 @@ const createBooking = async () => {
                 class="mt-4 flex space-x-2 text-sm text-neutral-700 dark:text-neutral-200"
               >
                 <Icon
-                  class="h-5 w-5 flex-shrink-0 text-green-500"
+                  class="h-5 w-5 shrink-0 text-green-500"
                   v-if="quote!.is_round_trip"
                   aria-hidden="true"
                   name="heroicons:check-20-solid"
                 />
                 <Icon
-                  class="h-5 w-5 flex-shrink-0 text-neutral-300"
+                  class="h-5 w-5 shrink-0 text-neutral-300"
                   v-else
                   aria-hidden="true"
                   name="heroicons:clock-20-solid"
@@ -269,7 +269,7 @@ const createBooking = async () => {
             >
               <span>{{ item.label }}</span>
               <a
-                class="ml-2 flex-shrink-0 text-neutral-400 hover:text-neutral-500"
+                class="ml-2 shrink-0 text-neutral-400 hover:text-neutral-500"
                 href="#"
               >
                 <span class="sr-only"
@@ -292,7 +292,7 @@ const createBooking = async () => {
 
         <div class="mt-6">
           <button
-            class="w-full rounded-md border border-transparent bg-red-600 px-4 py-3 text-base font-medium uppercase text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-neutral-50"
+            class="w-full rounded-md border border-transparent bg-red-600 px-4 py-3 text-base font-medium uppercase text-white shadow-xs hover:bg-red-700 focus:outline-hidden focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-neutral-50"
             v-if="!addedToCart"
             type="button"
             @click="cartStore.addToCart()"
@@ -300,7 +300,7 @@ const createBooking = async () => {
             {{ loading ? 'Adding To Cart...' : 'Add To Cart' }}
           </button>
           <button
-            class="w-full rounded-md border border-transparent bg-red-600 px-4 py-3 text-base font-medium uppercase text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-neutral-50"
+            class="w-full rounded-md border border-transparent bg-red-600 px-4 py-3 text-base font-medium uppercase text-white shadow-xs hover:bg-red-700 focus:outline-hidden focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-neutral-50"
             v-else
             type="button"
             @click="createBooking"

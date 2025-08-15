@@ -38,7 +38,7 @@ const closeNotification = (): void => {
         >
           <div class="p-4">
             <div class="flex items-start">
-              <div class="flex-shrink-0">
+              <div class="shrink-0">
                 <Icon
                   class="h-6 w-6 text-green-400"
                   aria-hidden="true"
@@ -53,9 +53,9 @@ const closeNotification = (): void => {
                   {{ message2 }}
                 </p>
               </div>
-              <div class="ml-4 flex flex-shrink-0">
+              <div class="ml-4 flex shrink-0">
                 <button
-                  class="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  class="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                   type="button"
                   @click="closeNotification"
                 >
