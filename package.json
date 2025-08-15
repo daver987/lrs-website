@@ -62,7 +62,7 @@
     "html2canvas": "^1.4.1",
     "html2pdf.js": "^0.10.3",
     "ics": "^3.8.1",
-    "nuxt": "^3.18.1",
+    "nuxt": "^4.0.0",
     "nuxt-icon": "^0.5.0",
     "openai": "^5.12.2",
     "prettier": "^3.6.2",
