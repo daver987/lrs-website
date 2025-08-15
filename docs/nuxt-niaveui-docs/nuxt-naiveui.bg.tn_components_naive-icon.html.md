@@ -1,13 +1,13 @@
 ---
-url: "https://nuxt-naiveui.bg.tn/components/naive-icon.html"
-title: "NaiveIcon | Nuxt Naive UI"
+url: 'https://nuxt-naiveui.bg.tn/components/naive-icon.html'
+title: 'NaiveIcon | Nuxt Naive UI'
 ---
 
 [Skip to content](https://nuxt-naiveui.bg.tn/components/naive-icon.html#VPContent)
 
 Return to top
 
-# NaiveIcon [​](https://nuxt-naiveui.bg.tn/components/naive-icon.html\#naiveicon)
+# NaiveIcon [​](https://nuxt-naiveui.bg.tn/components/naive-icon.html#naiveicon)
 
 This component is a wrapper of [Iconify Vue](https://iconify.design/getting-started/) which provides a collection of +100 icon sets. [Icônes](https://icones.js.org/) can be used for exploration and instant search.
 
@@ -15,17 +15,17 @@ Info
 
 The module uses the `Phosphor` icon set.
 
-### Props [​](https://nuxt-naiveui.bg.tn/components/naive-icon.html\#props)
+### Props [​](https://nuxt-naiveui.bg.tn/components/naive-icon.html#props)
 
-| **Name** | **Type** | **Default** | **Note** |
-| --- | --- | --- | --- |
-| name | string |  | This property is reactive |
-| size | number \| string | `naiveui.iconSize` |  |
-| iconColor | string |  | Color of icon |
-| color | string |  | Background color of the wrapper |
-| borderRadius | number |  | Border radius of the wrapper |
+| **Name**     | **Type**         | **Default**        | **Note**                        |
+| ------------ | ---------------- | ------------------ | ------------------------------- |
+| name         | string           |                    | This property is reactive       |
+| size         | number \| string | `naiveui.iconSize` |                                 |
+| iconColor    | string           |                    | Color of icon                   |
+| color        | string           |                    | Background color of the wrapper |
+| borderRadius | number           |                    | Border radius of the wrapper    |
 
-### Offline [​](https://nuxt-naiveui.bg.tn/components/naive-icon.html\#offline)
+### Offline [​](https://nuxt-naiveui.bg.tn/components/naive-icon.html#offline)
 
 By default, icons are fetched at runtime from the Iconify API. By setting the `iconDownload` config option to `true`, icons can be downloaded and stored locally in the `public/iconify` directory. This takes place only at production build. The advantages are:
 

@@ -1,13 +1,13 @@
 ---
-url: "https://nuxt-naiveui.bg.tn/composables/useNaiveDevice.html"
-title: "useNaiveDevice | Nuxt Naive UI"
+url: 'https://nuxt-naiveui.bg.tn/composables/useNaiveDevice.html'
+title: 'useNaiveDevice | Nuxt Naive UI'
 ---
 
 [Skip to content](https://nuxt-naiveui.bg.tn/composables/useNaiveDevice.html#VPContent)
 
 Return to top
 
-# useNaiveDevice [​](https://nuxt-naiveui.bg.tn/composables/useNaiveDevice.html\#usenaivedevice)
+# useNaiveDevice [​](https://nuxt-naiveui.bg.tn/composables/useNaiveDevice.html#usenaivedevice)
 
 This universal composable is intended to detect the device type based on the user agent. It can be helpful to lazy load components based on the device type to minimize page load time.
 

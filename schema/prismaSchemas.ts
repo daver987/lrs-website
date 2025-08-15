@@ -27,7 +27,7 @@ export const JsonValue: z.ZodType<Prisma.JsonValue> = z.union([
   z.number(),
   z.boolean(),
   z.lazy(() => z.array(JsonValue)),
-  z.lazy(() => z.record(JsonValue)),
+  z.lazy(() => z.record(z.string(), JsonValue)),
 ])
 
 export type JsonValueType = z.infer<typeof JsonValue>
@@ -44,7 +44,7 @@ export const InputJsonValue: z.ZodType<Prisma.InputJsonValue> = z.union([
   z.number(),
   z.boolean(),
   z.lazy(() => z.array(InputJsonValue.nullable())),
-  z.lazy(() => z.record(InputJsonValue.nullable())),
+  z.lazy(() => z.record(z.string(), InputJsonValue.nullable())),
 ])
 
 export type InputJsonValueType = z.infer<typeof InputJsonValue>
@@ -431,15 +431,15 @@ export const VerificationTokenScalarFieldEnumSchema = z.enum([
 /////////////////////////////////////////
 
 export const AccountSchema = z.object({
-  id: z.string().uuid(),
-  number: z.number().int(),
+  id: z.uuid(),
+  number: z.int(),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date(),
   company_name: z.string(),
   company_address: z.string(),
   company_phone: z.string().nullable(),
   company_email: z.string(),
-  company_account_number: z.number().int(),
+  company_account_number: z.int(),
 })
 
 export type Account = z.infer<typeof AccountSchema>
@@ -457,7 +457,7 @@ export type AccountPartial = z.infer<typeof AccountPartialSchema>
 /////////////////////////////////////////
 
 export const SessionSchema = z.object({
-  id: z.string().cuid(),
+  id: z.cuid(),
   session_token: z.string(),
   user_id: z.string(),
   expires: z.coerce.date(),
@@ -478,7 +478,7 @@ export type SessionPartial = z.infer<typeof SessionPartialSchema>
 /////////////////////////////////////////
 
 export const UserSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date(),
   first_name: z.string(),
@@ -512,7 +512,7 @@ export type UserPartial = z.infer<typeof UserPartialSchema>
 /////////////////////////////////////////
 
 export const MessageSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date(),
   message: z.string(),
@@ -536,7 +536,7 @@ export type MessagePartial = z.infer<typeof MessagePartialSchema>
 /////////////////////////////////////////
 
 export const AffiliateSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date(),
   name: z.string(),
@@ -562,7 +562,7 @@ export type AffiliatePartial = z.infer<typeof AffiliatePartialSchema>
 /////////////////////////////////////////
 
 export const DriverSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date(),
   first_name: z.string(),
@@ -591,7 +591,7 @@ export const VerificationTokenSchema = z.object({
   identifier: z.string(),
   token: z.string(),
   expires: z.coerce.date(),
-  id: z.string().cuid(),
+  id: z.cuid(),
 })
 
 export type VerificationToken = z.infer<typeof VerificationTokenSchema>
@@ -611,7 +611,7 @@ export type VerificationTokenPartial = z.infer<
 /////////////////////////////////////////
 
 export const ConversionSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   created_at: z.coerce.date().nullable(),
   utm_term: z.string().nullable(),
   utm_medium: z.string().nullable(),
@@ -638,20 +638,20 @@ export type ConversionPartial = z.infer<typeof ConversionPartialSchema>
 /////////////////////////////////////////
 
 export const QuoteSchema = z.object({
-  quote_number: z.number().int(),
+  quote_number: z.int(),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date(),
-  id: z.string().uuid(),
-  selected_hours: z.number().int().nullable(),
-  selected_passengers: z.number().int(),
+  id: z.uuid(),
+  selected_hours: z.int().nullable(),
+  selected_passengers: z.int(),
   is_round_trip: z.boolean(),
   is_booked: z.boolean(),
   user_id: z.string(),
   quote_total: z.number(),
-  service_number: z.number().int(),
-  vehicle_number: z.number().int(),
+  service_number: z.int(),
+  vehicle_number: z.int(),
   reference_value: z.string().nullable(),
-  sales_tax_number: z.number().int(),
+  sales_tax_number: z.int(),
   quote_subtotal: z.number().nullable(),
   quote_tax_total: z.number().nullable(),
   short_link: z.string().nullable(),
@@ -673,27 +673,27 @@ export type QuotePartial = z.infer<typeof QuotePartialSchema>
 /////////////////////////////////////////
 
 export const TripSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date(),
   pickup_date: z.string().nullable(),
   pickup_time: z.string().nullable(),
   distance_text: z.string().nullable(),
   duration_text: z.string().nullable(),
-  duration_value: z.number().int().nullable(),
-  distance_value: z.number().int().nullable(),
+  duration_value: z.int().nullable(),
+  distance_value: z.int().nullable(),
   calculated_distance: z.number().nullable(),
-  quote_number: z.number().int(),
+  quote_number: z.int(),
   service_label: z.string().nullable(),
   vehicle_label: z.string().nullable(),
   affiliate_payout: z.number().nullable(),
   is_farmed_out: z.boolean(),
   is_return: z.boolean(),
   notes: z.string().nullable(),
-  trip_order: z.number().int().nullable(),
+  trip_order: z.int().nullable(),
   price_id: z.string().nullable(),
-  carry_on_luggage: z.number().int().nullable(),
-  large_luggage: z.number().int().nullable(),
+  carry_on_luggage: z.int().nullable(),
+  large_luggage: z.int().nullable(),
   meta_data: NullableJsonValue.optional(),
 })
 
@@ -712,7 +712,7 @@ export type TripPartial = z.infer<typeof TripPartialSchema>
 /////////////////////////////////////////
 
 export const LocationSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date(),
   lat: z.number(),
@@ -726,7 +726,7 @@ export const LocationSchema = z.object({
   is_destination: z.boolean(),
   is_waypoint: z.boolean(),
   trip_id: z.string(),
-  route_order: z.number().int(),
+  route_order: z.int(),
 })
 
 export type Location = z.infer<typeof LocationSchema>
@@ -744,14 +744,14 @@ export type LocationPartial = z.infer<typeof LocationPartialSchema>
 /////////////////////////////////////////
 
 export const PriceSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date(),
   line_items_list: NullableJsonValue.optional(),
   line_items_subtotal: z.number().nullable(),
   line_items_tax: z.number().nullable(),
   line_items_total: z.number().nullable(),
-  quote_number: z.number().int().nullable(),
+  quote_number: z.int().nullable(),
   trip_id: z.string(),
 })
 
@@ -770,7 +770,7 @@ export type PricePartial = z.infer<typeof PricePartialSchema>
 /////////////////////////////////////////
 
 export const PaymentSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date(),
   is_preauthorized: z.boolean(),
@@ -780,7 +780,7 @@ export const PaymentSchema = z.object({
   payment_type: z.string().nullable(),
   notes: z.string().nullable(),
   trip_id: z.string(),
-  quote_number: z.number().int().nullable(),
+  quote_number: z.int().nullable(),
 })
 
 export type Payment = z.infer<typeof PaymentSchema>
@@ -798,7 +798,7 @@ export type PaymentPartial = z.infer<typeof PaymentPartialSchema>
 /////////////////////////////////////////
 
 export const FlightSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date(),
   airline_code: z.string().nullable(),
@@ -810,8 +810,8 @@ export const FlightSchema = z.object({
   departure_time_actual: z.string().nullable(),
   arrival_time_actual: z.string().nullable(),
   trip_id: z.string().nullable(),
-  airline_id: z.number().int().nullable(),
-  airport_id: z.number().int().nullable(),
+  airline_id: z.int().nullable(),
+  airport_id: z.int().nullable(),
   departure_time: z.string().nullable(),
   arrival_time: z.string().nullable(),
 })
@@ -831,14 +831,14 @@ export type FlightPartial = z.infer<typeof FlightPartialSchema>
 /////////////////////////////////////////
 
 export const ServiceSchema = z.object({
-  id: z.string().uuid(),
-  service_number: z.number().int(),
+  id: z.uuid(),
+  service_number: z.int(),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date(),
   label: z.string(),
   is_active: z.boolean(),
   is_hourly: z.boolean(),
-  limo_anywhere_id: z.number().int().nullable(),
+  limo_anywhere_id: z.int().nullable(),
 })
 
 export type Service = z.infer<typeof ServiceSchema>
@@ -856,8 +856,8 @@ export type ServicePartial = z.infer<typeof ServicePartialSchema>
 /////////////////////////////////////////
 
 export const LineItemSchema = z.object({
-  id: z.string().uuid(),
-  item_number: z.number().int(),
+  id: z.uuid(),
+  item_number: z.int(),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date(),
   label: z.string(),
@@ -884,8 +884,8 @@ export type LineItemPartial = z.infer<typeof LineItemPartialSchema>
 /////////////////////////////////////////
 
 export const SalesTaxSchema = z.object({
-  id: z.string().uuid(),
-  tax_number: z.number().int(),
+  id: z.uuid(),
+  tax_number: z.int(),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date(),
   tax_name: z.string(),
@@ -909,21 +909,21 @@ export type SalesTaxPartial = z.infer<typeof SalesTaxPartialSchema>
 /////////////////////////////////////////
 
 export const VehicleSchema = z.object({
-  id: z.string().uuid(),
-  vehicle_number: z.number().int(),
+  id: z.uuid(),
+  vehicle_number: z.int(),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date(),
-  max_passengers: z.number().int(),
-  max_luggage: z.number().int(),
+  max_passengers: z.int(),
+  max_luggage: z.int(),
   per_km: z.number(),
   per_hour: z.number(),
-  min_hours: z.number().int(),
-  min_distance: z.number().int(),
+  min_hours: z.int(),
+  min_distance: z.int(),
   min_rate: z.number(),
   is_active: z.boolean(),
   label: z.string(),
-  limo_anywhere_id: z.number().int().nullable(),
-  fasttrak_id: z.number().int().nullable(),
+  limo_anywhere_id: z.int().nullable(),
+  fasttrak_id: z.int().nullable(),
   vehicle_image: z.string().nullable(),
 })
 
@@ -943,7 +943,7 @@ export type VehiclePartial = z.infer<typeof VehiclePartialSchema>
 
 export const LineItemToQuoteSchema = z.object({
   A: z.string(),
-  B: z.number().int(),
+  B: z.int(),
 })
 
 export type LineItemToQuote = z.infer<typeof LineItemToQuoteSchema>
@@ -963,7 +963,7 @@ export type LineItemToQuotePartial = z.infer<
 /////////////////////////////////////////
 
 export const AirlineSchema = z.object({
-  id: z.number().int(),
+  id: z.int(),
   name: z.string().nullable(),
   iata: z.string().nullable(),
   icao: z.string().nullable(),
@@ -986,7 +986,7 @@ export type AirlinePartial = z.infer<typeof AirlinePartialSchema>
 /////////////////////////////////////////
 
 export const AirportSchema = z.object({
-  id: z.number().int(),
+  id: z.int(),
   name: z.string(),
   city: z.string().nullable(),
   country: z.string().nullable(),
@@ -1014,13 +1014,13 @@ export type AirportPartial = z.infer<typeof AirportPartialSchema>
 
 export const LAOrdersSchema = z.object({
   created_at: z.coerce.date(),
-  conf_num: z.number().int(),
+  conf_num: z.int(),
   type: z.string().nullable(),
   pu_date: z.string().nullable(),
   pu_time: z.string().nullable(),
   do_time: z.string().nullable(),
   duration: z.string().nullable(),
-  account_num: z.number().int().nullable(),
+  account_num: z.int().nullable(),
   agent_first_name: z.string().nullable(),
   agent_last_name: z.string().nullable(),
   alias: z.string().nullable(),
@@ -1054,8 +1054,8 @@ export const LAOrdersSchema = z.object({
   per_unit: z.number().nullable(),
   base_rate: z.number().nullable(),
   cleaning_fee: z.number().nullable(),
-  extra_hrs: z.number().int().nullable(),
-  extra_stops: z.number().int().nullable(),
+  extra_hrs: z.int().nullable(),
+  extra_stops: z.int().nullable(),
   reimbursement_for_supplies: z.number().nullable(),
   fuel_surcharge: z.number().nullable(),
   meet_and_greet: z.number().nullable(),

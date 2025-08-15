@@ -1,6 +1,6 @@
 ---
-url: "https://nuxt-naiveui.bg.tn/"
-title: "Nuxt Naive UI"
+url: 'https://nuxt-naiveui.bg.tn/'
+title: 'Nuxt Naive UI'
 ---
 
 [Skip to content](https://nuxt-naiveui.bg.tn/#VPContent)

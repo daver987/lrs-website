@@ -1,13 +1,13 @@
 ---
-url: "https://nuxt-naiveui.bg.tn/components/naive-tabbar.html"
-title: "NaiveTabbar | Nuxt Naive UI"
+url: 'https://nuxt-naiveui.bg.tn/components/naive-tabbar.html'
+title: 'NaiveTabbar | Nuxt Naive UI'
 ---
 
 [Skip to content](https://nuxt-naiveui.bg.tn/components/naive-tabbar.html#VPContent)
 
 Return to top
 
-# NaiveTabbar [​](https://nuxt-naiveui.bg.tn/components/naive-tabbar.html\#naivetabbar)
+# NaiveTabbar [​](https://nuxt-naiveui.bg.tn/components/naive-tabbar.html#naivetabbar)
 
 This component can be used for mobile and tablet navigation.
 
@@ -22,9 +22,9 @@ interface TabbarRoute {
 }
 ```
 
-### Props [​](https://nuxt-naiveui.bg.tn/components/naive-tabbar.html\#props)
+### Props [​](https://nuxt-naiveui.bg.tn/components/naive-tabbar.html#props)
 
-| **Name** | **Type** | **Default** | **Note** |
-| --- | --- | --- | --- |
-| routes | TabbarRoute | \[ \] | Recommended to not exceed 5 routes |
-| iconSize | number \| string | 24 |  |
+| **Name** | **Type**         | **Default** | **Note**                           |
+| -------- | ---------------- | ----------- | ---------------------------------- |
+| routes   | TabbarRoute      | \[ \]       | Recommended to not exceed 5 routes |
+| iconSize | number \| string | 24          |                                    |

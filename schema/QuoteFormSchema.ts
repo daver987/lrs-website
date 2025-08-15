@@ -81,10 +81,7 @@ export const QuoteFormSchema = z.object({
   id: z.string(),
   first_name: z.string(),
   last_name: z.string(),
-  email_address: z
-    .string()
-    .email({ message: 'Please enter a valid email' })
-    .toLowerCase(),
+  email_address: z.email().toLowerCase(),
   phone_number: z.string(),
   conversion: z.object({
     utm_medium: z.string().optional(),

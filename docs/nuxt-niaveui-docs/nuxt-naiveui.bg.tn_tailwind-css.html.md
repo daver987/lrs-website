@@ -1,17 +1,17 @@
 ---
-url: "https://nuxt-naiveui.bg.tn/tailwind-css.html"
-title: "Tailwind CSS | Nuxt Naive UI"
+url: 'https://nuxt-naiveui.bg.tn/tailwind-css.html'
+title: 'Tailwind CSS | Nuxt Naive UI'
 ---
 
 [Skip to content](https://nuxt-naiveui.bg.tn/tailwind-css.html#VPContent)
 
 Return to top
 
-# Tailwind CSS [​](https://nuxt-naiveui.bg.tn/tailwind-css.html\#tailwind-css)
+# Tailwind CSS [​](https://nuxt-naiveui.bg.tn/tailwind-css.html#tailwind-css)
 
 The module provides friendly TailwindCSS integration by resolving potential style conflicts. Please make sure to install the [Nuxt Tailwind](https://tailwindcss.nuxtjs.org/) module.
 
-#### Theme [​](https://nuxt-naiveui.bg.tn/tailwind-css.html\#theme)
+#### Theme [​](https://nuxt-naiveui.bg.tn/tailwind-css.html#theme)
 
 ts
 
@@ -40,7 +40,7 @@ export default defineNuxtConfig({
 });
 ```
 
-#### ColorMode [​](https://nuxt-naiveui.bg.tn/tailwind-css.html\#colormode)
+#### ColorMode [​](https://nuxt-naiveui.bg.tn/tailwind-css.html#colormode)
 
 ts
 

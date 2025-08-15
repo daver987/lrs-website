@@ -1,13 +1,13 @@
 ---
-url: "https://nuxt-naiveui.bg.tn/get-started/setup.html"
-title: "Setup | Nuxt Naive UI"
+url: 'https://nuxt-naiveui.bg.tn/get-started/setup.html'
+title: 'Setup | Nuxt Naive UI'
 ---
 
 [Skip to content](https://nuxt-naiveui.bg.tn/get-started/setup.html#VPContent)
 
 Return to top
 
-# Setup [​](https://nuxt-naiveui.bg.tn/get-started/setup.html\#setup)
+# Setup [​](https://nuxt-naiveui.bg.tn/get-started/setup.html#setup)
 
 Add `@bg-dev/nuxt-naiveui` dependency to your project:
 

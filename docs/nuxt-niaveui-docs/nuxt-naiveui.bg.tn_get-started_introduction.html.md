@@ -1,13 +1,13 @@
 ---
-url: "https://nuxt-naiveui.bg.tn/get-started/introduction.html"
-title: "Introduction | Nuxt Naive UI"
+url: 'https://nuxt-naiveui.bg.tn/get-started/introduction.html'
+title: 'Introduction | Nuxt Naive UI'
 ---
 
 [Skip to content](https://nuxt-naiveui.bg.tn/get-started/introduction.html#VPContent)
 
 On this page
 
-# Introduction [​](https://nuxt-naiveui.bg.tn/get-started/introduction.html\#introduction)
+# Introduction [​](https://nuxt-naiveui.bg.tn/get-started/introduction.html#introduction)
 
 Nuxt Naive UI is an unofficial module for [Nuxt](https://nuxt.com/) that aims to provide a complete UI layer based on [Naive UI](https://www.naiveui.com/) Vue 3 component library.
 
@@ -20,6 +20,6 @@ TIP
 
 The official `naive-ui` module for Nuxt was recently created and can be found [here](https://github.com/07akioni/nuxtjs-naive-ui).
 
-## Contributors [​](https://nuxt-naiveui.bg.tn/get-started/introduction.html\#contributors)
+## Contributors [​](https://nuxt-naiveui.bg.tn/get-started/introduction.html#contributors)
 
 [![](https://contrib.rocks/image?repo=becem-gharbi/nuxt-naiveui)](https://github.com/becem-gharbi/nuxt-naiveui/graphs/contributors)

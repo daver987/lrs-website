@@ -1,13 +1,13 @@
 ---
-url: "https://nuxt-naiveui.bg.tn/composables/useNaiveColorMode.html"
-title: "useNaiveColorMode | Nuxt Naive UI"
+url: 'https://nuxt-naiveui.bg.tn/composables/useNaiveColorMode.html'
+title: 'useNaiveColorMode | Nuxt Naive UI'
 ---
 
 [Skip to content](https://nuxt-naiveui.bg.tn/composables/useNaiveColorMode.html#VPContent)
 
 Return to top
 
-# useNaiveColorMode [​](https://nuxt-naiveui.bg.tn/composables/useNaiveColorMode.html\#usenaivecolormode)
+# useNaiveColorMode [​](https://nuxt-naiveui.bg.tn/composables/useNaiveColorMode.html#usenaivecolormode)
 
 This universal composable is intended for handling color mode state and preference.
 

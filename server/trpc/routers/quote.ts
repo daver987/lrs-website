@@ -35,7 +35,7 @@ export const quoteRouter = router({
   get: publicProcedure
     .input(
       z.object({
-        quote_number: z.number().optional().default(3000),
+        quote_number: z.number().optional().prefault(3000),
       })
     )
     .query(async ({ ctx, input }) => {

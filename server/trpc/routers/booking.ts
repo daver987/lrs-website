@@ -16,7 +16,7 @@ export const bookingRouter = router({
     .input(
       z.object({
         quote_number: z.number(),
-        notes: z.string().optional().default('No notes supplied'),
+        notes: z.string().optional().prefault('No notes supplied'),
         id: z.string(),
         large_luggage: z.number().optional().nullable(),
         carry_on_luggage: z.number().optional().nullable(),

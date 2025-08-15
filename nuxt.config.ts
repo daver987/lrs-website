@@ -1,4 +1,4 @@
-// Old Naive UI auto-import plugins removed; @bg-dev/nuxt-naiveui handles auto imports
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-08-14',
@@ -14,12 +14,11 @@ export default defineNuxtConfig({
     transpile: ['trpc-nuxt'],
   },
 
-  css: ['vue-tel-input/vue-tel-input.css'],
+  css: ['vue-tel-input/vue-tel-input.css', '~/assets/css/main.css'],
 
   modules: [
     '@vueuse/nuxt',
     '@nuxtjs/robots',
-    '@nuxtjs/tailwindcss',
     '@nuxt/image',
     '@nuxtjs/color-mode',
     '@nuxt/devtools',
@@ -155,6 +154,7 @@ export default defineNuxtConfig({
     },
   },
   vite: {
+    plugins: [tailwindcss()],
     resolve: {
       alias: { '.prisma/client/index-browser': `@prisma/client/index-browser` },
     },

@@ -1,13 +1,13 @@
 ---
-url: "https://nuxt-naiveui.bg.tn/composables/useNaiveLoadingBar.html"
-title: "useNaiveLoadingBar | Nuxt Naive UI"
+url: 'https://nuxt-naiveui.bg.tn/composables/useNaiveLoadingBar.html'
+title: 'useNaiveLoadingBar | Nuxt Naive UI'
 ---
 
 [Skip to content](https://nuxt-naiveui.bg.tn/composables/useNaiveLoadingBar.html#VPContent)
 
 Return to top
 
-# useNaiveLoadingBar [​](https://nuxt-naiveui.bg.tn/composables/useNaiveLoadingBar.html\#usenaiveloadingbar)
+# useNaiveLoadingBar [​](https://nuxt-naiveui.bg.tn/composables/useNaiveLoadingBar.html#usenaiveloadingbar)
 
 This composable is intended to support `useLoadingBar` usage on Nuxt plugins. Make sure to add `naive-loading-bar` as a child of `n-loading-bar-provider`.
 

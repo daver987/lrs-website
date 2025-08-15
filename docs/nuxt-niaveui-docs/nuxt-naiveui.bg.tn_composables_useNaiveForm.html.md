@@ -1,13 +1,13 @@
 ---
-url: "https://nuxt-naiveui.bg.tn/composables/useNaiveForm.html"
-title: "useNaiveForm | Nuxt Naive UI"
+url: 'https://nuxt-naiveui.bg.tn/composables/useNaiveForm.html'
+title: 'useNaiveForm | Nuxt Naive UI'
 ---
 
 [Skip to content](https://nuxt-naiveui.bg.tn/composables/useNaiveForm.html#VPContent)
 
 Return to top
 
-# useNaiveForm [​](https://nuxt-naiveui.bg.tn/composables/useNaiveForm.html\#usenaiveform)
+# useNaiveForm [​](https://nuxt-naiveui.bg.tn/composables/useNaiveForm.html#usenaiveform)
 
 This composable is intended to be used with the `n-form` naive-ui component. It provides state management. It's better to explain it with an example.
 

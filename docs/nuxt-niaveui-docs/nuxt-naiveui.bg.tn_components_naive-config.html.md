@@ -1,13 +1,13 @@
 ---
-url: "https://nuxt-naiveui.bg.tn/components/naive-config.html"
-title: "NaiveConfig | Nuxt Naive UI"
+url: 'https://nuxt-naiveui.bg.tn/components/naive-config.html'
+title: 'NaiveConfig | Nuxt Naive UI'
 ---
 
 [Skip to content](https://nuxt-naiveui.bg.tn/components/naive-config.html#VPContent)
 
 Return to top
 
-# NaiveConfig [​](https://nuxt-naiveui.bg.tn/components/naive-config.html\#naiveconfig)
+# NaiveConfig [​](https://nuxt-naiveui.bg.tn/components/naive-config.html#naiveconfig)
 
 This component is intended for theme configuration and reactivity, plus setting up global styles via `body` tag. The configuration part is handled via `n-config-provider` naive-ui component through which the theme is overwritten based on current color mode and device type.
 
@@ -33,7 +33,7 @@ Important
 
 Naive UI generates CSS using JS [(reference)](https://www.npmjs.com/package/css-render). This implementation **may cause an issue on pre-rendered Nuxt pages** because they are static (generated at build time). Thus a hydration mismatch may occur in this case.
 
-### Customization [​](https://nuxt-naiveui.bg.tn/components/naive-config.html\#customization)
+### Customization [​](https://nuxt-naiveui.bg.tn/components/naive-config.html#customization)
 
 To automatically generate color themes without granular customization, it's recommended to use the `generateTailwindColorThemes` utility based on Tailwind CSS [default color palette](https://tailwindcss.com/docs/customizing-colors) or the `generateAntdColorThemes` utility based on Ant Design [color palette generator](https://ant.design/docs/spec/colors#palette-generation-tool).
 
