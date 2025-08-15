@@ -19,13 +19,16 @@ userStore.setUserId(user_id.value)
 </script>
 
 <template>
-  <NLoadingBarProvider>
-    <NMessageProvider>
-      <NuxtLayout>
-        <NuxtPage />
-      </NuxtLayout>
-    </NMessageProvider>
-  </NLoadingBarProvider>
+  <naive-config>
+    <n-loading-bar-provider>
+      <naive-loading-bar navigation />
+      <n-message-provider>
+        <NuxtLayout>
+          <NuxtPage />
+        </NuxtLayout>
+      </n-message-provider>
+    </n-loading-bar-provider>
+  </naive-config>
 </template>
 
 <style>

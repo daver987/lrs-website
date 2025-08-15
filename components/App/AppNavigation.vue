@@ -5,7 +5,8 @@ import {
   TransitionChild,
   TransitionRoot,
 } from '@headlessui/vue'
-import { navigation, NavigationItem } from '~/data/navigation'
+import { navigation } from '~/data/navigation'
+import type { NavigationItem } from '~/data/navigation'
 
 const props = defineProps({
   linkClasses: {

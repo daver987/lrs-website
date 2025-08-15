@@ -3,7 +3,7 @@ const images = [
   '/images/premium_sedan-3.png',
   '/images/premium_suv-2.png',
   '/images/standard_suv-2.png',
-  'images/premium_suv-14.png',
+  '/images/premium_suv-14.png',
 ]
 
 const currentImageIndex = ref(0)
@@ -12,13 +12,17 @@ const switchImage = () => {
   currentImageIndex.value = (currentImageIndex.value + 1) % images.length
 }
 
-watchEffect((onInvalidate) => {
+// Run interval only on client
+onMounted(() => {
   const timer = setInterval(switchImage, 5000)
-
-  onInvalidate(() => {
-    clearInterval(timer)
-  })
+  onBeforeUnmount(() => clearInterval(timer))
 })
+
+const fallbackSrc = 'https://via.placeholder.com/800x400?text=Image'
+const onImgError = (e: Event) => {
+  const el = e.target as HTMLImageElement
+  if (el && el.src !== fallbackSrc) el.src = fallbackSrc
+}
 </script>
 
 <template>
@@ -28,6 +32,7 @@ watchEffect((onInvalidate) => {
         class="image"
         :key="images[currentImageIndex]"
         :src="images[currentImageIndex]"
+        @error="onImgError"
         alt="Switching images"
       />
     </transition>

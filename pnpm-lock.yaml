@@ -26,6 +26,9 @@ importers:
       superjson:
         specifier: ^1.13.3
         version: 1.13.3
+      tailwindcss:
+        specifier: ^3.4.17
+        version: 3.4.17
       trpc-panel:
         specifier: ^1.3.4
         version: 1.3.4(@trpc/server@10.45.2)(zod@3.25.76)
@@ -36,6 +39,9 @@ importers:
         specifier: ^3.25.76
         version: 3.25.76
     devDependencies:
+      '@bg-dev/nuxt-naiveui':
+        specifier: 2.0.0-rc.5
+        version: 2.0.0-rc.5(magicast@0.3.5)(vue@3.5.18(typescript@5.9.2))
       '@googlemaps/js-api-loader':
         specifier: ^1.16.10
         version: 1.16.10
@@ -150,9 +156,6 @@ importers:
       nuxt-icon:
         specifier: ^0.5.0
         version: 0.5.0(magicast@0.3.5)(vue@3.5.18(typescript@5.9.2))
-      nuxtjs-naive-ui:
-        specifier: 1.0.2
-        version: 1.0.2(magicast@0.3.5)(vue@3.5.18(typescript@5.9.2))
       openai:
         specifier: ^5.12.2
         version: 5.12.2(ws@8.18.3)(zod@3.25.76)
@@ -214,6 +217,13 @@ packages:
   '@ampproject/remapping@2.3.0':
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
     engines: {node: '>=6.0.0'}
+
+  '@ant-design/colors@7.2.1':
+    resolution: {integrity: sha512-lCHDcEzieu4GA3n8ELeZ5VQ8pKQAWcGGLRTQ50aQM2iqPpq2evTxER84jfdPvsPAtEcZ7m44NI45edFMo8oOYQ==}
+
+  '@ant-design/fast-color@2.0.6':
+    resolution: {integrity: sha512-y2217gk4NqL35giHl72o6Zzqji9O7vHh9YmhUVkPtAOpoTCH4uWxo/pr4VE8t0+ChEPs0qo4eJRC5Q1eXWo3vA==}
+    engines: {node: '>=8.x'}
 
   '@antfu/install-pkg@1.1.0':
     resolution: {integrity: sha512-MGQsmw10ZyI+EJo45CdSER4zEb+p31LpDAFp2Z3gkSd1yqVZGi0Ebx++YTEMonJy4oChEMLsxZ64j8FH6sSqtQ==}
@@ -348,6 +358,9 @@ packages:
   '@babel/types@7.28.2':
     resolution: {integrity: sha512-ruv7Ae4J5dUYULmeXw1gmb7rYRz57OWCPM57pHojnLq/3Z1CK2lNSLTCVjxVk1F/TZHwOZZrOWi0ur95BbLxNQ==}
     engines: {node: '>=6.9.0'}
+
+  '@bg-dev/nuxt-naiveui@2.0.0-rc.5':
+    resolution: {integrity: sha512-eWExQiiYentu/EbAMby/oVTVoSfNRA8vwtfRDRaYfbgVrDxoxOeidyEq09LsPDWUMlLKGxmo+nSg2JHtQfwe0A==}
 
   '@cloudflare/kv-asset-handler@0.4.0':
     resolution: {integrity: sha512-+tv3z+SPp+gqTIcImN9o0hqE9xyfQjI1XD9pL6NuKjua9B1y7mNYv0S9cP+QEbA4ppVgGZEmKOvHX5G5Ei1CVA==}
@@ -3645,6 +3658,10 @@ packages:
     resolution: {integrity: sha512-twQoecYPiVA5K/h6SxtORw/Bs3ar+mLUtoPSc7iMXzQzK8d7eJ/R09wmTwAjiamETn1cXYPGfNnu7DMoHgu12w==}
     hasBin: true
 
+  js-cookie@3.0.5:
+    resolution: {integrity: sha512-cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw==}
+    engines: {node: '>=14'}
+
   js-tiktoken@1.0.21:
     resolution: {integrity: sha512-biOj/6M5qdgx5TKjDnFT1ymSpM5tbd3ylwDtrQvFQSu0Z7bBYko2dF+W/aUkXUPuk6IVpRxk/3Q2sHOzGlS36g==}
 
@@ -4427,9 +4444,6 @@ packages:
         optional: true
       '@types/node':
         optional: true
-
-  nuxtjs-naive-ui@1.0.2:
-    resolution: {integrity: sha512-qJ5ZKTEQieNaSNJFHdRCCz9SOLRB7Rg0vwzFJe64WYKt+SzDM2sQ7ZXj2raJzyIPBtKInQv6yDo2vvSBsLiUHA==}
 
   nypm@0.6.1:
     resolution: {integrity: sha512-hlacBiRiv1k9hZFiphPUkfSQ/ZfQzZDzC+8z0wL3lvDAOUu/2NnChkKuMoMjNur/9OpKuz2QsIeiPVN0xM5Q0w==}
@@ -6289,6 +6303,14 @@ snapshots:
       '@jridgewell/gen-mapping': 0.3.13
       '@jridgewell/trace-mapping': 0.3.30
 
+  '@ant-design/colors@7.2.1':
+    dependencies:
+      '@ant-design/fast-color': 2.0.6
+
+  '@ant-design/fast-color@2.0.6':
+    dependencies:
+      '@babel/runtime': 7.28.2
+
   '@antfu/install-pkg@1.1.0':
     dependencies:
       package-manager-detector: 1.3.0
@@ -6483,6 +6505,18 @@ snapshots:
     dependencies:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.27.1
+
+  '@bg-dev/nuxt-naiveui@2.0.0-rc.5(magicast@0.3.5)(vue@3.5.18(typescript@5.9.2))':
+    dependencies:
+      '@ant-design/colors': 7.2.1
+      '@iconify/vue': 4.3.0(vue@3.5.18(typescript@5.9.2))
+      '@nuxt/kit': 3.18.1(magicast@0.3.5)
+      defu: 6.1.4
+      js-cookie: 3.0.5
+      naive-ui: 2.42.0(vue@3.5.18(typescript@5.9.2))
+    transitivePeerDependencies:
+      - magicast
+      - vue
 
   '@cloudflare/kv-asset-handler@0.4.0':
     dependencies:
@@ -10000,6 +10034,8 @@ snapshots:
 
   jiti@2.5.1: {}
 
+  js-cookie@3.0.5: {}
+
   js-tiktoken@1.0.21:
     dependencies:
       base64-js: 1.5.1
@@ -10778,14 +10814,6 @@ snapshots:
       - vue-tsc
       - xml2js
       - yaml
-
-  nuxtjs-naive-ui@1.0.2(magicast@0.3.5)(vue@3.5.18(typescript@5.9.2)):
-    dependencies:
-      '@css-render/vue3-ssr': 0.15.14(vue@3.5.18(typescript@5.9.2))
-      '@nuxt/kit': 3.18.1(magicast@0.3.5)
-    transitivePeerDependencies:
-      - magicast
-      - vue
 
   nypm@0.6.1:
     dependencies:

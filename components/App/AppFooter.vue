@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { NavigationItem } from '~/data/navigation'
+import type { NavigationItem } from '~/data/navigation'
 
 interface CompanyData {
   companyName: string
