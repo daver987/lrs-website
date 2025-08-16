@@ -181,7 +181,7 @@ const submitOrder = async () => {
             </ul>
 
             <dl
-              class="space-y-6 border-t border-gray-200 pt-8 text-sm font-medium"
+              class="space-y-6 border-t border-neutral-200 pt-8 text-sm font-medium"
             >
               <div
                 class="flex items-center justify-between"
@@ -197,7 +197,7 @@ const submitOrder = async () => {
               </div>
 
               <div
-                class="flex items-center justify-between border-t border-gray-200 pt-6 text-brand-900"
+                class="flex items-center justify-between border-t border-neutral-200 pt-6 text-brand-900"
               >
                 <dt class="text-base">Total</dt>
                 <dd class="text-base">${{ totalPrice }}</dd>

@@ -28,7 +28,7 @@
       >
         <BaseCard class="space-y-6">
           <h3 class="subheading">About The Vehicle</h3>
-          <p class="font-sans text-gray-500">
+          <p class="font-sans text-neutral-500">
             If you're looking for a legend to take care of you regardless of
             whether your destination is Toronto or Montreal, the Cadillac XTS is
             it. Its sophisticated and sleek design comes with features that make

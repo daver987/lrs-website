@@ -39,13 +39,13 @@ const {
 
 <template>
   <div
-    class="rounded-sm border border-gray-300 bg-white px-3 shadow-xs focus-within:border-brand-600 focus-within:ring-1 focus-within:ring-brand-600"
+    class="rounded-sm border border-neutral-300 bg-white px-3 shadow-xs focus-within:border-brand-600 focus-within:ring-1 focus-within:ring-brand-600"
   >
-    <label class="font-regular block text-xxs text-gray-700" :for="name">{{
+    <label class="font-regular block text-xxs text-neutral-700" :for="name">{{
       label
     }}</label>
     <input
-      class="-mt-1 block w-full border-0 p-0 pb-0.5 text-gray-900 placeholder-gray-400 focus:ring-0 sm:text-sm"
+      class="-mt-1 block w-full border-0 p-0 pb-0.5 text-neutral-900 placeholder-neutral-400 focus:ring-0 sm:text-sm"
       :id="name"
       :aria-label="label"
       :name="name"

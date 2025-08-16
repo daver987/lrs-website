@@ -137,10 +137,9 @@ const { onImgError } = useImageFallback()
             @click="open = true"
           >
             <span class="sr-only">Open menu</span>
-            <Icon class="h-6 w-6" name="heroicons:bars-3" aria-hidden="true" />
+            <Icon class="size-6" name="heroicons:bars-3" aria-hidden="true" />
           </button>
 
-          <!-- Logo -->
           <div
             class="ml-2 flex w-full justify-center lg:ml-0 lg:w-auto lg:justify-start"
           >
@@ -148,7 +147,7 @@ const { onImgError } = useImageFallback()
               <span class="sr-only">{{ appConfig.brand?.name }}</span>
               <img
                 class="h-12 w-auto lg:h-14"
-                :src="logoSrc as string"
+                :src="logoSrc"
                 :alt="`${appConfig.brand?.name} Logo`"
                 width="1920"
                 @error="onImgError"
@@ -197,11 +196,7 @@ const { onImgError } = useImageFallback()
               <div
                 class="flex items-center text-neutral-500 hover:text-brand dark:text-neutral-100"
               >
-                <img
-                  class="shrink-0 block w-5 h-auto"
-                  src="https://tailwindui.com/img/flags/flag-canada.svg"
-                  alt="Canada Flag"
-                />
+                <Icon name="openmoji:flag-canada" :size="24" />
                 <span class="ml-3 block text-sm font-medium">CAD</span>
                 <span class="sr-only">, change currency</span>
               </div>

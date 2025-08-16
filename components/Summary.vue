@@ -69,7 +69,7 @@ const { onImgError } = useImageFallback()
             </p>
           </div>
         </div>
-        <div class="mb-6 border-b-2 border-gray-200"></div>
+        <div class="mb-6 border-b-2 border-neutral-200"></div>
         <div class="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
           <div>
             <h2 class="text-lg font-bold">Customer Details</h2>
@@ -131,7 +131,7 @@ const { onImgError } = useImageFallback()
               <table class="w-full">
                 <tbody>
                   <tr
-                    class="border-t border-gray-200"
+                    class="border-t border-neutral-200"
                     v-for="(lineItem, itemIndex) in quote.combined_line_items"
                     :key="itemIndex"
                   >
@@ -151,7 +151,7 @@ const { onImgError } = useImageFallback()
             <span> ${{ item.total.toFixed(2) }}</span>
           </p>
         </div>
-        <div class="mt-6 border-t-2 border-gray-200 pt-6">
+        <div class="mt-6 border-t-2 border-neutral-200 pt-6">
           <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div class="flex flex-col">
               <p class="font-brand-body text-sm font-bold text-black">

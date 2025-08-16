@@ -46,16 +46,16 @@ const closeNotification = (): void => {
                 />
               </div>
               <div class="ml-3 w-0 flex-1 pt-0.5">
-                <p class="text-sm font-medium text-gray-900">
+                <p class="text-sm font-medium text-neutral-900">
                   {{ message1 }}
                 </p>
-                <p class="mt-1 text-sm text-gray-500">
+                <p class="mt-1 text-sm text-neutral-500">
                   {{ message2 }}
                 </p>
               </div>
               <div class="ml-4 flex shrink-0">
                 <button
-                  class="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  class="inline-flex rounded-md bg-white text-neutral-400 hover:text-neutral-500 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                   type="button"
                   @click="closeNotification"
                 >

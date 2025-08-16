@@ -54,7 +54,7 @@ const {
         :class="[
           errorMessage
             ? 'border-red-300 pr-10 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-hidden focus:ring-red-500'
-            : 'border-gray-300  focus:border-brand focus:ring-brand',
+            : 'border-neutral-neutral focus:border-brand focus:ring-brand',
         ]"
         :name="name"
         :placeholder="placeholder"

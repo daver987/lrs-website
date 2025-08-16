@@ -52,7 +52,7 @@ const url = useRuntimeConfig().public.WEBSITE_URL
             >
               <div class="flex px-4 pb-2 pt-5">
                 <button
-                  class="-m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400"
+                  class="-m-2 inline-flex items-center justify-center rounded-md p-2 text-neutral-400"
                   type="button"
                   @click="open = false"
                 >
@@ -65,7 +65,7 @@ const url = useRuntimeConfig().public.WEBSITE_URL
                 </button>
               </div>
 
-              <div class="space-y-6 border-t border-gray-200 px-4 py-6">
+              <div class="space-y-6 border-t border-neutral-200 px-4 py-6">
                 <template v-for="page in nav" :key="page.id">
                   <div class="flow-root">
                     <NuxtLink
@@ -78,10 +78,10 @@ const url = useRuntimeConfig().public.WEBSITE_URL
                 </template>
               </div>
 
-              <div class="space-y-6 border-t border-gray-200 px-4 py-6">
+              <div class="space-y-6 border-t border-neutral-200 px-4 py-6">
                 <div class="flow-root">
                   <NuxtLink
-                    class="-m-2 block p-2 font-medium text-gray-900"
+                    class="-m-2 block p-2 font-medium text-neutral-900"
                     exact-active-class="text-brand hover:text-brand-600"
                     to="/signin"
                     >Sign in
@@ -89,7 +89,7 @@ const url = useRuntimeConfig().public.WEBSITE_URL
                 </div>
                 <div class="flow-root">
                   <NuxtLink
-                    class="-m-2 block p-2 font-medium text-gray-900"
+                    class="-m-2 block p-2 font-medium text-neutral-900"
                     exact-active-class="text-brand hover:text-brand-600"
                     to="/signup"
                     >Create account
@@ -97,7 +97,7 @@ const url = useRuntimeConfig().public.WEBSITE_URL
                 </div>
               </div>
 
-              <div class="border-t border-gray-200 px-4 py-6">
+              <div class="border-t border-neutral-200 px-4 py-6">
                 <NuxtLink class="-m-2 flex items-center p-2">
                   <img
                     class="shrink-0 block w-5 h-auto"
@@ -117,10 +117,10 @@ const url = useRuntimeConfig().public.WEBSITE_URL
     </TransitionRoot>
     <header class="relative bg-transparent">
       <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Top">
-        <div class="border-b border-gray-400 py-2">
+        <div class="border-b border-neutral-400 py-2">
           <div class="flex h-16 w-full justify-center lg:items-center">
             <button
-              class="shrink-0 rounded-sm bg-transparent p-2 text-gray-400 hover:text-gray-500 lg:hidden"
+              class="shrink-0 rounded-sm bg-transparent p-2 text-neutral-400 hover:text-neutral-500 lg:hidden"
               type="button"
               @click="open = true"
             >
@@ -154,7 +154,7 @@ const url = useRuntimeConfig().public.WEBSITE_URL
               <div class="flex h-full space-x-8">
                 <template v-for="page in nav" :key="page.id">
                   <NuxtLink
-                    class="flex items-center text-sm font-medium capitalize tracking-wider text-gray-900 hover:text-brand"
+                    class="flex items-center text-sm font-medium capitalize tracking-wider text-neutral-900 hover:text-brand"
                     exact-active-class="text-brand hover:text-brand-600"
                     :to="page.href"
                     >{{ page.name }}
@@ -168,14 +168,14 @@ const url = useRuntimeConfig().public.WEBSITE_URL
                 class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6"
               >
                 <NuxtLink
-                  class="text-sm font-medium text-gray-900 hover:text-brand"
+                  class="text-sm font-medium text-neutral-900 hover:text-brand"
                   to="/signin"
                   exact-active-class="text-brand hover:text-brand-600"
                   >Sign in
                 </NuxtLink>
-                <span class="h-6 w-px bg-gray-700" aria-hidden="true" />
+                <span class="h-6 w-px bg-neutral-700" aria-hidden="true" />
                 <NuxtLink
-                  class="text-sm font-medium text-gray-900 hover:text-brand"
+                  class="text-sm font-medium text-neutral-900 hover:text-brand"
                   to="/signup"
                   exact-active-class="text-brand hover:text-brand-600"
                   >Create account
@@ -184,7 +184,7 @@ const url = useRuntimeConfig().public.WEBSITE_URL
 
               <div class="hidden lg:ml-8 lg:flex">
                 <a
-                  class="flex items-center text-gray-900 hover:text-brand dark:text-gray-500"
+                  class="flex items-center text-neutral-900 hover:text-brand dark:text-neutral-500"
                   href="#"
                 >
                   <img
@@ -208,7 +208,7 @@ const url = useRuntimeConfig().public.WEBSITE_URL
     <div class="relative min-h-full">
       <div>
         <h2
-          class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900"
+          class="mt-6 text-center text-3xl font-bold tracking-tight text-neutral-900"
         >
           Sign in to your account
         </h2>

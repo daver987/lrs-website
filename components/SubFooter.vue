@@ -5,7 +5,7 @@ const appConfig = useAppConfig()
 
 <template>
   <div class="bg-brand py-3 text-center">
-    <p class="text-sm uppercase text-gray-50">
+    <p class="text-sm uppercase text-neutral-50">
       &copy;<span>{{ currentYear }}</span> {{ appConfig.brand.legalName }}. All
       rights reserved
     </p>

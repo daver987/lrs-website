@@ -6,7 +6,7 @@
   <div class="mx-auto w-full max-w-sm lg:w-96">
     <div>
       <h2
-        class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900"
+        class="mt-6 text-center text-3xl font-bold tracking-tight text-neutral-900"
       >
         Sign in to your account
       </h2>

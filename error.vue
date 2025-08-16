@@ -19,11 +19,11 @@ const handleError = () => clearError({ redirect: '/' })
         class="w-full max-w-md rounded-lg bg-white p-8 shadow-md dark:bg-neutral-900"
       >
         <h1
-          class="mb-6 text-center text-2xl font-semibold text-gray-800 dark:text-white"
+          class="mb-6 text-center text-2xl font-semibold text-neutral-800 dark:text-white"
         >
           Oops! An error occurred
         </h1>
-        <p class="mb-8 text-center text-gray-600 dark:text-gray-300">
+        <p class="mb-8 text-center text-neutral-600 dark:text-neutral-300">
           {{ error.message }}
         </p>
         <div class="flex justify-center">

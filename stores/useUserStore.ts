@@ -39,7 +39,6 @@ export const useUserStore = defineStore('user', {
 
 function generateUuid() {
   const newUserId = uuidv4()
-
   return newUserId.toString()
 }
 

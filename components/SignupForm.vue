@@ -18,7 +18,7 @@ const color = colorMode.value
         />
       </NuxtLink>
       <h2
-        class="mt-6 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-200"
+        class="mt-6 text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-200"
       >
         Create account
       </h2>
@@ -34,7 +34,7 @@ const color = colorMode.value
         />
       </NuxtLink>
       <h2
-        class="mt-6 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-200"
+        class="mt-6 text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-200"
       >
         Sign up for an account
       </h2>
@@ -87,13 +87,13 @@ const color = colorMode.value
           <div class="flex items-center justify-between">
             <div class="flex items-center">
               <input
-                class="h-4 w-4 rounded-sm border-gray-300 text-brand-600 focus:ring-brand"
+                class="h-4 w-4 rounded-sm border-neutral-300 text-brand-600 focus:ring-brand"
                 id="remember-me"
                 name="remember-me"
                 type="checkbox"
               />
               <label
-                class="ml-2 block text-sm text-gray-900 dark:text-gray-200"
+                class="ml-2 block text-sm text-neutral-900 dark:text-neutral-200"
                 for="remember-me"
                 >Remember me</label
               >

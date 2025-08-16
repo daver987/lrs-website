@@ -9,8 +9,9 @@ import { createTRPCNuxtClient } from 'trpc-nuxt/client'
 import { httpBatchLink } from '@trpc/client'
 import { FetchError } from 'ofetch'
 import superjson from 'superjson'
-
 import type { AppRouter } from '~/server/trpc/routers'
+
+type Init = RequestInit | undefined
 
 export default defineNuxtPlugin(() => {
   const client = createTRPCNuxtClient<AppRouter>({
@@ -21,7 +22,7 @@ export default defineNuxtPlugin(() => {
         // We provide our own fetch to leverage the use of Nuxt's $fetch
         // trpc-nuxt has its own NuxtHttpBatchLink, but it doesn't handle error well
         // in the case of a FetchError, the error won't be properly mzpped in the trpc client. This implementation fixes it
-        async fetch(input: any, init?: any) {
+        async fetch(input: unknown, init?: Init) {
           try {
             const response = await $fetch.raw(input.toString(), init)
             return {

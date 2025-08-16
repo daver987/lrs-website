@@ -20,7 +20,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@nuxtjs/robots',
     '@nuxt/fonts',
-    // Removed '@nuxt/image' — using plain <img> tags
+    '@formkit/auto-animate/nuxt',
     '@nuxtjs/color-mode',
     '@nuxt/devtools',
     '@bg-dev/nuxt-naiveui',

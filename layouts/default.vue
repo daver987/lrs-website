@@ -27,7 +27,9 @@ const footerData = {
 
 <template>
   <div class="dark:bg-neutral-800">
-    <slot />
+    <main>
+      <slot />
+    </main>
     <AppFooter :company-data="footerData" :navigation="navigation">
       <template #footer-cta>
         <FooterCta />

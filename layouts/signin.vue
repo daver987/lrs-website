@@ -34,20 +34,20 @@ import { navigation } from '~/data/navigation'
               </NuxtLink>
             </div>
             <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-              <!-- Current: "border-brand text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" -->
+              <!-- Current: "border-brand text-neutral-900", Default: "border-transparent text-neutral-500 hover:border-neutral-300 hover:text-neutral-700" -->
               <NuxtLink
-                class="inline-flex items-center border-transparent font-sans text-sm font-medium capitalize text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                class="inline-flex items-center border-transparent font-sans text-sm font-medium capitalize text-neutral-500 hover:border-neutral-300 hover:text-neutral-700"
                 v-for="link in navigation"
                 :key="link.id"
                 :to="link.href"
-                exact-active-class="border-brand text-gray-900"
+                exact-active-class="border-brand text-neutral-900"
                 >{{ link.name }}</NuxtLink
               >
             </div>
           </div>
           <div class="hidden sm:ml-6 sm:flex sm:items-center" v-show="false">
             <button
-              class="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-hidden focus:ring-2 focus:ring-brand focus:ring-offset-2"
+              class="rounded-full bg-white p-1 text-neutral-400 hover:text-neutral-500 focus:outline-hidden focus:ring-2 focus:ring-brand focus:ring-offset-2"
               type="button"
             >
               <span class="sr-only">View notifications</span>
@@ -84,8 +84,8 @@ import { navigation } from '~/data/navigation'
                     <a
                       href="#"
                       :class="[
-                        active ? 'bg-gray-100' : '',
-                        'block px-4 py-2 text-sm text-gray-700',
+                        active ? 'bg-neutral-100' : '',
+                        'block px-4 py-2 text-sm text-neutral-700',
                       ]"
                       >Your Profile</a
                     >
@@ -94,8 +94,8 @@ import { navigation } from '~/data/navigation'
                     <a
                       href="#"
                       :class="[
-                        active ? 'bg-gray-100' : '',
-                        'block px-4 py-2 text-sm text-gray-700',
+                        active ? 'bg-neutral-100' : '',
+                        'block px-4 py-2 text-sm text-neutral-700',
                       ]"
                       >Settings</a
                     >
@@ -104,8 +104,8 @@ import { navigation } from '~/data/navigation'
                     <a
                       href="#"
                       :class="[
-                        active ? 'bg-gray-100' : '',
-                        'block px-4 py-2 text-sm text-gray-700',
+                        active ? 'bg-neutral-100' : '',
+                        'block px-4 py-2 text-sm text-neutral-700',
                       ]"
                       >Sign out</a
                     >
@@ -117,7 +117,7 @@ import { navigation } from '~/data/navigation'
           <div class="-mr-2 flex items-center sm:hidden">
             <!-- Mobile menu button -->
             <DisclosureButton
-              class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-hidden focus:ring-2 focus:ring-inset focus:ring-brand"
+              class="inline-flex items-center justify-center rounded-md p-2 text-neutral-400 hover:bg-neutral-100 hover:text-neuneutral-500 focus:outline-hidden focus:ring-2 focus:ring-inset focus:ring-brand"
             >
               <span class="sr-only">Open main menu</span>
               <Icon
@@ -139,7 +139,7 @@ import { navigation } from '~/data/navigation'
 
       <DisclosurePanel class="sm:hidden">
         <div class="space-y-1 pb-3 pt-2">
-          <!-- Current: "bg-brand-50 border-brand text-brand-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" -->
+          <!-- Current: "bg-brand-50 border-brand text-brand-700", Default: "border-transparent text-neutral-500 hover:bg-neutral-50 hover:border-neutral-300 hover:text-neutral-700" -->
           <DisclosureButton
             class="block border-l-4 border-brand bg-brand-50 py-2 pl-3 pr-4 text-base font-medium text-brand-700"
             as="a"
@@ -148,28 +148,28 @@ import { navigation } from '~/data/navigation'
             Dashboard
           </DisclosureButton>
           <DisclosureButton
-            class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+            class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-neutral-500 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-700"
             as="a"
             href="#"
           >
             Team
           </DisclosureButton>
           <DisclosureButton
-            class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+            class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-neutral-500 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-700"
             as="a"
             href="#"
           >
             Projects
           </DisclosureButton>
           <DisclosureButton
-            class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+            class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-neutral-500 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-700"
             as="a"
             href="#"
           >
             Calendar
           </DisclosureButton>
         </div>
-        <div class="border-t border-gray-200 pb-3 pt-4">
+        <div class="border-t border-neutral-200 pb-3 pt-4">
           <div class="flex items-center px-4">
             <div class="shrink-0">
               <img
@@ -179,13 +179,13 @@ import { navigation } from '~/data/navigation'
               />
             </div>
             <div class="ml-3">
-              <div class="text-base font-medium text-gray-800">Tom Cook</div>
-              <div class="text-sm font-medium text-gray-500">
+              <div class="text-base font-medium text-neutral-800">Tom Cook</div>
+              <div class="text-sm font-medium text-neutral-500">
                 tom@example.com
               </div>
             </div>
             <button
-              class="ml-auto shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-hidden focus:ring-2 focus:ring-brand focus:ring-offset-2"
+              class="ml-auto shrink-0 rounded-full bg-white p-1 text-neutral-400 hover:text-neutral-500 focus:outline-hidden focus:ring-2 focus:ring-brand focus:ring-offset-2"
               type="button"
             >
               <span class="sr-only">View notifications</span>
@@ -194,21 +194,21 @@ import { navigation } from '~/data/navigation'
           </div>
           <div class="mt-3 space-y-1">
             <DisclosureButton
-              class="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+              class="block px-4 py-2 text-base font-medium text-neutral-500 hover:bg-neutral-100 hover:text-neutral-800"
               as="a"
               href="#"
             >
               Your Profile
             </DisclosureButton>
             <DisclosureButton
-              class="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+              class="block px-4 py-2 text-base font-medium text-neutral-500 hover:bg-neutral-100 hover:text-neutral-800"
               as="a"
               href="#"
             >
               Settings
             </DisclosureButton>
             <DisclosureButton
-              class="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+              class="block px-4 py-2 text-base font-medium text-neutral-500 hover:bg-neutral-100 hover:text-neutral-800"
               as="a"
               href="#"
             >
