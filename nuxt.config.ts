@@ -20,20 +20,13 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@nuxtjs/robots',
     '@nuxt/fonts',
-    '@nuxt/image',
+    // Removed '@nuxt/image' — using plain <img> tags
     '@nuxtjs/color-mode',
     '@nuxt/devtools',
     '@bg-dev/nuxt-naiveui',
     '@pinia/nuxt',
     '@nuxt/icon',
   ],
-  image: {
-    inject: true,
-    quality: 80,
-    format: ['avif', 'webp', 'jpeg', 'png'],
-    domains: ['imagedelivery.net'],
-    densities: [1, 2],
-  },
   nitro: {
     experimental: {
       asyncContext: true,

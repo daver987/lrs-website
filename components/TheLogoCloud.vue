@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { useImageFallback } from '~/composables/useImageFallback'
 const logos = [
   {
     key: 0,
@@ -26,6 +27,7 @@ const logos = [
     alt: 'mec',
   },
 ]
+const { onImgError } = useImageFallback()
 </script>
 
 <template>
@@ -36,15 +38,12 @@ const logos = [
         v-for="logo in logos"
         key="logo.key"
       >
-        <NuxtPicture
+        <img
+          class="object-contain w-full max-w-xs filter grayscale dark:filter dark:grayscale-0 hover:grayscale-0"
           :alt="logo.alt"
-          :img-attrs="{
-            class:
-              'object-contain w-full max-w-xs filter grayscale dark:filter dark:grayscale-0 hover:grayscale-0',
-          }"
-          :src="$img(logo.src as string)"
-          placeholder
+          :src="logo.src as string"
           loading="lazy"
+          @error="onImgError"
         />
       </div>
     </div>

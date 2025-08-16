@@ -9,10 +9,10 @@
         </h2>
       </div>
       <div>
-        <NuxtPicture
+        <img
+          class="h-full object-cover object-center w-full"
           src="/images/premium_sedan-3.png"
           alt="Lincoln Continental Sedan"
-          :img-attrs="{ class: 'h-full object-cover object-center w-full' }"
           width="1920"
         />
       </div>
@@ -35,7 +35,7 @@
         </p>
       </BaseCard>
       <div>
-        <NuxtPicture
+        <img
           src="/images/premium_sedan-4.jpg"
           alt="Lincoln Continental Interior"
           width="1920"
@@ -44,12 +44,10 @@
     </div>
     <div class="mb-12 grid grid-cols-1 gap-4">
       <div class="col-span-1">
-        <NuxtPicture
+        <img
+          class="object-cover object-center w-full md:max-w-5xl"
           src="/images/premium_sedan-1.jpg"
           alt="Lincoln Continental Interior"
-          :img-attrs="{
-            class: 'object-cover object-center w-full md:max-w-5xl',
-          }"
           width="1920"
         />
       </div>

@@ -1,6 +1,26 @@
 # Action plan and finding's for Black Car Service Website
 
-## Progress Update — 2025-08-14
+## Progress Update — 2025-08-16
+
+Completed (this session)
+
+- Fixed Vue 3 type import issues: replaced runtime `Ref` imports with `import type { Ref }` across pages/composables.
+- Seeded database with dummy data (Vehicles, Services, LineItems, SalesTax); added `prisma/seed.js` and scripts `db:push`, `seed`.
+- Introduced app-level catalog preload via `callOnce` in `app.vue` (vehicles/services/lineItems/salesTax) and wired `useDataStore` as a single source for these lists.
+- Refactored consumers to store: updated `components/QuoteFormTwo.vue` to read from `useDataStore()` instead of duplicating TRPC queries.
+- Removed PlanetScale integration: deleted `server/psdb.ts`, removed usage from tRPC context, scrubbed docs, and dropped dependency from `package.json`.
+- Normalized images:
+  - Replaced all Nuxt Image usage (`<NuxtPicture>`/`<NuxtImg>`) with plain `<img>` tags to avoid provider/base path issues.
+  - Fixed absolute paths (e.g., `data/services.ts` from `images/...` to `/images/...`).
+  - Added fallback handler + placeholder asset to prevent blank UI when an image is missing.
+  - Simplified background images: removed `$img()` and Nuxt Image composables; backgrounds now use direct URLs via `useBackgroundImage` or local computed styles.
+- Removed `@nuxt/image` module and its config from `nuxt.config.ts`; removed dependency from `package.json`.
+
+Notes
+
+- The app now preloads catalog data once and reuses it via Pinia across navigations — fewer DB calls and simpler components.
+- All images are served directly from `/public/images` with plain `<img>` tags; background images also use direct paths. No external image provider required.
+- Stripe/Twilio work continues per AGENTS/PLAN; Stripe service refactor is still pending.
 
 Completed
 
@@ -172,7 +192,7 @@ devDependencies:
 - @nuxtjs/robots 3.0.0 (5.4.0 is available) - This may have been merged into nuxt seo
 - @nuxtjs/tailwindcss 6.14.0
 - @pinia/nuxt 0.4.11 (0.11.2 is available) - if the store is not complex use `useState` instead
-- @planetscale/database 1.19.0
+
 - @sendgrid/mail 7.7.0 (8.1.5 is available) - We dont need to be married to sendgrid theres lot of options
 - @stripe/stripe-js 2.4.0 (7.8.0 is available)
 - @tailwindcss/aspect-ratio 0.4.2

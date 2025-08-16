@@ -30,11 +30,10 @@ useHead({
 
 const color = useColorMode()
 const iconColor = color.value === 'light' ? '#fff' : '#737373'
-const $img = useImage()
 const backgroundImage = ref(appConfig.brand.assets.images.heroBackground)
 const fleetBackgroundImage = ref(appConfig.brand.assets.images.fleetBackground)
-const bgImg = useBackgroundImage($img, backgroundImage)
-const fleetBackgroundImg = useBackgroundImage($img, fleetBackgroundImage)
+const bgImg = useBackgroundImage(backgroundImage)
+const fleetBackgroundImg = useBackgroundImage(fleetBackgroundImage)
 </script>
 
 <template>
@@ -187,14 +186,11 @@ const fleetBackgroundImg = useBackgroundImage($img, fleetBackgroundImage)
       </BaseContainer>
     </BaseSection>
     <BaseSection class="pb-0">
-      <NuxtPicture
+      <img
+        class="object-cover object-center lg:mx-auto lg:max-w-6xl"
         alt="Toronto Skyline"
-        :img-attrs="{
-          class: 'object-cover object-center lg:mx-auto lg:max-w-6xl',
-        }"
         src="/images/toronto-9.jpg"
         width="1920"
-        loading="lazy"
       />
     </BaseSection>
     <BaseSection class="px-4 pt-0 sm:px-6 lg:px-8">

@@ -144,14 +144,10 @@ const createBooking = async () => {
             :key="trip.trip_order!"
           >
             <div class="shrink-0">
-              <NuxtPicture
+              <img
+                class="object-contain object-center w-24 h-24 rounded-md sm:h-48 sm:w-48"
                 :alt="quote!.vehicle.label"
-                :img-attrs="{
-                  class:
-                    'object-contain object-center w-24 h-24 rounded-md sm:h-48 sm:w-48',
-                }"
-                :src="$img(quote!.vehicle?.vehicle_image! as string)"
-                placeholder
+                :src="quote!.vehicle?.vehicle_image! as string"
               />
             </div>
 

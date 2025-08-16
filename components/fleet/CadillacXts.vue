@@ -10,11 +10,7 @@
         </h2>
       </div>
       <div>
-        <NuxtPicture
-          src="/images/standard_sedan-2.png"
-          alt="XTS"
-          width="1242"
-        />
+        <img src="/images/standard_sedan-2.png" alt="XTS" width="1242" />
       </div>
     </div>
     <div class="mb-12 grid grid-cols-1 place-items-center md:grid-cols-2">
@@ -33,10 +29,10 @@
         </p>
       </BaseCard>
       <div>
-        <NuxtPicture
+        <img
+          class="h-full object-cover object-center w-full"
           src="/images/standard_sedan-1.jpg"
           alt="XTS"
-          :img-attrs="{ class: 'h-full object-cover object-center w-full' }"
           width="1920"
         />
       </div>
@@ -45,18 +41,18 @@
       class="mb-12 grid auto-cols-auto grid-cols-1 place-items-center md:grid-cols-12 md:gap-4"
     >
       <div class="col-span-2 mb-6 md:col-span-4 md:mb-0">
-        <NuxtPicture
+        <img
+          class="h-full object-cover object-center w-full"
           src="/images/standard_sedan-3.jpg"
           alt="XTS"
-          :img-attrs="{ class: 'h-full object-cover object-center w-full' }"
           width="1011"
         />
       </div>
       <div class="col-span-6">
-        <NuxtPicture
+        <img
+          class="h-full object-cover object-center w-full"
           src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/65d84ca4-1cc0-428e-fde8-5aca205b4200/1920"
           alt="XTS"
-          :img-attrs="{ class: 'h-full object-cover object-center w-full' }"
           width="1920"
         />
       </div>
@@ -66,4 +62,3 @@
     </div>
   </div>
 </template>
-<script setup lang="ts"></script>

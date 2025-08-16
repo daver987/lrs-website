@@ -7,6 +7,7 @@ import {
 } from '@headlessui/vue'
 import { navigation } from '~/data/navigation'
 import type { NavigationItem } from '~/data/navigation'
+import { useImageFallback } from '~/composables/useImageFallback'
 
 const props = defineProps({
   linkClasses: {
@@ -30,6 +31,7 @@ const logoSrc = computed(
 const nav = navigation as NavigationItem[]
 
 const open = ref(false)
+const { onImgError } = useImageFallback()
 </script>
 
 <template>
@@ -109,12 +111,10 @@ const open = ref(false)
 
             <div class="border-t border-neutral-200 px-4 py-6">
               <NuxtLink class="-m-2 flex items-center p-2">
-                <NuxtPicture
+                <img
+                  class="shrink-0 block w-5 h-auto"
                   src="https://tailwindui.com/img/flags/flag-canada.svg"
                   alt="Canada flag"
-                  :img-attrs="{
-                    class: 'shrink-0 block w-5 h-auto',
-                  }"
                 />
                 <span class="ml-3 block text-base font-medium text-brand-600"
                   >CAD</span
@@ -146,12 +146,12 @@ const open = ref(false)
           >
             <NuxtLink class="self-center" to="/">
               <span class="sr-only">{{ appConfig.brand?.name }}</span>
-              <NuxtPicture
-                :src="$img(logoSrc as string)"
-                placeholder
+              <img
+                class="h-12 w-auto lg:h-14"
+                :src="logoSrc as string"
                 :alt="`${appConfig.brand?.name} Logo`"
                 width="1920"
-                :img-attrs="{ class: 'h-12 w-auto lg:h-14' }"
+                @error="onImgError"
               />
             </NuxtLink>
           </div>
@@ -197,12 +197,10 @@ const open = ref(false)
               <div
                 class="flex items-center text-neutral-500 hover:text-brand dark:text-neutral-100"
               >
-                <NuxtPicture
+                <img
+                  class="shrink-0 block w-5 h-auto"
                   src="https://tailwindui.com/img/flags/flag-canada.svg"
                   alt="Canada Flag"
-                  :img-attrs="{
-                    class: 'shrink-0 block w-5 h-auto',
-                  }"
                 />
                 <span class="ml-3 block text-sm font-medium">CAD</span>
                 <span class="sr-only">, change currency</span>

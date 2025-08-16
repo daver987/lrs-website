@@ -1,14 +1,9 @@
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import type { Ref } from 'vue'
 
 export const useBackgroundImage = (
-  $img: Function,
   imageUrl: Ref<string>,
-  options: any = { width: '100%' }
+  _options: any = {}
 ) => {
-  const backgroundImage = computed(() => {
-    const imgUrl = $img(imageUrl.value, options)
-    return { backgroundImage: `url('${imgUrl}')` }
-  })
-  return ref(backgroundImage)
+  return computed(() => ({ backgroundImage: `url('${imageUrl.value}')` }))
 }

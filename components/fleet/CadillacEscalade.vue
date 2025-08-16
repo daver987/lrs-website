@@ -9,7 +9,7 @@
         </h2>
       </div>
       <div>
-        <NuxtPicture
+        <img
           src="/images/premium_suv-2.png"
           alt="Cadillac-Escalade"
           width="1920"
@@ -33,21 +33,21 @@
         </p>
       </BaseCard>
       <div>
-        <NuxtPicture
+        <img
+          class="object-cover object-center w-full"
           src="/images/premium_suv-12.jpg"
           alt="Cadillac-Escalade"
-          :img-attrs="{ class: 'object-cover object-center w-full' }"
           width="1980"
         />
       </div>
     </div>
     <div class="mb-12 grid grid-cols-1 gap-4">
       <div class="col-span-1 w-full lg:w-[80%]">
-        <NuxtPicture
+        <img
+          class="object-cover object-center w-full"
           src="/images/premium_suv-1.jpg"
           alt="Cadillac-Escalade"
           width="960"
-          :img-attrs="{ class: 'object-cover object-center w-full' }"
         />
       </div>
     </div>

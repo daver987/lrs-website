@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { NavigationItem } from '~/data/navigation'
+import { useImageFallback } from '~/composables/useImageFallback'
 
 interface CompanyData {
   companyName: string
@@ -15,6 +16,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+const { onImgError } = useImageFallback()
 </script>
 
 <template>
@@ -30,14 +32,12 @@ const props = defineProps<Props>()
       >
         <div class="my-8 space-y-10">
           <NuxtLink class="block max-w-[125px]" to="/">
-            <NuxtPicture
+            <img
+              class="object-contain object-center w-full"
               :alt="companyData.companyName"
-              :img-attrs="{
-                class: 'object-contain object-center w-full',
-              }"
-              :src="$img(companyData.companyLogo as string)"
-              placeholder
+              :src="companyData.companyLogo as string"
               width="1920"
+              @error="onImgError"
             />
           </NuxtLink>
 

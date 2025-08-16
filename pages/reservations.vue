@@ -7,6 +7,7 @@ import {
   TransitionRoot,
 } from '@headlessui/vue'
 import { navigation } from '~/data/navigation'
+import { useImageFallback } from '~/composables/useImageFallback'
 
 definePageMeta({
   layout: 'auth',
@@ -31,6 +32,7 @@ const src = '/images/hpl-logo-dark.png'
 useScriptTag(
   'https://embed.evertransit.com/schedule.html?theme=default&api_key=d1966e57408430a9f1ef27738da11530ef1053b766334b82da016e6436c8cd765f'
 )
+const { onImgError } = useImageFallback()
 </script>
 
 <template>
@@ -111,12 +113,10 @@ useScriptTag(
 
               <div class="border-t border-gray-200 px-4 py-6">
                 <NuxtLink class="-m-2 flex items-center p-2">
-                  <NuxtPicture
+                  <img
+                    class="shrink-0 block w-5 h-auto"
                     src="https://tailwindui.com/img/flags/flag-canada.svg"
                     alt="Canada flag"
-                    :img-attrs="{
-                      class: 'shrink-0 block w-5 h-auto',
-                    }"
                   />
                   <span class="ml-3 block text-base font-medium text-brand-600"
                     >CAD</span
@@ -152,19 +152,15 @@ useScriptTag(
             >
               <NuxtLink class="self-center" to="/">
                 <span class="sr-only">{{ appConfig.brand.name }}</span>
-                <NuxtPicture
+                <img
+                  class="h-12 w-auto lg:h-14"
                   :src="
-                    $img(
-                      (appConfig.brand.assets.logo.dark ||
-                        appConfig.brand.assets.logo.light) as string
-                    )
+                    (appConfig.brand.assets.logo.dark ||
+                      appConfig.brand.assets.logo.light) as string
                   "
                   :alt="`${appConfig.brand.name} Logo`"
-                  placeholder
                   width="1920"
-                  :img-attrs="{
-                    class: 'h-12 w-auto lg:h-14',
-                  }"
+                  @error="onImgError"
                 />
               </NuxtLink>
             </div>
@@ -206,12 +202,10 @@ useScriptTag(
                   class="flex items-center text-gray-500 hover:text-brand"
                   href="#"
                 >
-                  <NuxtPicture
+                  <img
+                    class="shrink-0 block w-5 h-auto"
                     src="https://tailwindui.com/img/flags/flag-canada.svg"
                     alt="Canada Flag"
-                    :img-attrs="{
-                      class: 'shrink-0 block w-5 h-auto',
-                    }"
                   />
                   <span class="ml-3 block text-sm font-medium">CAD</span>
                   <span class="sr-only">, change currency</span>

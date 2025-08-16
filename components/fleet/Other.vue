@@ -25,13 +25,10 @@
           </BaseCard>
         </div>
         <div class="w-full md:col-span-4">
-          <NuxtPicture
+          <img
+            class="object-cover object-center w-full max-w-2xl md:w-5xl md:-ml-40 md:-mt-32"
             src="/images/sprinter-5.png"
             alt="11 Passenger Van"
-            :img-attrs="{
-              class:
-                'object-cover object-center w-full max-w-2xl md:w-5xl md:-ml-40 md:-mt-32',
-            }"
             width="1920"
           />
         </div>
@@ -41,13 +38,10 @@
     <section class="mb-16 w-full md:mb-32">
       <div class="flex flex-col md:grid md:grid-cols-10">
         <div class="w-full md:relative md:col-span-4">
-          <NuxtPicture
+          <img
+            class="object-cover object-center w-full md:w-5xl w-2xl md:right-0 md:bottom-[55%] md:left-0"
             src="/images/standard_suv-1.png"
             alt="GMC Yukon XL"
-            :img-attrs="{
-              class:
-                'object-cover object-center w-full md:w-5xl w-2xl md:right-0 md:bottom-[55%] md:left-0',
-            }"
             width="1920"
           />
         </div>
@@ -101,13 +95,10 @@
           </BaseCard>
         </div>
         <div class="w-full md:relative md:col-span-4">
-          <NuxtPicture
+          <img
+            class="object-cover object-center w-full md:max-w-3xl md:right-0 md:-bottom-12 md:absolute"
             src="/images/standard_suv-3.png"
             alt="GMC Yukon XL"
-            :img-attrs="{
-              class:
-                'object-cover object-center w-full md:max-w-3xl md:right-0 md:-bottom-12 md:absolute',
-            }"
             width="1920"
           />
         </div>

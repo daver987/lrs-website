@@ -19,14 +19,14 @@ import { navigation } from '~/data/navigation'
           <div class="flex">
             <div class="flex shrink-0 items-center">
               <NuxtLink to="/">
-                <NuxtImg
+                <img
                   class="mt-2 block h-12 w-auto lg:hidden"
                   src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/6a0f4d3c-3f6a-4e4e-f86b-1face7a5e400/1920"
                   alt="Your Company"
                 />
               </NuxtLink>
               <NuxtLink to="/">
-                <NuxtImg
+                <img
                   class="mt-4 hidden h-16 w-auto lg:block"
                   src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/6a0f4d3c-3f6a-4e4e-f86b-1face7a5e400/1920"
                   alt="Your Company"

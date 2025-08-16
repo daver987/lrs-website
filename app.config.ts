@@ -18,7 +18,7 @@ export default defineAppConfig({
       favicon: '/favicon.ico',
       images: {
         heroBackground: '/images/gradient-background.svg',
-        fleetBackground: '/images/premium_suv-1.jpg',
+        fleetBackground: '/images/gradient-background.svg',
       },
     },
     seo: {

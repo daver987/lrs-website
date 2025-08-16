@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ArrowBackIcon } from 'naive-ui/es/_internal/icons'
 import { ref } from '#imports'
+import { useImageFallback } from '~/composables/useImageFallback'
 
 const quoteNumberAsString = useRoute().query.quote_number as string
 const quote = await getQuote(quoteNumberAsString)
@@ -23,6 +24,7 @@ const saveOrderSummary = async () => {
 const goHome = async () => {
   await navigateTo('/')
 }
+const { onImgError } = useImageFallback()
 </script>
 
 <template>
@@ -47,7 +49,7 @@ const goHome = async () => {
     <div class="bg-white p-4 md:p-8" id="order-summary" ref="orderSummary">
       <div class="mx-auto w-full md:max-w-4xl">
         <div class="mb-6 flex items-center justify-between">
-          <NuxtPicture
+          <img
             class="h-auto w-32"
             alt="Logo"
             :src="
@@ -90,11 +92,11 @@ const goHome = async () => {
               <span class="font-semibold">Type: </span>
               {{ quote.vehicle.label }}
             </p>
-            <NuxtImg
+            <img
               class="mt-2 h-auto w-48"
-              :src="$img(quote.vehicle.vehicle_image! as string)"
+              :src="quote.vehicle.vehicle_image! as string"
               alt="Vehicle Image"
-              placeholder
+              @error="onImgError"
             />
           </div>
         </div>

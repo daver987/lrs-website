@@ -4,6 +4,7 @@ import { storeToRefs } from 'pinia'
 import { useCartStore } from '~/stores/useCartStore'
 import type { QuoteFormReturn } from '~/schema/QuoteFormSchema'
 import { ref, computed } from '#imports'
+import { useImageFallback } from '~/composables/useImageFallback'
 
 const cartStore = useCartStore()
 const { addedToCart } = storeToRefs(cartStore)
@@ -14,6 +15,7 @@ const vehicleImage = ref('')
 const vehicleLabel = ref('')
 const serviceLabel = ref('')
 const loading = ref(false)
+const { onImgError } = useImageFallback()
 
 onMounted(async () => {
   if (typeof quoteNumberAsString === 'string') {
@@ -84,14 +86,11 @@ const itemsInCart = computed(() =>
               </div>
             </li>
             <li class="flex items-center py-6" v-else>
-              <NuxtPicture
-                :src="$img(vehicleImage as string)"
+              <img
+                class="h-16 w-16 flex-none rounded-md border object-contain border-neutral-200"
+                :src="vehicleImage as string"
                 alt="Vehicle"
-                :img-attrs="{
-                  class:
-                    'h-16 w-16 flex-none rounded-md border object-contain border-neutral-200',
-                }"
-                placeholder
+                @error="onImgError"
               />
               <div class="ml-4 flex-auto">
                 <h3 class="font-brand-body font-medium text-neutral-900">

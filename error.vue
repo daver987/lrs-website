@@ -2,9 +2,8 @@
 const props = defineProps({
   error: Object,
 })
-const $img = useImage()
 const backgroundImage = computed(() => {
-  const imgUrl = $img('/icons/gradient-background.svg', { width: '100%' })
+  const imgUrl = '/images/gradient-background.svg'
   return { backgroundImage: `url('${imgUrl}')` }
 })
 const handleError = () => clearError({ redirect: '/' })

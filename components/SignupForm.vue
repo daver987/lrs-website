@@ -7,16 +7,13 @@ const color = colorMode.value
   <div class="mx-auto w-full max-w-sm lg:w-96">
     <div v-if="color === 'dark'">
       <NuxtLink to="/">
-        <NuxtPicture
-          :img-attrs="{ class: 'w-auto h-16' }"
+        <img
+          class="w-auto h-16"
           :alt="useAppConfig().brand.name"
           :src="
-            $img(
-              (useAppConfig().brand.assets.logo.dark ||
-                useAppConfig().brand.assets.logo.light) as string
-            )
+            (useAppConfig().brand.assets.logo.dark ||
+              useAppConfig().brand.assets.logo.light) as string
           "
-          placeholder
           width="1920"
         />
       </NuxtLink>
@@ -29,13 +26,10 @@ const color = colorMode.value
 
     <div v-if="color !== 'dark'">
       <NuxtLink to="/">
-        <NuxtPicture
-          :img-attrs="{
-            class: 'w-auto h-16',
-          }"
+        <img
+          class="w-auto h-16"
           :alt="useAppConfig().brand.name"
-          :src="$img(useAppConfig().brand.assets.logo.light as string)"
-          placeholder
+          :src="useAppConfig().brand.assets.logo.light as string"
           width="1920"
         />
       </NuxtLink>

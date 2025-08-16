@@ -99,12 +99,10 @@ const url = useRuntimeConfig().public.WEBSITE_URL
 
               <div class="border-t border-gray-200 px-4 py-6">
                 <NuxtLink class="-m-2 flex items-center p-2">
-                  <NuxtPicture
+                  <img
+                    class="shrink-0 block w-5 h-auto"
                     src="https://tailwindui.com/img/flags/flag-canada.svg"
                     alt="Canada flag"
-                    :img-attrs="{
-                      class: 'shrink-0 block w-5 h-auto',
-                    }"
                   />
                   <span class="ml-3 block text-base font-medium text-brand-600"
                     >CAD</span
@@ -140,16 +138,14 @@ const url = useRuntimeConfig().public.WEBSITE_URL
             >
               <NuxtLink class="self-center" to="/">
                 <span class="sr-only">{{ appConfig.brand.name }}</span>
-                <NuxtPicture
+                <img
+                  class="h-12 w-auto lg:h-14"
                   :src="
                     appConfig.brand.assets.logo.dark ||
                     appConfig.brand.assets.logo.light
                   "
                   :alt="`${appConfig.brand.name} Logo`"
                   width="1920"
-                  :img-attrs="{
-                    class: 'h-12 w-auto lg:h-14',
-                  }"
                 />
               </NuxtLink>
             </div>
@@ -191,12 +187,10 @@ const url = useRuntimeConfig().public.WEBSITE_URL
                   class="flex items-center text-gray-900 hover:text-brand dark:text-gray-500"
                   href="#"
                 >
-                  <NuxtPicture
+                  <img
+                    class="shrink-0 block w-5 h-auto"
                     src="https://tailwindui.com/img/flags/flag-canada.svg"
                     alt="Canada Flag"
-                    :img-attrs="{
-                      class: 'shrink-0 block w-5 h-auto',
-                    }"
                   />
                   <span class="ml-3 block text-sm font-medium">CAD</span>
                   <span class="sr-only">, change currency</span>

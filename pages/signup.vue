@@ -98,10 +98,8 @@ const appConfig = useAppConfig()
 
               <div class="border-t border-gray-200 px-4 py-6">
                 <NuxtLink class="-m-2 flex items-center p-2">
-                  <NuxtPicture
-                    :img-attrs="{
-                      class: 'shrink-0 block w-5 h-auto',
-                    }"
+                  <img
+                    class="shrink-0 block w-5 h-auto"
                     alt="Canada flag"
                     src="https://tailwindui.com/img/flags/flag-canada.svg"
                   />
@@ -139,10 +137,8 @@ const appConfig = useAppConfig()
             >
               <NuxtLink class="self-center" to="/">
                 <span class="sr-only">{{ appConfig.brand.name }}</span>
-                <NuxtPicture
-                  :img-attrs="{
-                    class: 'h-12 w-auto lg:h-14',
-                  }"
+                <img
+                  class="h-12 w-auto lg:h-14"
                   :alt="`${appConfig.brand.name} Logo`"
                   :src="
                     appConfig.brand.assets.logo.dark ||
@@ -190,10 +186,8 @@ const appConfig = useAppConfig()
                   class="flex items-center text-gray-500 hover:text-brand"
                   href="#"
                 >
-                  <NuxtPicture
-                    :img-attrs="{
-                      class: 'shrink-0 block w-5 h-auto',
-                    }"
+                  <img
+                    class="shrink-0 block w-5 h-auto"
                     alt="Canada Flag"
                     src="https://tailwindui.com/img/flags/flag-canada.svg"
                   />

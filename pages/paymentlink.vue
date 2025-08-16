@@ -2,6 +2,7 @@
 import { OpenAI } from 'langchain/llms/openai'
 import { PromptTemplate } from 'langchain/prompts'
 import vehicle from '~/components/Vehicle.vue'
+import { useImageFallback } from '~/composables/useImageFallback'
 
 definePageMeta({
   name: 'paymentlink',
@@ -85,6 +86,7 @@ onMounted(() => {
 })
 
 const isLoading = ref(false)
+const { onImgError } = useImageFallback()
 
 //todo: add in the creation of draft invoice in stripe
 //todo: add region functionality for auto tax calculation for out of town trips
@@ -109,13 +111,11 @@ const isLoading = ref(false)
       <div class="mx-auto flex max-w-2xl px-4 lg:w-full lg:max-w-lg lg:px-0">
         <NuxtLink class="self-center" to="/">
           <span class="sr-only">{{ useAppConfig().brand.name }}</span>
-          <NuxtPicture
-            :img-attrs="{
-              class: 'w-auto h-12 lg:h-14',
-            }"
+          <img
+            class="w-auto h-12 lg:h-14"
+            @error="onImgError"
             :alt="`${useAppConfig().brand.name} Logo`"
-            :src="$img(useAppConfig().brand.assets.logo.light as string)"
-            placeholder
+            :src="useAppConfig().brand.assets.logo.light as string"
             width="1920"
           />
         </NuxtLink>
@@ -153,14 +153,11 @@ const isLoading = ref(false)
                 v-for="trip in trips"
                 :key="trip.pickup_time as string"
               >
-                <NuxtPicture
+                <img
+                  class="h-32 w-32 flex-none rounded-md object-contain object-center"
                   :alt="vehicle.label"
-                  :img-attrs="{
-                    class:
-                      'h-32 w-32 flex-none rounded-md object-contain object-center',
-                  }"
-                  :src="$img(vehicle.vehicle_image! as string)"
-                  placeholder
+                  @error="onImgError"
+                  :src="vehicle.vehicle_image! as string"
                 />
                 <div class="flex-auto space-y-1">
                   <h3 class="text-brand-900">{{ service.label }}</h3>

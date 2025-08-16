@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useUserStore } from './stores/useUserStore'
 import { useStorage } from '@vueuse/core'
+import { useDataStore } from '~/stores/useDataStore'
 
 useHead({
   meta: [
@@ -16,6 +17,26 @@ const storageKey = `${appConfig.brand?.slug || 'brand'}_user_id`
 const user_id = useStorage(storageKey, userStore.getUserId())
 
 userStore.setUserId(user_id.value)
+
+// Preload catalog-like data once for the app lifetime
+const dataStore = useDataStore()
+await callOnce(async () => {
+  try {
+    const trpc = useTrpc()
+    const [vehicles, services, lineItems, salesTaxes] = await Promise.all([
+      trpc.vehicle.get.query(),
+      trpc.service.get.query(),
+      trpc.lineItem.get.query(),
+      trpc.salesTax.get.query(),
+    ])
+    dataStore.setVehicleTypes(vehicles || [])
+    dataStore.setServiceTypes(services || [])
+    dataStore.setLineItems(lineItems || [])
+    dataStore.setSalesTaxes(salesTaxes || [])
+  } catch (e) {
+    console.error('[callOnce] preload catalog failed', e)
+  }
+})
 </script>
 
 <template>

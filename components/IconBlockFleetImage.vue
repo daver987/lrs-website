@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { useImageFallback } from '~/composables/useImageFallback'
 defineProps({
   image: {
     type: String,
@@ -9,17 +10,16 @@ defineProps({
     required: true,
   },
 })
+const { onImgError } = useImageFallback()
 </script>
 
 <template>
-  <NuxtPicture
+  <img
+    class="md:object-center md:object-cover"
     :alt="altText"
-    :img-attrs="{
-      class: 'md:object-center md:object-cover',
-    }"
-    :src="$img(image as string)"
-    placeholder
+    :src="image as string"
     loading="lazy"
     width="1920"
+    @error="onImgError"
   />
 </template>

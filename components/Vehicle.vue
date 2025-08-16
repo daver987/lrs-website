@@ -13,7 +13,7 @@
         </div>
         <figure>
           <div class="mx-auto max-w-md lg:max-w-xl">
-            <NuxtPicture
+            <img
               alt="XTS"
               src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/12f57e26-99ae-4fe0-9579-fa3129277800/1920"
               width="1920"
@@ -42,8 +42,8 @@
         <InputTel />
         <figure>
           <div>
-            <NuxtPicture
-              :img-attrs="{ class: 'h-full object-cover object-center w-full' }"
+            <img
+              class="h-full object-cover object-center w-full"
               alt="XTS"
               src="https://imagedelivery.net/9mQjskQ9vgwm3kCilycqww/f0204aa2-4cb2-4204-10e5-5c3bed0d3500/1920"
               width="1920"

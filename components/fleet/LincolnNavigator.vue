@@ -9,7 +9,7 @@
         </h2>
       </div>
       <div>
-        <NuxtPicture
+        <img
           src="/images/premium_suv-14.png"
           alt="Lincoln Navigator"
           width="1920"
@@ -32,7 +32,7 @@
         </p>
       </BaseCard>
       <div>
-        <NuxtPicture
+        <img
           src="/images/premium_suv-15.jpg"
           alt="Lincoln Navigator"
           width="1920"
@@ -43,14 +43,14 @@
       class="mb-12 grid auto-cols-auto grid-cols-1 place-items-center md:grid-cols-12 md:gap-4"
     >
       <div class="col-span-1 mb-6 md:col-span-4 md:mb-0">
-        <NuxtPicture
+        <img
           src="/images/premium_suv-10.jpg"
           alt="Lincoln Navigator"
           width="1920"
         />
       </div>
       <div class="col-span-6">
-        <NuxtPicture
+        <img
           src="/images/premium_suv-9.jpg"
           alt="Lincoln Navigator"
           width="1920"

@@ -11,6 +11,7 @@ import type { Place } from '~/schema/placeSchema'
 import type { ComputedRef, Ref, WatchCallback } from 'vue'
 import type { FormInst, FormRules, SelectOption } from 'naive-ui'
 import type { Service, Vehicle } from '~/schema/prismaSchemas'
+import { useDataStore } from '~/stores/useDataStore'
 
 const formRef = ref<FormInst | null>(null)
 const loading: Ref<boolean> = ref(false)
@@ -21,10 +22,14 @@ const { user_id } = storeToRefs(userStore)
 const message = useMessage()
 const loadingBar = useLoadingBar()
 
-const { data: vehicle } = await useTrpc().vehicle.get.useQuery()
-const { data: service } = await useTrpc().service.get.useQuery()
-const { data: lineItem } = await useTrpc().lineItem.get.useQuery()
-const { data: salesTax } = await useTrpc().salesTax.get.useQuery()
+// Read preloaded data from the app-level store (initialized via callOnce)
+const dataStore = useDataStore()
+const {
+  vehicleTypes: vehicle,
+  serviceTypes: service,
+  lineItems: lineItem,
+  salesTaxes: salesTax,
+} = storeToRefs(dataStore)
 
 const vehicleOptions: ComputedRef<SelectOption[] | null> = computed(() => {
   return computeVehicleOptions(vehicle.value as Vehicle[])

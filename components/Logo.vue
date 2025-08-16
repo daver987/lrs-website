@@ -1,32 +1,33 @@
 <template>
   <NuxtLink to="/">
     <div class="logo" :class="[size, shape]">
-      <NuxtPicture
+      <img
         v-if="shape === 'round'"
-        :src="$img(logoRound as string)"
-        placeholder
+        :src="logoRound as string"
         :width="imageWidth"
         alt="Company Logo"
+        @error="onImgError"
       />
-      <NuxtPicture
+      <img
         v-else-if="lettersOnly"
-        :src="$img(logoLetters as string)"
-        placeholder
+        :src="logoLetters as string"
         :width="imageWidth"
         alt="Company Logo"
+        @error="onImgError"
       />
-      <NuxtPicture
+      <img
         v-else
-        :src="$img(logoDefault as string)"
-        placeholder
+        :src="logoDefault as string"
         :width="imageWidth"
         alt="Company Logo"
+        @error="onImgError"
       />
     </div>
   </NuxtLink>
 </template>
 
 <script lang="ts" setup>
+import { useImageFallback } from '~/composables/useImageFallback'
 const props = defineProps({
   size: {
     type: String,
@@ -51,6 +52,7 @@ const imageWidth = {
   large: 150,
 }[props.size] as number
 const appConfig = useAppConfig()
+const { onImgError } = useImageFallback()
 const logoDefaultLight = appConfig.brand.assets.logo.light
 const logoDefaultDark =
   appConfig.brand.assets.logo.dark || appConfig.brand.assets.logo.light

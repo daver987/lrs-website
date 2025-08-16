@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { useImageFallback } from '~/composables/useImageFallback'
 definePageMeta({
   layout: 'default',
   colorMode: 'dark',
@@ -19,8 +20,9 @@ const headerInfo = {
   aboveHeading: `DISCOVER ${appConfig.brand.name}`,
   heading: 'ABOUT US',
   body: `${appConfig.brand.name} is here to help you get from place to place. It's our job to provide you with the means of transportation, and we won't stop until it's done right.`,
-  image: '/images/misc-8.jpg',
+  image: '/images/gradient-background.svg',
 }
+const { onImgError } = useImageFallback()
 const qualities = [
   {
     id: 1,
@@ -100,15 +102,13 @@ const qualities = [
           </div>
         </div>
         <div class="md:self-center">
-          <NuxtPicture
-            :img-attrs="{
-              class:
-                'object-center object-cover h-64 w-full md:object-left md:min-h-72',
-            }"
+          <img
+            class="object-center object-cover h-64 w-full md:object-left md:min-h-72"
             alt="Chauffeur Service"
             loading="lazy"
             src="/images/misc-7.jpg"
             width="919"
+            @error="onImgError"
           />
         </div>
       </BaseContainer>
@@ -116,15 +116,13 @@ const qualities = [
     <BaseSection>
       <BaseContainer class="place-items-center md:grid md:grid-cols-2">
         <div class="w-full max-w-xl">
-          <NuxtPicture
-            :img-attrs="{
-              class:
-                'object-center object-cover w-full min-h-72 self-center md:object-left',
-            }"
+          <img
+            class="object-center object-cover w-full min-h-72 self-center md:object-left"
             alt="Tesla-S-Back-Seat"
             loading="lazy"
             src="/images/tesla-s-4.jpg"
             width="814"
+            @error="onImgError"
           />
         </div>
         <div class="w-full max-w-xl">
@@ -141,17 +139,13 @@ const qualities = [
       </BaseContainer>
     </BaseSection>
     <BaseSection class="px-0">
-      <NuxtPicture
-        :img-attrs="{
-          class: 'object-cover object-center w-full min-h-16',
-        }"
-        :modifiers="{
-          effect: 'blur:100',
-        }"
+      <img
+        class="object-cover object-center w-full min-h-16"
         alt="Toronto-evening-skyline"
         loading="lazy"
         src="/images/toronto-7.jpg"
         width="1920"
+        @error="onImgError"
       />
       <BaseContainer class="px-4">
         <div

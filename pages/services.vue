@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { services } from '~/data/services'
 import { ourTours } from '~/data/tours'
+import { useImageFallback } from '~/composables/useImageFallback'
 
 definePageMeta({
   layout: 'default',
@@ -19,22 +20,19 @@ useHead({
 })
 
 const tours = ourTours
-const $img = useImage()
 
 const backgroundImage = computed(() => {
-  const imgUrl = $img('images/toronto-9.jpg', {
-    width: 100,
-    style: 'filter: greyscale(100%)',
-  })
+  const imgUrl = '/images/gradient-background.svg'
   return { backgroundImage: `url('${imgUrl}')` }
 })
 
 const headerInfo = {
   aboveHeading: 'WHAT WE OFFER YOU',
   heading: 'OUR SERVICES',
-  image: '/images/toronto-8.jpg',
+  image: '/images/gradient-background.svg',
   body: `${appConfig.brand.name} is here to help you get from place to place. It's our job to provide you with the means of transportation, and we won't stop until it's done right.`,
 }
+const { onImgError } = useImageFallback()
 </script>
 
 <template>
@@ -81,13 +79,11 @@ const headerInfo = {
           :class="service.boxPosition"
         >
           <div :class="service.imagePosition">
-            <NuxtPicture
+            <img
+              class="object-cover object-center w-full"
               :alt="service.altText"
-              :img-attrs="{
-                class: 'object-cover object-center w-full',
-              }"
-              :src="$img(service.image as string)"
-              placeholder
+              :src="service.image as string"
+              @error="onImgError"
             />
           </div>
           <div class="flex" :class="service.infoPosition">

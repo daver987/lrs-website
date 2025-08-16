@@ -28,7 +28,6 @@ const props = defineProps({
   },
 })
 
-const $img = useImage()
 const appConfig = useAppConfig()
 const displayPhone = computed(
   () => props.companyPhone || appConfig.brand?.contact?.phoneDisplay || ''
@@ -40,16 +39,11 @@ const phoneHref = computed(
   () => `tel:${appConfig.brand?.contact?.phoneE164 || displayPhone.value}`
 )
 const backgroundImage = computed(() => {
-  const imgUrl = $img('/images/gradient-background.svg', {
-    fit: '',
-    format: '',
-    height: 0,
-    width: 100,
-  })
+  const imgUrl = '/images/gradient-background.svg'
   return { backgroundImage: `url('${imgUrl}')` }
 })
 const headerImage = computed(() => {
-  const imgUrl = $img(props.image as string, { width: '100%' })
+  const imgUrl = props.image as string
   return { backgroundImage: `url('${imgUrl}')` }
 })
 </script>
