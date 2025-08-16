@@ -10,6 +10,8 @@
     "nuxt:dev": "nuxt dev",
     "prisma:dev": "prisma dev",
     "dev": "sh -c 'pnpm prisma:dev & pnpm nuxt:dev'",
+    "db:push": "prisma db push",
+    "seed": "node prisma/seed.js",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "prisma generate",

@@ -1,7 +1,12 @@
-import { Place } from '~/schema/placeSchema'
-import { LocationQueryValue } from 'vue-router'
-import { LineItem, SalesTax, Service, Vehicle } from '@prisma/client'
-import { ComputedRef } from 'vue'
+import type { Place } from '~/schema/placeSchema'
+import type { LocationQueryValue } from 'vue-router'
+import type {
+  LineItem,
+  SalesTax,
+  Service,
+  Vehicle,
+} from '~/schema/prismaSchemas'
+import type { ComputedRef } from 'vue'
 
 export interface FormValue {
   id: string

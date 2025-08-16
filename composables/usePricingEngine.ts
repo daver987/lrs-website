@@ -1,5 +1,6 @@
 import type { LineItem, SalesTax, Service, Vehicle } from '@prisma/client'
-import { ref, Ref } from 'vue'
+import { ref } from 'vue'
+import type { Ref } from 'vue'
 import { z } from 'zod'
 import {
   DirectionsApiResponse,

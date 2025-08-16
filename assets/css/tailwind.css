@@ -9,10 +9,10 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --font-sans: 'Inter var', caviar-dreams;
+  --font-sans: caviar-dreams;
   --font-brand: caviar-dreams;
   --font-brand-heading: campton-thin;
-  --font-brand-subheading: caviar-dreams;
+  --font-brand-subheading: caviar-dreams-700;
   --font-brand-body: campton-light;
   --font-subheading: caviar-dreams;
   --font-heading: campton-thin;

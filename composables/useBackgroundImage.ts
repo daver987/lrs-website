@@ -1,4 +1,5 @@
-import { computed, Ref } from 'vue'
+import { computed, ref } from 'vue'
+import type { Ref } from 'vue'
 
 export const useBackgroundImage = (
   $img: Function,

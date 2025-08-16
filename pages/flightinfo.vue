@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { buildLuggageOptions } from '~/composables/useBuildOptions'
-import { FormRules } from 'naive-ui'
-import { Ref } from 'vue'
+import type { FormRules } from 'naive-ui'
+import type { Ref } from 'vue'
 import { useStripeStore } from '~/stores/useStripeStore'
 
 // definePageMeta({
@@ -11,7 +11,7 @@ import { useStripeStore } from '~/stores/useStripeStore'
 const quoteNumber = useRoute().query.quote_number as string
 const clientSecret = useRoute().query.client_secret
 const quote = await getQuote(quoteNumber)
-const maxLuggage = ref(quote?.vehicle.max_luggage)
+const maxLuggage = ref(quote.vehicle.max_luggage)
 const formRef = ref(null)
 const luggageOptions = computed(() => buildLuggageOptions(maxLuggage.value!))
 const stripeStore = useStripeStore()

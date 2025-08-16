@@ -1,6 +1,7 @@
 import { DateArray, EventStatus } from 'ics'
 import * as ics from 'ics'
-import { Ref, ref } from 'vue'
+import { ref } from 'vue'
+import type { Ref } from 'vue'
 
 interface Attendee {
   name: string

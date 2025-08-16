@@ -1,5 +1,10 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import { Vehicle, Service, LineItem, SalesTax } from '~/schema/prismaSchemas'
+import type {
+  Vehicle,
+  Service,
+  LineItem,
+  SalesTax,
+} from '~/schema/prismaSchemas'
 
 export const useDataStore = defineStore('data', {
   state: () => {

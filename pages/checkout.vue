@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Ref } from 'vue'
+import type { Ref } from 'vue'
 import { useGtm } from '@gtm-support/vue-gtm'
 
 definePageMeta({

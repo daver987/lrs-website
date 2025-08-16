@@ -1,5 +1,5 @@
-import { Service, Vehicle } from '@prisma/client'
-import { Place } from '~/schema/placeSchema'
+import type { Service, Vehicle } from '~/schema/prismaSchemas'
+import type { Place } from '~/schema/placeSchema'
 import { isAirport } from '~/utils/formUtils/isAirport'
 
 export function getServiceTypeByNumber(
