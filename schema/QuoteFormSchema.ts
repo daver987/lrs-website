@@ -102,6 +102,18 @@ export const QuoteFormSchema = z.object({
     place_id: z.string(),
     types: z.array(z.string()),
   }),
+  // Optional waypoint stops (pricing only for now)
+  stops: z
+    .array(
+      z.object({
+        formatted_address: z.string(),
+        name: z.string(),
+        place_id: z.string(),
+        types: z.array(z.string()),
+      })
+    )
+    .optional()
+    .default([]),
   pickup_date: z.string().nullable(),
   pickup_time: z.string().nullable(),
   return_date: z.string().nullable(),

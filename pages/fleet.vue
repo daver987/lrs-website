@@ -65,7 +65,7 @@ const tabs = [
   {
     icon: 'Fleet-Other',
     title: 'Other',
-    id: '6',
+    id: '5',
     tag: resolveComponent('FleetOther'),
   },
 ]

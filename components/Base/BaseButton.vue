@@ -11,13 +11,13 @@ interface Props {
 
 const buttonStyles: { [key: string]: string } = {
   'btn-light':
-    'border-neutral-100 text-neutral-100 hover:border-brand hover:text-brand focus:border-brand focus:ring-3 focus:ring-brand',
+    'border-neutral-100 text-neutral-100 hover:border-brand hover:text-brand focus:border-brand focus:ring-1 focus:ring-brand',
   'btn-brand':
-    'border-brand text-brand hover:border-brand hover:text-brand focus:border-brand focus:ring-3 focus:ring-brand',
+    'border-brand text-brand hover:border-brand hover:text-brand focus:border-brand focus:ring-1 focus:ring-brand',
   'btn-dark':
-    'border-neutral-900 text-neutral-900 focus:border-brand focus:ring-3 focus:ring-brand dark:text-neutral-400 dark:border-neutral-400 hover:border-brand hover:text-brand',
+    'border-neutral-900 text-neutral-900 focus:border-brand focus:ring-1 focus:ring-brand dark:text-neutral-400 dark:border-neutral-400 hover:border-brand hover:text-brand',
   'btn-flat':
-    'border-0 text-brand font-brand-body hover:text-brand active:outline-hidden focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-brand',
+    'border-0 text-brand font-brand-body hover:text-brand active:outline-hidden focus:outline-hidden focus:ring-1 focus:ring-offset-2 focus:ring-brand',
   'btn-solid':
     'bg-brand border-brand text-neutral-900 hover:border-brand hover:text-neutral-900',
 }

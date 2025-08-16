@@ -5,120 +5,92 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
 async function seedVehicles() {
-  const count = await prisma.vehicle.count()
-  if (count > 0) return { skipped: true }
+  // Clear existing
+  await prisma.vehicle.deleteMany({})
 
   await prisma.vehicle.createMany({
     data: [
       {
-        label: 'Sedan',
+        label: 'Luxury Sedan',
         max_passengers: 3,
         max_luggage: 3,
-        per_km: 2.5,
-        per_hour: 65,
+        per_km: 1.7,
+        per_hour: 80,
         min_hours: 2,
-        min_distance: 0,
-        min_rate: 130,
+        min_distance: 25, // base rule aligns with 25km minimum
+        min_rate: 0,
         is_active: true,
-        vehicle_image: '/images/vehicles/sedan.jpg',
+        vehicle_image: '/images/standard_sedan-4.jpg',
       },
       {
-        label: 'SUV',
+        label: 'Luxury SUV',
         max_passengers: 6,
         max_luggage: 6,
-        per_km: 3.2,
-        per_hour: 85,
+        per_km: 2.1,
+        per_hour: 105,
         min_hours: 2,
-        min_distance: 0,
-        min_rate: 170,
+        min_distance: 25,
+        min_rate: 0,
         is_active: true,
-        vehicle_image: '/images/vehicles/suv.jpg',
-      },
-      {
-        label: 'Sprinter',
-        max_passengers: 12,
-        max_luggage: 10,
-        per_km: 4.5,
-        per_hour: 125,
-        min_hours: 3,
-        min_distance: 0,
-        min_rate: 375,
-        is_active: true,
-        vehicle_image: '/images/vehicles/sprinter.jpg',
+        vehicle_image: '/images/premium_suv-1.jpg',
       },
     ],
     skipDuplicates: true,
   })
-  return { created: 3 }
+  return { created: 2 }
 }
 
 async function seedServices() {
-  const count = await prisma.service.count()
-  if (count > 0) return { skipped: true }
-
+  await prisma.service.deleteMany({})
   await prisma.service.createMany({
     data: [
-      { label: 'Point to Point', is_active: true, is_hourly: false },
-      { label: 'Airport Transfer', is_active: true, is_hourly: false },
-      { label: 'Hourly Charter', is_active: true, is_hourly: true },
+      { label: 'Point-to-Point', is_active: true, is_hourly: false }, // service_number 1
+      { label: 'To Airport', is_active: true, is_hourly: false }, // service_number 2
+      { label: 'From Airport', is_active: true, is_hourly: false }, // service_number 3
+      { label: 'Hourly / As Directed', is_active: true, is_hourly: true }, // service_number 4
     ],
     skipDuplicates: true,
   })
-  return { created: 3 }
+  return { created: 4 }
 }
 
 async function seedLineItems() {
-  const count = await prisma.lineItem.count()
-  if (count > 0) return { skipped: true }
-
+  await prisma.lineItem.deleteMany({})
   await prisma.lineItem.createMany({
     data: [
       {
-        item_number: 1001,
+        item_number: 2001,
         label: 'Gratuity',
         description: 'Suggested gratuity (20%)',
         is_percentage: true,
-        is_taxable: false,
+        is_taxable: false, // gratuity not taxable
         is_active: true,
-        amount: 0.2,
-        applies_to: 'subtotal',
+        amount: 20, // percent
+        applies_to: 'base',
       },
       {
-        item_number: 1002,
+        item_number: 2002,
         label: 'Fuel Surcharge',
-        description: 'Fuel surcharge',
-        is_percentage: false,
+        description: 'Fuel surcharge (8%)',
+        is_percentage: true,
         is_taxable: true,
         is_active: true,
-        amount: 5,
-        applies_to: 'trip',
-      },
-      {
-        item_number: 1003,
-        label: 'Airport Fee',
-        description: 'Airport/concession fee',
-        is_percentage: false,
-        is_taxable: true,
-        is_active: true,
-        amount: 10,
-        applies_to: 'trip',
+        amount: 8, // percent
+        applies_to: 'base',
       },
     ],
     skipDuplicates: true,
   })
-  return { created: 3 }
+  return { created: 2 }
 }
 
 async function seedSalesTax() {
-  const count = await prisma.salesTax.count()
-  if (count > 0) return { skipped: true }
-
-  // First record will have tax_number = 1 (autoincrement)
+  await prisma.salesTax.deleteMany({})
   await prisma.salesTax.create({
     data: {
-      tax_name: 'Default Sales Tax',
-      amount: 0.08875,
-      region: 'NY',
+      tax_name: 'HST',
+      amount: 13, // percent
+      region: 'ON',
       is_active: true,
     },
   })
@@ -127,8 +99,8 @@ async function seedSalesTax() {
 
 async function main() {
   const results = {}
-  results.vehicles = await seedVehicles()
   results.services = await seedServices()
+  results.vehicles = await seedVehicles()
   results.lineItems = await seedLineItems()
   results.salesTax = await seedSalesTax()
   // eslint-disable-next-line no-console

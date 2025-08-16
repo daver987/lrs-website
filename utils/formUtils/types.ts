@@ -1,34 +1,40 @@
 import type { Place } from '~/schema/placeSchema'
-import type { LocationQueryValue } from 'vue-router'
+
 import type {
   LineItem,
   SalesTax,
   Service,
   Vehicle,
 } from '~/schema/prismaSchemas'
-import type { ComputedRef } from 'vue'
 
 export interface FormValue {
   id: string
-  origin: Place | null
-  destination: Place | null
+  origin: Place
+  destination: Place
+  stops?: Place[]
   last_name: string
   first_name: string
   email_address: string
   phone_number: string
-  selected_passengers: null | number
-  pickup_date: string | null | undefined
-  pickup_time: string | null | undefined
-  return_date: string | null | undefined
-  return_time: string | null | undefined
-  selected_hours: null | number
-  vehicle_number: null | number
-  service_number: null | number
+  selected_passengers: number | null
+  pickup_date: string | null
+  pickup_time: string | null
+  return_date: string | null
+  return_time: string | null
+  selected_hours: number | null
+  vehicle_number: number | null
+  service_number: number | null
   is_round_trip: boolean
   is_hourly: boolean
-  conversion: { [p: string]: string | null | LocationQueryValue[] }
+  conversion: {
+    utm_medium?: string
+    utm_source?: string
+    utm_campaign?: string
+    utm_term?: string
+    gclid?: string
+  }
   sales_tax: SalesTax[]
   line_items: LineItem[]
-  vehicle: Vehicle | null | ComputedRef<Vehicle | null>
-  service: Service | null | ComputedRef<Service | null>
+  vehicle: Vehicle | null
+  service: Service | null
 }

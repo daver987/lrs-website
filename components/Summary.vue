@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ArrowBackIcon } from 'naive-ui/es/_internal/icons'
 import { ref } from '#imports'
+import { generatePdf } from '~/utils/general/generatePdf'
 import { useImageFallback } from '~/composables/useImageFallback'
 
 const quoteNumberAsString = useRoute().query.quote_number as string
@@ -17,7 +18,12 @@ onBeforeRouteLeave(async () => await sendConfirmation(quote))
 
 const saveOrderSummary = async () => {
   if (orderSummary.value) {
-    await generatePdf(orderSummary.value)
+    try {
+      await generatePdf(orderSummary.value)
+    } catch (e) {
+      // Fallback to browser print if PDF generation fails
+      window.print()
+    }
   }
 }
 

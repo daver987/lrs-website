@@ -1,4 +1,4 @@
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware((_to, _from) => {
   const route = useRoute()
   const gclid = route.query.gclid
   if (gclid) {

@@ -10,7 +10,7 @@ export function useFormatDateTime() {
 
   function coerceStringToNumber(ts: string | number) {
     if (typeof ts === 'string') {
-      return parseInt(ts)
+      return Number.parseInt(ts)
     } else {
       return ts
     }

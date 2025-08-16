@@ -86,42 +86,63 @@
 }
 
 @layer base {
+  /* Inter variable (three faces share same var source) */
   @font-face {
     font-family: 'Inter var';
     font-weight: 100 900;
     font-display: swap;
     font-style: oblique 0deg 10deg;
-    src: url('./assets/fonts/Inter.var.woff2?v=3.19') format('woff2');
+    src: url('../fonts/Inter.var.woff2?v=3.19') format('woff2');
   }
   @font-face {
     font-family: 'Inter var';
     font-weight: 100 900;
     font-display: swap;
     font-style: normal;
-    src: url('./assets/fonts/Inter.var.woff2?v=3.19') format('woff2');
+    src: url('../fonts/Inter.var.woff2?v=3.19') format('woff2');
   }
   @font-face {
     font-family: 'Inter var';
     font-weight: 100 900;
     font-display: swap;
     font-style: italic;
-    src: url('./assets/fonts/Inter.var.woff2?v=3.19') format('woff2');
+    src: url('../fonts/Inter.var.woff2?v=3.19') format('woff2');
   }
+  /* Alias to cover 'Inter Var' capitalization used elsewhere */
+  @font-face {
+    font-family: 'Inter Var';
+    font-weight: 100 900;
+    font-display: swap;
+    font-style: normal;
+    src: url('../fonts/Inter.var.woff2?v=3.19') format('woff2');
+  }
+
+  /* Caviar Dreams regular (400) */
   @font-face {
     font-family: 'caviar-dreams';
     font-style: normal;
     font-weight: 400;
     src:
       local('caviar-dreams'),
-      url('./assets/fonts/caviar-dreams.woff') format('woff');
+      url('../fonts/caviar-dreams-400.woff') format('woff');
   }
+  /* Caviar Dreams bold (mapped to separate family name used by tokens) */
+  @font-face {
+    font-family: 'caviar-dreams-700';
+    font-style: normal;
+    font-weight: 700;
+    src:
+      local('caviar-dreams-bold'),
+      url('../fonts/caviar-dreams-700.woff') format('woff');
+  }
+
   @font-face {
     font-family: 'campton-light';
     font-style: normal;
     font-weight: 400;
     src:
       local('campton-light'),
-      url('./assets/fonts/campton-light.woff') format('woff');
+      url('../fonts/campton-light.woff') format('woff');
   }
   @font-face {
     font-family: 'campton-thin';
@@ -129,11 +150,37 @@
     font-weight: 400;
     src:
       local('campton-thin'),
-      url('./assets/fonts/campton-thin.woff') format('woff');
+      url('../fonts/campton-thin.woff') format('woff');
   }
 }
 
 @layer utilities {
+  /* Map brand font tokens to usable utility classes */
+  .font-brand-body {
+    font-family:
+      var(--font-brand-body), 'Inter var', 'Inter Var', system-ui, sans-serif;
+  }
+  .font-brand-heading {
+    font-family:
+      var(--font-brand-heading), 'Inter var', 'Inter Var', system-ui, sans-serif;
+  }
+  .font-brand-subheading {
+    font-family:
+      var(--font-brand-subheading), 'Inter var', 'Inter Var', system-ui,
+      sans-serif;
+  }
+  .font-heading {
+    font-family:
+      var(--font-heading), 'Inter var', 'Inter Var', system-ui, sans-serif;
+  }
+  .font-body {
+    font-family:
+      var(--font-body), 'Inter var', 'Inter Var', system-ui, sans-serif;
+  }
+  .font-brand {
+    font-family:
+      var(--font-brand), 'Inter var', 'Inter Var', system-ui, sans-serif;
+  }
   .vue-tel-input {
     border-radius: var(--n-border-radius) !important;
     border: 1px solid transparent !important;
@@ -164,6 +211,8 @@
   body {
     background-color: #fafafa;
     min-height: 100dvh;
+    font-family:
+      var(--font-body), 'Inter var', 'Inter Var', system-ui, sans-serif;
   }
 
   textarea:focus {

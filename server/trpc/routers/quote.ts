@@ -228,6 +228,9 @@ export const quoteRouter = router({
         destination,
         pickup_date,
         pickup_time,
+        return_date,
+        return_time,
+        stops = [],
       } = input
       const aircallSecret = useRuntimeConfig().AIRCALL_API_TOKEN
       const sendGridKey = useRuntimeConfig().SENDGRID_API_KEY
@@ -243,6 +246,10 @@ export const quoteRouter = router({
       )
       pricingEngine.origin.value = origin.place_id
       pricingEngine.destination.value = destination.place_id
+      // Map optional waypoints (pricing only for now)
+      pricingEngine.waypoints.value = Array.isArray(stops)
+        ? stops.map((s: any) => s.place_id)
+        : []
       pricingEngine.selectedHours.value = selected_hours!
       pricingEngine.serviceTypeId.value = service_number!
       pricingEngine.vehicleTypeId.value = vehicle_number!
@@ -250,6 +257,16 @@ export const quoteRouter = router({
       await pricingEngine.updateDistance()
       pricingEngine.updateBaseRate()
       pricingEngine.updateLineItemsTotal(origin.place_id)
+
+      // Apply GTAA fee automatically for airport pickups (origin is airport)
+      const originIsAirport = Array.isArray(origin.types)
+        ? origin.types.includes('airport')
+        : false
+      if (originIsAirport) {
+        pricingEngine.setAirportPickupFee(13.27)
+      } else {
+        pricingEngine.setAirportPickupFee(0)
+      }
 
       const routeData = pricingEngine.routeData.value
       const calculatedLineItems = pricingEngine.detailedLineItems.value
@@ -269,6 +286,8 @@ export const quoteRouter = router({
         combined_line_items: calculatedLineItemsTotals!,
         pickup_date: pickup_date as string,
         pickup_time: pickup_time as string,
+        return_date: (return_date as string) || null,
+        return_time: (return_time as string) || null,
         distance_text: routeData?.routes[0].legs[0].distance.text!,
         duration_text: routeData?.routes[0].legs[0].duration.text!,
         duration_value: routeData?.routes[0].legs[0].distance.value!,

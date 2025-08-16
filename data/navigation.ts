@@ -36,4 +36,9 @@ export const navigation = <NavigationItem[]>[
     href: '/reservations',
     id: 5,
   },
+  {
+    name: 'FAQ',
+    href: '/faq',
+    id: 6,
+  },
 ]

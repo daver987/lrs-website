@@ -30,6 +30,8 @@ export function createQuoteFromForm(quotes: {
   combined_line_items: any
   pickup_date: string
   pickup_time: string
+  return_date: string | null
+  return_time: string | null
   distance_text: string
   duration_text: string
   duration_value: number
@@ -128,6 +130,58 @@ export function createQuoteFromForm(quotes: {
             },
           },
         },
+        ...(quotes.is_round_trip
+          ? [
+              {
+                pickup_date: quotes.return_date ?? quotes.pickup_date,
+                pickup_time: quotes.return_time ?? quotes.pickup_time,
+                distance_text: quotes.distance_text,
+                duration_text: quotes.duration_text,
+                duration_value: quotes.duration_value,
+                distance_value: quotes.distance_value,
+                service_label: quotes.service_label,
+                vehicle_label: quotes.vehicle_label,
+                is_return: true,
+                trip_order: 1,
+                locations: {
+                  create: [
+                    {
+                      // Return trip origin is original destination
+                      lat: quotes.destinationLat,
+                      lng: quotes.destinationLng,
+                      name: quotes.destinationName,
+                      formatted_address: quotes.destinationFormattedAddress,
+                      full_name: quotes.destinationFullName,
+                      place_id: quotes.destinationPlaceId,
+                      types: quotes.destinationTypes,
+                      is_origin: true,
+                      route_order: 0,
+                    },
+                    {
+                      // Return trip destination is original origin
+                      lat: quotes.originLat,
+                      lng: quotes.originLng,
+                      name: quotes.originName,
+                      formatted_address: quotes.originFormattedAddress,
+                      full_name: quotes.originFullName,
+                      place_id: quotes.originPlaceId,
+                      types: quotes.originTypes,
+                      is_destination: true,
+                      route_order: 1,
+                    },
+                  ],
+                },
+                price: {
+                  create: {
+                    line_items_list: quotes.line_items_list,
+                    line_items_subtotal: quotes.line_items_subtotal,
+                    line_items_tax: quotes.line_items_tax,
+                    line_items_total: quotes.line_items_total,
+                  },
+                },
+              },
+            ]
+          : []),
       ],
     },
     user: {

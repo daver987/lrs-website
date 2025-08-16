@@ -11,6 +11,7 @@ import type { Place } from '~/schema/placeSchema'
 import type { ComputedRef, Ref, WatchCallback } from 'vue'
 import type { FormInst, FormRules, SelectOption } from 'naive-ui'
 import type { Service, Vehicle } from '~/schema/prismaSchemas'
+import type { QuoteForm } from '~/schema/QuoteFormSchema'
 import { useDataStore } from '~/stores/useDataStore'
 
 const formRef = ref<FormInst | null>(null)
@@ -21,8 +22,6 @@ const { user_id } = storeToRefs(userStore)
 
 const message = useMessage()
 const loadingBar = useLoadingBar()
-
-// Read preloaded data from the app-level store (initialized via callOnce)
 const dataStore = useDataStore()
 const {
   vehicleTypes: vehicle,
@@ -43,6 +42,12 @@ const hoursOptions = computed(() => {
 
 const route = useRoute()
 const gtmValues = route.query
+const emptyPlace: Place = {
+  place_id: '',
+  formatted_address: '',
+  name: '',
+  types: [],
+}
 
 const formValue: Ref<FormValue> = ref({
   id: user_id.value,
@@ -53,8 +58,8 @@ const formValue: Ref<FormValue> = ref({
   conversion: {
     ...gtmValues,
   },
-  origin: {} as Place,
-  destination: {} as Place,
+  origin: emptyPlace,
+  destination: emptyPlace,
   pickup_date: null,
   pickup_time: null,
   return_date: null,
@@ -67,15 +72,31 @@ const formValue: Ref<FormValue> = ref({
   is_hourly: false,
   vehicle: null,
   service: null,
-  line_items: lineItem,
-  sales_tax: salesTax,
+  line_items: lineItem.value || [],
+  sales_tax: salesTax.value || [],
 })
-formValue.value.service = computed(() => {
-  return getServiceTypeByNumber(service.value, formValue.value.service_number!)
-})
-formValue.value.vehicle = computed(() => {
-  return getVehicleTypeByNumber(vehicle.value, formValue.value.vehicle_number!)
-})
+formValue.value.service = null
+formValue.value.vehicle = null
+
+watch(
+  () => formValue.value.service_number,
+  (num) => {
+    formValue.value.service =
+      num != null
+        ? getServiceTypeByNumber(service.value as Service[], num) || null
+        : null
+  }
+)
+
+watch(
+  () => formValue.value.vehicle_number,
+  (num) => {
+    formValue.value.vehicle =
+      num != null
+        ? getVehicleTypeByNumber(vehicle.value as Vehicle[], num) || null
+        : null
+  }
+)
 
 const maxPassengers = computed(() => {
   const vehicleType = vehicleOptions.value?.find(
@@ -99,7 +120,6 @@ const isDisabled = ref(true)
 watch(
   () => formValue.value.service,
   () => {
-    //@ts-ignore
     if (formValue.value.service?.is_hourly) {
       isDisabled.value = false
     } else {
@@ -202,12 +222,10 @@ const handleFormValueChange: WatchCallback<
   if (!origin || !destination) {
     return
   }
-
   const isOriginAirport = isAirport(origin)
   const isDestinationAirport = isAirport(destination)
   const fromAirportServiceType = 3
   const toAirportServiceType = 2
-
   if (isOriginAirport) {
     formValue.value.service_number = fromAirportServiceType
   } else if (isDestinationAirport) {
@@ -235,7 +253,6 @@ const handleChangeDestination = (evt: Place) => {
 
 const gtm = useGtm()
 const gclidCookie = useCookie('gclid')
-const tags = useRuntimeConfig().public
 
 function triggerEvent(quoteTotal: number) {
   gtm?.trackEvent({
@@ -258,29 +275,89 @@ function setEnhancedTracking(
   userId: string
 ) {
   const formattedPhoneNumber: string = phone.replace(/\s+/g, '')
-
   gtm?.trackEvent({
     set: 'user_data',
     email: email,
     phone_number: formattedPhoneNumber,
   })
-
   gtm?.trackEvent({
     set: 'quote_number',
     quote_number: quoteNumber,
   })
-
   gtm?.trackEvent({
     set: 'user_id',
     user_id: userId,
   })
 }
 
+function buildConversion() {
+  const allowed = [
+    'utm_medium',
+    'utm_source',
+    'utm_campaign',
+    'utm_term',
+    'gclid',
+  ] as const
+  const conv: Record<string, string> = {}
+  for (const key of allowed) {
+    const raw = (gtmValues as any)[key]
+    if (typeof raw === 'string' && raw.trim() !== '') {
+      conv[key] = raw
+    }
+  }
+  return conv
+}
+
 async function onSubmit() {
   try {
     loading.value = true
-    const quoteData = await useTrpc().quote.postQuote.mutate(formValue.value)
+    if (!formValue.value.origin.place_id) {
+      message.error('Please select a pickup location')
+      return
+    }
+    if (!formValue.value.destination.place_id) {
+      message.error('Please select a drop-off location')
+      return
+    }
+    if (!formValue.value.vehicle) {
+      message.error('Please select a vehicle type')
+      return
+    }
+    if (!formValue.value.service) {
+      message.error('Please select a service type')
+      return
+    }
+    const vehicleNonNull = formValue.value.vehicle!
+    const serviceNonNull = formValue.value.service!
+    const payload: QuoteForm = {
+      id: formValue.value.id,
+      first_name: formValue.value.first_name,
+      last_name: formValue.value.last_name,
+      email_address: formValue.value.email_address,
+      phone_number: formValue.value.phone_number,
+      conversion: buildConversion(),
+      origin: formValue.value.origin,
+      destination: formValue.value.destination,
+      stops: formValue.value.stops ?? [],
+      pickup_date: formValue.value.pickup_date,
+      pickup_time: formValue.value.pickup_time,
+      return_date: formValue.value.return_date,
+      return_time: formValue.value.return_time,
+      selected_hours: formValue.value.selected_hours,
+      selected_passengers: formValue.value.selected_passengers,
+      is_hourly: formValue.value.is_hourly,
+      vehicle_number: formValue.value.vehicle_number,
+      service_number: formValue.value.service_number,
+      is_round_trip: formValue.value.is_round_trip,
+      vehicle: vehicleNonNull,
+      service: serviceNonNull,
+      line_items: formValue.value.line_items,
+      sales_tax: formValue.value.sales_tax,
+    }
+
+    const quoteData = await useTrpc().quote.postQuote.mutate(payload)
     quoteStore.setQuote(quoteData)
+
     setTimeout(async () => {
       setEnhancedTracking(
         formValue.value.email_address,
@@ -329,15 +406,13 @@ async function handleValidateButtonClick(e: MouseEvent) {
 function disablePreviousDate(ts: number) {
   return ts < new Date().getTime() - 24 * 60 * 60 * 1000
 }
-
-//todo: add cheaper pricing for airport pickups
 </script>
 
 <template>
   <n-grid :cols="1" responsive="self">
     <n-grid-item :span="1">
       <div
-        class="border rounded-sm border border-white bg-black p-4 sm:mx-auto sm:w-full sm:max-w-2xl sm:overflow-hidden sm:rounded-lg"
+        class="border rounded-sm border-white bg-black p-4 sm:mx-auto sm:w-full sm:max-w-2xl sm:overflow-hidden sm:rounded-lg"
       >
         <h2 class="mb-4 mt-2 text-center text-3xl uppercase text-white">
           Instant Quote
@@ -406,46 +481,10 @@ function disablePreviousDate(ts: number) {
                   use12-hours
                   value-format="p"
                 />
-                <n-switch v-if="false" v-model:value="formValue.is_round_trip">
-                  <template #checked> Round</template>
-                  <template #unchecked> One Way</template>
-                </n-switch>
               </n-space>
             </n-form-item-gi>
           </n-grid>
-          <n-collapse-transition v-if="false" :show="formValue.is_round_trip">
-            <n-grid :cols="2" :x-gap="12" item-responsive>
-              <n-form-item-gi
-                :show-label="false"
-                :span="1"
-                label="Return Date"
-                path="dateTime.return_date"
-              >
-                <n-date-picker
-                  v-model:value="formValue.return_date as any"
-                  :default-value="Date.now()"
-                  :is-date-disabled="disablePreviousDate"
-                  input-readonly
-                  placeholder="Select Return Date"
-                  type="date"
-                />
-              </n-form-item-gi>
-              <n-form-item-gi
-                :show-label="false"
-                :span="1"
-                label="Return Time"
-                path="dateTime.return_time"
-              >
-                <n-time-picker
-                  v-model:value="formValue.return_time as any"
-                  :clearable="true"
-                  format="h:mm a"
-                  input-readonly
-                  use12-hours
-                />
-              </n-form-item-gi>
-            </n-grid>
-          </n-collapse-transition>
+
           <n-grid :cols="2" :x-gap="12" item-responsive>
             <n-form-item-gi
               :show-label="false"

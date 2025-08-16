@@ -6,6 +6,7 @@ import { format } from 'date-fns'
 import { ref } from '#imports'
 import type { Prisma } from '@prisma/client'
 import { z } from 'zod'
+import { useImageFallback } from '~/composables/useImageFallback'
 
 type QuoteWithRelations = Prisma.QuoteGetPayload<{
   include: {
@@ -55,6 +56,7 @@ const stripeStore = useStripeStore()
 const { addedToCart, loading } = storeToRefs(cartStore)
 const currentDate = format(new Date(), 'PPPP')
 const checkoutLoading = ref(false)
+const { onImgError } = useImageFallback()
 
 const createBooking = async () => {
   checkoutLoading.value = true
@@ -148,6 +150,7 @@ const createBooking = async () => {
                 class="object-contain object-center w-24 h-24 rounded-md sm:h-48 sm:w-48"
                 :alt="quote!.vehicle.label"
                 :src="quote!.vehicle?.vehicle_image! as string"
+                @error="onImgError"
               />
             </div>
 

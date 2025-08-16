@@ -130,6 +130,7 @@ const submitOrder = async () => {
               useAppConfig().brand.assets.logo.dark ||
               useAppConfig().brand.assets.logo.light
             "
+            @error="onImgError"
             width="1920"
           />
         </NuxtLink>

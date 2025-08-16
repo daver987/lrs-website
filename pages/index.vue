@@ -61,7 +61,9 @@ const fleetBackgroundImg = useBackgroundImage(fleetBackgroundImage)
                   <ImageSwitcher />
                 </div>
               </div>
-              <div class="mt-16 px-3 pb-8 sm:mt-24 lg:col-span-6 lg:mt-0">
+              <div
+                class="mt-16 px-3 pb-8 sm:mt-24 lg:col-span-6 lg:mt-0 lg:flex lg:items-center lg:self-center"
+              >
                 <QuoteFormTwo />
               </div>
             </div>

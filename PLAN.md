@@ -44,6 +44,24 @@ Notes
 - Remaining mentions of the legacy brand exist in `data/*.ts` for historical copy; UI replaces them at render time via `useBrandifyText`. We can migrate these to brand-aware data later without blocking other work.
 - Verify GTM in the environment after deploy to ensure a single event stream.
 
+## Progress Update — 2025-08-16 (Session 2)
+
+Completed
+
+- Image sweep: added `@error` fallbacks for key `<img>` tags (logo, cart/checkout vehicle images). Background header images still WIP; using direct URLs.
+- Quote form: enabled Round Trip toggle and return date/time fields; added optional single waypoint (stop) input used in pricing only.
+- Pricing: extended `QuoteFormSchema` to accept `stops[]`; server now maps `stops` to `pricingEngine.waypoints` for accurate distance calcs.
+- Round trip persistence: `createQuoteFromForm` now creates a second trip (is_return=true) when round-trip is selected, using return date/time and reversed route.
+- Invoice print: wired `Summary.vue` to use `utils/general/generatePdf` for Save as PDF on `/success`.
+- FAQ: added `/faq` page and linked it in navigation.
+
+Next up
+
+- Checkout UX polish: improve missing params guards, inline errors, and confirm-after-payment transition.
+- Waypoint persistence: extend DB `locations` creation to include waypoints (requires geocode for lat/lng by place_id) and render them in summaries.
+- Flights lookup: spec/POC for flight status API (after MVP checkout is stable).
+- Basic portal: sketch 2–3 screens (Quotes, Trips, Invoice) with auth.
+
 ## **Key Findings**
 
 - Hard-coded branding: name, logos, colors, copy appear across `pages`, `layouts
