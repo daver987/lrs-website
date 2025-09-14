@@ -18,7 +18,6 @@ const user_id = useStorage(storageKey, userStore.getUserId())
 
 userStore.setUserId(user_id.value)
 
-// Preload catalog-like data once for the app lifetime
 const dataStore = useDataStore()
 await callOnce(async () => {
   try {

@@ -1,18 +1,12 @@
 import { publicProcedure, router } from '../trpc'
 import { z } from 'zod'
-import {
-  sendTwilioSms,
-  createAircallContact,
-  sendQuoteEmail,
-  createQuoteFromForm,
-  updateShortLink,
-  formatAddress,
-} from '~/utils'
+import { sendTwilioSms } from '~/server/utils/sendTwilioSms'
+import { createAircallContact } from '~/server/utils/createAircallContact'
+import { sendQuoteEmail } from '~/server/utils/sendGridEmail'
+import { createQuoteFromForm, updateShortLink } from '~/server/utils/trpcUtils'
+import { formatAddress } from '~/utils/dates/formatAddress'
 import { usePricingEngine, useLinkShortener } from '~/composables'
-import {
-  quoteFormReturnSchema,
-  QuoteFormSchema,
-} from '~/schema/QuoteFormSchema'
+import { quoteFormReturnSchema, QuoteFormSchema } from '~/shared/schemas'
 import chalk from 'chalk'
 import { Prisma } from '@prisma/client'
 

@@ -5,8 +5,8 @@ import { z } from 'zod'
 import {
   DirectionsSchema,
   type DirectionsApiResponse,
-} from '~/schema/directionsSchema'
-import { LineItemSchema } from '~/schema/prismaSchemas'
+  LineItemSchema,
+} from '~/shared/schemas'
 
 /**
  * ----------------------------------------------------------------------------

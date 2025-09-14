@@ -1,10 +1,15 @@
-import type { QuoteFormReturn } from '~/schema/QuoteFormSchema'
+import type { QuoteFormReturn } from '~/shared/schemas'
+import { consola } from 'consola'
 
 export const createAircallContact = async (
   aircallSecret: string,
   contact: QuoteFormReturn
 ): Promise<void> => {
   try {
+    if (!aircallSecret) {
+      consola.warn('[createAircallContact] No secret, mocking create')
+      return
+    }
     const headers = new Headers({
       Authorization: `Basic ${aircallSecret}`,
       'Content-Type': 'application/json',
@@ -37,11 +42,13 @@ export const createAircallContact = async (
     const response = await fetch('https://api.aircall.io/v1/contacts', options)
     if (response.ok) {
       const data = await response.json()
-      console.log('This is the returned aircall services', data)
+      consola.info('[AIRCALL] This is the returned aircall services', data)
     } else {
-      console.error(`Error creating Aircall contact: ${response.statusText}`)
+      consola.error(
+        `[AIRCALL] Error creating Aircall contact: ${response.statusText}`
+      )
     }
   } catch (error) {
-    console.error('Error in createAircallContact:', error)
+    consola.error('[AIRCALL] Error in createAircallContact:', error)
   }
 }

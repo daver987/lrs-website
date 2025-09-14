@@ -1,6 +1,6 @@
 import { router, publicProcedure } from '../trpc'
 import { z } from 'zod'
-import { ContactFormSchema } from '~/schema/contactFormSchema'
+import { ContactFormSchema } from '~/shared/schemas'
 
 const extendedForm = ContactFormSchema.extend({
   userId: z.string().optional(),

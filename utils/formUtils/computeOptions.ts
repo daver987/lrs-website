@@ -1,5 +1,5 @@
 import type { SelectOption } from 'naive-ui'
-import { Vehicle, Service } from '@prisma/client'
+import type { Vehicle, Service } from '@prisma/client'
 
 export function computeVehicleOptions(
   array: Vehicle[] | null

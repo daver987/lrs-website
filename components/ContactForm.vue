@@ -2,7 +2,7 @@
 import { toTypedSchema } from '@vee-validate/zod'
 import { storeToRefs } from 'pinia'
 import { ErrorMessage, Field, useForm } from 'vee-validate'
-import { ContactFormSchema } from '~/schema/contactFormSchema'
+import { ContactFormSchema } from '~/shared/schemas'
 import { useUserStore } from '~/stores/useUserStore'
 
 const userStore = useUserStore()

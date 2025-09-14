@@ -9,23 +9,15 @@
  * are still exported but marked deprecated. They use suspense() to
  * await the query and then return the same shape as before to avoid
  * breaking existing callers.
- *
- * Improvements:
- * - Centralized, type-safe query keys
- * - Parameter included in quote query key to avoid cache collisions
- * - Consistent naming: useXQuery composables
- * - `enabled` gating for quote query when no quote number
  */
 
 export const queryKeys = {
   salesTax: () => ['salesTax'] as const,
-  lineItems: () => ['lineItem'] as const, // keeping original singular key to preserve cache continuity
+  lineItems: () => ['lineItem'] as const,
   vehicle: () => ['vehicle'] as const,
   service: () => ['service'] as const,
   quote: (quoteNumber: number) => ['quote', quoteNumber] as const,
 }
-
-// --- Composable Queries (preferred) ---
 
 export function useSalesTaxQuery() {
   return useQuery({

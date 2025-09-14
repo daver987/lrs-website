@@ -1,5 +1,8 @@
 import { Stripe } from 'stripe'
-import { PrismaClient, User } from '@prisma/client'
+import { PrismaClient, type User } from '@prisma/client'
+import { consola } from 'consola'
+import { stripeInit } from './stripeInit'
+import { H3Event } from 'h3'
 
 interface GetOrCreateStripCustomer {
   stripe: Stripe
@@ -60,9 +63,8 @@ export async function getOrCreateStripCustomerId({
 
   if (updatedUser.stripe_customer_id) {
     return updatedUser.stripe_customer_id
-  } else {
-    throw new Error('Failed to update user with Stripe customer ID')
   }
+  throw new Error('Failed to update user with Stripe customer ID')
 }
 
 export async function createSetupIntent({
@@ -84,7 +86,7 @@ export async function createSetupIntent({
       customer: stripeCustomerId,
       payment_method_types: ['card'],
       metadata: {
-        quoteNumber: quoteNumber,
+        quoteNumber,
       },
     })
 
@@ -118,7 +120,7 @@ export async function createSetupIntent({
     }
     return setupIntent
   } catch (error) {
-    console.error('Error creating setup intent:', error)
+    consola.error('Error creating setup intent:', error)
     throw new Error('Failed to create setup intent')
   }
 }
@@ -131,19 +133,14 @@ export async function getCustomerByEmail({
     throw new Error('Email is required')
   }
 
-  const customers = await stripe.customers.list({ email: email })
+  const customers = await stripe.customers.list({ email })
 
   if (customers.data.length > 0) {
-    return customers.data[0]
+    return customers.data[0] ?? null
   }
 
   return null
 }
-
-const taxRateId = 'txr_1MWuVFEm9nnVhePIlujaVvBo'
-const fuelSurcharge = 'prod_NlYJ2HAaYwGg6U'
-const gratuity = 'prod_NlYIBCyMFKGpTP'
-const airportFee = 'prod_NlYJgktjL9N1iB'
 
 const pointToPoint = {
   standardSuv: 'prod_NlYDJcWdMZRPSt',
@@ -172,18 +169,20 @@ const toAirport = {
 async function createPrice(
   amountInCents: number,
   productId: string,
-  quoteNumber: number
+  quoteNumber: number,
+  event: H3Event
 ) {
+  const stripe = stripeInit(event)
   const price = await stripe.prices.create({
     billing_scheme: 'per_unit',
     product: productId,
     currency: 'cad',
     unit_amount: amountInCents,
     metadata: {
-      quoteNumber: quoteNumber,
+      quoteNumber,
     },
   })
-  console.log('Stripe Product and Price', price)
+  consola.info('Stripe Product and Price', price)
   return price
 }
 

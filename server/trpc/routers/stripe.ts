@@ -1,6 +1,9 @@
 import { router, publicProcedure } from '../trpc'
 import { z } from 'zod'
-import { getOrCreateStripCustomerId, createSetupIntent } from '~/utils'
+import {
+  getOrCreateStripCustomerId,
+  createSetupIntent,
+} from '~/server/utils/stripe'
 
 export const stripeRouter = router({
   createSetup: publicProcedure
