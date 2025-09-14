@@ -10,10 +10,7 @@
 import superjson from 'superjson'
 import { Context } from '~/server/trpc/context'
 import { initTRPC } from '@trpc/server'
-import chalk from 'chalk'
-
-export const logger = (...messages: string[]) =>
-  console.log(chalk.blue('[ TRPC ]'), ' - ', ...messages)
+import { consola } from 'consola'
 
 const t = initTRPC.context<Context>().create({
   transformer: superjson,
@@ -33,12 +30,12 @@ const t = initTRPC.context<Context>().create({
 // })
 
 const loggerMiddleware = t.middleware(async ({ path, next }) => {
-  logger(`${path}`)
+  consola.info(`${path}`)
 
   const start = Date.now()
   const result = await next()
   const durationMs = Date.now() - start
-  logger(`${path} - END : ${durationMs}ms`)
+  consola.info(`${path} - END : ${durationMs}ms`)
 
   return result
 })

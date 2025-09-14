@@ -1,6 +1,8 @@
 import { router, publicProcedure } from '../trpc'
 import { z } from 'zod'
 import { ContactFormSchema } from '~/shared/schemas'
+import { consola } from 'consola'
+import chalk from 'chalk'
 
 const extendedForm = ContactFormSchema.extend({
   userId: z.string().optional(),
@@ -22,7 +24,9 @@ export const userRouter = router({
       })
     }),
   getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.user.findMany()
+    const users = ctx.prisma.user.findMany()
+    consola.info(chalk.blue('[NEW_USERS]', JSON.stringify(users)))
+    return users
   }),
   userForm: publicProcedure
     .input(extendedForm)

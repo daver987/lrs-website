@@ -1,14 +1,18 @@
 import { publicProcedure, router } from '../trpc'
 import { z } from 'zod'
-import { sendTwilioSms } from '~/server/utils/sendTwilioSms'
-import { createAircallContact } from '~/server/utils/createAircallContact'
-import { sendQuoteEmail } from '~/server/utils/sendGridEmail'
-import { createQuoteFromForm, updateShortLink } from '~/server/utils/trpcUtils'
-import { formatAddress } from '~/utils/dates/formatAddress'
+import {
+  sendQuoteEmail,
+  sendTwilioSms,
+  createAircallContact,
+  formatAddress,
+  createQuoteFromForm,
+  updateShortLink,
+} from '#imports'
 import { usePricingEngine, useLinkShortener } from '~/composables'
-import { quoteFormReturnSchema, QuoteFormSchema } from '~/shared/schemas'
+import { quoteFormReturnSchema, QuoteFormSchema } from '~~/shared/schemas'
 import chalk from 'chalk'
 import { Prisma } from '@prisma/client'
+import { consola } from 'consola'
 
 type QuoteWithRelations = Prisma.QuoteGetPayload<{
   include: {
@@ -35,63 +39,62 @@ export const quoteRouter = router({
     .query(async ({ ctx, input }) => {
       if (input.quote_number === 3000) {
         return { status: 'NO_QUOTE' }
-      } else {
-        const quote = await ctx.prisma.quote.findUnique({
-          where: { quote_number: input.quote_number },
-          select: {
-            id: true,
-            quote_number: true,
-            selected_hours: true,
-            selected_passengers: true,
-            is_round_trip: true,
-            combined_line_items: true,
-            quote_total: true,
-            quote_subtotal: true,
-            quote_tax_total: true,
-            user: {
-              select: {
-                id: true,
-                first_name: true,
-                last_name: true,
-                phone_number: true,
-                email_address: true,
-                full_name: true,
-                stripe_customer_id: true,
-              },
+      }
+      const quote = await ctx.prisma.quote.findUnique({
+        where: { quote_number: input.quote_number },
+        select: {
+          id: true,
+          quote_number: true,
+          selected_hours: true,
+          selected_passengers: true,
+          is_round_trip: true,
+          combined_line_items: true,
+          quote_total: true,
+          quote_subtotal: true,
+          quote_tax_total: true,
+          user: {
+            select: {
+              id: true,
+              first_name: true,
+              last_name: true,
+              phone_number: true,
+              email_address: true,
+              full_name: true,
+              stripe_customer_id: true,
             },
-            vehicle: {
-              select: {
-                label: true,
-                vehicle_image: true,
-                max_luggage: true,
-                vehicle_number: true,
-                fasttrak_id: true,
-              },
+          },
+          vehicle: {
+            select: {
+              label: true,
+              vehicle_image: true,
+              max_luggage: true,
+              vehicle_number: true,
+              fasttrak_id: true,
             },
-            service: {
-              select: {
-                label: true,
-              },
+          },
+          service: {
+            select: {
+              label: true,
             },
-            trips: {
-              orderBy: {
-                trip_order: 'asc',
-              },
-              include: {
-                price: true,
-                payment: true,
-                locations: {
-                  orderBy: {
-                    route_order: 'asc',
-                  },
+          },
+          trips: {
+            orderBy: {
+              trip_order: 'asc',
+            },
+            include: {
+              price: true,
+              payment: true,
+              locations: {
+                orderBy: {
+                  route_order: 'asc',
                 },
               },
             },
           },
-        })
-        console.log('[RETURNED_QUOTE]', quote)
-        return { status: 'FOUND_QUOTE', quote }
-      }
+        },
+      })
+      consola.info(chalk.blue('[RETURNED_QUOTE]', quote))
+      return { status: 'FOUND_QUOTE', quote }
     }),
 
   getCreatedAt: publicProcedure
@@ -110,16 +113,16 @@ export const quoteRouter = router({
           is_booked: true,
         },
       })
-      console.log('Server Result:', result)
+      consola.info(chalk.blue('[SERVER_RESULT]', result))
 
-      if (!result) {
-        console.log("Quote doesn't exist")
-        return result
-      } else {
+      if (result) {
         return {
           created_at: result.created_at,
           is_booked: result.is_booked,
         }
+      } else {
+        consola.info(chalk.blue('[QUOTE_DOES_NOT_EXIST]'))
+        return result
       }
     }),
 
@@ -194,7 +197,7 @@ export const quoteRouter = router({
           },
         },
       })
-      console.log(quoteReturn)
+      consola.info(chalk.blue('[QUOTE_RETURN]', quoteReturn))
       return quoteReturn[0]
     }),
 
@@ -229,8 +232,7 @@ export const quoteRouter = router({
       const aircallSecret = useRuntimeConfig().AIRCALL_API_TOKEN
       const sendGridKey = useRuntimeConfig().SENDGRID_API_KEY
       const domain = useRuntimeConfig().public.WEBSITE_URL
-      const prisma = ctx.prisma
-      const twilioClient = ctx.twilioClient
+      const { prisma, twilioClient } = ctx
 
       const pricingEngine = usePricingEngine(
         vehicle,
@@ -273,15 +275,15 @@ export const quoteRouter = router({
       const quotes = {
         selected_hours: selected_hours!,
         selected_passengers: selected_passengers!,
-        is_round_trip: is_round_trip,
+        is_round_trip,
         quote_total: totalAmount,
         quote_subtotal: subTotal,
         quote_tax_total: taxTotal,
         combined_line_items: calculatedLineItemsTotals!,
-        pickup_date: pickup_date as string,
-        pickup_time: pickup_time as string,
-        return_date: (return_date as string) || null,
-        return_time: (return_time as string) || null,
+        pickup_date: pickup_date ?? '',
+        pickup_time: pickup_time ?? '',
+        return_date: return_date ?? '',
+        return_time: return_time ?? '',
         distance_text: routeData?.routes[0].legs[0].distance.text!,
         duration_text: routeData?.routes[0].legs[0].duration.text!,
         duration_value: routeData?.routes[0].legs[0].distance.value!,
@@ -355,12 +357,12 @@ export const quoteRouter = router({
         },
       })
       const quote = quoteFormReturnSchema.parse(data)
-      let newObj = JSON.parse(JSON.stringify(quote))
+      const newObj = JSON.parse(JSON.stringify(quote))
       newObj.combined_line_items = newObj.combined_line_items.filter(
         (item: any) => item.label !== 'Total' && item.label !== 'HST'
       )
 
-      console.log(chalk.green('[ZAPIER_QUOTE]', JSON.stringify(newObj)))
+      consola.info(chalk.green('[ZAPIER_QUOTE]', JSON.stringify(newObj)))
       const zapier = await $fetch(
         'https://hooks.zapier.com/hooks/catch/11745690/340edjn/',
         {
@@ -368,7 +370,7 @@ export const quoteRouter = router({
           body: { newObj },
         }
       )
-      console.log(chalk.red('[ZAPIER]', JSON.stringify(zapier)))
+      consola.info(chalk.red('[ZAPIER]', JSON.stringify(zapier)))
       shortLink.value = createShortLink(quote.quote_number)
       await Promise.all([
         sendQuoteEmail(quote, sendGridKey, shortLink.value),

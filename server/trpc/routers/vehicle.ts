@@ -1,5 +1,6 @@
 import { publicProcedure, router } from '../trpc'
 import chalk from 'chalk'
+import { consola } from 'consola'
 
 export const vehicleRouter = router({
   get: publicProcedure.query(async ({ ctx }) => {
@@ -11,10 +12,10 @@ export const vehicleRouter = router({
         },
       })
       await useStorage().setItem('formItems:vehicles', JSON.stringify(vehicles))
-      console.log(chalk.blue('[NEW_VEHICLE]', vehicles))
+      consola.info(chalk.blue('[NEW_VEHICLE]', vehicles))
       return vehicles
     } else {
-      console.log(
+      consola.info(
         chalk.green('[STORED_VEHICLE]', JSON.stringify(storedVehicles))
       )
       return storedVehicles

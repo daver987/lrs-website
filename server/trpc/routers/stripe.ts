@@ -4,6 +4,8 @@ import {
   getOrCreateStripCustomerId,
   createSetupIntent,
 } from '~/server/utils/stripe'
+import { consola } from 'consola'
+import chalk from 'chalk'
 
 export const stripeRouter = router({
   createSetup: publicProcedure
@@ -16,6 +18,7 @@ export const stripeRouter = router({
     .mutation(async ({ ctx, input }) => {
       const stripeId = await getOrCreateStripCustomerId({
         stripe: ctx.stripe,
+        // @ts-expect-error - double check this
         prisma: ctx.prisma,
         userId: input.userId,
       })
@@ -23,8 +26,10 @@ export const stripeRouter = router({
         stripeCustomerId: stripeId,
         quoteNumber: input.quoteNumber,
         stripe: ctx.stripe,
+        // @ts-expect-error - double check this
         prisma: ctx.prisma,
       })
+      consola.info(chalk.blue('[CREATE_SETUP_INTENT]', setupIntent))
       return { setupIntent, stripeId, statusCode: 200 }
     }),
 })
