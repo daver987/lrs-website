@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { NavigationItem } from '~/app/data/navigation'
+import type { NavigationItem } from '~/data/navigation'
 import { useImageFallback } from '~/composables/useImageFallback'
 
 interface CompanyData {

@@ -1,9 +1,9 @@
-import type { QuoteFormReturn } from '~/shared/schemas'
+import type { QuoteFormReturn } from '~~/shared/schemas'
 import sgMail, { type MailDataRequired } from '@sendgrid/mail'
-import { parseTimeString, parseDateTime } from '~/utils'
+import { parseTimeString, parseDateTime } from '~~/shared/utils'
 import { consola } from 'consola'
 import { useAppConfig, useRuntimeConfig } from '#imports'
-import { useIcsCal } from '~/server/utils/useIcsCal'
+import { useIcsCal } from '~~/server/utils/useIcsCal'
 
 export async function sendQuoteEmail(
   newQuote: QuoteFormReturn,

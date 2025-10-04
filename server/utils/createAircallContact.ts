@@ -1,4 +1,4 @@
-import type { QuoteFormReturn } from '~/shared/schemas'
+import type { QuoteFormReturn } from '~~/shared/schemas'
 import { consola } from 'consola'
 
 export const createAircallContact = async (

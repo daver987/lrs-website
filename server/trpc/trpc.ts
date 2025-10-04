@@ -8,7 +8,7 @@
  * @see https://trpc.io/docs/v10/procedures
  */
 import superjson from 'superjson'
-import { Context } from '~/server/trpc/context'
+import { Context } from '~~/server/trpc/context'
 import { initTRPC } from '@trpc/server'
 import { consola } from 'consola'
 

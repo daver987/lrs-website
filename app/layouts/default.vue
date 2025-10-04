@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { navigation } from '~/app/data/navigation'
+import { navigation } from '~/data/navigation'
 
 const appConfig = useAppConfig()
 

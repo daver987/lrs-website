@@ -6,7 +6,7 @@ import {
   TransitionChild,
   TransitionRoot,
 } from '@headlessui/vue'
-import { navigation } from '~/app/data/navigation'
+import { navigation } from '~/data/navigation'
 
 definePageMeta({
   title: 'Sign Up',

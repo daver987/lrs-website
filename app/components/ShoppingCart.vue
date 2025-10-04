@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { useCartStore } from '~/app/stores/useCartStore'
+import { useCartStore } from '~/stores/useCartStore'
 import { storeToRefs } from 'pinia'
-import { useStripeStore } from '~/app/stores/useStripeStore'
+import { useStripeStore } from '~/stores/useStripeStore'
 import { format } from 'date-fns'
 import { ref } from '#imports'
 import type { Prisma } from '@prisma/client'

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
 import { storeToRefs } from 'pinia'
-import { useCartStore } from '~/app/stores/useCartStore'
-import type { QuoteFormReturn } from '~/shared/schemas'
+import { useCartStore } from '~/stores/useCartStore'
+import type { QuoteFormReturn } from '~~/shared/schemas'
 import { ref, computed } from '#imports'
 import { useImageFallback } from '~/composables/useImageFallback'
 

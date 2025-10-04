@@ -26,6 +26,7 @@ export default defineNuxtConfig({
     '@bg-dev/nuxt-naiveui',
     '@pinia/nuxt',
     '@nuxt/icon',
+    'nuxt-directus',
   ],
   nitro: {
     experimental: {
@@ -127,6 +128,11 @@ export default defineNuxtConfig({
     AIRCALL_API_ID: process.env.AIRCALL_API_ID,
     SENDGRID_API_KEY: process.env.SENDGRID_API_KEY,
     public: {
+      directus: {
+        url: 'https://directus.drobertson.pro',
+        autoFetch: true,
+        devtools: true,
+      },
       gtm: {
         id: process.env.GTM_ID as string,
         defer: false,

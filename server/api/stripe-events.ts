@@ -1,12 +1,13 @@
 import { Stripe } from 'stripe'
 import { readRawBody, defineEventHandler } from 'h3'
-import { stripe } from '~/server/utils/stripeInit'
+import { stripeInit } from '~~/server/utils/stripeInit'
 import { z } from 'zod'
 
 export default defineEventHandler(async (event) => {
   const messagingSID = useRuntimeConfig().TWILIO_MESSAGING_SID
   const endpointSecret = useRuntimeConfig().STRIPE_WEBHOOK_SECRET
   const client = event.context.twilioClient
+  const stripe = stripeInit(event)
 
   const rawBody = await readRawBody(event)
   const headers = getRequestHeaders(event)

@@ -8,7 +8,7 @@ import {
   MenuItem,
   MenuItems,
 } from '@headlessui/vue'
-import { navigation } from '~/app/data/navigation'
+import { navigation } from '~/data/navigation'
 </script>
 
 <template>

@@ -3,7 +3,7 @@ import { z } from 'zod'
 import {
   getOrCreateStripCustomerId,
   createSetupIntent,
-} from '~/server/utils/stripe'
+} from '~~/server/utils/stripe'
 import { consola } from 'consola'
 import chalk from 'chalk'
 

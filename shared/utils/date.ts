@@ -2,11 +2,11 @@ export function parseTimeString(timeStr: string) {
   const hoursRegex = /(\d+)\s*hour(s)?/
   const minsRegex = /(\d+)\s*min(s)?/
 
-  let hoursMatch = timeStr.match(hoursRegex)
-  let minsMatch = timeStr.match(minsRegex)
+  const hoursMatch = timeStr.match(hoursRegex)
+  const minsMatch = timeStr.match(minsRegex)
 
-  let hours = hoursMatch ? parseInt(hoursMatch[1], 10) : 0
-  let minutes = minsMatch ? parseInt(minsMatch[1], 10) : 0
+  const hours = hoursMatch ? parseInt(hoursMatch[1], 10) : 0
+  const minutes = minsMatch ? parseInt(minsMatch[1], 10) : 0
 
   return { hours, minutes }
 }
@@ -18,6 +18,7 @@ type DateAndTime = [
   hours: number,
   minutes: number,
 ]
+
 function parseMonth(monthStr: string) {
   const monthNames = [
     'January',

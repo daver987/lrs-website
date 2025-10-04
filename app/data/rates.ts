@@ -1,3 +1,4 @@
+import type { Service } from '~~/shared/schemas'
 import type { Rates, Surcharges } from '~~/shared/types'
 
 const rates = [
@@ -56,5 +57,33 @@ const surcharges = {
   gratuity: 0.2,
   HST: 0.13,
 } as Surcharges
+
+const services = [
+  {
+  id: 1,
+  name: 'Point-to-Point',
+  is_active: true,
+  is_hourly: false,
+  },
+  {
+    id: 2,
+    name: 'To Airport',
+    is_active: true,
+    is_hourly: false,
+  },
+  {
+    id: 3,
+    name: 'From Airport',
+    is_active: true,
+    is_hourly: false,
+  },
+  {
+    id: 4,
+    name: 'Hourly / As Directed',
+    is_active: true,
+    is_hourly: true,
+  },
+] as Service[]
+
 
 export { rates, surcharges }

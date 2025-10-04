@@ -3,431 +3,548 @@ generator client {
 }
 
 datasource db {
-  provider     = "postgres"
-  url          = env("DATABASE_URL")
+  provider = "postgres"
+  url      = env("DATABASE_URL")
 }
 
-model Account {
-  id                     String   @id @unique @default(uuid())
-  number                 Int      @unique @default(autoincrement())
-  created_at             DateTime @default(now())
-  updated_at             DateTime @updatedAt
-  company_name           String?
-  company_address        String?
-  company_phone          String?
-  company_email          String
-  company_account_number Int
-  users                  User[]
+// ---------- ENUMS ----------
+enum Status {
+  ACTIVE
+  INACTIVE
 }
 
-model Session {
-  id            String   @id @default(cuid())
-  session_token String   @unique
-  user_id       String
-  expires       DateTime
-  user          User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-
-  @@index([user_id])
+enum DistanceUnit {
+  KM
+  MI
 }
 
-model User {
-  id                   String       @id @unique @default(uuid())
-  created_at           DateTime     @default(now())
-  updated_at           DateTime     @updatedAt
-  first_name           String
-  last_name            String
-  email_address        String       @unique
-  phone_number         String
-  phone_number_country String?
-  stripe_customer_id   String?
-  clerk_id             String?
-  is_customer          Boolean      @default(false)
-  account_id           String?
-  notes                String?
-  payment_method       String?
-  meta_data            Json?
-  full_name            String?
-  email_verified       DateTime?
-  image                String?
-  sessions             Session[]
-  quotes               Quote[]
-  account              Account?     @relation(fields: [account_id], references: [id])
-  conversion           Conversion[]
-  messages             Message[]
+enum BillingBasis {
+  DISTANCE
+  HOURLY
+  FLAT_RATE
+}
 
-  @@index([account_id])
+enum LocationType {
+  ORIGIN
+  DESTINATION
+  WAYPOINT
+}
+
+enum ChargeScope {
+  BASE_FARE // Base used for % calcs
+  PERCENTAGE // % of base fare (taxable)
+  FIXED_RATE // Flat amount (taxable)
+  PERCENTAGE_NO_TAX // % of base fare, not taxable
+  FIXED_RATE_NO_TAX // Flat, not taxable (e.g., reimburse)
+  FIXED_PER_UNIT // Flat per unit (e.g., per stop)
+}
+
+enum FlightStatus {
+  SCHEDULED
+  DEPARTED
+  ACTIVE
+  LANDED
+  CANCELLED
+}
+
+enum TripState {
+  DRAFT
+  PENDING
+  CONFIRMED
+  EN_ROUTE
+  ON_LOCATION
+  PASSENGER_ONBOARD
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum TripType {
+  IN_HOUSE
+  FARMED_OUT
+}
+
+enum PaymentProvider {
+  STRIPE
+  CASH
+  OTHER
+}
+
+enum QuoteStatus {
+  DRAFT
+  SENT
+  ACCEPTED
+  REJECTED
+  EXPIRED
+  CANCELLED
+  BOOKED
+}
+
+enum OrderStatus {
+  BOOKED
+  CANCELLED
+  COMPLETED
+}
+
+// ---------- CONTACTS, MESSAGES, CONVERSIONS, PAYMENTS ----------
+model Contact {
+  id              String          @id @default(uuid()) // Primary key
+  created_at      DateTime        @default(now()) // Creation timestamp
+  updated_at      DateTime        @updatedAt // Update timestamp
+  first_name      String // Contact first name
+  last_name       String // Contact last name
+  full_name       String // Contact full name
+  email_address   String          @unique @db.Citext // Case-insensitive unique email
+  phone_number    String?         @unique // E.164 formatted phone (optional)
+  notes           String? // Freeform notes
+  messages        Message[] // Messages from web/contact forms
+  conversions     Conversion[] // UTM/source attribution
+  payment_methods PaymentMethod[] // Saved payment methods
+  trips           TripPassenger[] // Passenger/booker joins
+  Quote           Quote[]
+
+  @@index([last_name, first_name])
+  @@map("contacts")
 }
 
 model Message {
-  id         String   @id @unique @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  message    String
-  subject    String
-  user       User     @relation(fields: [user_id], references: [id])
-  user_id    String
-  is_read    Boolean  @default(value: false)
+  id         String   @id @default(uuid()) // Primary key
+  created_at DateTime @default(now()) // Creation timestamp
+  updated_at DateTime @updatedAt // Update timestamp
+  message    String // Message body
+  subject    String // Message subject
+  contact_id String // FK → Contact.id
+  contact    Contact  @relation(fields: [contact_id], references: [id], onDelete: Cascade) // Contact relation
+  user_id    String? // Optional internal user id (staff)
+  is_read    Boolean  @default(false) // Read flag
 
-  @@index([user_id])
-}
-
-model Affiliate {
-  id            String   @id @unique @default(uuid())
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
-  name          String
-  email_address String
-  phone_number  String
-  address       String?
-  notes         String?
-  is_driver     Boolean  @default(false)
-}
-
-model Driver {
-  id            String      @id @unique @default(uuid())
-  created_at    DateTime    @default(now())
-  updated_at    DateTime    @updatedAt
-  display_name  String?
-  employee_id   Int?
-  is_inactive   Boolean     @default(false)
-  company       String?
-  first_name    String
-  last_name     String
-  email_address String
-  phone_number  String
-  notes         String?
-  trips         Trip[]
-  payments      DriverPay[]
-  balance_owed  Float
-}
-
-model DriverPay {
-  id         String   @id @unique @default(uuid())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  Driver     Driver?  @relation(fields: [driverId], references: [id])
-  driverId   String?
-  trip       Trip     @relation(fields: [tripId], references: [id])
-  tripId     String
-  amount     Float
-  is_paid    Boolean
-
-  @@index([tripId])
-  @@index([driverId])
-}
-
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-  id         String   @id @default(cuid())
-
-  @@unique([identifier, token])
+  @@index([contact_id, created_at])
+  @@map("messages")
 }
 
 model Conversion {
-  id              String    @id @default(uuid())
-  created_at      DateTime? @default(now())
-  utm_term        String?
-  utm_medium      String?
-  utm_source      String?
-  utm_campaign    String?
-  gclid           String?
-  source          String?
-  conversion_name String?
-  user_id         String
-  user            User      @relation(fields: [user_id], references: [id])
+  id              String   @id @default(uuid()) // Primary key
+  created_at      DateTime @default(now()) // Creation timestamp
+  utm_term        String? // UTM term
+  utm_medium      String? // UTM medium
+  utm_source      String? // UTM source
+  utm_campaign    String? // UTM campaign
+  gclid           String? // Google Click ID
+  source          String? // Freeform source name
+  conversion_name String? // Named conversion (e.g., form_submit)
+  contact_id      String // FK → Contact.id
+  contact         Contact  @relation(fields: [contact_id], references: [id], onDelete: Cascade) // Contact relation
 
-  @@index([user_id])
+  @@index([contact_id])
+  @@map("conversions")
 }
 
+model PaymentMethod {
+  id          String          @id @default(uuid()) // Primary key
+  created_at  DateTime        @default(now()) // Creation timestamp
+  updated_at  DateTime        @updatedAt // Update timestamp
+  provider    PaymentProvider // Payment provider (e.g., STRIPE)
+  external_id String          @unique // Provider PM id (e.g., Stripe PM_xxx)
+  brand       String? // Card brand (if card)
+  last4       String? // Last 4 digits (if card)
+  exp_month   Int? // Expiry month (if card)
+  exp_year    Int? // Expiry year (if card)
+  contact_id  String // FK → Contact.id
+  contact     Contact         @relation(fields: [contact_id], references: [id], onDelete: Cascade) // Owner contact
+
+  @@index([contact_id])
+  @@map("payment_methods")
+}
+
+// ---------- SALES: QUOTE → ORDER (SNAPSHOT) ----------
 model Quote {
-  quote_number        Int        @unique @default(autoincrement())
-  created_at          DateTime   @default(now())
-  updated_at          DateTime   @updatedAt
-  id                  String     @id @default(uuid())
-  selected_hours      Int?       @default(2)
-  selected_passengers Int        @default(1)
-  is_round_trip       Boolean    @default(false)
-  is_booked           Boolean    @default(false)
-  user_id             String
-  quote_total         Float
-  service_number      Int
-  vehicle_number      Int
-  reference_value     String?
-  sales_tax_number    Int        @default(1)
-  quote_subtotal      Float?
-  quote_tax_total     Float?
-  short_link          String?
-  combined_line_items Json?
-  pricing             Price[]
-  service             Service    @relation(fields: [service_number], references: [service_number], onDelete: Cascade)
-  vehicle             Vehicle    @relation(fields: [vehicle_number], references: [vehicle_number], onDelete: Cascade)
-  user                User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  sales_tax           SalesTax   @relation(fields: [sales_tax_number], references: [tax_number], onDelete: Cascade)
-  line_items          LineItem[]
-  trips               Trip[]
-  payment             Payment[]
+  id           String   @id @default(uuid()) // Primary key
+  quote_number Int      @unique @default(autoincrement()) // Human-friendly quote number
+  created_at   DateTime @default(now()) // Creation timestamp
+  updated_at   DateTime @updatedAt // Update timestamp
 
-  @@index([user_id])
+  contact_id String // FK → Contact.id
+  contact    Contact @relation(fields: [contact_id], references: [id], onDelete: Cascade) // Buyer
+
+  // Selected offering at quote time (enforce FKs)
+  service_id String // FK → ServiceClass.id
+  vehicle_id String // FK → VehicleClass.id
+  service    ServiceClass @relation(fields: [service_id], references: [id]) // Quoted service class
+  vehicle    VehicleClass @relation(fields: [vehicle_id], references: [id]) // Quoted vehicle class
+
+  sales_tax_number Int      @default(1) // FK → SalesTax.tax_number (region rule)
+  sales_tax        SalesTax @relation(fields: [sales_tax_number], references: [tax_number], onDelete: Cascade) // Tax rule snapshot ref
+
+  selected_hours      Int? @default(2) // Requested hours (if hourly)
+  selected_passengers Int  @default(1) // Requested passenger count
+
+  quote_subtotal  Decimal?    @db.Decimal(12, 2) // Cached subtotal (optional)
+  quote_tax_total Decimal?    @db.Decimal(12, 2) // Cached tax total (optional)
+  quote_total     Decimal     @db.Decimal(12, 2) // Cached grand total (authoritative at quote time)
+  short_link      String? // Public quote short link
+  reference_value String? // External reference (PO#, etc.)
+  status          QuoteStatus @default(DRAFT) // Quote lifecycle state
+
+  trips  Trip[] // One or more trips included in this quote
+  orders Order[] // Order generated from this quote (at most 1)
+  Price  Price[]
+
+  @@index([contact_id])
   @@index([sales_tax_number])
-  @@index([vehicle_number])
-  @@index([service_number])
+  @@map("quotes")
 }
 
+model Order {
+  id           String      @id @default(uuid()) // Primary key
+  created_at   DateTime    @default(now()) // Creation timestamp
+  updated_at   DateTime    @updatedAt // Update timestamp
+  quote_number Int         @unique // FK → Quote.quote_number (1:1)
+  quote        Quote       @relation(fields: [quote_number], references: [quote_number], onDelete: Cascade) // Source quote
+  status       OrderStatus @default(BOOKED) // Order lifecycle state
+  currency     String      @default("USD") // Currency for money fields
+  total_paid   Decimal     @default(0) @db.Decimal(12, 2) // Total captured/received
+
+  lines       OrderLine[] // Immutable snapshot lines (copied from PriceItem)
+  adjustments OrderAdjustment[] // Append-only adjustments (delta charges/refunds)
+
+  @@map("orders")
+}
+
+model OrderLine {
+  id              String      @id @default(uuid()) // Primary key
+  created_at      DateTime    @default(now()) // Creation timestamp
+  order_id        String // FK → Order.id
+  order           Order       @relation(fields: [order_id], references: [id], onDelete: Cascade) // Parent order
+  trip_id         String? // Optional mapping back to Trip
+  label           String // Line label at snapshot time
+  description     String? // Line description at snapshot time
+  scope           ChargeScope // Calc scope used at snapshot time
+  quantity        Decimal     @db.Decimal(10, 2) // Quantity at snapshot time
+  unit_amount     Decimal?    @db.Decimal(12, 2) // Unit amount at snapshot time
+  percent         Decimal?    @db.Decimal(7, 4) // Percent (0.1500 = 15%) at snapshot time
+  taxable         Boolean     @default(true) // Whether taxable at snapshot time
+  applies_to_base Boolean     @default(false) // Whether modifies base at snapshot time
+  tax_bps         Int         @default(0) // Applied tax in basis points (e.g., 1300 = 13%)
+  line_total      Decimal     @db.Decimal(12, 2) // Final computed amount of this line
+
+  @@index([order_id])
+  @@index([trip_id])
+  @@map("order_lines")
+}
+
+model OrderAdjustment {
+  id         String   @id @default(uuid()) // Primary key
+  created_at DateTime @default(now()) // Creation timestamp
+  order_id   String // FK → Order.id
+  order      Order    @relation(fields: [order_id], references: [id], onDelete: Cascade) // Parent order
+  trip_id    String? // Optional mapping back to Trip
+  reason     String // Reason (e.g., extra wait time)
+  amount     Decimal  @db.Decimal(12, 2) // Positive = charge, negative = refund
+  taxable    Boolean  @default(false) // Whether taxable
+  tax_bps    Int      @default(0) // Tax applied to this adjustment (bps)
+
+  @@index([order_id])
+  @@map("order_adjustments")
+}
+
+// ---------- OPERATIONS: TRIPS, PASSENGERS, LOCATIONS, PRICES ----------
 model Trip {
-  id                  String      @id @unique @default(uuid())
-  created_at          DateTime    @default(now())
-  updated_at          DateTime    @updatedAt()
-  pickup_date         String?
-  pickup_time         String?
-  distance_text       String?
-  duration_text       String?
-  duration_value      Int?
-  distance_value      Int?
-  calculated_distance Float?
-  quote_number        Int
-  service_label       String?
-  vehicle_label       String?
-  affiliate_payout    Float?
-  is_farmed_out       Boolean     @default(false)
-  is_return           Boolean     @default(false)
-  notes               String?
-  trip_order          Int?        @default(0)
-  price_id            String?
-  carry_on_luggage    Int?        @default(0)
-  large_luggage       Int?        @default(0)
-  meta_data           Json?
-  price               Price?
-  quote               Quote       @relation(fields: [quote_number], references: [quote_number], onDelete: Cascade)
-  payment             Payment?
-  locations           Location[]
-  flights             Flight[]
-  Driver              Driver?     @relation(fields: [driverId], references: [id])
-  driverId            String?
-  DriverPay           DriverPay[]
+  id         String   @id @default(uuid()) // Primary key
+  created_at DateTime @default(now()) // Creation timestamp
+  updated_at DateTime @updatedAt // Update timestamp
+
+  pickup_at        DateTime? // Scheduled pickup datetime
+  pickup_tz        String? // Pickup timezone (IANA)
+  distance_m       Int? // Estimated distance in meters
+  duration_s       Int? // Estimated duration in seconds
+  notes            String? // Operational notes
+  carry_on_luggage Int       @default(0) // Count of carry-on items
+  large_luggage    Int       @default(0) // Count of large luggage
+  trip_type        TripType  @default(IN_HOUSE) // In-house vs farmed-out
+
+  driver_id String? // FK → Driver.id (assigned driver)
+  driver    Driver? @relation(fields: [driver_id], references: [id]) // Driver relation
+
+  service_class_id String // FK → ServiceClass.id (selected service)
+  service_class    ServiceClass @relation(fields: [service_class_id], references: [id]) // Service relation
+  vehicle_class_id String // FK → VehicleClass.id (selected vehicle class)
+  vehicle_class    VehicleClass @relation(fields: [vehicle_class_id], references: [id]) // Vehicle relation
+
+  quote_number Int // FK → Quote.quote_number
+  quote        Quote @relation(fields: [quote_number], references: [quote_number], onDelete: Cascade) // Parent quote
+
+  status        TripState         @default(DRAFT) // Current trip state (operational)
+  status_events TripStatusEvent[] // Event history for state transitions
+
+  locations  Location[] // Ordered route points
+  flight     Flight? // Optional flight info
+  passengers TripPassenger[] // Booker/rider/greeter relations
+  price      Price? // 1:1 pricing calculator
+
+  DriverPay DriverPay[] // Driver payout records
 
   @@index([quote_number])
-  @@index([price_id])
-  @@index([driverId])
+  @@index([driver_id])
+  @@index([service_class_id])
+  @@index([vehicle_class_id])
+  @@map("trips")
+}
+
+model TripStatusEvent {
+  id         String    @id @default(uuid()) // Primary key
+  created_at DateTime  @default(now()) // Event timestamp
+  trip_id    String // FK → Trip.id
+  trip       Trip      @relation(fields: [trip_id], references: [id], onDelete: Cascade) // Trip relation
+  state      TripState // State value
+  label      String? // Optional human label (e.g., "Chauffeur en route")
+  sequence   Int       @default(0) // Optional monotonic sequence
+  set_by     String? // Who set the state (user id/system)
+  notes      String? // Event notes
+
+  @@index([trip_id, created_at])
+  @@map("trip_status_events")
+}
+
+model TripPassenger {
+  trip_id    String // FK → Trip.id
+  contact_id String // FK → Contact.id
+  role       TripPassengerRole @default(PASSENGER) // Role of contact in this trip
+  primary    Boolean           @default(false) // Is this the primary passenger?
+  notes      String? // Notes for this passenger
+  created_at DateTime          @default(now()) // Creation timestamp
+  updated_at DateTime          @updatedAt // Update timestamp
+
+  trip    Trip    @relation(fields: [trip_id], references: [id], onDelete: Cascade) // Trip relation
+  contact Contact @relation(fields: [contact_id], references: [id], onDelete: Cascade) // Contact relation
+
+  @@id([trip_id, contact_id])
+  @@index([contact_id])
+  @@map("trip_passengers")
+}
+
+enum TripPassengerRole {
+  PASSENGER
+  BOOKER
+  GREETER
 }
 
 model Location {
-  id                String   @id @default(uuid())
-  created_at        DateTime @default(now())
-  updated_at        DateTime @updatedAt
-  lat               Float
-  lng               Float
-  name              String
-  formatted_address String
-  full_name         String?
-  place_id          String
-  types             Json
-  is_origin         Boolean  @default(false)
-  is_destination    Boolean  @default(false)
-  is_waypoint       Boolean  @default(false)
-  trip_id           String
-  route_order       Int      @default(0)
-  trip              Trip     @relation(fields: [trip_id], references: [id], onDelete: Cascade)
+  id                String       @id @default(uuid()) // Primary key
+  created_at        DateTime     @default(now()) // Creation timestamp
+  updated_at        DateTime     @updatedAt // Update timestamp
+  lat               Float // Latitude
+  lng               Float // Longitude
+  name              String // Place name (e.g., "Bob's Burgers")
+  formatted_address String // Google formatted address
+  full_name         String? // Concatenated friendly name
+  place_id          String // Google Place ID (if available)
+  type              LocationType @default(ORIGIN) // Route role
+  trip_id           String // FK → Trip.id
+  route_order       Int          @default(0) // Sequence in route (0=first)
+  trip              Trip         @relation(fields: [trip_id], references: [id], onDelete: Cascade) // Trip relation
 
-  @@index([trip_id])
+  @@index([trip_id, route_order])
+  @@map("locations")
 }
 
 model Price {
-  id                  String   @id @unique @default(uuid())
-  created_at          DateTime @default(now())
-  updated_at          DateTime @updatedAt
-  line_items_list     Json?
-  line_items_subtotal Float?
-  line_items_tax      Float?
-  line_items_total    Float?
-  quote_number        Int?
-  trip_id             String   @unique
-  quote               Quote?   @relation(fields: [quote_number], references: [quote_number], onDelete: Cascade)
-  trip                Trip     @relation(fields: [trip_id], references: [id], onDelete: Cascade)
+  id           String    @id @default(uuid()) // Primary key
+  created_at   DateTime  @default(now()) // Creation timestamp
+  updated_at   DateTime  @updatedAt // Update timestamp
+  currency     String    @default("USD") // Currency for money fields
+  base_rate    Decimal?  @db.Decimal(12, 2) // Base rate before modifiers
+  subtotal     Decimal?  @db.Decimal(12, 2) // Subtotal (pre-tax)
+  tax_total    Decimal?  @db.Decimal(12, 2) // Total tax across items
+  total_amount Decimal?  @db.Decimal(12, 2) // Grand total for this trip
+  locked_at    DateTime? // Set when snapshot to Order occurs
+
+  quote_number Int? // Optional FK → Quote.quote_number (cache link)
+  quote        Quote? @relation(fields: [quote_number], references: [quote_number], onDelete: Cascade) // Quote relation (optional)
+
+  trip_id String @unique // FK → Trip.id (1:1)
+  trip    Trip   @relation(fields: [trip_id], references: [id], onDelete: Cascade) // Trip relation
+
+  items PriceItem[] // Mutable calculator line items
 
   @@index([quote_number])
+  @@map("prices")
 }
 
-model Payment {
-  id               String   @id @unique @default(uuid())
-  created_at       DateTime @default(now())
-  updated_at       DateTime @updatedAt
-  is_preauthorized Boolean  @default(false)
-  is_paid          Boolean  @default(false)
-  setup_intent     Json?
-  payment_intent   Json?
-  payment_type     String?
-  notes            String?
-  trip_id          String   @unique
-  quote_number     Int?
-  trip             Trip     @relation(fields: [trip_id], references: [id], onDelete: Cascade)
-  quote            Quote?   @relation(fields: [quote_number], references: [quote_number], onDelete: Cascade)
+model PriceItem {
+  id              String      @id @default(uuid()) // Primary key
+  created_at      DateTime    @default(now()) // Creation timestamp
+  updated_at      DateTime    @updatedAt // Update timestamp
+  price_id        String // FK → Price.id
+  price           Price       @relation(fields: [price_id], references: [id], onDelete: Cascade) // Parent price
+  label           String // Item label (e.g., "Base Fare")
+  description     String? // Item description/details
+  scope           ChargeScope // Calculation scope
+  quantity        Decimal     @default(1) @db.Decimal(10, 2) // Quantity (for per-unit items)
+  unit_amount     Decimal?    @db.Decimal(12, 2) // Unit amount (for fixed items)
+  percent         Decimal?    @db.Decimal(7, 4) // Percentage as decimal (0.1500 = 15%)
+  taxable         Boolean     @default(true) // Whether taxable
+  applies_to_base Boolean     @default(false) // Whether modifies base fare
+  total_amount    Decimal?    @db.Decimal(12, 2) // Computed total for this item
 
-  @@index([quote_number])
+  line_item_id String? // Optional FK → LineItem.id (catalog source)
+  line_item    LineItem? @relation(fields: [line_item_id], references: [id]) // Catalog reference
+
+  @@index([price_id])
+  @@map("price_items")
 }
 
-model Flight {
-  id                    String   @id @unique @default(uuid())
-  created_at            DateTime @default(now())
-  updated_at            DateTime @updatedAt
-  airline_code          String?
-  airline_name          String?
-  flight_number         String?
-  is_active             Boolean  @default(false)
-  is_landed             Boolean  @default(false)
-  is_arrived            Boolean  @default(false)
-  departure_time_actual String?
-  arrival_time_actual   String?
-  trip_id               String
-  airline_id            Int?
-  airport_id            Int?
-  departure_time        String?
-  arrival_time          String?
-  trip                  Trip     @relation(fields: [trip_id], references: [id], onDelete: Cascade)
+// ---------- CATALOGS: TAX, LINE ITEMS, SERVICES, VEHICLES ----------
+model SalesTax {
+  id         String    @id @default(uuid()) // Primary key
+  tax_number Int       @unique @default(autoincrement()) // Human-friendly tax number
+  created_at DateTime  @default(now()) // Creation timestamp
+  updated_at DateTime  @updatedAt // Update timestamp
+  tax_name   String // Tax name (e.g., HST)
+  bps        Int       @default(0) // Basis points (e.g., 1300 = 13.00%)
+  region     String // Region code (e.g., "ON")
+  status     Status    @default(ACTIVE) // Active/inactive flag
+  valid_from DateTime  @default(now()) // Rate valid-from date
+  valid_to   DateTime? // Rate valid-to date (nullable)
 
-  @@index([trip_id])
-}
+  quotes Quote[] // Quotes that reference this tax
 
-model Service {
-  id               String   @id @unique @default(uuid())
-  service_number   Int      @unique @default(autoincrement())
-  created_at       DateTime @default(now())
-  updated_at       DateTime @updatedAt
-  label            String
-  is_active        Boolean  @default(false)
-  is_hourly        Boolean  @default(false)
-  limo_anywhere_id Int?
-  quotes           Quote[]
+  @@map("sales_taxes")
 }
 
 model LineItem {
-  id            String   @id @unique @default(uuid())
-  item_number   Int      @unique
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
-  label         String
-  description   String?
-  is_percentage Boolean  @default(true)
-  is_taxable    Boolean  @default(true)
-  is_active     Boolean  @default(true)
-  amount        Float
-  applies_to    String?
-  quotes        Quote[]
+  id          String      @id @default(uuid()) // Primary key
+  item_number Int         @unique // Human-friendly item number
+  created_at  DateTime    @default(now()) // Creation timestamp
+  updated_at  DateTime    @updatedAt // Update timestamp
+  label       String // Catalog item label
+  description String? // Catalog item description
+  status      Status      @default(ACTIVE) // Active/inactive flag
+  scope       ChargeScope // Default calc scope for this catalog item
+  PriceItem   PriceItem[]
+
+  @@map("line_items")
 }
 
-model SalesTax {
-  id         String   @id @unique @default(uuid())
-  tax_number Int      @unique @default(autoincrement())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  tax_name   String
-  amount     Float
-  region     String
-  is_active  Boolean  @default(true)
-  quotes     Quote[]
+model ServiceClass {
+  id               String                      @id @default(uuid()) // Primary key
+  service_number   Int                         @unique @default(autoincrement()) // Human-friendly service number
+  created_at       DateTime                    @default(now()) // Creation timestamp
+  updated_at       DateTime                    @updatedAt // Update timestamp
+  label            String // Service label (e.g., "Airport Transfer")
+  status           Status                      @default(ACTIVE) // Active/inactive flag
+  billing_basis    BillingBasis                @default(DISTANCE) // Billing mode for this service
+  trips            Trip[] // Trips using this service
+  eligibleVehicles ServiceVehicleEligibility[] // Allowed vehicle classes for this service
+  Quote            Quote[]
+
+  @@map("service_classes")
 }
 
-model Vehicle {
-  id               String   @id @unique @default(uuid())
-  vehicle_number   Int      @unique @default(autoincrement())
-  created_at       DateTime @default(now())
-  updated_at       DateTime @updatedAt
-  max_passengers   Int      @default(0)
-  max_luggage      Int      @default(0)
-  per_km           Float    @default(0)
-  per_hour         Float    @default(0)
-  min_hours        Int      @default(0)
-  min_distance     Int      @default(0)
-  min_rate         Float    @default(0)
-  is_active        Boolean  @default(true)
-  label            String
-  limo_anywhere_id Int?
-  fasttrak_id      Int?
-  vehicle_image    String?
-  quotes           Quote[]
+model VehicleClass {
+  id              String                      @id @default(uuid()) // Primary key
+  vehicle_number  Int                         @unique @default(autoincrement()) // Human-friendly vehicle class number
+  created_at      DateTime                    @default(now()) // Creation timestamp
+  updated_at      DateTime                    @updatedAt // Update timestamp
+  label           String // Vehicle class label (e.g., "Luxury SUV")
+  max_passengers  Int                         @default(0) // Max passengers
+  max_luggage     Int                         @default(0) // Max luggage
+  per_km_or_mile  Decimal                     @default(0) @db.Decimal(12, 2) // Distance rate
+  per_hour        Decimal                     @default(0) @db.Decimal(12, 2) // Hourly rate
+  min_hours       Int                         @default(0) // Minimum billable hours
+  min_distance    Int                         @default(0) // Minimum billable distance (unit per distance_unit)
+  min_rate        Decimal                     @default(0) @db.Decimal(12, 2) // Minimum fare
+  status          Status                      @default(ACTIVE) // Active/inactive flag
+  vehicle_image   String? // Representative image URL
+  distance_unit   DistanceUnit                @default(KM) // Unit used for per-distance rates
+  trips           Trip[] // Trips using this vehicle class
+  service_classes ServiceVehicleEligibility[] // Services this class qualifies for
+
+  Quote Quote[]
+
+  @@map("vehicle_classes")
 }
 
-model LineItemToQuote {
-  A String
-  B Int
+model ServiceVehicleEligibility {
+  service_id String // FK → ServiceClass.id
+  vehicle_id String // FK → VehicleClass.id
+  service    ServiceClass @relation(fields: [service_id], references: [id], onDelete: Cascade) // Service relation
+  vehicle    VehicleClass @relation(fields: [vehicle_id], references: [id], onDelete: Cascade) // Vehicle relation
 
-  @@unique([A, B], map: "_LineItemToQuote_AB_unique")
-  @@index([B], map: "_LineItemToQuote_B_index")
-  @@map("_LineItemToQuote")
+  @@id([service_id, vehicle_id])
+  @@map("service_vehicle_eligibilities")
 }
 
-model Fasttrak {
-  id           Int      @id @unique @default(autoincrement())
-  created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
-  reservations Json
+// ---------- FLIGHTS ----------
+model Flight {
+  id                     String       @id @default(uuid()) // Primary key
+  created_at             DateTime     @default(now()) // Creation timestamp
+  updated_at             DateTime     @updatedAt // Update timestamp
+  carrier_iata           String? // Airline IATA code (e.g., "AC")
+  carrier_name           String? // Airline name (e.g., "Air Canada")
+  flight_number          String? // Flight number (e.g., "AC123")
+  status                 FlightStatus @default(SCHEDULED) // Flight status
+  departure_scheduled    DateTime? // Scheduled departure time
+  arrival_scheduled      DateTime? // Scheduled arrival time
+  departure_actual       DateTime? // Actual departure time
+  arrival_actual         DateTime? // Actual arrival time
+  departure_airport_iata String? // Departure airport IATA (e.g., "YYZ")
+  arrival_airport_iata   String? // Arrival airport IATA (e.g., "LAX")
+  trip_id                String       @unique // FK → Trip.id (1:1)
+  trip                   Trip         @relation(fields: [trip_id], references: [id], onDelete: Cascade) // Trip relation
+
+  @@index([trip_id])
+  @@map("flights")
 }
 
-model LAOrders {
-  created_at                            DateTime @default(now())
-  conf_num                              Int      @id @unique @default(autoincrement())
-  type                                  String?
-  pu_date                               String?
-  pu_time                               String?
-  do_time                               String?
-  duration                              String?
-  account_num                           Int?
-  agent_first_name                      String?
-  agent_last_name                       String?
-  alias                                 String?
-  o_res_alias                           String?
-  affiliate_first_name                  String?
-  affiliate_last_name                   String?
-  billing_contact                       String?
-  booking_contact                       String?
-  passenger_first_name                  String?
-  passenger_last_name                   String?
-  passenger_email                       String?
-  ref_num                               String?
-  company                               String?
-  routing_details                       String?
-  pax_num                               Float?
-  driver                                String?
-  car                                   String?
-  vehicle_type                          String?
-  service_type                          String?
-  res_by                                String?
-  date_time_created                     String?
-  status                                String?
-  pmt_method                            String?
-  pmt_status                            String?
-  payments_deposits_excluding_auth_only Float?
-  pre_authorizations_auth_only          Float?
-  flat_rate                             Float?
-  misc_fee                              Float?
-  wait_time                             Float?
-  per_hour                              Float?
-  per_unit                              Float?
-  base_rate                             Float?
-  cleaning_fee                          Float?
-  extra_hrs                             Int?
-  extra_stops                           Int?
-  reimbursement_for_supplies            Float?
-  fuel_surcharge                        Float?
-  meet_and_greet                        Float?
-  parking                               Float?
-  gratuity                              Float?
-  admin_fee                             Float?
-  ETR                                   Float?
-  airport_tol                           Float?
-  toll_charge                           Float?
-  discount                              Float?
-  per_pass                              Float?
-  tax                                   Float?
-  flat                                  Float?
-  trip_total                            Float?
-  payment_date                          String?
-  pu_date_and_time                      String?
-  payment_method                        String?
-  transaction_type                      String?
-  other                                 String?
-  payment_id                            String?
-  notes                                 String?
-  amount                                String?
+// ---------- DRIVERS & PAY ----------
+model Driver {
+  id            String      @id @default(uuid()) // Primary key
+  created_at    DateTime    @default(now()) // Creation timestamp
+  updated_at    DateTime    @updatedAt // Update timestamp
+  display_name  String? // Public display name
+  employee_id   Int? // Internal employee number
+  is_inactive   Boolean     @default(false) // Inactive flag
+  company       String? // Company name (if affiliate)
+  first_name    String // Driver first name
+  last_name     String // Driver last name
+  email_address String // Driver email (not unique)
+  phone_number  String // Driver phone (not unique)
+  notes         String? // Driver notes
+  balance_owed  Decimal     @default(0) @db.Decimal(12, 2) // Current balance owed to driver
+  trips         Trip[] // Trips assigned to driver
+  payments      DriverPay[] // Payouts to driver
+
+  @@map("drivers")
+}
+
+model DriverPay {
+  id         String   @id @default(uuid()) // Primary key
+  created_at DateTime @default(now()) // Creation timestamp
+  updated_at DateTime @updatedAt // Update timestamp
+  driverId   String // FK → Driver.id
+  tripId     String // FK → Trip.id
+  amount     Decimal  @db.Decimal(12, 2) // Amount payable for this trip
+  is_paid    Boolean  @default(false) // Paid flag
+  driver     Driver   @relation(fields: [driverId], references: [id]) // Driver relation
+  trip       Trip     @relation(fields: [tripId], references: [id]) // Trip relation
+
+  @@unique([driverId, tripId])
+  @@index([tripId])
+  @@index([driverId])
+  @@map("driver_pays")
+}
+
+// ---------- AFFILIATES ----------
+model Affiliate {
+  id            String   @id @default(uuid()) // Primary key
+  created_at    DateTime @default(now()) // Creation timestamp
+  updated_at    DateTime @updatedAt // Update timestamp
+  name          String // Affiliate name
+  email_address String // Affiliate email
+  phone_number  String // Affiliate phone
+  address       String? // Address
+  notes         String? // Notes
+  is_driver     Boolean  @default(false) // Whether this affiliate is also a driver
+
+  @@map("affiliates")
 }

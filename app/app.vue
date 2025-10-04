@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useUserStore } from './stores/useUserStore'
+import { useUserStore } from '~/stores/useUserStore'
 import { useStorage } from '@vueuse/core'
-import { useDataStore } from '~/app/stores/useDataStore'
+import { useDataStore } from '~/stores/useDataStore'
 
 useHead({
   meta: [
@@ -39,16 +39,18 @@ await callOnce(async () => {
 </script>
 
 <template>
-  <naive-config>
-    <n-loading-bar-provider>
-      <naive-loading-bar navigation />
-      <n-message-provider>
-        <NuxtLayout>
-          <NuxtPage />
-        </NuxtLayout>
-      </n-message-provider>
-    </n-loading-bar-provider>
-  </naive-config>
+  <div>
+    <naive-config>
+      <n-loading-bar-provider>
+        <naive-loading-bar navigation />
+        <n-message-provider>
+          <NuxtLayout>
+            <NuxtPage />
+          </NuxtLayout>
+        </n-message-provider>
+      </n-loading-bar-provider>
+    </naive-config>
+  </div>
 </template>
 
 <style>

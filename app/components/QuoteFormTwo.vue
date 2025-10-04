@@ -1,18 +1,18 @@
 <script lang="ts" setup>
 import { useMessage, useLoadingBar } from 'naive-ui'
 import { VueTelInput } from 'vue-tel-input'
-import { useUserStore } from '~/app/stores/useUserStore'
-import { useQuoteStore } from '~/app/stores/useQuoteStore'
+import { useUserStore } from '~/stores/useUserStore'
+import { useQuoteStore } from '~/stores/useQuoteStore'
 import { storeToRefs } from 'pinia'
 import { useGtm } from '@gtm-support/vue-gtm'
 import { ref } from '#imports'
 import type { FormValue } from '~/utils/formUtils'
-import type { Place } from '~/shared/schemas'
+import type { Place } from '~~/shared/schemas'
 import type { ComputedRef, Ref, WatchCallback } from 'vue'
 import type { FormInst, FormRules, SelectOption } from 'naive-ui'
-import type { Service, Vehicle } from '~/shared/schemas'
-import type { QuoteForm } from '~/shared/schemas'
-import { useDataStore } from '~/app/stores/useDataStore'
+import type { Service, Vehicle } from '~~/shared/schemas'
+import type { QuoteForm } from '~~/shared/schemas'
+import { useDataStore } from '~/stores/useDataStore'
 
 const formRef = ref<FormInst | null>(null)
 const loading: Ref<boolean> = ref(false)

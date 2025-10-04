@@ -1,5 +1,5 @@
 import { Prisma, PrismaClient } from '@prisma/client'
-import type { QuoteFormReturn } from '~/shared/schemas'
+import type { QuoteFormReturn } from '~~/shared/schemas'
 
 export async function updateShortLink(
   prisma: PrismaClient,

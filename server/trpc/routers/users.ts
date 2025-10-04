@@ -1,6 +1,6 @@
 import { router, publicProcedure } from '../trpc'
 import { z } from 'zod'
-import { ContactFormSchema } from '~/shared/schemas'
+import { ContactFormSchema } from '~~/shared/schemas'
 import { consola } from 'consola'
 import chalk from 'chalk'
 

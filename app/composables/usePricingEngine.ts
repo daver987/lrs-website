@@ -6,7 +6,7 @@ import {
   DirectionsSchema,
   type DirectionsApiResponse,
   LineItemSchema,
-} from '~/shared/schemas'
+} from '~~/shared/schemas'
 
 /**
  * ----------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { services } from '~/app/data/services'
-import { ourTours } from '~/app/data/tours'
+import { services } from '~/data/services'
+import { ourTours } from '~/data/tours'
 import { useImageFallback } from '~/composables/useImageFallback'
 
 definePageMeta({

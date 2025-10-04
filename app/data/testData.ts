@@ -1,4 +1,4 @@
-import { publicProcedure, router } from '~/server/trpc/trpc'
+import { publicProcedure, router } from '~~/server/trpc/trpc'
 
 interface LineItem {
   label: string

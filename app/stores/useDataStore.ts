@@ -1,5 +1,5 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import type { Vehicle, Service, LineItem, SalesTax } from '~/shared/schemas'
+import type { Vehicle, Service, LineItem, SalesTax } from '~~/shared/schemas'
 
 export const useDataStore = defineStore('data', {
   state: () => {

@@ -2,7 +2,7 @@
 import { buildLuggageOptions } from '~/composables/useBuildOptions'
 import type { FormRules } from 'naive-ui'
 import type { Ref } from 'vue'
-import { useStripeStore } from '~/app/stores/useStripeStore'
+import { useStripeStore } from '~/stores/useStripeStore'
 
 // definePageMeta({
 //   middleware: 'quotecheck',

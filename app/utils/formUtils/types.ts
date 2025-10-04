@@ -1,6 +1,6 @@
-import type { Place } from '~/shared/schemas'
+import type { Place } from '~~/shared/schemas'
 
-import type { LineItem, SalesTax, Service, Vehicle } from '~/shared/schemas'
+import type { LineItem, SalesTax, Service, Vehicle } from '~~/shared/schemas'
 
 export interface FormValue {
   id: string

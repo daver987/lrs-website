@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { servicesHome } from '~/app/data/servicesHome'
-import { features } from '~/app/data/features'
+import { servicesHome } from '~/data/servicesHome'
+import { features } from '~/data/features'
+import { consola } from 'consola'
 
 definePageMeta({
   name: 'Home',
@@ -34,6 +35,11 @@ const backgroundImage = ref(appConfig.brand.assets.images.heroBackground)
 const fleetBackgroundImage = ref(appConfig.brand.assets.images.fleetBackground)
 const bgImg = useBackgroundImage(backgroundImage)
 const fleetBackgroundImg = useBackgroundImage(fleetBackgroundImage)
+
+const user = useDirectusUser()
+if (!user) {
+  consola.log('no-user', JSON.stringify(user))
+}
 </script>
 
 <template>
@@ -86,6 +92,8 @@ const fleetBackgroundImg = useBackgroundImage(fleetBackgroundImage)
         />
       </div>
     </BaseSection>
+    <h1>{{ global?.title }}</h1>
+    <p>{{ global?.description }}</p>
     <BaseSection
       class="bg-black/50 bg-cover bg-center bg-no-repeat pt-10 bg-blend-hard-light"
       :style="fleetBackgroundImg"
