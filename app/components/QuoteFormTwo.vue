@@ -618,12 +618,13 @@ function disablePreviousDate(ts: number) {
           </n-grid>
           <n-button
             :loading="loading"
-            color="#b91c1c"
+            color="white"
             size="large"
             style="
               width: 100%;
               text-transform: uppercase;
               background-color: #b91c1c;
+              color: #fff;
             "
             @click="handleValidateButtonClick"
             >Get Prices & Availability

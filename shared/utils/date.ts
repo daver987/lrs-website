@@ -5,8 +5,8 @@ export function parseTimeString(timeStr: string) {
   const hoursMatch = timeStr.match(hoursRegex)
   const minsMatch = timeStr.match(minsRegex)
 
-  const hours = hoursMatch ? parseInt(hoursMatch[1], 10) : 0
-  const minutes = minsMatch ? parseInt(minsMatch[1], 10) : 0
+  const hours = hoursMatch ? parseInt(hoursMatch[1] as string, 10) : 0
+  const minutes = minsMatch ? parseInt(minsMatch[1] as string, 10) : 0
 
   return { hours, minutes }
 }
@@ -40,11 +40,15 @@ function parseMonth(monthStr: string) {
   return index === -1 ? null : index + 1
 }
 
-export function parseDateTime(dateStr: string, timeStr: string): DateAndTime {
+export function parseDateTime(
+  dateStr: string,
+  timeStr: string
+): DateAndTime | null {
   const dateParts = dateStr.split(' ')
-  const year = parseInt(dateParts[2], 10)
-  const month = parseMonth(dateParts[0]) as number
-  const day = parseInt(dateParts[1].slice(0, -1), 10)
+  if (!dateParts && timeStr) return null
+  const year = parseInt(dateParts[2] as string, 10)
+  const month = parseMonth(dateParts[0] as string)
+  const day = parseInt(dateParts[1]?.slice(0, -1) as string, 10)
 
   const timeParts = timeStr.split(':')
   const hours = parseInt(timeParts[0], 10)

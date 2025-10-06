@@ -67,7 +67,7 @@
     "html2canvas": "^1.4.1",
     "html2pdf.js": "^0.10.3",
     "ics": "^3.8.1",
-    "nuxt": "^4.0.3",
+    "nuxt": "^4.1.2",
     "nuxt-directus": "5.7.0",
     "openai": "^5.12.2",
     "pinia": "^3.0.3",

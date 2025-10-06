@@ -20,7 +20,7 @@ const headerInfo = {
   aboveHeading: `DISCOVER ${appConfig.brand.name}`,
   heading: 'ABOUT US',
   body: `${appConfig.brand.name} is here to help you get from place to place. It's our job to provide you with the means of transportation, and we won't stop until it's done right.`,
-  image: '/images/gradient-background.svg',
+  image: '/images/toronto-9.jpg',
 }
 const { onImgError } = useImageFallback()
 const qualities = [
@@ -57,7 +57,7 @@ const qualities = [
       :aboveHeading="headerInfo.aboveHeading"
       :body="headerInfo.body"
       :heading="headerInfo.heading"
-      :image="headerInfo.image"
+      image="/images/toronto-9.jpg"
     />
     <BaseSection class="md:-mt-16">
       <BaseContainer class="md:grid md:grid-cols-2">

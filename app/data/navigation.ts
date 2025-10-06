@@ -31,14 +31,6 @@ export const navigation = <NavigationItem[]>[
     href: '/contact',
     id: 5,
   },
-  {
-    name: 'Reservations',
-    href: '/reservations',
-    id: 5,
-  },
-  {
-    name: 'FAQ',
-    href: '/faq',
-    id: 6,
-  },
 ]
+
+// Note: Reservations and FAQ links can be re-added once booking features return.

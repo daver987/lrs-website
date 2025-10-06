@@ -26,6 +26,16 @@ const props = defineProps({
     required: false,
     default: undefined,
   },
+  overlayOpacity: {
+    type: Number,
+    required: false,
+    default: 0.65,
+  },
+  maxWidthClass: {
+    type: String,
+    required: false,
+    default: 'max-w-6xl',
+  },
 })
 
 const appConfig = useAppConfig()
@@ -38,14 +48,10 @@ const displayEmail = computed(
 const phoneHref = computed(
   () => `tel:${appConfig.brand?.contact?.phoneE164 || displayPhone.value}`
 )
-const backgroundImage = computed(() => {
-  const imgUrl = '/images/gradient-background.svg'
-  return { backgroundImage: `url('${imgUrl}')` }
-})
-const headerImage = computed(() => {
-  const imgUrl = props.image as string
-  return { backgroundImage: `url('${imgUrl}')` }
-})
+const backgroundImage = computed(() => ({
+  backgroundImage: "url('/images/gradient-background.svg')",
+}))
+const headerImage = computed(() => props.image || '')
 </script>
 
 <template>
@@ -54,46 +60,83 @@ const headerImage = computed(() => {
     :style="backgroundImage"
   >
     <AppNavigation />
-    <BaseContainer class="relative mt-20 grid grid-cols-1 md:grid-cols-2">
-      <div
-        class="relative bg-black bg-opacity-60 bg-cover bg-center bg-no-repeat py-32 bg-blend-darken md:col-span-2 md:px-10"
-        :style="headerImage"
-      >
-        <div class="space-y-4 text-center md:text-left">
-          <p
-            class="text-center font-brand-subheading text-sm uppercase leading-relaxed tracking-widest text-brand md:text-left md:text-base"
+
+    <BaseContainer class="relative mt-20">
+      <div class="relative flex justify-center">
+        <div
+          class="pointer-events-auto absolute left-0 top-1/2 hidden min-w-[160px] -translate-x-1/2 -translate-y-1/2 -rotate-90 md:flex md:justify-between"
+        >
+          <NuxtLink
+            class="inline-flex items-center gap-2 font-brand-body text-sm uppercase tracking-widest text-neutral-200"
+            :href="phoneHref"
           >
-            {{ aboveHeading }}
-          </p>
-          <h1
-            class="text-center font-brand-heading text-4xl uppercase leading-tight text-neutral-200 md:text-left lg:text-5xl"
+            <span class="text-brand">CALL :</span>
+            <span>{{ displayPhone }}</span>
+          </NuxtLink>
+        </div>
+
+        <div
+          class="pointer-events-auto absolute right-0 top-1/2 hidden min-w-[200px] translate-x-1/2 -translate-y-1/2 rotate-90 md:flex md:justify-between"
+        >
+          <NuxtLink
+            class="inline-flex items-center gap-2 font-brand-body text-sm uppercase tracking-widest text-neutral-200"
+            :href="`mailto:${displayEmail}`"
           >
-            {{ heading }}
-          </h1>
-          <p
-            class="mx-auto max-w-xs font-brand-body text-neutral-400 md:m-0 md:text-left"
-          >
-            {{ body }}
-          </p>
+            <span class="text-brand">EMAIL :</span>
+            <span>{{ displayEmail }}</span>
+          </NuxtLink>
+        </div>
+
+        <div :class="['relative w-full', maxWidthClass]">
           <div
-            class="bottom-1/2 tracking-wide md:absolute md:-left-20 md:-rotate-90 md:transform"
+            class="relative w-full overflow-hidden border border-neutral-800"
           >
-            <NuxtLink
-              class="text-center font-brand-body text-sm text-neutral-200"
-              :href="phoneHref"
-              ><span class="text-brand">CALL :</span>
-              {{ displayPhone }}
-            </NuxtLink>
-          </div>
-          <div
-            class="bottom-1/2 my-1 md:absolute md:-right-36 md:rotate-90 md:transform"
-          >
-            <NuxtLink
-              class="text-center font-brand-body text-sm uppercase tracking-wide text-neutral-200"
-              :href="`mailto:${displayEmail}`"
-              ><span class="text-brand">EMAIL :</span>
-              {{ displayEmail }}
-            </NuxtLink>
+            <div class="relative aspect-[4/3] md:aspect-[21/9]">
+              <img
+                class="absolute inset-0 h-full w-full object-cover"
+                v-if="headerImage"
+                :src="headerImage"
+                alt="Header visual"
+              />
+              <div
+                class="absolute inset-0 bg-black"
+                :style="{ opacity: overlayOpacity }"
+              />
+              <div
+                class="relative flex h-full flex-col items-center justify-center gap-6 px-6 py-16 text-center md:items-start md:px-12 md:text-left"
+              >
+                <p
+                  class="font-brand-subheading text-sm uppercase leading-relaxed tracking-widest text-brand md:text-base"
+                >
+                  {{ aboveHeading }}
+                </p>
+                <h1
+                  class="font-brand-heading text-4xl uppercase leading-tight text-neutral-200 lg:text-5xl"
+                >
+                  {{ heading }}
+                </h1>
+                <p class="max-w-xl font-brand-body text-neutral-400">
+                  {{ body }}
+                </p>
+
+                <div class="flex flex-col items-center gap-2 md:hidden">
+                  <NuxtLink
+                    class="font-brand-body text-sm uppercase tracking-widest text-neutral-200"
+                    :href="phoneHref"
+                  >
+                    <span class="text-brand">CALL :</span>
+                    <span class="ml-1">{{ displayPhone }}</span>
+                  </NuxtLink>
+                  <NuxtLink
+                    class="font-brand-body text-sm uppercase tracking-widest text-neutral-200"
+                    :href="`mailto:${displayEmail}`"
+                  >
+                    <span class="text-brand">EMAIL :</span>
+                    <span class="ml-1">{{ displayEmail }}</span>
+                  </NuxtLink>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

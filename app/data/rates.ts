@@ -1,5 +1,4 @@
 import type { Service } from '~~/shared/schemas'
-import type { Rates, Surcharges } from '~~/shared/types'
 
 const rates = [
   {
@@ -50,13 +49,13 @@ const rates = [
     vehicle_image_alt: 'Premium SUV',
     vehicle_image_src: '/images/cadillac-xts-1.png',
   },
-] as Rates[]
+]
 
 const surcharges = {
   fuelSurcharge: 0.08,
   gratuity: 0.2,
   HST: 0.13,
-} as Surcharges
+}
 
 const services = [
   {
@@ -83,7 +82,7 @@ const services = [
     is_active: true,
     is_hourly: true,
   },
-] as Service[]
+]
 
 
 export { rates, surcharges }

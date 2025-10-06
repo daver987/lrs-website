@@ -1,19 +1,19 @@
 export default defineAppConfig({
   brand: {
-    slug: 'hpl',
-    name: 'High Park Livery',
-    legalName: 'High Park Livery Inc.',
-    domain: 'https://highparklivery.com',
+    slug: 'lrs',
+    name: 'Luxury Ride Service',
+    legalName: 'Luxury Ride Service',
+    domain: 'https://luxuryrideservice.com',
     contact: {
-      email: 'info@highparklivery.com',
-      phoneE164: '+16473609631',
-      phoneDisplay: '647.360.9631',
+      email: 'booking@luxuryrideservice.com',
+      phoneE164: '+16479942424',
+      phoneDisplay: '647.994.2424',
     },
-    orderPrefix: 'HPL',
+    orderPrefix: 'LRS',
     assets: {
       logo: {
-        light: '/images/HPL-Logo-White.png',
-        dark: '/images/hpl-logo-dark.png',
+        light: '/images/Luxury-Ride-Service-Logo.png',
+        dark: '/images/Luxury-Ride-Service-Logo.png',
       },
       favicon: '/favicon.ico',
       images: {
@@ -22,11 +22,11 @@ export default defineAppConfig({
       },
     },
     seo: {
-      title: 'High Park Livery - Premium Black Car Service in Greater Toronto',
+      title: 'Luxury Ride Service - Premium Chauffeured Transportation',
       description:
-        'High Park Livery offers top-quality black car services in the Greater Toronto Area. Book a ride for airport transfers, corporate travel, or special events.',
-      ogImage: '/images/HPL-Logo-White.png',
-      twitterImage: '/images/HPL-Logo-White.png',
+        'Luxury Ride Service delivers elevated black car and chauffeur experiences for airport transfers, corporate travel, and special occasions across the Greater Toronto and Hamilton Area.',
+      ogImage: '/images/Luxury-Ride-Service-Logo.png',
+      twitterImage: '/images/Luxury-Ride-Service-Logo.png',
     },
     ui: {
       colors: {
@@ -44,5 +44,9 @@ export default defineAppConfig({
         },
       },
     },
+  },
+  features: {
+    ecommerceEnabled: false,
+    useMockCatalog: true,
   },
 })

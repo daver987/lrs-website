@@ -25,13 +25,16 @@ const logoSrc = computed(
   () =>
     props.src ||
     appConfig.brand?.assets?.logo?.light ||
-    '/images/HPL-Logo-White.png'
+    '/images/Luxury-Ride-Service-Logo.png'
 )
 
 const nav = navigation as NavigationItem[]
 
 const open = ref(false)
 const { onImgError } = useImageFallback()
+const ecommerceEnabled = computed(
+  () => appConfig.features?.ecommerceEnabled ?? true
+)
 </script>
 
 <template>
@@ -46,73 +49,88 @@ const { onImgError } = useImageFallback()
         leave-from="opacity-100"
         leave-to="opacity-0"
       >
-        <div class="fixed inset-0 bg-black bg-opacity-25" />
+        <div class="fixed inset-0 bg-neutral-900/90 backdrop-blur-sm" />
       </TransitionChild>
 
-      <div class="fixed inset-0 z-40 flex">
+      <div class="fixed inset-0 z-40 flex justify-end">
         <TransitionChild
           as="template"
-          enter="transition ease-in-out duration-300 transform"
-          enter-from="-translate-x-full"
+          enter="transition-transform duration-300 ease-out"
+          enter-from="translate-x-full"
           enter-to="translate-x-0"
-          leave="transition ease-in-out duration-300 transform"
+          leave="transition-transform duration-200 ease-in"
           leave-from="translate-x-0"
-          leave-to="-translate-x-full"
+          leave-to="translate-x-full"
         >
           <DialogPanel
-            class="relative flex w-full max-w-xs flex-col overflow-y-auto bg-white pb-12 shadow-xl"
+            class="relative flex h-full w-full max-w-sm flex-col overflow-y-auto bg-gradient-to-b from-neutral-950/95 via-neutral-900/90 to-neutral-950/95 pb-10 shadow-xl"
           >
-            <div class="flex px-4 pb-2 pt-5">
+            <div class="flex items-center justify-between px-4 pb-4 pt-6">
+              <NuxtLink
+                class="flex items-center gap-2"
+                to="/"
+                @click="open = false"
+              >
+                <span class="sr-only">{{ appConfig.brand?.name }}</span>
+                <img
+                  class="h-10 w-auto"
+                  :src="logoSrc"
+                  :alt="`${appConfig.brand?.name} Logo`"
+                  width="1920"
+                  @error="onImgError"
+                />
+              </NuxtLink>
               <button
-                class="-m-2 inline-flex items-center justify-center rounded-md p-2 text-neutral-400"
+                class="inline-flex items-center justify-center rounded-md p-2 text-neutral-400 hover:text-brand"
                 type="button"
                 @click="open = false"
               >
                 <span class="sr-only">Close menu</span>
-                <Icon
-                  class="h-6 w-6"
-                  name="heroicons:x-mark"
-                  aria-hidden="true"
-                />
+                <Icon size="28" name="heroicons:x-mark" aria-hidden="true" />
               </button>
             </div>
 
-            <div class="space-y-6 border-t border-neutral-200 px-4 py-6">
+            <nav class="flex flex-1 flex-col gap-3 px-4">
               <template v-for="page in nav" :key="page.id">
-                <div class="flow-root">
-                  <NuxtLink
-                    class="-m-2 block p-2 font-medium capitalize"
-                    exact-active-class="dark:text-brand dark:hover:text-brand-600"
-                    :to="page.href"
-                    >{{ page.name }}
-                  </NuxtLink>
-                </div>
+                <NuxtLink
+                  class="block rounded-md border border-neutral-800/60 bg-neutral-900/60 px-4 py-3 text-base font-medium uppercase tracking-wide text-neutral-100 transition hover:border-brand/60 hover:bg-neutral-800/70"
+                  exact-active-class="border-brand/70 bg-brand/20 text-brand"
+                  :to="page.href"
+                  @click="open = false"
+                  >{{ page.name }}</NuxtLink
+                >
               </template>
+            </nav>
+
+            <div
+              class="space-y-4 border-t border-neutral-800/70 px-4 py-6"
+              v-if="ecommerceEnabled"
+            >
+              <NuxtLink
+                class="block rounded-md border border-neutral-800/60 bg-neutral-900/60 px-4 py-3 text-center font-brand-body text-sm font-medium uppercase tracking-wide text-neutral-100 transition hover:border-brand/60 hover:bg-neutral-800/70"
+                exact-active-class="border-brand/70 bg-brand/20 text-brand"
+                to="/signin"
+                @click="open = false"
+                >Sign in</NuxtLink
+              >
+              <NuxtLink
+                class="block rounded-md border border-neutral-800/60 bg-neutral-900/60 px-4 py-3 text-center font-brand-body text-sm font-medium uppercase tracking-wide text-neutral-100 transition hover:border-brand/60 hover:bg-neutral-800/70"
+                exact-active-class="border-brand/70 bg-brand/20 text-brand"
+                to="/signup"
+                @click="open = false"
+                >Create account</NuxtLink
+              >
             </div>
 
-            <div class="space-y-6 border-t border-neutral-200 px-4 py-6">
-              <div class="flow-root">
-                <NuxtLink
-                  class="-m-2 block p-2 font-brand-body font-medium text-neutral-900"
-                  exact-active-class="text-brand hover:text-brand-600"
-                  to="/signin"
-                  >Sign in</NuxtLink
-                >
-              </div>
-              <div class="flow-root">
-                <NuxtLink
-                  class="-m-2 block p-2 font-brand-body font-medium text-neutral-900"
-                  exact-active-class="text-brand hover:text-brand-600"
-                  to="/signup"
-                  >Create account</NuxtLink
-                >
-              </div>
-            </div>
-
-            <div class="border-t border-neutral-200 px-4 py-6">
-              <NuxtLink class="-m-2 flex items-center p-2">
+            <div
+              class="border-t border-neutral-800/70 px-4 py-6"
+              v-if="ecommerceEnabled"
+            >
+              <NuxtLink
+                class="flex items-center gap-3 rounded-md border border-neutral-800/60 bg-neutral-900/60 px-4 py-3 text-neutral-100 hover:border-brand/60 hover:bg-neutral-800/70"
+              >
                 <img
-                  class="shrink-0 block w-5 h-auto"
+                  class="h-5 w-5"
                   src="https://tailwindui.com/img/flags/flag-canada.svg"
                   alt="Canada flag"
                 />
@@ -146,7 +164,7 @@ const { onImgError } = useImageFallback()
             <NuxtLink class="self-center" to="/">
               <span class="sr-only">{{ appConfig.brand?.name }}</span>
               <img
-                class="h-12 w-auto lg:h-14"
+                class="h-12 w-auto"
                 :src="logoSrc"
                 :alt="`${appConfig.brand?.name} Logo`"
                 width="1920"
@@ -174,6 +192,7 @@ const { onImgError } = useImageFallback()
           <div class="ml-auto flex items-center">
             <div
               class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6"
+              v-if="ecommerceEnabled"
             >
               <NuxtLink
                 class="font-brand-body text-sm font-medium capitalize text-neutral-200 hover:text-brand"
@@ -192,7 +211,7 @@ const { onImgError } = useImageFallback()
               >
             </div>
 
-            <div class="hidden lg:ml-8 lg:flex">
+            <div class="hidden lg:ml-8 lg:flex" v-if="ecommerceEnabled">
               <div
                 class="flex items-center text-neutral-500 hover:text-brand dark:text-neutral-100"
               >
@@ -201,7 +220,7 @@ const { onImgError } = useImageFallback()
                 <span class="sr-only">, change currency</span>
               </div>
             </div>
-            <div class="ml-4 flow-root lg:ml-6">
+            <div class="ml-4 flow-root lg:ml-6" v-if="ecommerceEnabled">
               <MiniCart />
             </div>
           </div>

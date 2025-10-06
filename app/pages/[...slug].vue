@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-const route = useRoute().params.slug[0]
+const route = useRoute().params.slug![0]
 const appConfig = useAppConfig()
 const { decode } = useLinkShortener(appConfig.brand?.domain || '')
 const quoteNumber = decode(route)

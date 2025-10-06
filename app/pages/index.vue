@@ -16,8 +16,8 @@ useHead({
   link: [
     {
       rel: 'icon',
-      type: 'image/png',
-      href: '/favicon.png',
+      type: 'image/x-icon',
+      href: '/favicon.ico',
     },
   ],
   meta: [
@@ -43,7 +43,7 @@ if (!user) {
 </script>
 
 <template>
-  <div>
+  <div class="min-h-dvh">
     <div class="relative min-h-screen overflow-hidden" :style="bgImg">
       <AppNavigation />
       <div class="relative">
@@ -77,7 +77,6 @@ if (!user) {
         </div>
       </div>
     </div>
-
     <BaseSection class="px-4">
       <div
         class="mx-auto grid grid-cols-1 gap-3 @container md:grid-cols-2 lg:max-w-7xl lg:grid-cols-4"
@@ -92,8 +91,6 @@ if (!user) {
         />
       </div>
     </BaseSection>
-    <h1>{{ global?.title }}</h1>
-    <p>{{ global?.description }}</p>
     <BaseSection
       class="bg-black/50 bg-cover bg-center bg-no-repeat pt-10 bg-blend-hard-light"
       :style="fleetBackgroundImg"
@@ -153,7 +150,7 @@ if (!user) {
           </p>
         </div>
         <div class="flex w-full place-items-center justify-center p-6">
-          <icon class="text-neutral-400" name="ri:24-hours-line" size="256" />
+          <Icon class="text-neutral-400" name="ri:24-hours-line" size="256" />
         </div>
       </BaseContainer>
     </BaseSection>
